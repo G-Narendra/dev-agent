@@ -278,6 +278,16 @@ def ensure_setup() -> bool:
     if is_configured():
         return True
 
+    # Check if we're already inside an event loop (e.g., from chat command)
+    try:
+        loop = asyncio.get_running_loop()
+        # Already in a loop — can't use asyncio.run().
+        # Print message and return False so the caller can handle it.
+        console.print("[yellow]No API keys configured. Run `dev setup` first.[/yellow]")
+        return False
+    except RuntimeError:
+        pass  # No running loop — safe to use asyncio.run()
+
     # Run the async wizard
     try:
         return asyncio.run(run_wizard())

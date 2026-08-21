@@ -73,6 +73,11 @@ function main() {
     fs.mkdirSync(devDir, { recursive: true });
   }
 
+  // Default to 'chat' when no arguments given (like Claude Code)
+  if (args.length === 0) {
+    args = ["chat"];
+  }
+
   // Build the Python command string
   // We write args as a Python list literal
   const pyArgs = args.map(function(a) {

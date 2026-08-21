@@ -69,7 +69,7 @@ __version__ = "1.0.0"
 app = typer.Typer(
     name="dev",
     help="Dev - Free 24/7 AI coding agent powered by NVIDIA NIMs",
-    no_args_is_help=True,
+    no_args_is_help=False,
 )
 
 # Sub-apps
@@ -870,9 +870,9 @@ def chat(
                 elif cmd.startswith("/name"):
                     parts = cmd.split(maxsplit=1)
                     if len(parts) > 1:
-                        session_name = parts[1].strip()
-                        conv.metadata["name"] = session_name
-                        console.print(f"[green]Session named: {session_name}[/green]")
+                        new_session_name = parts[1].strip()
+                        conv.metadata["name"] = new_session_name
+                        console.print(f"[green]Session named: {new_session_name}[/green]")
                     else:
                         name = conv.metadata.get("name", "unnamed")
                         console.print(f"[dim]Session name: {name}[/dim]")
