@@ -47,7 +47,15 @@ class DevTUI:
     """
     
     def __init__(self):
-        self.console = Console(theme=THEME)
+        import sys
+        # Force UTF-8 on Windows to prevent cp1252 encoding errors
+        if sys.platform == "win32":
+            try:
+                sys.stdout.reconfigure(encoding="utf-8")
+                sys.stderr.reconfigure(encoding="utf-8")
+            except Exception:
+                pass
+        self.console = Console(theme=THEME, force_terminal=True)
         self._start_time = time.time()
         self._session_cost = 0.0
         self._tool_count = 0
@@ -159,28 +167,12 @@ class DevTUI:
         self.console.print("[agent]Dev:[/agent] ", end="")
     
     def show_streaming_chunk(self, chunk: str):
-        """Show streaming chunk with live panel."""
-        if not hasattr(self, '_streaming_buffer'):
-            self._streaming_buffer = ""
-            self._streaming_live = None
-        self._streaming_buffer += chunk
-        # Use Rich Live for real-time updates
-        from rich.text import Text as RichText
-        if self._streaming_live is None:
-            from rich.live import Live
-            self._streaming_live = Live(RichText(self._streaming_buffer), console=self.console, refresh_per_second=10, transient=True)
-            self._streaming_live.start()
-        else:
-            self._streaming_live.update(RichText(self._streaming_buffer))
+        """Show streaming chunk."""
+        self.console.print(chunk, end="", highlight=False)
     
     def show_streaming_end(self):
         """End streaming display."""
-        if hasattr(self, '_streaming_live') and self._streaming_live is not None:
-            self._streaming_live.stop()
-            self._streaming_live = None
-            # Print final text
-            self.console.print(self._streaming_buffer, highlight=False)
-        self._streaming_buffer = ""
+        self.console.print()
     
     def get_input(self) -> str | None:
         """Get user input."""
@@ -235,11 +227,24 @@ class StreamingDisplay:
         self._buffer = ""
     
     def update(self, chunk: str):
-        """Update with a new chunk."""
+        """Update with a new chunk with live panel."""
         self._buffer += chunk
-        self.tui.show_streaming_chunk(chunk)
+        from rich.text import Text as RichText
+        if self._live is None:
+            self._live = Live(RichText(self._buffer), console=self.tui.console, refresh_per_second=10, transient=True)
+            self._live.start()
+        else:
+            self._live.update(RichText(self._buffer))
     
     def end(self):
         """End streaming display."""
-        self.tui.show_streaming_end()
+        if self._live is not None:
+            self._live.stop()
+            self._live = None
+            # Print final buffered text (safe encoding for Windows)
+            try:
+                self.tui.console.print(self._buffer, highlight=False)
+            except UnicodeEncodeError:
+                safe = self._buffer.encode('ascii', errors='replace').decode('ascii')
+                self.tui.console.print(safe, highlight=False)
         self._buffer = ""

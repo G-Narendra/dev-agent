@@ -41,6 +41,20 @@ class ToolRegistry:
                         },
                     }
 
+    def __contains__(self, name: str) -> bool:
+        """Support `in` operator: `if tool_name in registry`."""
+        return name in self._tools
+
+    def __getitem__(self, name: str) -> Any:
+        """Support `registry[name]` access."""
+        return self._tools[name]
+
+    def __len__(self) -> int:
+        return len(self._tools)
+
+    def keys(self):
+        return self._tools.keys()
+
     def get(self, name: str) -> Any | None:
         """Get a tool handler by name."""
         return self._tools.get(name)

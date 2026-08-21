@@ -7,6 +7,8 @@ if __name__ == "__main__" or "__main__" in sys.modules:
     # Fix Windows encoding for emoji
     if sys.platform == "win32":
         os.environ.setdefault("PYTHONIOENCODING", "utf-8")
+        os.environ.setdefault("PYTHONUTF8", "1")  # Force UTF-8 for all Python I/O
+        os.environ.setdefault("PYTHONLEGACYWINDOWSSTDIO", "0")
         try:
             sys.stdout.reconfigure(encoding="utf-8")
             sys.stderr.reconfigure(encoding="utf-8")

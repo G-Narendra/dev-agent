@@ -51,6 +51,14 @@ class RealReadFilesTool(Tool):
 
     async def execute(self, input_data: dict, state: Any, project_path: str) -> dict:
         paths = input_data.get("paths", [])
+        # LLM may send paths as a JSON string instead of a list
+        if isinstance(paths, str):
+            try:
+                paths = json.loads(paths)
+            except (json.JSONDecodeError, TypeError):
+                paths = [paths]
+        if not isinstance(paths, list):
+            paths = [paths]
         results = []
 
         for path_info in paths:
@@ -106,9 +114,9 @@ class RealReadFilesTool(Tool):
 
     def _resolve_path(self, path: str, project_path: str) -> str:
         if os.path.isabs(path):
-            abs_path = os.path.normpath(path)
+            abs_path = os.path.normpath(os.path.abspath(path))
         else:
-            abs_path = os.path.normpath(os.path.join(project_path, path))
+            abs_path = os.path.normpath(os.path.abspath(os.path.join(project_path, path)))
         # Path traversal protection: ensure resolved path is within project
         abs_project = os.path.normpath(os.path.abspath(project_path))
         if not abs_path.startswith(abs_project):
@@ -522,6 +530,12 @@ class RealRunTerminalCommand(Tool):
                     if bash_path:
                         effective_command = f'{bash_path} -c {shlex.quote(command)}'
 
+            # Force UTF-8 encoding on Windows to prevent cp1252 errors
+            import copy
+            env = copy.copy(os.environ)
+            env['PYTHONUTF8'] = '1'
+            env['PYTHONIOENCODING'] = 'utf-8'
+            kwargs['env'] = env
             proc = await asyncio.create_subprocess_shell(effective_command, **kwargs)
             stdout, stderr = await asyncio.wait_for(proc.communicate(), timeout=timeout)
 

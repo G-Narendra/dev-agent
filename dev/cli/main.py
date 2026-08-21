@@ -660,13 +660,15 @@ def chat(
             return
 
         # Create ONE ProductionAgentLoop (reused across ALL turns)
+        # Use 70b for tool calling (8b is too small for reliable tool calls)
+        effective_model = model if model != "default" else "coding"
         loop_config = LoopConfig(
-            model=model,
+            model=effective_model,
             auto_lint=True,
             auto_commit=True,
             auto_test=False,
             verbose=verbose,
-            approval_mode=approval,
+            approval_mode=approval_mode,
             enforce_plan_mode=plan,
             diff_preview=diff_preview,
         )
