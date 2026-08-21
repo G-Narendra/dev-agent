@@ -83,19 +83,23 @@ async def verify_key(api_key: str) -> dict:
 
             if response.status_code == 200:
                 data = response.json()
-                # Get available models
-                models_response = await client.get(
-                    f"{NIM_BASE_URL}/models",
-                    headers={"Authorization": f"Bearer {api_key}"},
-                )
+                # Try to get available models (endpoint may not exist on all tiers)
                 models = []
-                if models_response.status_code == 200:
-                    models_data = models_response.json()
-                    models = [
-                        m["id"]
-                        for m in models_data.get("data", [])
-                        if m.get("owned_by") == "nvidia"
-                    ]
+                try:
+                    models_response = await client.get(
+                        f"{NIM_BASE_URL}/models",
+                        headers={"Authorization": f"Bearer {api_key}"},
+                        timeout=10.0,
+                    )
+                    if models_response.status_code == 200:
+                        models_data = models_response.json()
+                        models = [
+                            m["id"]
+                            for m in models_data.get("data", [])
+                            if m.get("owned_by") == "nvidia"
+                        ]
+                except Exception:
+                    pass  # Models endpoint not available, but key is valid
                 return {"valid": True, "models": models, "error": None}
             elif response.status_code == 401:
                 return {"valid": False, "models": [], "error": "Invalid API key"}
@@ -163,14 +167,12 @@ async def run_wizard() -> bool:
     # Ask how many keys
     while True:
         try:
-            num_keys = IntPrompt.ask(
-                "[bold]How many NVIDIA NIM API keys do you have?",
-                default=1,
-            )
+            raw = input("How many NVIDIA NIM API keys do you have? (1): ").strip()
+            num_keys = int(raw) if raw else 1
             if 1 <= num_keys <= 10:
                 break
             console.print("[red]Please enter a number between 1 and 10[/red]")
-        except (ValueError, KeyboardInterrupt):
+        except (ValueError, KeyboardInterrupt, EOFError):
             console.print("[dim]Using 1 key[/dim]")
             num_keys = 1
 
@@ -182,11 +184,9 @@ async def run_wizard() -> bool:
         console.print(f"[bold]Key {i + 1}/{num_keys}:[/bold]")
         while True:
             try:
-                key = Prompt.ask(
-                    f"  Paste your API key #{i + 1}",
-                    password=True,
-                )
-            except KeyboardInterrupt:
+                # Use input() instead of Rich Prompt so Ctrl+V paste works in cmd.exe
+                key = input(f"  Paste your API key #{i + 1}: ")
+            except (KeyboardInterrupt, EOFError):
                 console.print("\n[dim]Skipping remaining keys[/dim]")
                 break
 
@@ -211,12 +211,11 @@ async def run_wizard() -> bool:
                 break
             else:
                 console.print(f"  [red]✗ {result['error']}[/red]")
-                retry = Prompt.ask(
-                    "  Try again?",
-                    choices=["y", "n"],
-                    default="y",
-                )
-                if retry == "n":
+                try:
+                    retry = input("  Try again? (y/n): ").strip().lower()
+                except (KeyboardInterrupt, EOFError):
+                    retry = "n"
+                if retry in ("n", "no"):
                     break
 
         if len(keys) > 0 and i < num_keys - 1:
