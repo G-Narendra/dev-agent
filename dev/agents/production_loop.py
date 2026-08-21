@@ -627,19 +627,22 @@ class ProductionAgentLoop:
                 else:
                     write_tcs.append(tc)
 
-            # Execute read-only tools in parallel (up to 5 concurrent)
-            if len(read_only_tcs) > 1:
-                self._log(f"Parallel execution: {len(read_only_tcs)} read-only tools")
-                async def _exec_read_only(rtc):
-                    return await self._execute_single_tool(rtc, on_tool_call, on_tool_result)
-                read_results = await asyncio.gather(
-                    *[_exec_read_only(tc) for tc in read_only_tcs],
-                    return_exceptions=True,
-                )
-                for tc, res in zip(read_only_tcs, read_results):
-                    if isinstance(res, Exception):
-                        res = {"error": str(res)}
-                    # Results already added to cur_messages inside _execute_single_tool
+            # Execute read-only tools (parallel if multiple, sequential if single)
+            if read_only_tcs:
+                if len(read_only_tcs) > 1:
+                    self._log(f"Parallel execution: {len(read_only_tcs)} read-only tools")
+                    async def _exec_read_only(rtc):
+                        return await self._execute_single_tool(rtc, on_tool_call, on_tool_result)
+                    read_results = await asyncio.gather(
+                        *[_exec_read_only(tc) for tc in read_only_tcs],
+                        return_exceptions=True,
+                    )
+                    for tc, res in zip(read_only_tcs, read_results):
+                        if isinstance(res, Exception):
+                            res = {"error": str(res)}
+                else:
+                    # Single read-only tool — execute sequentially
+                    await self._execute_single_tool(read_only_tcs[0], on_tool_call, on_tool_result)
 
             # Execute write tools sequentially
             for tc in write_tcs:

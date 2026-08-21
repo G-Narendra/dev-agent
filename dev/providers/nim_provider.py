@@ -331,17 +331,42 @@ class NimProvider:
         resolved_model = self.MODELS.get(model, model)
         key = await self._wait_for_available_key()
         
-        # Try streaming with tools first
+        # Use non-streaming when tools are present (more reliable with smaller models)
+        # Streaming tool calls are unreliable on many NIM models
         if tools:
+            payload = {
+                "model": resolved_model,
+                "messages": messages,
+                "temperature": temperature,
+                "max_tokens": max_tokens,
+                "tools": tools,
+                **kwargs,
+            }
+            headers = {
+                "Authorization": f"Bearer {key.key}",
+                "Content-Type": "application/json",
+            }
             try:
-                async for event in self._stream_with_tools(
-                    messages, resolved_model, temperature, max_tokens, tools, key, **kwargs
-                ):
-                    yield event
+                response = await self._client.post("/chat/completions", json=payload, headers=headers)
+                response.raise_for_status()
+                result = response.json()
+                usage = result.get("usage", {})
+                if usage:
+                    self._record_request(key, usage.get("total_tokens", 0))
+                    yield {"type": "usage", "usage": usage}
+                choice = result.get("choices", [{}])[0]
+                message = choice.get("message", {})
+                finish_reason = choice.get("finish_reason", "stop")
+                content = message.get("content") or ""
+                if content:
+                    yield {"type": "text", "content": content}
+                tool_calls = message.get("tool_calls", [])
+                for tc in tool_calls:
+                    yield {"type": "tool_call", "tool_call": tc}
+                yield {"type": "finish", "reason": finish_reason}
                 return
-            except Exception:
-                # Tool streaming not supported - fall back to non-streaming
-                pass
+            except Exception as e:
+                pass  # Fall through to streaming without tools
         
         # Fallback: non-streaming call (works reliably)
         payload = {
@@ -474,7 +499,10 @@ class NimProvider:
                 if usage:
                     yield {"type": "usage", "usage": usage}
                 
-                choice = chunk.get("choices", [{}])[0]
+                choices = chunk.get("choices", [])
+                if not choices:
+                    continue
+                choice = choices[0]
                 delta = choice.get("delta", {})
                 finish_reason = choice.get("finish_reason")
                 
