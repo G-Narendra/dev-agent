@@ -1,0 +1,81 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "hipaa-compliance"
+display_name: "HIPAA Compliant Data Architecture"
+description: >
+  Architect the database, storage, and logging infrastructure to ensure full HIPAA compliance 
+  when handling Protected Health Information (PHI).
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "healthtech-engineer"
+phase: "build"
+applicable_startups: 
+  - healthtech
+priority: "mvp"
+difficulty: "expert"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Infrastructure Configuration"
+    tasks:
+      - "Sign Business Associate Agreements (BAAs) with AWS/GCP, Vercel, and Database providers."
+      - "Enable hardware-level encryption at rest (KMS) for the database and S3 buckets."
+  - step: "Audit Logging"
+    tasks:
+      - "Implement application-level logging that records the User ID, Timestamp, Action (View/Edit), and Patient ID."
+      - "Ensure audit logs are shipped to an immutable, append-only datastore (e.g., AWS CloudWatch)."
+  - step: "Data Minimization"
+    tasks:
+      - "Never log PHI (names, SSNs, medical notes) in application error logs or APM tools (e.g., Sentry/Datadog)."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Sending emails or SMS messages containing patient medical information (they are not inherently secure). Send a link to a secure portal instead."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Hipaa Compliance process"
+  - "How do I handle hipaa compliance?"
+  - "Implement hipaa compliance"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the hipaa compliance process"
+  optional:
+    - name: "data_source"
+      type: "string"
+      description: "Source of data to analyze"
+      default: "Internal data"
+
+outputs:
+  files:
+    - path: "outputs/hipaa-compliance.md"
+      description: "Results of the hipaa compliance process"
+  artifacts:
+    - "Completed hipaa compliance deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

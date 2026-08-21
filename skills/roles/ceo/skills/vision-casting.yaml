@@ -1,0 +1,103 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "vision-casting"
+display_name: "Internal Vision Casting & Storytelling"
+description: >
+  Communicates the company's vision to internal stakeholders continuously. 
+  Translates the abstract 10-year vision into day-to-day motivation for 
+  engineers, sales reps, and customer support. Prevents the team from losing 
+  the 'forest for the trees'.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "ceo"
+phase: "growth"
+applicable_startups:
+  - all
+priority: "high"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "The team is burning out."
+  - "Prepare the All-Hands speech."
+  - "Remind everyone why we are building this."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Draft All-Hands narrative."
+  - "Extract customer success stories."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "recent_wins"
+      type: "string"
+      description: "Recent feature shipped or customer closed."
+  optional:
+    - name: "current_morale"
+      type: "string"
+      description: "High, low, burned out."
+      default: "Neutral"
+
+outputs:
+  files:
+    - path: "business/leadership/all-hands-script.md"
+      description: "The narrative structure for the company meeting."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "N/A"
+manual:
+  - "Employee retention remains above 90%, and internal pulse surveys show high alignment with company direction."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "Toxic Positivity: Do not gaslight the team. If the servers went down for 12 hours, acknowledge the pain before casting the vision of the new architecture."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Video/Zoom"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "The Customer Hero Story"
+    tasks:
+      - "Start every All-Hands by telling a specific story of a user whose life was improved by the product. Abstract metrics don't motivate engineers; human impact does."
+  - step: "Connecting the Dots"
+    tasks:
+      - "Explicitly tie the boring grunt work (e.g., migrating the database) to the grand vision. 'We are doing this painful migration so we can support 10x more users next year to achieve X'."
+  - step: "The 'Repetition' Cadence"
+    tasks:
+      - "Commit to repeating the core vision statement at the end of every single town hall, in every major product spec, and in every onboarding session."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Assuming that because you said the vision once at the company retreat in 2021, everyone still remembers and feels motivated by it."
+best_practices:
+  - "Use analogies and metaphors. Complex technical visions must be simplified into memorable soundbites that an employee can explain to their family at dinner."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Sequoia: The Art of Storytelling"
+    url: "https://www.sequoiacap.com/article/the-art-of-storytelling/"

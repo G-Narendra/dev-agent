@@ -1,0 +1,102 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "sql-queries"
+display_name: "Advanced SQL & Ad-Hoc Analysis"
+description: >
+  Writes highly optimized, complex SQL queries to extract deep insights from 
+  the data warehouse. Uses Window Functions, CTEs, and cohort analysis to 
+  answer nuanced business questions that standard BI dashboards cannot.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "data-analyst"
+phase: "operations"
+applicable_startups:
+  - all
+priority: "high"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Find the retention rate of users who signed up in March."
+  - "Who are our top 10% most active customers?"
+  - "Write a SQL query for cohort analysis."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Generate SQL script."
+  - "Optimize slow query."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "business_question"
+      type: "string"
+      description: "The ad-hoc request (e.g., Retention by month)."
+  optional:
+    - name: "sql_dialect"
+      type: "string"
+      description: "Snowflake, Postgres, BigQuery."
+      default: "Postgres"
+
+outputs:
+  files:
+    - path: "data/queries/march_cohort_retention.sql"
+      description: "The finalized SQL script."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "N/A"
+manual:
+  - "The query accurately answers the business question and completes execution in under 30 seconds."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "Cartesian Joins (Cross Joins): Be extremely careful when joining large tables without a strict `ON` condition. It will create a Cartesian product that will instantly exhaust warehouse memory."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "DataGrip / DBeaver"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Common Table Expressions (CTEs)"
+    tasks:
+      - "Never write nested subqueries (e.g., `SELECT * FROM (SELECT * FROM ...)`). Use `WITH` clauses (CTEs) to make the logic read top-to-bottom sequentially."
+  - step: "Window Functions"
+    tasks:
+      - "Use Window Functions (`ROW_NUMBER()`, `LAG()`, `LEAD()`) to solve complex problems like 'Time between purchases' without writing horrific self-joins."
+  - step: "Cohort Analysis"
+    tasks:
+      - "Structure cohort queries by grouping users by their 'Acquisition Month', then calculating activity for `Month 1`, `Month 2`, etc., relative to that acquisition date."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Using `COUNT(user_id)` when you meant `COUNT(DISTINCT user_id)`. This is the #1 cause of inflated metrics in early-stage startups."
+best_practices:
+  - "Comment the intent of complex `WHERE` clauses. If you write `WHERE status != 'pending' AND updated_at < current_date`, add a comment: `-- Exclude incomplete orders from yesterday`."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Mode Analytics: Advanced SQL"
+    url: "https://mode.com/sql-tutorial/advanced-sql/"

@@ -1,0 +1,78 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "competitor-teardown"
+display_name: "Competitor Teardown & Gap Analysis"
+description: >
+  Deconstruct the market leader's product, pricing, and go-to-market strategy to 
+  find the exact vulnerabilities the startup can exploit.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "market-research-analyst"
+phase: "ideation"
+applicable_startups: 
+  - all
+priority: "high"
+difficulty: "advanced"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Feature Matrix"
+    tasks:
+      - "Map the competitor's exact feature set, noting which features are heavily marketed but actually terrible to use (this is the Wedge)."
+  - step: "Pricing Exploitation"
+    tasks:
+      - "Identify where the competitor's pricing model punishes the customer (e.g., charging per seat for a tool that should be collaborative) and do the exact opposite."
+  - step: "Review Mining"
+    tasks:
+      - "Scrape 1-star and 2-star reviews from G2, Capterra, and Trustpilot to identify the exact words angry customers use to describe the competitor's failures."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Deciding to just 'build all the features the competitor has but make it 10% cheaper', guaranteeing a race to the bottom with zero differentiation."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Competitor Teardown process"
+  - "How do I handle competitor teardown?"
+  - "Implement competitor teardown"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the competitor teardown process"
+  optional:
+    - name: "N/A"
+      type: "string"
+      description: "No optional inputs needed."
+
+outputs:
+  files:
+    - path: "outputs/competitor-teardown.md"
+      description: "Results of the competitor teardown process"
+  artifacts:
+    - "Completed competitor teardown deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

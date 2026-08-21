@@ -1,0 +1,117 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "swiftui-architecture"
+display_name: "SwiftUI Architecture (MVVM/TCA)"
+description: >
+  Designs scalable SwiftUI applications by strictly separating the declarative 
+  View layer from the business logic. Implements robust architectures like 
+  MVVM (Model-View-ViewModel) or TCA (The Composable Architecture) to handle state. Covers key patterns to avoid common pitfalls like storing sensitive tokens or credentials in plaintext in user, and provides actionable best practices for production-ready results.
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "mobile-developer-swift"
+phase: "build"
+applicable_startups:
+  - all
+priority: "critical"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "The SwiftUI view is getting too large."
+  - "Implement MVVM for this screen."
+  - "Pass this data down the view hierarchy."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Generate ViewModel class."
+  - "Draft SwiftUI View structure."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "screen_name"
+      type: "string"
+      description: "E.g., UserProfile, Settings."
+  optional:
+    - name: "architecture"
+      type: "string"
+      description: "MVVM or TCA."
+      default: "MVVM"
+
+outputs:
+  files:
+    - path: "Views/UserProfileView.swift"
+      description: "The declarative UI."
+    - path: "ViewModels/UserProfileViewModel.swift"
+      description: "The state container."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "The ViewModel can be completely unit-tested without importing the SwiftUI framework."
+manual:
+  - "The SwiftUI View struct contains zero business logic, API calls, or complex data formatting."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "Excessive EnvironmentObjects: Do not inject every single object into the global `@EnvironmentObject`. It creates hidden dependencies and makes the app impossible to modularize or test."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "SwiftUI"
+      install: "N/A"
+  alternatives:
+    - name: "The Composable Architecture (TCA)"
+      when: "Building massive, highly complex state machines."
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "The ViewModel Separation"
+    tasks:
+      - "Create an `ObservableObject` class (the ViewModel). All API calls, data formatting, and state mutations must happen here. The View only observes this class using `@StateObject`."
+      - "Add database migration testing -- test both up and down migrations in CI."
+  - step: "Preview Providers"
+    tasks:
+      - "Always implement `#Preview` blocks. Inject a 'Mock' ViewModel into the preview so the SwiftUI canvas renders instantly without trying to make live network requests."
+      - "Run a profiler to identify the top 3 performance bottlenecks before optimizing."
+  - step: "Value Types for UI State"
+    tasks:
+      - "Use Swift structs for representing UI state (e.g., `struct ViewState { var isLoading: Bool; var items: [String] }`). It is much safer and performant than managing 10 individual `@Published` properties."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Storing sensitive tokens or credentials in plaintext in UserDefaults/SharedPreferences -- use the platform Keychain/Keystore."
+  - "Ignoring memory warnings on low-end devices -- mobile apps crash silently when the OS kills them for memory pressure."
+  - "Blocking the main thread with network calls or heavy computation -- the UI freezes and the OS shows an Application Not Responding dialog."
+  - "Forcing users to download large assets on cellular data -- check connectivity and defer to WiFi."
+  - "Not handling deep link fallbacks -- if your app isn't installed, the link should gracefully open the app store."
+best_practices:
+  - "Break massive Views into smaller, highly focused sub-views. SwiftUI structs are incredibly cheap to instantiate. If a View is over 150 lines, it is doing too much."
+
+  - "Test on the lowest-spec device you support, not just the latest flagship — that's what most of your users have."
+  - "Implement offline-first architecture using local storage and sync — mobile networks are unreliable."
+  - "Handle deep links and universal links properly — they're the primary way users return to your app from elsewhere."
+  - "Use ProGuard/R8 (Android) or app thinning (iOS) to reduce APK/IPA size — smaller apps have higher install conversion."
+  - "Add pull-to-refresh and retry mechanisms on all data screens — mobile users expect to manually refresh when data feels stale."
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Apple: Data Flow in SwiftUI"
+    url: "https://developer.apple.com/documentation/swiftui/model-data"

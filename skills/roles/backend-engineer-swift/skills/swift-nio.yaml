@@ -1,0 +1,88 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "swift-nio"
+display_name: "SwiftNIO Async Networking"
+description: >
+  Build high-performance networking services with SwiftNIO. Covers
+  event loops, channels, pipelines, and custom protocol handlers for
+  building low-level network servers and clients.
+role: "backend-engineer-swift"
+phase: "build"
+applicable_startups:
+  - all
+priority: "high"
+difficulty: "advanced"
+trigger_phrases:
+  - "Build a SwiftNIO server for..."
+  - "Implement custom protocol handler with SwiftNIO for..."
+  - "Set up async TCP/UDP server in Swift for..."
+example_cli_actions:
+  - "swift run Server"
+  - "swift package generate-xcodeproj"
+  - "echo 'test' | nc localhost 8080"
+inputs:
+  required:
+    - name: "protocol_type"
+      type: "string"
+      description: "TCP, UDP, HTTP, or custom protocol."
+  optional:
+    - name: "concurrency_model"
+      type: "string"
+      description: "EventLoop per connection or async/await."
+      default: "async/await with NIO 2"
+outputs:
+  files:
+    - path: "Sources/App/Handlers/ChannelHandler.swift"
+      description: "Channel inbound/outbound handler."
+    - path: "Sources/App/main.swift"
+      description: "Server bootstrap with EventLoopGroup."
+    - path: "Package.swift"
+      description: "Swift package manifest with NIO dependency."
+  artifacts:
+    - "Performance benchmarks for concurrent connections."
+permissions_needed:
+  - "filesystem"
+  - "network access"
+safety_notes:
+  - "Never block the EventLoop use EventLoopFuture or async/await to schedule work."
+  - "Always set connectTimeout and idleTimeout to prevent leaked connections."
+recommended_tools:
+  primary:
+    - name: "SwiftNIO 2 + AsyncHTTPClient + Logging"
+      install: "swift package init --type executable"
+implementation_checklist:
+  - step: "Server Bootstrap"
+    tasks:
+      - "Create ServerBootstrap with EventLoopGroup."
+      - "Configure channel initializer with handler pipeline."
+  - step: "Handler Implementation"
+    tasks:
+      - "Implement ChannelInboundHandler with proper error handling."
+      - "Add ByteBuffer to Codable conversion for structured data."
+  - step: "Testing"
+    tasks:
+      - "Write integration tests with EmbeddedChannel for handler testing."
+      - "Benchmark concurrent connection handling."
+anti_patterns:
+  - "Using synchronous blocking I/O calls in handler methods."
+  - "Leaking ByteBuffers by not releasing them after use."
+best_practices:
+  - "Use Swift structured concurrency (async/await) over raw EventLoopFuture."
+  - "Add Logging to all handlers for debugging and observability."
+references:
+  - title: "SwiftNIO Documentation"
+    url: "https://github.com/apple/swift-nio"
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."

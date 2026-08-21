@@ -1,0 +1,80 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "risk-mitigation"
+display_name: "Risk Assessment & Mitigation Strategy"
+description: >
+  Identify financial, operational, and cyber risks, procure necessary insurance policies, 
+  and implement strict fraud prevention protocols.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "risk-manager"
+phase: "operations"
+applicable_startups: 
+  - fintech
+  - enterprise
+priority: "mvp"
+difficulty: "advanced"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Risk Auditing"
+    tasks:
+      - "Conduct a quarterly risk audit identifying Single Points of Failure (SPOF) in vendors, tech, or personnel."
+  - step: "Fraud Prevention (FinTech specific)"
+    tasks:
+      - "Implement velocity limits and strict KYC/AML checks to prevent automated synthetic identity fraud."
+  - step: "Insurance"
+    tasks:
+      - "Procure a comprehensive D&O insurance policy to protect founders and board members from personal liability."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Operating a FinTech startup that moves millions of dollars a day without having any Cyber Liability Insurance in place."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Risk Mitigation process"
+  - "How do I handle risk mitigation?"
+  - "Implement risk mitigation"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the risk mitigation process"
+  optional:
+    - name: "code_repository"
+      type: "string"
+      description: "Path to the code repository"
+      default: "./"
+
+outputs:
+  files:
+    - path: "outputs/risk-mitigation.md"
+      description: "Results of the risk mitigation process"
+  artifacts:
+    - "Completed risk mitigation deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

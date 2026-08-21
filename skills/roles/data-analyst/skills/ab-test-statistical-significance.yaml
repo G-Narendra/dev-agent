@@ -1,0 +1,111 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "ab-test-statistical-significance"
+display_name: "A/B Testing & Statistical Significance"
+description: >
+  Ensure that product and marketing experiments actually produced a real result, 
+  rather than just random statistical noise. Prevents the startup from rolling 
+  out a 'winning' feature that actually hurts the business.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "data-analyst"
+phase: "operations"
+applicable_startups:
+  - all
+priority: "critical"
+difficulty: "expert"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Did the A/B test win?"
+  - "Is this result statistically significant?"
+  - "Calculate the p-value."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Run a T-test on experimental data."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "control_group"
+      type: "string"
+      description: "Sample size and conversion rate for Variation A (The Original)."
+    - name: "test_group"
+      type: "string"
+      description: "Sample size and conversion rate for Variation B (The Challenger)."
+  optional:
+    - name: "confidence_level"
+      type: "string"
+      description: "90% vs 95% vs 99%."
+      default: "95%"
+
+outputs:
+  files:
+    - path: "data/experiments/checkout-test-results.md"
+      description: "The formal analysis of the A/B test."
+  artifacts:
+    - "A recommendation: 'Deploy Variation B', 'Keep Original', or 'Keep Testing'."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "N/A"
+  manual:
+    - "The company only ships features that have a > 95% probability (p < 0.05) of actually improving the core metric."
+    - "The team stops wasting engineering time building 'winners' that were actually just statistical flukes."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+
+safety_notes:
+  - "The Peeking Problem: DO NOT look at the A/B test results on Day 2, see that Variation B is 'winning', and turn off the test. This is a severe statistical fallacy (p-hacking). You MUST decide the sample size in advance and wait until it is reached."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Python (SciPy) / R / Optimizely Calculator"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Pre-Test (Power Calculation)"
+    tasks:
+      - "Before starting the test, calculate how many users you need to detect a 10% change. If you need 50,000 users and your site only gets 1,000 visitors a month, you CANNOT run this A/B test. It will take 4 years."
+  - step: "Running the Test (The MDE)"
+    tasks:
+      - "Establish the Minimum Detectable Effect (MDE). Are you looking for a massive 20% jump, or a tiny 1% optimization? Smaller effects require massively larger sample sizes."
+  - step: "Evaluating the Results (p-value)"
+    tasks:
+      - "If Variation A got 2.1% and Variation B got 2.4%, that looks like a win. BUT if the sample size was only 500 people, the p-value might be 0.40 (40% chance it was just random luck). DO NOT deploy Variation B."
+  - step: "Check for Simpson's Paradox"
+    tasks:
+      - "Segment the winning test by Mobile vs Desktop. Sometimes Variation B wins overall, but actually performs worse on BOTH Mobile and Desktop individually, because the traffic mix shifted during the test."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Testing trivial things with low traffic. If you are an early-stage B2B startup with 50 signups a week, DO NOT A/B test the color of a button. You will never reach statistical significance. Just pick a color and focus on building major features."
+  - "Ignoring the 'Novelty Effect'. Variation B often wins simply because it is *new* and users click on new things. If you deploy it, the conversion rate will drop back to normal after 3 weeks."
+
+best_practices:
+  - "Use a Two-Tailed Test. A One-Tailed test assumes Variation B can only be better or equal. A Two-Tailed test checks if Variation B is actually *destroying* conversions, which is highly possible."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Evan Miller: A/B Testing Calculator"
+    url: "https://www.evanmiller.org/ab-testing/"

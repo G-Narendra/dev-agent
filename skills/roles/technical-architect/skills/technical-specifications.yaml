@@ -1,0 +1,83 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "technical-specifications"
+display_name: "Technical Specification Design"
+description: >
+  Draft rigorous technical specifications that define API contracts, database schemas, 
+  and system architecture before a single line of code is written.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "technical-architect"
+phase: "planning"
+applicable_startups: 
+  - all
+priority: "high"
+difficulty: "expert"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "API Contracts"
+    tasks:
+      - "Define the exact JSON payload structures, HTTP methods, and status codes for all new endpoints using OpenAPI/Swagger syntax before backend work begins."
+  - step: "Database Schema Design"
+    tasks:
+      - "Draft the ERD (Entity-Relationship Diagram). Explicitly define foreign keys, indexes, and constraints. Evaluate if the schema can handle 100x data scale."
+  - step: "Failure Modes Analysis"
+    tasks:
+      - "Include a 'What Could Go Wrong' section detailing edge cases, network partition behavior, and how the system degrades gracefully when 3rd party APIs are down."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Starting a massive 3-month rewrite based on a 2-paragraph Jira ticket, resulting in the backend and frontend teams building completely incompatible systems."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Technical Specifications process"
+  - "How do I handle technical specifications?"
+  - "Implement technical specifications"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the technical specifications process"
+  optional:
+    - name: "data_source"
+      type: "string"
+      description: "Source of data to analyze"
+      default: "Internal data"
+    - name: "code_repository"
+      type: "string"
+      description: "Path to the code repository"
+      default: "./"
+
+outputs:
+  files:
+    - path: "outputs/technical-specifications.md"
+      description: "Results of the technical specifications process"
+  artifacts:
+    - "Completed technical specifications deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

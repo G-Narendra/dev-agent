@@ -1,0 +1,105 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "qbr-meetings"
+display_name: "Quarterly Business Reviews (QBRs)"
+description: >
+  Structures and executes highly strategic meetings with Enterprise clients 
+  every 90 days. Moves the conversation away from 'support tickets and bugs' 
+  and focuses entirely on the financial ROI the software is delivering.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "customer-success"
+phase: "growth"
+applicable_startups:
+  - B2B, SaaS, Enterprise
+priority: "high"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "We have a meeting with the enterprise client next week."
+  - "Prepare the QBR deck."
+  - "Prove our ROI to the customer."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Generate QBR slide outline."
+  - "Draft ROI calculation."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "client_name"
+      type: "string"
+      description: "e.g., Acme Corp."
+    - name: "original_goals"
+      type: "string"
+      description: "Why did they buy the software 6 months ago?"
+  optional:
+    - name: "usage_data"
+      type: "string"
+      description: "Key metrics achieved this quarter."
+      default: "TBD"
+
+outputs:
+  files:
+    - path: "cs/qbr/acme_corp_q3.md"
+      description: "The structure of the presentation."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "N/A"
+manual:
+  - "The Economic Buyer (the person who signs the checks) actually attends the meeting, and agrees to upgrade their license tier."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "The Defensive QBR: Never use the QBR to defend the product's downtime or argue about open support tickets. Acknowledge them in 2 minutes, then pivot immediately back to strategic goals."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Google Slides / Canva"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "The ROI Slide"
+    tasks:
+      - "This is the only slide the Executive cares about. 'You paid us $50k. Our software saved your team 400 hours, which equates to $80k in payroll savings. You are at +$30k ROI.' Make the math undeniable."
+  - step: "Review the Past, Plan the Future"
+    tasks:
+      - "Spend 30% of the meeting reviewing what happened last quarter. Spend 70% of the meeting planning what you are going to achieve together *next* quarter."
+  - step: "Product Roadmap Tease"
+    tasks:
+      - "Always show the client a sneak peek of the upcoming product roadmap. It makes them feel like a VIP partner and secures their commitment for the next renewal cycle."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Reading 25 slides of generic usage stats ('Your team logged in 400 times!'). Usage is not value. Tying those 400 logins to a specific business outcome is value."
+best_practices:
+  - "Send the agenda 7 days in advance. Ask the client: 'Is there anything specific you want to cover?' If you don't co-create the agenda, they won't show up."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Gainsight: How to run a QBR"
+    url: "https://www.gainsight.com/guides/the-ultimate-guide-to-quarterly-business-reviews-qbrs/"

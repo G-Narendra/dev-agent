@@ -1,0 +1,88 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "symfony-api"
+display_name: "Symfony REST API Development"
+description: >
+  Build production-grade REST APIs with Symfony framework. Covers Doctrine
+  ORM, API Platform, serialization, authentication, and messenger queues.
+role: "backend-engineer-php"
+phase: "build"
+applicable_startups:
+  - all
+priority: "high"
+difficulty: "advanced"
+trigger_phrases:
+  - "Build a Symfony API for..."
+  - "Set up Doctrine entities for..."
+  - "Implement API Platform resources for..."
+example_cli_actions:
+  - "symfony console make:entity Product"
+  - "symfony console make:controller Api/ProductController"
+  - "composer require api"
+  - "php bin/phpunit"
+inputs:
+  required:
+    - name: "entity_model"
+      type: "string"
+      description: "Doctrine entity to build API around."
+  optional:
+    - name: "api_platform"
+      type: "string"
+      description: "API Platform, FOSRestBundle, or manual controllers."
+      default: "API Platform"
+outputs:
+  files:
+    - path: "src/Entity/EntityName.php"
+      description: "Doctrine entity with mappings."
+    - path: "src/Controller/Api/EntityController.php"
+      description: "API controller."
+    - path: "config/packages/api_platform.yaml"
+      description: "API Platform configuration."
+  artifacts:
+    - "Swagger/OpenAPI documentation via API Platform."
+permissions_needed:
+  - "filesystem"
+  - "database access"
+safety_notes:
+  - "Never use {{ app.request }} in Twig templates that render user input."
+  - "Always use param converters with proper type hints to prevent parameter injection."
+recommended_tools:
+  primary:
+    - name: "Symfony + Doctrine + API Platform + PHPUnit"
+      install: "composer create-project symfony/skeleton"
+implementation_checklist:
+  - step: "Entity & Doctrine"
+    tasks:
+      - "Create Doctrine entity with attributes/annotations."
+      - "Generate and run migration: php bin/console make:migration."
+  - step: "API Platform"
+    tasks:
+      - "Configure API Platform with proper normalization context."
+      - "Add custom DataProvider and DataPersister if needed."
+  - step: "Security"
+    tasks:
+      - "Configure JWT authentication with LexikJWTAuthenticationBundle."
+      - "Add voter-based authorization for entity-level access control."
+anti_patterns:
+  - "Using annotations for Doctrine mappings instead of PHP 8 attributes."
+  - "Exposing all entity properties via API Platform without serialization groups."
+best_practices:
+  - "Use Symfony Flex recipes for framework configuration."
+  - "Use Messenger component for async job processing."
+references:
+  - title: "Symfony Documentation"
+    url: "https://symfony.com/doc/current/"
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."

@@ -1,0 +1,78 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "aws-infrastructure"
+display_name: "AWS Cloud Infrastructure Management"
+description: >
+  Architect, secure, and scale the startup's backend infrastructure using Amazon Web Services 
+  (VPC, EC2, RDS, S3, IAM) following the AWS Well-Architected Framework.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "cloud-engineer"
+phase: "growth"
+applicable_startups: 
+  - all
+priority: "mvp"
+difficulty: "expert"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Network Isolation (VPC)"
+    tasks:
+      - "Place all databases (RDS) and internal microservices in private subnets with no public IP routing."
+  - step: "Identity & Access (IAM)"
+    tasks:
+      - "Enforce the Principle of Least Privilege: an EC2 instance should only have an IAM role that grants access to the specific S3 bucket it needs, nothing else."
+  - step: "Cost Management"
+    tasks:
+      - "Set up AWS Budgets and CloudWatch billing alarms to prevent a $50,000 surprise bill due to a runaway Lambda function."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Using the AWS Root Account to deploy daily infrastructure, or assigning the `AdministratorAccess` policy to the backend API's IAM role."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Aws Infrastructure process"
+  - "How do I handle aws infrastructure?"
+  - "Implement aws infrastructure"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the aws infrastructure process"
+  optional:
+    - name: "N/A"
+      type: "string"
+      description: "No optional inputs needed."
+
+outputs:
+  files:
+    - path: "outputs/aws-infrastructure.md"
+      description: "Results of the aws infrastructure process"
+  artifacts:
+    - "Completed aws infrastructure deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "AWS Documentation"
+    url: "https://docs.aws.amazon.com"
+  - title: "Terraform Documentation"
+    url: "https://developer.hashicorp.com/terraform/docs"

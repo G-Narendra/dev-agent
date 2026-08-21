@@ -1,0 +1,110 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "strategic-planning"
+display_name: "Strategic Planning & Resource Allocation"
+description: >
+  Directs the company's macro strategy. Decides exactly what the company will 
+  do, and more importantly, what it will explicitly choose NOT to do over the 
+  next 12-18 months. Allocates capital and engineering headcount accordingly.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "ceo"
+phase: "planning"
+applicable_startups:
+  - all
+priority: "critical"
+difficulty: "expert"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "We are spread too thin."
+  - "Set the goals for next year."
+  - "Should we build this new product line?"
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Draft strategic roadmap."
+  - "Generate resource allocation matrix."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "current_runway"
+      type: "string"
+      description: "Months of cash left."
+    - name: "market_threats"
+      type: "string"
+      description: "What are competitors doing?"
+  optional:
+    - name: "historical_growth"
+      type: "string"
+      description: "YOY growth rate."
+      default: "Unknown"
+
+outputs:
+  files:
+    - path: "business/strategy/annual-plan.md"
+      description: "The macro priorities for the year."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "N/A"
+manual:
+  - "80% of engineering and marketing resources are actively deployed against the top 3 company priorities, not dispersed across 20 random 'nice-to-have' projects."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "The 'Shiny Object' Syndrome: The CEO cannot change the company's macro strategy every time they read an article about AI on Twitter. It will destroy engineering morale."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Miro / FigJam"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "The 'Not Doing' List"
+    tasks:
+      - "Strategy is sacrifice. Write down a list of 5 massive, lucrative opportunities that the company is explicitly ignoring this year to maintain absolute focus on the core product."
+  - step: "Resource Concentration"
+    tasks:
+      - "If 'Enterprise Sales' is the #1 strategic priority, look at the budget. If 60% of the budget is still going to B2C marketing, your strategy is fake. Align the budget to the strategy."
+  - step: "The North Star Metric"
+    tasks:
+      - "Identify ONE single metric that the entire company optimizes for (e.g., 'Daily Active Users' or 'Net Revenue Retention'). Every department's OKRs must roll up to this metric."
+  - step: "Scenario Planning"
+    tasks:
+      - "Draft a contingency plan. 'If we do not hit $5M ARR by Q3, we will cut marketing spend by 40% and pause hiring.' Decide this now when heads are cool, not in Q3 when everyone is panicking."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Having 15 'Top Priorities'. If everything is a priority, nothing is. Force rank them 1 through 3."
+  - "Delegating strategy to consultants. The CEO must own the strategic direction based on intimate customer knowledge, not outsource it."
+
+best_practices:
+  - "Communicate the strategy repeatedly. You will feel like you are repeating yourself constantly, but it takes 7 times for an employee to truly internalize the macro strategy."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Good Strategy Bad Strategy (Richard Rumelt)"
+    url: "https://en.wikipedia.org/wiki/Good_Strategy/Bad_Strategy"

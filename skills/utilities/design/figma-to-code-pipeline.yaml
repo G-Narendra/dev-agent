@@ -1,0 +1,100 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "figma-to-code-pipeline"
+display_name: "Figma-to-Code Translation Pipeline"
+description: >
+  Translates high-fidelity Figma designs into production-ready frontend code. 
+  Extracts design tokens, maps components, and prevents the 'pixel-pushing' 
+  friction between designers and engineers.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "utility"
+phase: "all"
+applicable_startups:
+  - all
+priority: "high"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Convert this Figma design to React."
+  - "Implement the new landing page."
+  - "Extract the design tokens."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Generate React components."
+  - "Export CSS variables."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "figma_url"
+      type: "string"
+      description: "The link to the approved Figma file."
+    - name: "frontend_framework"
+      type: "string"
+      description: "React, Vue, Svelte, HTML/CSS."
+  optional:
+    - name: "styling_solution"
+      type: "string"
+      description: "Tailwind, CSS Modules, Styled Components."
+      default: "Tailwind CSS"
+
+outputs:
+  files:
+    - path: "src/components/ui/GeneratedComponent.tsx"
+      description: "The functional, accessible frontend code."
+  artifacts:
+    - "A mapped list of Figma design tokens to CSS variables."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "The generated code passes all accessibility (a11y) linting."
+  manual:
+    - "The coded UI is visually indistinguishable from the Figma design when overlaid."
+    - "The code uses responsive flex/grid layouts, not absolute positioning."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "network"
+  - "filesystem"
+
+safety_notes:
+  - "Never rely on automated 'Export to Code' plugins for complex logic. They generate absolute-positioned `<div>` soup. Use them to extract styles, but hand-write the semantic DOM structure."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Figma Dev Mode"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Token Extraction"
+    tasks:
+      - "Do not hardcode `#FF5500`. Extract it as `var(--brand-primary)` or add it to the `tailwind.config.js`."
+      - "Map standard spacing units (4px, 8px, 16px) to CSS utility classes."
+  - step: "Semantic DOM Construction"
+    tasks:
+      - "Look at the visual design and determine the correct HTML tags. A large bold text might be an `<h1>`. A clickable rectangle is a `<button>`, not a `<div onClick>`. Semantic HTML is critical for SEO and accessibility."
+  - step: "Responsive Layout Mapping"
+    tasks:
+      - "Translate Figma's 'Auto Layout' into CSS Flexbox. Translate complex 2D layouts into CSS Grid."
+      - "Ensure mobile breakpoints are handled correctly."
+  - step: "State implementation"
+    tasks:
+      - "Implement hover, focus, and active states. Figma often shows a static screen; the code must feel alive."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Using `margin-top: -14px` to fix a misalignment. This breaks when the viewport changes. Fix the flexbox alignment instead."
+  - "Ignoring font rendering differences. Browsers render fonts slightly thicker than Figma. Use `-webkit-font-smoothing: antialiased` if needed."
+
+best_practices:
+  - "Build small, atomic components first (Button, Input, Card) before attempting to build the entire complex Page."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Figma for Developers"
+    url: "https://www.figma.com/developers/"

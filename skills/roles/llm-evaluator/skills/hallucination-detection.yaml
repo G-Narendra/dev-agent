@@ -1,0 +1,79 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "hallucination-detection"
+display_name: "Hallucination Detection & Mitigation"
+description: >
+  Implement grounding techniques and verification loops to ensure the LLM strictly 
+  relies on provided context and flags low-confidence answers.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "llm-evaluator"
+phase: "operations"
+applicable_startups: 
+  - ai
+priority: "high"
+difficulty: "expert"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Citation Enforcement"
+    tasks:
+      - "Prompt the LLM to strictly cite the exact source document ID for every claim it makes, refusing to answer if a citation cannot be generated."
+  - step: "Self-Correction Loop"
+    tasks:
+      - "Implement a secondary pass where the LLM is asked to review its own draft against the original context and remove any facts not explicitly found."
+  - step: "Confidence Thresholding"
+    tasks:
+      - "Use logprobs (if supported by the API) to detect low-confidence token generation, flagging the response for human review if certainty drops."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Allowing a customer support AI to invent a refund policy that doesn't exist just to appease an angry customer, making the startup legally liable."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Hallucination Detection process"
+  - "How do I handle hallucination detection?"
+  - "Implement hallucination detection"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the hallucination detection process"
+  optional:
+    - name: "code_repository"
+      type: "string"
+      description: "Path to the code repository"
+      default: "./"
+
+outputs:
+  files:
+    - path: "outputs/hallucination-detection.md"
+      description: "Results of the hallucination detection process"
+  artifacts:
+    - "Completed hallucination detection deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

@@ -1,0 +1,79 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "cross-platform-ui-dev"
+display_name: "Cross-Platform Flutter Development"
+description: >
+  Build high-performance, cross-platform mobile apps using Flutter and Dart, ensuring
+  smooth animations and reliable state management using Riverpod or BLoC.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "mobile-developer-flutter"
+phase: "build"
+applicable_startups: 
+  - consumer
+priority: "mvp"
+difficulty: "advanced"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Architecture"
+    tasks:
+      - "Set up Riverpod for reactive, compile-safe dependency injection and global state."
+  - step: "UI Implementation"
+    tasks:
+      - "Build responsive layouts using Slivers for complex scrolling behaviors."
+      - "Implement hero animations and implicit animations for smooth state transitions."
+  - step: "Native Integration"
+    tasks:
+      - "Write platform channels (MethodChannels) if the app needs to access raw native APIs not covered by pub.dev plugins."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Calling `setState()` at the very top level of the widget tree for a minor UI update, causing the entire application to re-render and drop frames."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Cross Platform Ui Dev process"
+  - "How do I handle cross platform ui dev?"
+  - "Implement cross platform ui dev"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the cross platform ui dev process"
+  optional:
+    - name: "N/A"
+      type: "string"
+      description: "No optional inputs needed."
+
+outputs:
+  files:
+    - path: "outputs/cross-platform-ui-dev.md"
+      description: "Results of the cross platform ui dev process"
+  artifacts:
+    - "Completed cross platform ui dev deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

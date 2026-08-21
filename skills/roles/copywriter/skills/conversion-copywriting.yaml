@@ -1,0 +1,79 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "conversion-copywriting"
+display_name: "Conversion-Focused Copywriting"
+description: >
+  Write high-converting landing page headlines, CTAs, and sales collateral that 
+  focus exclusively on customer benefits rather than technical features.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "copywriter"
+phase: "growth"
+applicable_startups: 
+  - all
+priority: "high"
+difficulty: "advanced"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "The Headline Formula"
+    tasks:
+      - "Ensure the H1 instantly communicates what the product does, who it's for, and why they should care, using the formula: 'End benefit + Timeframe + Addressing Objections'."
+  - step: "Feature vs Benefit"
+    tasks:
+      - "Translate every technical feature into a human benefit. (e.g., Change '256-bit AES encryption' to 'Your private data is completely unhackable')."
+  - step: "Action-Oriented CTAs"
+    tasks:
+      - "Replace passive Call-to-Actions (like 'Submit' or 'Learn More') with high-intent, value-driven text (like 'Get Your Free Report' or 'Start Saving Money')."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Writing a vague, poetic H1 like 'Unleash Your Potential', leaving the visitor completely confused about what the software actually does."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Conversion Copywriting process"
+  - "How do I handle conversion copywriting?"
+  - "Implement conversion copywriting"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the conversion copywriting process"
+  optional:
+    - name: "target_audience"
+      type: "string"
+      description: "Target user or customer segment"
+      default: "Primary user persona"
+
+outputs:
+  files:
+    - path: "outputs/conversion-copywriting.md"
+      description: "Results of the conversion copywriting process"
+  artifacts:
+    - "Completed conversion copywriting deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

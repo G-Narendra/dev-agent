@@ -1,0 +1,112 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "poc-proof-of-concept"
+display_name: "Proof of Concept (POC) Management"
+description: >
+  Structures and manages technical evaluations (POCs / Pilots). Prevents 
+  the 'Never-ending POC' by establishing strict success criteria, timelines, 
+  and executive buy-in before granting the prospect access to the software.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "sales-engineer"
+phase: "growth"
+applicable_startups:
+  - b2b-saas
+  - developer-tools
+priority: "critical"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "They want to test the API for 30 days."
+  - "Set up a sandbox for the client."
+  - "The POC is dragging on."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Draft POC scoping document."
+  - "Provision isolated trial environment."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "client_name"
+      type: "string"
+      description: "The enterprise prospect."
+    - name: "technical_goal"
+      type: "string"
+      description: "What are they trying to prove? (e.g., Can it handle 10k RPS?)"
+  optional:
+    - name: "duration"
+      type: "string"
+      description: "Length of the POC."
+      default: "14 Days"
+
+outputs:
+  files:
+    - path: "business/sales/poc/evaluation-plan.md"
+      description: "The mutually agreed upon success criteria."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "N/A"
+manual:
+  - "The prospect signs the annual contract immediately upon the POC hitting the predefined success metrics."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "Resource Drain: Do not agree to build custom engineering features just to win a POC unless the contract value is massive and approved by the VP of Engineering."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Shared Slack Channel"
+      install: "N/A"
+  alternatives:
+    - name: "GitHub Repo (for DevTools)"
+      when: "Providing sample integration code."
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "The 'Go/No-Go' Agreement"
+    tasks:
+      - "Before starting, force the prospect to agree: 'If we prove X, Y, and Z over the next 14 days, will you sign the contract on the 15th?' If they say no, do not do the POC."
+  - step: "Define Success Metrics"
+    tasks:
+      - "Document exact, binary metrics. Not 'See if the team likes it'. Use: 'API successfully authenticates via Okta and processes 500 test transactions with <50ms latency'."
+  - step: "Timeboxing"
+    tasks:
+      - "Strictly limit the POC to 14 or 30 days. Cut off access on the final day to force a purchasing decision."
+  - step: "Weekly Check-ins"
+    tasks:
+      - "Schedule a 15-minute call every Friday during the POC to unblock their engineers. If they cancel the call, the deal is dying."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Tossing the keys over the fence. Giving a prospect a login and saying 'Let us know how it goes' results in a 10% win rate. You must guide them through the tool."
+best_practices:
+  - "Charge for POCs if you are an enterprise platform. A $5,000 paid pilot ensures the prospect actually allocates engineering resources to test it."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Mastering Technical Sales: The Sales Engineer's Handbook"
+    url: "https://www.masteringtechnicalsales.com/"

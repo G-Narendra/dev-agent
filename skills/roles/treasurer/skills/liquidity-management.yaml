@@ -1,0 +1,80 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "liquidity-management"
+display_name: "Corporate Liquidity & Treasury Operations"
+description: >
+  Manage the startup's bank accounts, invest idle venture capital safely, and ensure 
+  the company can always meet its short-term financial obligations.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "treasurer"
+phase: "growth"
+applicable_startups: 
+  - enterprise
+  - fintech
+priority: "mvp"
+difficulty: "advanced"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Cash Positioning"
+    tasks:
+      - "Build a 13-week rolling cash flow forecast to predict exact cash needs."
+      - "Establish a Sweep Account structure to move idle cash into interest-bearing accounts nightly."
+  - step: "Investment Policy"
+    tasks:
+      - "Draft a Corporate Investment Policy Statement (IPS) limiting investments to ultra-safe assets (e.g., US Treasuries, Money Market funds)."
+  - step: "Banking Redundancy"
+    tasks:
+      - "Open accounts at two Systemically Important Financial Institutions (G-SIFIs) to ensure access to payroll funds if one bank fails."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Investing $10M of the Series A round into high-yield corporate junk bonds to 'get a better return', risking the company's entire runway on market volatility."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Liquidity Management process"
+  - "How do I handle liquidity management?"
+  - "Implement liquidity management"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the liquidity management process"
+  optional:
+    - name: "N/A"
+      type: "string"
+      description: "No optional inputs needed."
+
+outputs:
+  files:
+    - path: "outputs/liquidity-management.md"
+      description: "Results of the liquidity management process"
+  artifacts:
+    - "Completed liquidity management deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

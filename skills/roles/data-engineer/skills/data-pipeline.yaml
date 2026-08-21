@@ -1,0 +1,108 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "data-pipeline"
+display_name: "Data Pipeline Architecture (ELT)"
+description: >
+  Builds robust, fault-tolerant pipelines to extract data from various SaaS 
+  tools (Salesforce, Stripe) and load it into the central data warehouse. 
+  Ensures data freshness and alerts the team instantly if a sync fails.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "data-engineer"
+phase: "operations"
+applicable_startups:
+  - all
+priority: "critical"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "We need Stripe data in Snowflake."
+  - "The daily sync failed."
+  - "Set up Fivetran or Airbyte."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Draft Airflow DAG."
+  - "Configure Airbyte connection."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "source_system"
+      type: "string"
+      description: "Where is the data coming from?"
+    - name: "destination_warehouse"
+      type: "string"
+      description: "Snowflake, BigQuery, Redshift."
+  optional:
+    - name: "sync_frequency"
+      type: "string"
+      description: "Hourly, Daily, Real-time."
+      default: "Daily at Midnight"
+
+outputs:
+  files:
+    - path: "airflow/dags/stripe_to_snowflake.py"
+      description: "The pipeline orchestration script."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "Data freshness tests pass, confirming the warehouse is never more than 24 hours behind production."
+manual:
+  - "Zero duplicate rows are created in the warehouse even if the pipeline runs twice (Idempotency)."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "PII Exposure: Strip out Personally Identifiable Information (SSNs, plain text emails) before the data lands in the analytical warehouse to comply with GDPR/CCPA."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Fivetran / Airbyte"
+      install: "N/A"
+  alternatives:
+    - name: "Apache Airflow"
+      when: "Complex custom orchestration is required."
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "ELT over ETL"
+    tasks:
+      - "Extract and Load the data into the warehouse raw FIRST (ELT). Transform the data inside the warehouse using SQL (dbt). This prevents losing raw data if the transformation logic changes."
+  - step: "Idempotent Syncs"
+    tasks:
+      - "Ensure pipelines use `MERGE` or `UPSERT` commands based on a primary key and updated timestamp, rather than blind `INSERT` commands, to prevent duplication on retries."
+  - step: "Data Quality Tests"
+    tasks:
+      - "Add assertions to the pipeline. If the 'Total Revenue' column from yesterday contains negative numbers, halt the pipeline and alert the team before the bad data reaches the CEO's dashboard."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Writing custom Python scripts to scrape APIs via cron jobs on an EC2 instance. This is brittle. Use managed connectors (Airbyte/Fivetran) for standard SaaS tools."
+best_practices:
+  - "Implement Dead Letter Queues (DLQs) for failed rows so the entire batch doesn't fail just because one row had a malformed date string."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Fivetran: ETL vs ELT"
+    url: "https://fivetran.com/learn/etl-vs-elt"

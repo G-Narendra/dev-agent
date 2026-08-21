@@ -1,0 +1,114 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "developer-community-building"
+display_name: "Developer Community Building (Discord/Slack)"
+description: >
+  Establish and nurture a vibrant, self-sustaining community of developers 
+  around the startup's product. Shifts support burden away from internal 
+  teams by empowering super-users to help each other.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "developer-advocate"
+phase: "operations"
+applicable_startups:
+  - developer-tools
+  - open-source
+priority: "high"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "We need a Discord server."
+  - "How do we build a community?"
+  - "Users need a place to ask questions."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Draft community guidelines."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "community_platform"
+      type: "string"
+      description: "Discord vs Slack vs Discourse."
+    - name: "core_audience"
+      type: "string"
+      description: "Open-source contributors vs Enterprise customers."
+  optional:
+    - name: "moderation_rules"
+      type: "string"
+      description: "Strict vs Permissive."
+      default: "Standard Code of Conduct"
+
+outputs:
+  files:
+    - path: "dev-rel/community/code-of-conduct.md"
+      description: "The rules of engagement for the server."
+  artifacts:
+    - "A channel architecture for the Discord server."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "N/A"
+  manual:
+    - "The community reaches a 'Self-Sustaining' state, where > 50% of technical questions are answered accurately by other community members, not company employees."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+
+safety_notes:
+  - "The 'Ghost Town' Risk: Do NOT launch a public community if you do not have a dedicated DevRel person to answer every single question within 1 hour for the first 6 months. An empty Discord server where questions go unanswered destroys trust."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Discord / Slack"
+      install: "N/A"
+  alternatives:
+    - name: "Discourse"
+      when: "You want the Q&A to be indexed by Google (Discord/Slack are closed silos)."
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Channel Architecture"
+    tasks:
+      - "Keep it simple. Do not create 40 channels on Day 1. Start with `#announcements`, `#general`, `#help-and-support`, and `#showcase`."
+  - step: "The 'First 100' Strategy"
+    tasks:
+      - "Do not just tweet a link. Personally invite your top 100 most active users/contributors via email. Ask them to help you seed the community."
+  - step: "The 5-Minute SLA (Service Level Agreement)"
+    tasks:
+      - "In the early days, the DevRel team MUST treat the Discord like a live chat. If a developer joins and asks a question, answer it immediately. This proves the community is alive and valuable."
+  - step: "Empowering Super-Users (The MVP Program)"
+    tasks:
+      - "Identify the 5 users who answer the most questions. Give them a special 'Community MVP' role (different color name), send them a hoodie, and give them direct access to the engineering team. They will run the community for you."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Using the community purely for marketing broadcasts. If 90% of the messages are the company posting 'Check out our new feature!', it is not a community; it's a mailing list. A community is peer-to-peer interaction."
+  - "Tolerating toxicity. If a 'brilliant' engineer is constantly condescending to beginners asking simple questions, ban them immediately. Toxicity kills communities faster than anything else."
+
+best_practices:
+  - "Host weekly 'Office Hours' via Discord Voice/Video. Allow any developer to drop in and live-debug their code with your core engineering team."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Orbit: The Community Growth Model"
+    url: "https://orbit.love/model"

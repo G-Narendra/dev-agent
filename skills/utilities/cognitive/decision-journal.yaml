@@ -1,0 +1,92 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "decision-journal"
+display_name: "Decision Journaling & Pre-Mortems"
+description: >
+  Forces structured thinking before making irreversible (Type 1) decisions. 
+  Documents the context, options, anticipated outcomes, and confidence level 
+  so the team can review the decision process later without hindsight bias.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "utility"
+phase: "all"
+applicable_startups:
+  - all
+priority: "medium"
+difficulty: "intermediate"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Let's document this decision."
+  - "Write a pre-mortem."
+  - "Why did we choose this architecture?"
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Generate decision record (ADR)."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "decision_context"
+      type: "string"
+      description: "What decision is being made and why?"
+    - name: "options_considered"
+      type: "string"
+      description: "What were the alternatives?"
+  optional:
+    - name: "confidence_level"
+      type: "string"
+      description: "0-100% confidence in the outcome."
+      default: "80%"
+
+outputs:
+  files:
+    - path: "decisions/adr/YYYY-MM-DD-{topic}.md"
+      description: "The Architecture Decision Record (ADR) or Business Decision Record."
+  artifacts:
+    - "A structured log of the decision."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "N/A"
+  manual:
+    - "Six months later, the team can read the document and completely understand *why* a decision was made, even if it turned out to be wrong."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+
+safety_notes:
+  - "Do not use this for easily reversible (Type 2) decisions. Writing a 3-page document to decide on a button color slows the startup down. Reserve this for database choices, co-founder equity, and pricing models."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Markdown"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Define the State of the World"
+    tasks:
+      - "Write down what the team currently knows, what they don't know, and the constraints (time, money, talent)."
+  - step: "The Pre-Mortem"
+    tasks:
+      - "Assume it is 1 year from now and the decision was a complete disaster. Write down *exactly* what went wrong."
+  - step: "Define Falsifiability"
+    tasks:
+      - "Write an 'I was wrong if...' statement. (e.g., 'We chose MongoDB. I was wrong if our join queries exceed 5 seconds by Month 6')."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Outcome Bias: Judging a past decision based on the result rather than the information available at the time."
+  - "Post-hoc Rationalization: Modifying the decision journal after the fact to make the team look smarter."
+
+best_practices:
+  - "Store ADRs (Architecture Decision Records) directly in the git repository next to the code they affect."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Farnam Street: The Decision Journal"
+    url: "https://fs.blog/decision-journal/"

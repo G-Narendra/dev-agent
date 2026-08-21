@@ -1,0 +1,111 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "data-privacy-gdpr-compliance"
+display_name: "GDPR, CCPA & Data Privacy Compliance"
+description: >
+  Ensure the startup's software and marketing practices do not violate 
+  international data privacy laws. Focuses on consent, data mapping, 
+  and handling user deletion requests (Right to be Forgotten).
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "legal-counsel"
+phase: "operations"
+applicable_startups:
+  - all
+priority: "critical"
+difficulty: "expert"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Are we GDPR compliant?"
+  - "A user requested we delete their data."
+  - "Update the privacy policy."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Generate a Privacy Policy."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "data_collected"
+      type: "string"
+      description: "List of all PII collected (Emails, IPs, Health data)."
+    - name: "third_party_processors"
+      type: "string"
+      description: "Where does the data go? (AWS, Stripe, Mixpanel)."
+  optional:
+    - name: "target_regions"
+      type: "string"
+      description: "EU (GDPR), California (CCPA), or Global."
+      default: "Global"
+
+outputs:
+  files:
+    - path: "legal/privacy/privacy-policy-v2.md"
+      description: "The public-facing privacy policy."
+  artifacts:
+    - "A Data Mapping (RoPA) spreadsheet for internal auditors."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "N/A"
+  manual:
+    - "The startup passes a third-party security audit (e.g., SOC2 Type II) without any major privacy violations."
+    - "Zero fines are levied by the ICO or European regulators."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+
+safety_notes:
+  - "The 72-Hour Rule: Under GDPR, if you suffer a data breach, you MUST notify the regulator within 72 hours of becoming aware of it. Have a 'Breach Response Plan' drafted and ready."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "OneTrust / Vanta"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Data Mapping (RoPA)"
+    tasks:
+      - "You cannot protect what you don't know you have. Create a Record of Processing Activities. Document: What data is collected? Why? Where is it stored? When is it deleted?"
+  - step: "Consent Management"
+    tasks:
+      - "Pre-checked boxes for marketing emails are illegal in the EU. Implement explicit, opt-in consent mechanisms. Implement a cookie banner that actually blocks tracking scripts until the user clicks 'Accept'."
+  - step: "Data Subject Access Requests (DSAR)"
+    tasks:
+      - "Create an SOP for when a user says 'Delete everything you have on me'. Engineering must know how to hard-delete the user from Postgres, Stripe, Mixpanel, and Zendesk within 30 days."
+  - step: "Data Processing Agreements (DPA)"
+    tasks:
+      - "If you use AWS to store EU citizen data, you must sign a DPA with AWS. You are the Data Controller; they are the Data Processor. The legal chain of custody must be unbroken."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Copy-pasting Facebook's privacy policy. Your startup is not Facebook. Your privacy policy must accurately reflect YOUR actual data practices. If you claim 'We never sell your data' but you share it with ad networks, you are committing fraud."
+  - "Ignoring 'Soft Deletes'. When a user clicks 'Delete Account', simply changing `is_active = False` in the database is a violation of the Right to be Forgotten. The PII must be purged or heavily anonymized."
+
+best_practices:
+  - "Data Minimization. If you run a weather app, you do not need the user's phone number or home address. Only collect the exact data required to deliver the core service."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "GDPR.eu: Compliance Checklist"
+    url: "https://gdpr.eu/checklist/"

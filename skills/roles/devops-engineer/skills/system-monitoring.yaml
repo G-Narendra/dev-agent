@@ -1,0 +1,85 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "system-monitoring"
+display_name: "Observability & Alerting"
+description: >
+  Instrument the infrastructure with metrics, logs, and traces (Datadog/Prometheus) 
+  so the team is alerted to degradation before users even notice.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "devops-engineer"
+phase: "operations"
+applicable_startups: 
+  - all
+priority: "high"
+difficulty: "expert"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "The RED Metrics"
+    tasks:
+      - "Create dashboards focused on the RED metrics for every microservice: Rate (Requests/sec), Errors (HTTP 5xx), and Duration (P99 Latency)."
+  - step: "Actionable Alerting"
+    tasks:
+      - "Configure PagerDuty to only page an on-call engineer at 3 AM if the alert is ACTIONABLE (i.e., a human needs to do something immediately to prevent revenue loss)."
+  - step: "Log Aggregation"
+    tasks:
+      - "Centralize all logs into structured JSON format so engineers can easily query by `user_id` or `request_id` during an outage."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Setting up alerts for high CPU utilization (which auto-scales away naturally) instead of alerting on elevated user-facing HTTP 500 error rates, leading to massive alert fatigue."
+
+best_practices:
+  - "Infrastructure as Code should be version-controlled alongside app code."
+  - "Implement health checks and readiness probes for all services."
+  - "Use immutable infrastructure -- never SSH into running containers."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the System Monitoring process"
+  - "How do I handle system monitoring?"
+  - "Implement system monitoring"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the system monitoring process"
+  optional:
+    - name: "data_source"
+      type: "string"
+      description: "Source of data to analyze"
+      default: "Internal data"
+    - name: "target_audience"
+      type: "string"
+      description: "Target user or customer segment"
+      default: "Primary user persona"
+
+outputs:
+  files:
+    - path: "outputs/system-monitoring.md"
+      description: "Results of the system monitoring process"
+  artifacts:
+    - "Completed system monitoring deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Docker Documentation"
+    url: "https://docs.docker.com"
+  - title: "Kubernetes Documentation"
+    url: "https://kubernetes.io/docs"
+  - title: "AWS Documentation"
+    url: "https://docs.aws.amazon.com"

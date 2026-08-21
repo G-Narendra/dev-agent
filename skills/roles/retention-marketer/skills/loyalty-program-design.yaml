@@ -1,0 +1,111 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "loyalty-program-design"
+display_name: "Loyalty & Referral Program Design"
+description: >
+  Design incentives that turn highly satisfied customers (advocates) into a free 
+  acquisition channel. Balances the financial cost of the reward against the 
+  Customer Acquisition Cost (CAC) savings of viral growth.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "retention-marketer"
+phase: "growth"
+applicable_startups:
+  - all
+priority: "growth"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Create a referral program."
+  - "Design a loyalty points system."
+  - "How do we get users to invite friends?"
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Create a referral economic model."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "current_cac"
+      type: "string"
+      description: "Current cost to acquire a customer via paid channels."
+    - name: "product_type"
+      type: "string"
+      description: "B2B SaaS, D2C Ecommerce, Marketplace, etc."
+  optional:
+    - name: "incentive_type"
+      type: "string"
+      description: "Cash, Account Credit, Swag, or Feature Unlocks."
+      default: "Account Credit"
+
+outputs:
+  files:
+    - path: "marketing/referral-program.md"
+      description: "The rules, mechanics, and UI requirements for the program."
+  artifacts:
+    - "A spreadsheet calculating the ROI of the referral incentive."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "Viral Coefficient (K-factor) increases above 0.2."
+  manual:
+    - "Cost of the referral reward is strictly less than 50% of the standard paid CAC."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+
+safety_notes:
+  - "Implement fraud prevention. Without checks, users will create fake accounts to refer themselves and steal credits."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Rewardful / PartnerStack"
+      install: "N/A"
+  alternatives:
+    - name: "Custom Build (Stripe API)"
+      when: "The core product heavily relies on deep financial integration."
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Incentive Selection"
+    tasks:
+      - "B2B: Offer account credit or physical swag. (A $50 Amazon card to a corporate employee feels like a bribe; a $500 account credit helps their company)."
+      - "B2C/Ecommerce: Offer double-sided cash/credit ('Give $20, Get $20')."
+  - step: "Double-Sided Mechanics"
+    tasks:
+      - "Always reward BOTH the referrer and the referee. If only the referrer gets a reward, sharing feels selfish and spammy. If both get rewarded, sharing feels like a gift."
+  - step: "Visibility Strategy"
+    tasks:
+      - "Do not hide the 'Refer a Friend' button deep in the Settings menu. Surface it immediately after a 'Happy Moment' (e.g., right after they successfully process a payment or generate a report)."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Offering complex points systems (e.g., 'Earn 500 gem points'). Users don't want to do math to figure out what a gem point is worth in real money."
+  - "Paying out the reward instantly upon signup. Always tie the payout to an activation metric (e.g., 'Get $50 when your friend makes their first purchase') to prevent fraud."
+
+best_practices:
+  - "Look at Dropbox's famous referral program: 'Invite a friend, you both get 500MB of extra storage'. It cost them nothing (storage is cheap) but gave the user exactly what they wanted."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "First Round Review: How to Build a Referral Program"
+    url: "https://review.firstround.com/the-science-behind-dropboxs-growth-engine"

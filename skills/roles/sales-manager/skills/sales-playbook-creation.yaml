@@ -1,0 +1,108 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "sales-playbook-creation"
+display_name: "Sales Playbook & Process Definition"
+description: >
+  Create the definitive guide for how the company sells its product. 
+  Translates founder-led sales into a repeatable, scalable process that new 
+  Account Executives (AEs) can memorize and execute.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "sales-manager"
+phase: "growth"
+applicable_startups:
+  - b2b-saas
+priority: "critical"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Write the sales playbook."
+  - "How do we train new sales reps?"
+  - "Standardize the sales process."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Create a sales playbook template."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "ideal_customer_profile"
+      type: "string"
+      description: "Who exactly is the target buyer? (e.g., 'VP of Engineering at 100-500 employee tech companies')."
+  optional:
+    - name: "sales_methodology"
+      type: "string"
+      description: "MEDDIC, BANT, or Challenger Sale."
+      default: "MEDDIC"
+
+outputs:
+  files:
+    - path: "sales/sales-playbook-v1.md"
+      description: "The master document for all new hires."
+  artifacts:
+    - "A 30-60-90 day onboarding plan for new AEs."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "N/A"
+  manual:
+    - "A new sales rep can close their first deal within 60 days without the CEO having to join the call."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+
+safety_notes:
+  - "Pricing Authority: The playbook MUST explicitly state the maximum discount an AE can offer without managerial approval (e.g., 10%). Reps left to their own devices will slash prices to 50% to close deals, destroying company margins."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Notion / Guru"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "The Ideal Customer Profile (ICP)"
+    tasks:
+      - "Define exactly who you sell to, and more importantly, who you DO NOT sell to. AEs waste 50% of their time talking to unqualified leads. Give them permission to disqualify bad fits early."
+  - step: "The Sales Stages"
+    tasks:
+      - "Map the CRM stages to verifiable customer actions, not AE feelings. (e.g., Stage 3 is NOT 'Customer seems interested'. Stage 3 IS 'Customer agreed to a technical proof of concept')."
+  - step: "The Value Proposition & Battlecards"
+    tasks:
+      - "Write out the 30-second elevator pitch."
+      - "Create 'Battlecards' for the top 3 competitors. (e.g., 'When the customer mentions Competitor X, highlight our superior API speed. Do NOT attack their UI.')."
+  - step: "Qualification Framework (MEDDIC)"
+    tasks:
+      - "Metrics, Economic Buyer, Decision Criteria, Decision Process, Identify Pain, Champion. Ensure AEs are gathering this data on every discovery call."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Creating a 200-page PDF playbook that no one reads. The playbook must be a living, searchable wiki (like Notion or Guru) that is updated weekly."
+  - "Letting the top-performing AE completely ignore the playbook because 'they hit quota'. If the process isn't followed in the CRM, you cannot forecast revenue or scale the team."
+
+best_practices:
+  - "Include links to actual call recordings (Gong/Chorus) of the CEO or top AE executing the pitch perfectly. Reading a script is entirely different from hearing the required tone of voice."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "HubSpot: How to Build a Sales Playbook"
+    url: "https://blog.hubspot.com/sales/sales-playbook"

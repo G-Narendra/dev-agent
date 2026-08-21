@@ -1,0 +1,107 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "jobs-to-be-done-framework"
+display_name: "Jobs to be Done (JTBD) Framework"
+description: >
+  Translate user needs into the 'Jobs to be Done' format. Shifts the product focus 
+  away from features (what the product does) to outcomes (what the user is actually 
+  trying to accomplish, e.g., 'hire a milkshake to pass the time on a commute').
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "customer-interview-specialist"
+phase: "ideation"
+applicable_startups:
+  - all
+priority: "mvp"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Define the jobs to be done."
+  - "Why do users hire our product?"
+  - "Write JTBD statements."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Create a JTBD list artifact."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "user_research"
+      type: "file"
+      description: "Synthesized insights from customer interviews."
+  optional:
+    - name: "competitors"
+      type: "string"
+      description: "Existing solutions the user currently 'hires'."
+      default: "null"
+
+outputs:
+  files:
+    - path: "product/jtbd-statements.md"
+      description: "List of core Jobs to be Done."
+  artifacts:
+    - "A matrix comparing how well your product vs competitors solves the Core Job."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "Every statement strictly follows the format: 'When [situation], I want to [motivation], so I can [expected outcome].'"
+  manual:
+    - "The team stops talking about 'adding a dashboard' and starts talking about 'helping users feel in control of their spending'."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+
+safety_notes:
+  - "N/A"
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Notion / Markdown"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Identify the Core Job"
+    tasks:
+      - "Abstract the user's request. If they ask for 'a 1/4 inch drill', the job is 'make a 1/4 inch hole'."
+  - step: "Write Job Statements"
+    tasks:
+      - "Use the standard syntax: 'When [Context], I want to [Motivation], so I can [Expected Outcome].'"
+      - "Example Context: 'When I am preparing for a board meeting...'"
+      - "Example Motivation: '...I want to quickly aggregate my financial data...'"
+      - "Example Outcome: '...so I can look competent and secure my next round of funding.'"
+  - step: "Identify Competitors (The Broad View)"
+    tasks:
+      - "Realize that competitors are not just other software. For Zoom, the competitor is a business trip (Delta Airlines) or a phone call."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Writing a JTBD statement that contains a feature. 'When I log in, I want to see a pie chart, so I can view my data.' This dictates the solution, not the job."
+  - "Making the 'Context' too generic (e.g., 'When I am at work...'). The context must describe the specific trigger that causes the struggle."
+
+best_practices:
+  - "Focus heavily on the 'Expected Outcome'. Is the user trying to save time, make money, or gain social status? Emotional outcomes are often stronger than functional ones."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Clayton Christensen: The Jobs to be Done Theory"
+    url: "https://hbr.org/2016/09/know-your-customers-jobs-to-be-done"

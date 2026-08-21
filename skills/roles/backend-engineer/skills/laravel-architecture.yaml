@@ -1,0 +1,78 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "laravel-architecture"
+display_name: "PHP Laravel Architecture"
+description: >
+  Build rapid-prototyping and scalable monoliths using Laravel, leveraging Eloquent ORM, 
+  Jobs, and broadcasting for real-time web applications.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "backend-engineer"
+phase: "build"
+applicable_startups: 
+  - saas
+priority: "high"
+difficulty: "advanced"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Eloquent Optimization"
+    tasks:
+      - "Use `with()` to eager load relationships and prevent the N+1 query problem when iterating over collections in Blade templates or API responses."
+  - step: "Queues & Jobs"
+    tasks:
+      - "Offload all slow tasks (email sending, PDF generation) to Laravel Horizon using Redis to keep the web response time under 100ms."
+  - step: "Form Requests"
+    tasks:
+      - "Move all validation logic out of the Controller and into dedicated FormRequest classes to keep controllers lean and testable."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Writing raw `DB::raw()` queries that concatenate user input directly into the SQL string, creating a massive SQL injection vulnerability."
+
+best_practices:
+  - "Design APIs with idempotency in mind -- same request, same result."
+  - "Always validate inputs at the API boundary before processing."
+  - "Use database transactions for operations that modify multiple records."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Laravel Architecture process"
+  - "How do I handle laravel architecture?"
+  - "Implement laravel architecture"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the laravel architecture process"
+  optional:
+    - name: "N/A"
+      type: "string"
+      description: "No optional inputs needed."
+
+outputs:
+  files:
+    - path: "outputs/laravel-architecture.md"
+      description: "Results of the laravel architecture process"
+  artifacts:
+    - "Completed laravel architecture deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "PostgreSQL Documentation"
+    url: "https://postgresql.org/docs"
+  - title: "Node.js Documentation"
+    url: "https://nodejs.org/en/docs/"

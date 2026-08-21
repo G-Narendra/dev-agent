@@ -1,0 +1,79 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "flutter-architecture"
+display_name: "Flutter Application Architecture"
+description: >
+  Build high-performance, cross-platform mobile applications using Flutter and Dart, 
+  implementing robust state management and native integrations.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "mobile-developer-flutter"
+phase: "build"
+applicable_startups: 
+  - consumer
+priority: "high"
+difficulty: "expert"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "State Management"
+    tasks:
+      - "Implement Riverpod or BLoC to strictly separate UI presentation from business logic and network calls."
+  - step: "Widget Optimization"
+    tasks:
+      - "Use `const` constructors aggressively for all static widgets to prevent the Flutter engine from rebuilding them during every frame."
+  - step: "Native Channels"
+    tasks:
+      - "Write efficient MethodChannels when bridging to Swift/Kotlin for heavy native operations (e.g., Bluetooth or ARKit) that Flutter cannot handle natively."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Putting all business logic, API calls, and state management directly inside a massive 1,500-line `StatefulWidget`, making it completely untestable."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Flutter Architecture process"
+  - "How do I handle flutter architecture?"
+  - "Implement flutter architecture"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the flutter architecture process"
+  optional:
+    - name: "code_repository"
+      type: "string"
+      description: "Path to the code repository"
+      default: "./"
+
+outputs:
+  files:
+    - path: "outputs/flutter-architecture.md"
+      description: "Results of the flutter architecture process"
+  artifacts:
+    - "Completed flutter architecture deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

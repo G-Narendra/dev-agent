@@ -1,0 +1,81 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "infrastructure-deployment"
+display_name: "Land and Deploy (Infrastructure)"
+description: >
+  Execute the initial 'Day 0' deployment of the startup's infrastructure, moving from 
+  local development to a live, production-ready environment.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "devops-engineer"
+phase: "build"
+applicable_startups: 
+  - all
+priority: "mvp"
+difficulty: "advanced"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Environment Parity"
+    tasks:
+      - "Ensure the production environment perfectly mirrors staging (same OS, same Postgres version) to prevent 'It works on my machine' bugs."
+  - step: "Zero Trust Networking"
+    tasks:
+      - "Configure security groups so the database only accepts connections from the specific IP range of the backend application servers."
+  - step: "The Initial Smoke Test"
+    tasks:
+      - "After deployment, manually create a test user, perform a core action, and verify the data actually saved in the production database."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Deploying the API successfully but forgetting to run the database migrations on production, causing immediate 500 errors for the first users."
+
+best_practices:
+  - "Infrastructure as Code should be version-controlled alongside app code."
+  - "Implement health checks and readiness probes for all services."
+  - "Use immutable infrastructure -- never SSH into running containers."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Infrastructure Deployment process"
+  - "How do I handle infrastructure deployment?"
+  - "Implement infrastructure deployment"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the infrastructure deployment process"
+  optional:
+    - name: "code_repository"
+      type: "string"
+      description: "Path to the code repository"
+      default: "./"
+
+outputs:
+  files:
+    - path: "outputs/infrastructure-deployment.md"
+      description: "Results of the infrastructure deployment process"
+  artifacts:
+    - "Completed infrastructure deployment deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Docker Documentation"
+    url: "https://docs.docker.com"
+  - title: "Kubernetes Documentation"
+    url: "https://kubernetes.io/docs"
+  - title: "AWS Documentation"
+    url: "https://docs.aws.amazon.com"

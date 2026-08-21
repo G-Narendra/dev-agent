@@ -1,0 +1,108 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "web-animations"
+display_name: "Web Animations & Micro-Interactions"
+description: >
+  Elevate the UX from 'functional' to 'delightful' using performant animations. 
+  Focuses on hardware-accelerated CSS transitions, Framer Motion for complex 
+  React orchestrations, and Lottie for vector animations.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "frontend-engineer"
+phase: "ship"
+applicable_startups:
+  - all
+priority: "growth"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Add a loading animation."
+  - "Make the UI feel smoother."
+  - "Animate the page transition."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "npm install framer-motion"
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "target_element"
+      type: "string"
+      description: "What is moving? (e.g., 'Modal opening', 'Button hover')."
+  optional:
+    - name: "animation_library"
+      type: "string"
+      description: "Framer Motion vs Vanilla CSS."
+      default: "Framer Motion"
+
+outputs:
+  files:
+    - path: "src/components/ui/AnimatedModal.tsx"
+      description: "The animated component."
+  artifacts:
+    - "A definition of the app's standard spring physics (stiffness/damping)."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "Animations maintain 60 FPS in Chrome DevTools performance profiling."
+  manual:
+    - "The animation feels 'snappy' and does not delay the user from achieving their goal."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+
+safety_notes:
+  - "Accessibility: You MUST respect the `prefers-reduced-motion` media query. If a user has this enabled in their OS (often for vestibular disorders), immediately disable all non-essential animations."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Framer Motion (React)"
+      install: "npm install framer-motion"
+  alternatives:
+    - name: "GSAP"
+      when: "Building highly complex, scroll-linked storytelling websites (e.g., Apple-style landing pages)."
+
+implementation_checklist:
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+  - step: "The 300ms Rule"
+    tasks:
+      - "Keep UI animations (menus opening, buttons hovering) between 150ms and 300ms. Anything slower makes the app feel sluggish. Anything faster is imperceptible."
+  - step: "Hardware Acceleration"
+    tasks:
+      - "ONLY animate `transform` (scale, translate) and `opacity`. These are handed off to the GPU."
+      - "NEVER animate `width`, `height`, `margin`, or `top/left`. These trigger a 'Layout Calculation' on the CPU, causing massive jank and frame drops."
+  - step: "Exit Animations"
+    tasks:
+      - "In React, when a component is removed from the DOM, it disappears instantly. Use `<AnimatePresence>` in Framer Motion to allow the component to gracefully fade out before it is unmounted."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "The 'PowerPoint Transition' anti-pattern. Having every single list item fly in from a different side of the screen on page load. It is distracting and amateurish."
+  - "Blocking user interaction. If a success checkmark animation takes 2 seconds to play, do not prevent the user from clicking the 'Next' button while it plays."
+
+best_practices:
+  - "Use Spring physics instead of Easing Curves (ease-in-out) for spatial movement. Springs naturally handle interruptions (e.g., the user dragging a modal halfway and letting go) much better than rigid bezier curves."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Framer Motion Documentation"
+    url: "https://www.framer.com/motion/"

@@ -1,0 +1,110 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "ux-audit-remediation"
+display_name: "UX Audit & Remediation Planning"
+description: >
+  Conducts systematic UX audits of existing products to identify usability
+  issues, heuristic violations, accessibility problems, and friction points.
+  Creates prioritized remediation plans based on impact and effort.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "product-designer-ux"
+phase: "growth"
+applicable_startups:
+  - all
+priority: "growth"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Conduct a UX audit."
+  - "Our product has usability issues."
+  - "Find friction points in the user experience."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Run heuristic evaluation."
+  - "Create UX remediation plan."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "product_url_or_app"
+      type: "string"
+      description: "The product to audit."
+    - name: "audit_scope"
+      type: "string"
+      description: "Full audit, specific flows, or specific pages."
+  optional:
+    - name: "analytics_data"
+      type: "file"
+      description: "User behavior data to guide audit focus."
+      default: "None available"
+
+outputs:
+  files:
+    - path: "design/audit/ux-audit-report.md"
+      description: "Comprehensive UX audit with prioritized findings"
+  artifacts:
+    - "A prioritized UX remediation roadmap"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Heuristic Evaluation"
+    tasks:
+      - "Evaluate against Nielsen's 10 usability heuristics: visibility, match to real world, user control, consistency, error prevention, recognition, flexibility, aesthetic design, help, documentation."
+      - "Score each heuristic violation by severity (0-4 scale)."
+      - "Document each issue with screenshot, heuristic violated, and severity."
+      - "Focus on the most impactful screens: landing, signup, core feature, checkout/settings."
+  - step: "Analytics-Driven Analysis"
+    tasks:
+      - "Analyze funnel drop-offs to identify where users are struggling."
+      - "Review session recordings at drop-off points to understand why."
+      - "Check rage clicks, dead clicks, and error messages in the analytics."
+      - "Correlate UX issues with business metrics (conversion, retention, support tickets)."
+  - step: "Accessibility Audit"
+    tasks:
+      - "Run automated accessibility testing (WAVE, axe DevTools, Lighthouse)."
+      - "Test keyboard navigation — can users complete all tasks without a mouse?"
+      - "Check color contrast meets WCAG AA standards (4.5:1 for normal text)."
+      - "Test with screen reader (VoiceOver, NVDA) to identify announcement issues."
+  - step: "Remediation Prioritization"
+    tasks:
+      - "Create an impact vs. effort matrix for each finding."
+      - "Low effort, high impact = do immediately."
+      - "High effort, high impact = plan for next sprint."
+      - "Low effort, low impact = fix when convenient."
+      - "High effort, low impact = deprioritize or defer."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Reviewing the product in isolation without analytics data to guide focus."
+  - "Creating a huge list of issues without prioritization — overwhelming the team."
+  - "Only finding UI issues and ignoring deeper UX problems with the workflow."
+  - "Conducting an audit but not following through on the remediation plan."
+best_practices:
+  - "Combine automated tools (Lighthouse, axe) with expert heuristic review."
+  - "Session recordings are worth a thousand screenshots — watch real users struggle."
+  - "Fix the most common user paths first before optimizing edge cases."
+  - "Share audit findings with the whole team, not just designers."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

@@ -1,0 +1,81 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "devops-philosophy"
+display_name: "DevOps Philosophy & Culture"
+description: >
+  Embed the core DevOps philosophy into the engineering team: breaking down silos, 
+  automating toil, and treating infrastructure entirely as code.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "devops-engineer"
+phase: "operations"
+applicable_startups: 
+  - all
+priority: "high"
+difficulty: "advanced"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "You Build It, You Run It"
+    tasks:
+      - "Ensure that software engineers who write the code are also the ones carrying the pager and deploying it, forcing them to care about operational stability."
+  - step: "Toil Elimination"
+    tasks:
+      - "Identify any operational task (e.g., provisioning a developer database) that is done manually more than twice, and write a script to fully automate it."
+  - step: "Immutable Infrastructure"
+    tasks:
+      - "Never SSH into a server to manually update a package or change a config file. If a server is broken, kill it and let the Auto Scaling Group spin up a fresh one."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Creating an isolated 'DevOps Team' that acts as a ticket-taking bottleneck, forcing developers to wait 3 days just to get a new S3 bucket provisioned."
+
+best_practices:
+  - "Infrastructure as Code should be version-controlled alongside app code."
+  - "Implement health checks and readiness probes for all services."
+  - "Use immutable infrastructure -- never SSH into running containers."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Devops Philosophy process"
+  - "How do I handle devops philosophy?"
+  - "Implement devops philosophy"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the devops philosophy process"
+  optional:
+    - name: "code_repository"
+      type: "string"
+      description: "Path to the code repository"
+      default: "./"
+
+outputs:
+  files:
+    - path: "outputs/devops-philosophy.md"
+      description: "Results of the devops philosophy process"
+  artifacts:
+    - "Completed devops philosophy deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Docker Documentation"
+    url: "https://docs.docker.com"
+  - title: "Kubernetes Documentation"
+    url: "https://kubernetes.io/docs"
+  - title: "AWS Documentation"
+    url: "https://docs.aws.amazon.com"

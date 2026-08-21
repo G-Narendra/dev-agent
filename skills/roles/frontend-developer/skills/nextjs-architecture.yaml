@@ -1,0 +1,113 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "nextjs-architecture"
+display_name: "Next.js App Router Architecture"
+description: >
+  Architect production-ready Next.js applications leveraging the App Router, 
+  React Server Components (RSC), and Edge rendering for optimal performance.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "frontend-developer"
+phase: "build"
+applicable_startups: 
+  - all
+priority: "critical"
+difficulty: "expert"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Set up a new Next.js project."
+  - "Refactor this React app to use the App Router."
+  - "How should we handle data fetching in Next.js?"
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "npx create-next-app@latest my-app --typescript --tailwind --eslint --app"
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "project_name"
+      type: "string"
+      description: "The name of the application."
+  optional:
+    - name: "ui_library"
+      type: "string"
+      description: "Component library to install."
+      default: "shadcn/ui"
+
+outputs:
+  files:
+    - path: "app/layout.tsx"
+      description: "The root layout defining global fonts and providers."
+  artifacts:
+    - "A running Next.js dev server."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "npm run build completes without type errors or linting failures."
+    - "Lighthouse Performance score is > 90."
+  manual:
+    - "The initial page load requires zero client-side JavaScript to render the main HTML structure."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+  - "network"
+
+safety_notes:
+  - "Never expose server-side secrets (e.g., database URLs) to the client by failing to prefix them with `NEXT_PUBLIC_` if they are truly needed on the client, or keep them securely on the server."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Next.js"
+      install: "npx create-next-app@latest"
+  alternatives:
+    - name: "Vite + React"
+      when: "Building an internal dashboard that does not require SEO or Server-Side Rendering."
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Server Components Default"
+    tasks:
+      - "Keep components as Server Components by default. Only add `'use client'` at the absolute lowest leaf node necessary (e.g., a button with an `onClick` handler)."
+  - step: "Data Fetching & Caching"
+    tasks:
+      - "Fetch data directly in Server Components using standard `fetch()` or direct ORM calls. Utilize Next.js route segment config (`revalidate = 60`) for ISR caching."
+  - step: "Streaming & Suspense"
+    tasks:
+      - "Wrap slow database queries in React `<Suspense>` boundaries. Serve the static shell of the page instantly, and stream in the heavy data chunks as they resolve."
+  - step: "SEO Metadata"
+    tasks:
+      - "Export the `metadata` object from `layout.tsx` and `page.tsx` to automatically generate title tags, meta descriptions, and OpenGraph images."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Slapping `'use client'` at the very top of `layout.tsx`, forcing the entire application to client-side render and completely defeating the purpose of Next.js Server Components."
+  - "Using `useEffect` to fetch data on initial load instead of fetching it securely and instantly on the server."
+  - "Passing large, unsanitized database objects (including passwords or internal IDs) as props from a Server Component to a Client Component."
+
+best_practices:
+  - "Use Next.js Server Actions for form submissions and mutations instead of building separate `/api` routes."
+  - "Keep global state (Redux/Zustand) to an absolute minimum; rely on URL parameters and Server Components for most data."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Next.js Documentation"
+    url: "https://nextjs.org/docs"

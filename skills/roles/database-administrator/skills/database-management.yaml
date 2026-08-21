@@ -1,0 +1,79 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "database-management"
+display_name: "Production Database Management"
+description: >
+  Manage backups, replication, connection pooling, and routine maintenance for 
+  high-throughput production databases (PostgreSQL/MySQL).
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "database-administrator"
+phase: "operations"
+applicable_startups: 
+  - all
+priority: "high"
+difficulty: "expert"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Automated Backups & PITR"
+    tasks:
+      - "Ensure continuous Write-Ahead Log (WAL) archiving is enabled, allowing Point-In-Time-Recovery (PITR) to restore the database to any specific second in the past 7 days."
+  - step: "Connection Pooling"
+    tasks:
+      - "Deploy PgBouncer in front of Postgres to handle 10,000+ incoming connections from serverless functions, multiplexing them down to 100 actual database connections."
+  - step: "Index Maintenance"
+    tasks:
+      - "Schedule routine `VACUUM ANALYZE` and `REINDEX` jobs to clear dead tuples and prevent query performance degradation over time."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Taking daily snapshots of the database but never actually testing the restore process, only to discover during an outage that the backups were corrupted 6 months ago."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Database Management process"
+  - "How do I handle database management?"
+  - "Implement database management"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the database management process"
+  optional:
+    - name: "data_source"
+      type: "string"
+      description: "Source of data to analyze"
+      default: "Internal data"
+
+outputs:
+  files:
+    - path: "outputs/database-management.md"
+      description: "Results of the database management process"
+  artifacts:
+    - "Completed database management deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

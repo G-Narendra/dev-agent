@@ -1,0 +1,114 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "model-deployment"
+display_name: "MLOps Model Deployment (Triton / SageMaker)"
+description: >
+  Deploys machine learning models into highly available production environments. 
+  Manages GPU infrastructure, API routing, versioning, and continuous model 
+  monitoring to detect data drift over time. Covers key patterns to avoid common pitfalls like training on the full dataset without a holdout test set -- m, and provides actionable best practices for production-ready results.
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "mlops-engineer"
+phase: "operations"
+applicable_startups:
+  - all
+priority: "critical"
+difficulty: "expert"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Put the new ML model in production."
+  - "The inference endpoint is too slow."
+  - "How do we A/B test two different models?"
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Generate model server Dockerfile."
+  - "Draft SageMaker endpoint config."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "model_artifact"
+      type: "string"
+      description: "Path to .pkl, .pt, or ONNX file."
+    - name: "framework"
+      type: "string"
+      description: "PyTorch, TensorFlow, Scikit-Learn."
+  optional:
+    - name: "serving_platform"
+      type: "string"
+      description: "AWS SageMaker, Triton, FastAPI."
+      default: "FastAPI"
+
+outputs:
+  files:
+    - path: "mlops/serving/api.py"
+      description: "The inference API layer."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "API inference latency stays under 100ms for lightweight models, and under 2s for heavy LLMs."
+manual:
+  - "A new version of the model can be deployed seamlessly without dropping any live customer requests."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "GPU Memory Leaks: If your API endpoint continuously loads models into GPU memory on every request without clearing them, it will crash with an OOM (Out of Memory) error in minutes. Load the model ONCE globally at startup."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "FastAPI / Docker"
+      install: "pip install fastapi uvicorn"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Model Serialization (ONNX)"
+    tasks:
+      - "Do not deploy raw PyTorch code if performance is critical. Export the model to ONNX or TensorRT format for massive inference speedups and cross-platform compatibility."
+      - "Add database migration testing -- test both up and down migrations in CI."
+  - step: "The Inference API"
+    tasks:
+      - "Wrap the model in a FastAPI endpoint. Implement strict data validation (using Pydantic) on the incoming JSON to ensure the model doesn't receive strings when it expects integers."
+  - step: "A/B Testing (Shadow Deployment)"
+    tasks:
+      - "When releasing V2 of a model, do a 'Shadow Deployment'. Route 100% of live traffic to V1, but mirror that traffic to V2 asynchronously. Compare the predictions of V2 against V1 without affecting the user experience."
+      - "Set up automated rollback mechanism that triggers if health checks fail after deployment."
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Training on the full dataset without a holdout test set -- model performance metrics will be unrealistically optimistic."
+  - "Serving an ML model without input validation -- adversarial inputs can cause silent incorrect predictions."
+  - "Not monitoring for data drift in production -- a model that was 95% accurate at launch can degrade to 60% as real-world data shifts."
+  - "Using default hyperparameters without any tuning -- can leave 10-30% performance on the table."
+  - "Deploying a model to production without a rollback plan -- a bad model can degrade user experience until manually caught."
+best_practices:
+  - "Log every single prediction (Inputs + Output) to a database. This is required for detecting 'Model Drift' later (e.g., when the real-world data changes and the model's accuracy slowly decays)."
+
+  - "Split data into train/validation/test sets before any exploration — data leakage from test set inflates accuracy metrics."
+  - "Log model inputs, outputs, and predictions in production for debugging regressions and data drift detection."
+  - "Implement canary deployments for model updates — serve the new model to 5% of traffic first and monitor for regressions."
+  - "Pin dependencies and model versions in production builds — an unexpected library update can silently change model behavior."
+  - "Add input validation that rejects out-of-distribution samples — the model was not trained on data outside its domain."
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "MLOps: Continuous delivery and automation pipelines in machine learning"
+    url: "https://cloud.google.com/architecture/mlops-continuous-delivery-and-automation-pipelines-in-machine-learning"

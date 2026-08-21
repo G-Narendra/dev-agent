@@ -1,0 +1,79 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "native-ios-dev"
+display_name: "Native iOS Architecture (SwiftUI)"
+description: >
+  Build premium native iOS applications using Swift, declarative SwiftUI, and Combine/Async-Await 
+  for reactive state management.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "mobile-developer-swift"
+phase: "build"
+applicable_startups: 
+  - consumer
+  - fintech
+priority: "mvp"
+difficulty: "advanced"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Architecture (MVVM)"
+    tasks:
+      - "Implement MVVM architecture utilizing SwiftUI Views and `ObservableObject` / `@StateObject` ViewModels."
+  - step: "Async Operations"
+    tasks:
+      - "Use modern Swift concurrency (`async/await`) instead of nested closure callbacks for network requests."
+  - step: "Memory Hygiene"
+    tasks:
+      - "Audit all closures (closures) to ensure `[weak self]` is used where appropriate to prevent memory leaks via retain cycles."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Failing to use `[weak self]` inside a network request callback, creating a retain cycle that keeps a massive View in memory forever after the user navigates away."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Native Ios Dev process"
+  - "How do I handle native ios dev?"
+  - "Implement native ios dev"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the native ios dev process"
+  optional:
+    - name: "N/A"
+      type: "string"
+      description: "No optional inputs needed."
+
+outputs:
+  files:
+    - path: "outputs/native-ios-dev.md"
+      description: "Results of the native ios dev process"
+  artifacts:
+    - "Completed native ios dev deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

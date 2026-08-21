@@ -1,0 +1,111 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "product-requirements-document"
+display_name: "Product Requirements Document (PRD)"
+description: >
+  Write concise, engineering-ready Product Requirements Documents (PRDs) that focus 
+  on the user problem and strict acceptance criteria, avoiding technical micromanagement.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "product-manager"
+phase: "planning"
+applicable_startups: 
+  - all
+priority: "critical"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Write a PRD for..."
+  - "Draft the product requirements for..."
+  - "Create the specs for the new feature."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Creating a markdown artifact."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "feature_idea"
+      type: "string"
+      description: "The raw idea or customer request to be formulated into a product spec."
+  optional:
+    - name: "user_research"
+      type: "file"
+      description: "Customer interview transcripts or survey data backing the feature."
+      default: "null"
+
+outputs:
+  files:
+    - path: "docs/prd.md"
+      description: "The structured PRD document ready for engineering review."
+  artifacts:
+    - "A markdown table summarizing the User Stories."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "The PRD document contains an 'Out of Scope' section."
+  manual:
+    - "Engineers can read the PRD and immediately start architecting without asking 'But what happens if the user clicks X?'"
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+
+safety_notes:
+  - "Ensure no PII (Personally Identifiable Information) from customer interviews is hardcoded into the public PRD."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Notion/Confluence"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Problem Statement"
+    tasks:
+      - "Start every PRD with a 1-paragraph summary of the exact user pain point being solved. Do not start by explaining the solution."
+  - step: "Target Audience"
+    tasks:
+      - "Explicitly define WHO this feature is for (e.g., 'Admin users on the Enterprise plan')."
+  - step: "Acceptance Criteria (Given/When/Then)"
+    tasks:
+      - "Write strict Acceptance Criteria for every user story. E.g., 'Given the user is logged out, When they click Save, Then they are redirected to login'."
+  - step: "Out of Scope"
+    tasks:
+      - "Explicitly list 3-5 features that are aggressively OUT OF SCOPE for the V1 release to prevent engineering scope creep."
+  - step: "Go-to-Market Strategy"
+    tasks:
+      - "Define how this feature will be announced (e.g., in-app tooltip, email blast, changelog entry)."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Writing a 40-page PRD that dictates the exact database schema and React components to the engineering team, turning the PM into an unauthorized architect."
+  - "Failing to define 'Success Metrics' (e.g., 'We expect 20% of DAUs to use this feature within week 1'), making it impossible to know if the launch was a success."
+  - "Including 'Nice-to-haves' in the core user stories, guaranteeing the project will miss its deadline."
+
+best_practices:
+  - "Keep PRDs under 3 pages. If it takes longer to read, it's too complex."
+  - "Focus obsessively on the 'Why' and 'What', and leave the 'How' to engineering and design."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Lenny's Newsletter: PRD Templates"
+    url: "https://www.lennysnewsletter.com/"

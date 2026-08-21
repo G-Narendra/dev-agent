@@ -1,0 +1,107 @@
+# ============================================================
+# SKILL TEMPLATE — Canonical schema for all skill YAML files
+# ============================================================
+# Every skill file MUST conform to this schema exactly.
+# Copy this file and fill in all fields when creating a new skill.
+# ============================================================
+
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "{skill-name}"                     # kebab-case, matches filename
+display_name: "{Skill Display Name}"     # Human-readable title
+description: >
+  {2-3 sentence description of what this skill enables the agent
+  to accomplish. Be specific — not "handles databases" but
+  "designs normalized PostgreSQL schemas with indexing strategy."}
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "{role-folder-name}"               # Parent role this skill belongs to
+phase: "{ideation|planning|build|ship|growth|operations}"
+applicable_startups:                     # Which archetypes need this skill
+  - all                                  # or: [ai, saas, fintech, ...]
+priority: "{mvp|growth|scale}"           # When this skill becomes critical
+difficulty: "{beginner|intermediate|advanced|expert}"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:                         # Natural language triggers
+  - "{phrase that should activate this skill}"
+  - "{another trigger phrase}"
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:                     # Concrete commands/actions
+  - "{exact CLI command or agent action 1}"
+  - "{exact CLI command or agent action 2}"
+  - "{exact CLI command or agent action 3}"
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "{input_name}"
+      type: "{string|file|config|api_key}"
+      description: "{what this input is and where it comes from}"
+  optional:
+    - name: "{optional_input_name}"
+      type: "{string|file|config}"
+      description: "{what this optional input is}"
+      default: "{default value if not provided}"
+
+outputs:
+  files:
+    - path: "{relative/path/to/output/file}"
+      description: "{what this file contains}"
+  artifacts:
+    - "{description of non-file output, e.g., 'deployed service URL'}"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:                             # Machine-verifiable
+    - "{test or command that proves success — e.g., 'npm test passes'}"
+    - "{measurable metric — e.g., 'API responds < 200ms p95'}"
+  manual:                                # Requires human verification
+    - "{qualitative check — e.g., 'landing page looks professional'}"
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "{filesystem|network|api_key|environment_variable|browser}"
+  - "{specific resource — e.g., 'write access to database'}"
+
+safety_notes:
+  - "{any destructive operations that need human approval}"
+  - "{data privacy considerations}"
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "{tool/library name}"
+      install: "{npm install X | pip install X | brew install X}"
+  alternatives:
+    - name: "{alternative tool}"
+      when: "{condition when this is preferred}"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "{Step 1 — high-level phase name}"
+    tasks:
+      - "{specific task 1}"
+      - "{specific task 2}"
+      - "{specific task 3}"
+  - step: "{Step 2}"
+    tasks:
+      - "{specific task 1}"
+      - "{specific task 2}"
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "{common mistake 1 — what NOT to do and why}"
+  - "{common mistake 2}"
+  - "{common mistake 3}"
+
+best_practices:
+  - "{best practice 1 — the RIGHT way to do it}"
+  - "{best practice 2}"
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "{Reference name}"
+    url: "{https://...}"
+  - title: "{Another reference}"
+    url: "{https://...}"

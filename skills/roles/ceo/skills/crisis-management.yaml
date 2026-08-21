@@ -1,0 +1,109 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "crisis-management"
+display_name: "CEO Crisis Management & Communications"
+description: >
+  Frameworks for navigating existential threats to the startup. Covers PR crises, 
+  managing layoffs (Reduction in Force), navigating severe security breaches, 
+  and making the 'pivot or perish' decision.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "ceo"
+phase: "operations"
+applicable_startups:
+  - all
+priority: "critical"
+difficulty: "expert"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "We need to do layoffs."
+  - "How do we handle this PR crisis?"
+  - "Manage the data breach communication."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Create a crisis communication plan."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "crisis_type"
+      type: "string"
+      description: "e.g., 'Layoff', 'Data Breach', 'Executive Scandal'."
+    - name: "impact_radius"
+      type: "string"
+      description: "Who is affected? (Employees, Customers, Investors, Public)."
+  optional:
+    - name: "legal_constraints"
+      type: "string"
+      description: "What are we legally not allowed to say?"
+      default: "null"
+
+outputs:
+  files:
+    - path: "operations/crisis/communications-plan.md"
+      description: "Internal and external messaging strategy."
+  artifacts:
+    - "A runbook for executing a Reduction in Force (RIF)."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "N/A"
+  manual:
+    - "The company survives the crisis without permanent destruction of brand trust or employee morale."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+
+safety_notes:
+  - "In a legal or security crisis, NEVER issue a public statement without the explicit approval of Legal Counsel. Admitting fault incorrectly can destroy the company."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Notion / Markdown"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Layoffs (Reduction in Force)"
+    tasks:
+      - "Cut deep, cut once. It is better to cut 20% once than 10% twice. Multiple rounds of layoffs destroy all remaining team morale."
+      - "Treat departing employees with extreme dignity. Generous severance, extended healthcare, and help finding new roles. The surviving employees are watching how you treat the departed."
+  - step: "Security/Data Breaches"
+    tasks:
+      - "Communicate quickly, even if you don't have all the answers. 'We are investigating an incident' is better than 3 days of silence while rumors swirl."
+      - "Never downplay the severity before the investigation is complete."
+  - step: "The Apology Framework"
+    tasks:
+      - "Acknowledge the specific harm caused. Take absolute responsibility (no 'I'm sorry you felt that way'). Explain exactly the concrete steps being taken to ensure it never happens again."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "The 'CEO Victim' mentality. Blaming the market, blaming the employees, or blaming the investors during a crisis. The CEO is ultimately responsible for everything."
+  - "Leaking information. In a crisis, establish a strict 'War Room' of 3-4 trusted executives. Information should only flow out when officially coordinated."
+
+best_practices:
+  - "Over-communicate internally during a crisis. In the absence of information, employees assume the absolute worst."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "a16z: Planning and Managing Layoffs"
+    url: "https://a16z.com/2020/03/20/planning-and-managing-layoffs/"

@@ -1,0 +1,78 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "alerting-strategy"
+display_name: "Alerting & On-Call Strategy"
+description: >
+  Configure intelligent, actionable alerts that wake up engineers only when absolutely 
+  necessary, preventing alert fatigue and burnout.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "site-reliability-engineering"
+phase: "operations"
+applicable_startups: 
+  - all
+priority: "high"
+difficulty: "advanced"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Symptom-Based Alerting"
+    tasks:
+      - "Alert on symptoms (e.g., 'Checkout failure rate > 5%') rather than causes (e.g., 'Database CPU is at 80%'). The symptom is what impacts the business."
+  - step: "Alert Deduplication"
+    tasks:
+      - "Group alerts in PagerDuty so a single root cause (e.g., DB down) triggers 1 incident, not 500 separate emails."
+  - step: "The 'Sleep Test'"
+    tasks:
+      - "If an alert fires at 3 AM and the engineer's response is 'I'll look at this tomorrow', immediately delete or downgrade the alert to an email digest."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Configuring an alert to text the entire engineering team every time the server CPU spikes for 5 seconds during a totally normal automated backup."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Alerting Strategy process"
+  - "How do I handle alerting strategy?"
+  - "Implement alerting strategy"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the alerting strategy process"
+  optional:
+    - name: "N/A"
+      type: "string"
+      description: "No optional inputs needed."
+
+outputs:
+  files:
+    - path: "outputs/alerting-strategy.md"
+      description: "Results of the alerting strategy process"
+  artifacts:
+    - "Completed alerting strategy deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

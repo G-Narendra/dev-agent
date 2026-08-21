@@ -1,0 +1,114 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "ui-micro-interactions"
+display_name: "Motion Graphics & UI Micro-Interactions"
+description: >
+  Brings the product to life. Designs subtle animations, transitions, 
+  and feedback loops that elevate the software from feeling 'functional' 
+  to feeling 'premium, polished, and alive'. Covers key patterns to avoid common pitfalls like designing for the ideal screen size first -- mobile-first fo, and provides actionable best practices for production-ready results.
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "motion-graphics-designer"
+phase: "build"
+applicable_startups:
+  - Consumer Apps, FinTech, D2C
+priority: "medium"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "The app feels static."
+  - "Animate the success state."
+  - "Make the loading screen less boring."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Generate Lottie animation JSON."
+  - "Draft CSS transition states."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "ui_element"
+      type: "string"
+      description: "Button, Loading Spinner, Empty State."
+    - name: "interaction_trigger"
+      type: "string"
+      description: "Hover, Click, Page Load, Success."
+  optional:
+    - name: "brand_feel"
+      type: "string"
+      description: "Playful/Bouncy vs Sleek/Corporate."
+      default: "Sleek and Fast"
+
+outputs:
+  files:
+    - path: "design/motion/checkout_success.json"
+      description: "The Lottie JSON file for engineering handoff."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "N/A"
+manual:
+  - "User perception of app speed increases, and abandonment rates during loading states decrease by 15% due to engaging visual feedback."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "The Accessibility (a11y) Rule: Never rely purely on motion to convey critical information, and always respect the user's OS-level 'Prefers-Reduced-Motion' setting. Heavy animations can cause physical nausea for users with vestibular disorders."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "After Effects / LottieFiles / Figma"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "The 'Meaningful Transition'"
+    tasks:
+      - "Motion should not be decorative; it should guide the eye. When a user clicks a list item to view details, the item should seamlessly expand into the detail view (Shared Element Transition). Don't just flash a new screen instantly."
+  - step: "State Feedback (The Micro-Interaction)"
+    tasks:
+      - "When a user clicks 'Add to Cart', the button text shouldn't just change to 'Added'. The button should morph into a checkmark, or the cart icon in the header should subtly bounce. Always provide instant, delightful validation of user actions."
+      - "Add database migration testing -- test both up and down migrations in CI."
+  - step: "Perceived Performance Hacks"
+    tasks:
+      - "If an API call takes 3 seconds, a static spinning wheel feels broken. Use a 'Skeleton Screen' that pulsates, or a custom branded loading animation. Distracting the user with high-quality motion makes the 3 seconds feel like 1 second."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Designing for the ideal screen size first -- mobile-first forces better prioritization and prevents content overflow disasters."
+  - "Using color as the only differentiator for states (error, success, disabled) -- inaccessible to colorblind users."
+  - "Shipping UI without loading, empty, and error states -- the user is left guessing what happened."
+  - "Creating components in isolation without real content -- 'lorem ipsum' hides layout problems that real text exposes."
+  - "Ignoring touch target sizes (minimum 44x44px) on mobile -- users fat-finger the wrong button and get frustrated."
+best_practices:
+  - "Use Easing Curves. Linear animations (moving at a constant speed) look robotic and cheap. Use 'Ease-Out' (start fast, slow down at the end) for UI elements entering the screen. It mimics physics and feels premium."
+
+  - "Design in vector format (SVG/EPS) — logos must scale from favicon (16px) to billboard (10m) without quality loss."
+  - "Test every logo in three formats: full color, single color (black), and inverted (white on dark background)."
+  - "Ensure the logo is recognizable at 16x16px before finalizing — if it doesn't work as a favicon, simplify."
+  - "Wait 48 hours between creating and finalizing a logo — fresh eyes catch symmetry and proportion issues."
+  - "Create a brand guidelines document that specifies clear space, minimum size, color palette, and incorrect usage examples."
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Google Material Design: Understanding Motion"
+    url: "https://m2.material.io/design/motion/understanding-motion.html"

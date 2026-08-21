@@ -1,0 +1,109 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "etl-pipeline-construction"
+display_name: "ELT Pipeline Construction (dbt / Fivetran)"
+description: >
+  Constructs modern ELT (Extract, Load, Transform) pipelines. Uses Fivetran/Airbyte 
+  for raw extraction, and dbt (data build tool) to apply version-controlled, 
+  tested SQL transformations inside the Data Warehouse.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "data-engineer"
+phase: "build"
+applicable_startups:
+  - all
+priority: "critical"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "We need to sync Stripe data into Snowflake."
+  - "Build the ETL pipeline."
+  - "Set up dbt."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "dbt run"
+  - "dbt test"
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "source_systems"
+      type: "string"
+      description: "Postgres, Stripe, Zendesk."
+  optional:
+    - name: "warehouse"
+      type: "string"
+      description: "Snowflake, BigQuery, Redshift."
+      default: "Snowflake"
+
+outputs:
+  files:
+    - path: "data/dbt/models/staging/stg_stripe_payments.sql"
+      description: "The dbt staging model."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "`dbt test` passes, confirming no nulls in primary keys and referential integrity."
+manual:
+  - "The marketing team can query unified customer data without writing complex regex or joins."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+  - "network (Warehouse connection)"
+
+safety_notes:
+  - "PII Hashing: Ensure that passwords, SSNs, or raw credit cards are either excluded from the extraction or cryptographically hashed before landing in the Data Warehouse."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "dbt (Data Build Tool)"
+      install: "pip install dbt-core"
+  alternatives:
+    - name: "Apache Airflow"
+      when: "Managing complex, multi-step python orchestration outside of just SQL."
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Extraction & Loading (EL)"
+    tasks:
+      - "Use a managed connector (Airbyte/Fivetran/Stitch) to replicate raw source tables directly into a `RAW` schema in the warehouse. Do not write custom Python scripts for standard APIs."
+  - step: "Staging Models (dbt)"
+    tasks:
+      - "Write 1:1 staging views (`stg_stripe_charges.sql`). Rename columns to standardize conventions (e.g., `created_at` instead of `CreatedDate`), cast data types, and do NOT do joins here."
+  - step: "Core Models (dbt)"
+    tasks:
+      - "Create `fct_` (Fact) and `dim_` (Dimension) tables. Join the staging tables to create business entities (e.g., `fct_monthly_revenue`)."
+  - step: "Testing & Documentation"
+    tasks:
+      - "Add `schema.yml` to define tests: `unique`, `not_null`, and `accepted_values` on critical columns."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Writing ETL scripts that pull data into Python memory, transform it, and push it back. This is slow and expensive. Do ELT: push raw data to the warehouse and use SQL to transform it using the warehouse's massive compute."
+best_practices:
+  - "Make all dbt models idempotent. Running `dbt run` twice should result in the exact same state, not duplicate rows."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "dbt Best Practices"
+    url: "https://docs.getdbt.com/docs/build/guides"

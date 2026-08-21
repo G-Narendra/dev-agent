@@ -1,0 +1,80 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "asc606-revenue-recognition"
+display_name: "ASC 606 Revenue Recognition"
+description: >
+  Implement strict accrual accounting principles to recognize SaaS revenue ratably 
+  over the life of the contract, preventing fraudulent revenue inflation.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "revenue-accountant"
+phase: "growth"
+applicable_startups: 
+  - saas
+  - enterprise
+priority: "critical"
+difficulty: "expert"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Deferred Revenue"
+    tasks:
+      - "If a customer pays $12,000 upfront for an annual contract on Jan 1st, recognize exactly $1,000 in January revenue. Park the remaining $11,000 in a 'Deferred Revenue' liability account."
+  - step: "Performance Obligations"
+    tasks:
+      - "Separate the software subscription from one-time implementation fees. Recognize the implementation fee revenue immediately upon project completion, not ratably."
+  - step: "Stripe Reconciliation"
+    tasks:
+      - "Ensure every Stripe payout matches the accounting ledger exactly to the penny, accounting for Stripe processing fees as a separate COGS line item."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Recording a $120,000 annual upfront cash payment as 'Monthly Recurring Revenue (MRR)' for that specific month, making the startup look 12x bigger than it actually is to investors."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Asc606 Revenue Recognition process"
+  - "How do I handle asc606 revenue recognition?"
+  - "Implement asc606 revenue recognition"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the asc606 revenue recognition process"
+  optional:
+    - name: "code_repository"
+      type: "string"
+      description: "Path to the code repository"
+      default: "./"
+
+outputs:
+  files:
+    - path: "outputs/asc606-revenue-recognition.md"
+      description: "Results of the asc606 revenue recognition process"
+  artifacts:
+    - "Completed asc606 revenue recognition deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

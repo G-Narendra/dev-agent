@@ -1,0 +1,113 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "a-b-testing-setup"
+display_name: "Landing Page A/B Testing Setup"
+description: >
+  Design, implement, and measure rigorous A/B tests (split tests) on landing pages 
+  to empirically determine which headlines, layouts, or CTAs drive the highest conversion. 
+  Removes opinions from design decisions.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "landing-page-specialist"
+phase: "growth"
+applicable_startups:
+  - all
+priority: "critical"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run an A/B test on the homepage."
+  - "Test the new headline."
+  - "Set up Google Optimize / VWO."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Create an A/B test hypothesis document."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "page_url"
+      type: "string"
+      description: "The URL of the page being tested."
+    - name: "hypothesis"
+      type: "string"
+      description: "What we are testing and why we think it will win (e.g., 'Moving the form above the fold will increase form fills by 10%')."
+  optional:
+    - name: "traffic_volume"
+      type: "string"
+      description: "Average daily traffic to determine test duration."
+      default: "1000/day"
+
+outputs:
+  files:
+    - path: "growth/ab-test-plan.md"
+      description: "The documented parameters of the split test."
+  artifacts:
+    - "A significance calculator determining when the test can be concluded."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "Test runs until it achieves 95% statistical significance."
+  manual:
+    - "The team trusts the data over the CEO's personal preference."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+
+safety_notes:
+  - "Ensure the testing tool (e.g., VWO or Optimizely) does not cause 'flicker' (where the original page loads for a split second before the variant applies), which tanks conversion and trust."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "VWO / PostHog / Optimizely"
+      install: "N/A"
+  alternatives:
+    - name: "Next.js Middleware"
+      when: "Running server-side split tests to completely eliminate UI flicker."
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Hypothesis Generation"
+    tasks:
+      - "Never test random changes. Every test must start with a hypothesis based on user feedback or analytics (e.g., 'Heatmaps show users don't scroll past the fold, so we should move the CTA up')."
+  - step: "Sample Size Calculation"
+    tasks:
+      - "Use a Bayesian or Frequentist calculator before starting. If your page only gets 100 visitors a month, you cannot run an A/B test. It will take 4 years to reach significance."
+  - step: "Test Execution"
+    tasks:
+      - "Test only ONE major variable at a time (e.g., Headline OR Button Color). If you test a new headline, new hero image, and new button all at once (Multivariate), you won't know which one caused the improvement."
+  - step: "The 'Loser' Analysis"
+    tasks:
+      - "If a test fails (the original wins), document *why*. A failed test is still a successful learning event."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Peeking: Checking the test after 2 days, seeing the variant is winning by 50%, and turning off the original. This is a statistical illusion. You MUST wait until the calculated sample size is reached."
+  - "Testing button colors (Red vs Green) when the core value proposition is fundamentally flawed. Test big things first (Headlines, Pricing, Offer), not micro-optimizations."
+
+best_practices:
+  - "Run 'A/A' tests occasionally. Show the exact same page to both Group A and Group B. If the tool says Group B won by 20%, your testing setup is broken."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "CXL: A/B Testing Guide"
+    url: "https://cxl.com/blog/ab-testing-guide/"

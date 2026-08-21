@@ -1,0 +1,85 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "implementation-project-management"
+display_name: "Enterprise Software Implementation"
+description: >
+  Manage the critical 30-90 day window after a sale, guiding the customer through data 
+  migration, API integration, and team training to ensure successful adoption.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "customer-onboarding-specialist"
+phase: "growth"
+applicable_startups: 
+  - enterprise
+priority: "mvp"
+difficulty: "advanced"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "The Kick-Off"
+    tasks:
+      - "Lead a kick-off call with the buyer and their technical team."
+      - "Establish a shared project tracker (e.g., Asana/Monday) with strict deadlines."
+  - step: "Data Migration"
+    tasks:
+      - "Provide the customer with CSV templates and assist them in mapping their legacy data into the new system."
+  - step: "Training"
+    tasks:
+      - "Host live Zoom training sessions for the end-users (not just the executive buyer)."
+      - "Require the users to actually click through the software during the call."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Sending the customer a 50-page PDF manual and hoping they figure out how to set up the software themselves."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Implementation Project Management process"
+  - "How do I handle implementation project management?"
+  - "Implement implementation project management"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the implementation project management process"
+  optional:
+    - name: "data_source"
+      type: "string"
+      description: "Source of data to analyze"
+      default: "Internal data"
+    - name: "target_audience"
+      type: "string"
+      description: "Target user or customer segment"
+      default: "Primary user persona"
+
+outputs:
+  files:
+    - path: "outputs/implementation-project-management.md"
+      description: "Results of the implementation project management process"
+  artifacts:
+    - "Completed implementation project management deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

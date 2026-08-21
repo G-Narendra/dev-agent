@@ -1,0 +1,115 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "review-miner-g2-capterra-trustpilot"
+display_name: "G2, Capterra & Trustpilot Review Mining"
+description: >
+  Mines real customer reviews from G2, Capterra (software reviews) and 
+  Trustpilot (general business reviews). These platforms contain unfiltered,
+  verified user opinions about existing products. The 1-star and 2-star reviews 
+  are particularly valuable — they tell you exactly what customers hate and 
+  what they'd switch for. This is direct competitive intelligence.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "utility"
+phase: "ideation"
+applicable_startups:
+  - all
+priority: "high"
+difficulty: "beginner"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "What do users hate about X?"
+  - "Read G2 reviews for competitors."
+  - "Find customer complaints on Trustpilot."
+  - "What are the top criticisms of this product?"
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Search G2 for competitor reviews."
+  - "Extract 1-star review patterns on Trustpilot."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "competitor_names"
+      type: "string"
+      description: "Comma-separated list of competitors (e.g., 'Salesforce, HubSpot, Pipedrive')."
+  optional:
+    - name: "platform"
+      type: "string"
+      description: "'g2' (software reviews), 'capterra' (software reviews), 'trustpilot' (general), or 'all'."
+      default: "all"
+
+outputs:
+  files:
+    - path: "research/review-analysis-{competitor}.md"
+      description: "A categorized report of customer complaints and praise."
+  artifacts:
+    - "Top 10 most common customer complaints (the startup's opportunity list)."
+    - "Direct customer quotes for social proof and validation."
+    - "Feature comparison matrix showing what users wish existed."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "N/A"
+  manual:
+    - "Identified at least 5 specific, recurring complaints that the startup can address."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "network"
+
+safety_notes:
+  - "Review quality varies: Some reviews are fake (paid or disgruntled ex-employees). Cross-reference patterns across multiple reviews."
+  - "G2 and Capterra are B2B software focused. For consumer products, use Trustpilot or Amazon reviews instead."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Google Search (site:g2.com OR site:capterra.com OR site:trustpilot.com)"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Mine G2 Reviews"
+    tasks:
+      - "Use Google: `site:g2.com {competitor_name} reviews`"
+      - "Sort by 'Lowest Rated' first — the 1-star reviews are your competitive intelligence."
+      - "Extract the top 10 most-mentioned complaints. Group them by theme."
+      - "Also read 5-star reviews to understand what the competitor does well."
+  - step: "Mine Capterra Reviews"
+    tasks:
+      - "Use Google: `site:capterra.com {competitor_name} reviews`"
+      - "Capterra reviews tend to be more detailed than G2. Look for the 'Pros' and 'Cons' sections."
+      - "Check the 'Alternatives Considered' section — this reveals what else customers evaluated."
+  - step: "Mine Trustpilot Reviews (For Consumer Products)"
+    tasks:
+      - "Use Google: `site:trustpilot.com {company_name}`"
+      - "Filter by 1-star and 2-star. These are your customers' frustrations."
+      - "Look for patterns: Is it always the same complaint? Multiple mentions of a single issue = opportunity."
+  - step: "Compile the 'Opportunity Matrix'"
+    tasks:
+      - "Create a table per competitor: Complaint | Frequency | Current Solution | Our Opportunity"
+      - "Example: 'HubSpot pricing is too expensive for small teams' (50+ mentions) → 'Build affordable alternative for teams under 10 people'"
+      - "Prioritize complaints that (1) appear across multiple platforms, (2) are mentioned by many users, (3) don't have a good existing solution."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Only reading the positive reviews. The negative reviews are where the product opportunity lives."
+  - "Assuming one angry review is a trend. Cross-check: does this complaint appear 5+ times across different reviews?"
+  - "Ignoring the 'would recommend' ratio. A product with 4 stars but 30% 'would not recommend' has a loyal core but a frustrated majority."
+
+best_practices:
+  - "Look for reviews mentioning competitors by name (e.g., 'I switched from X to Y because...'). These reveal the exact switching triggers."
+  - "Pay attention to reviews from the last 3-6 months. Older reviews may describe problems the competitor has already fixed."
+  - "Search for 'alternative' in reviews. Users who mention alternatives are actively looking to switch."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "G2 Reviews"
+    url: "https://www.g2.com/"
+  - title: "Capterra Reviews"
+    url: "https://www.capterra.com/"
+  - title: "Trustpilot Reviews"
+    url: "https://www.trustpilot.com/"

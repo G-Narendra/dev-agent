@@ -1,0 +1,78 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "brand-naming"
+display_name: "Startup & Product Naming (Lexicon)"
+description: >
+  Generate memorable, legally defensible, and brandable names for the startup and its 
+  core features, ensuring domain and trademark availability.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "startup-namer"
+phase: "ideation"
+applicable_startups: 
+  - all
+priority: "mvp"
+difficulty: "advanced"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "The Lexicon Matrix"
+    tasks:
+      - "Generate 50 names using different linguistic frameworks: Abstract (Kodak), Evocative (Apple), Descriptive (Salesforce), and Invented composites (Instagram)."
+  - step: "Trademark Clearance"
+    tasks:
+      - "Search the USPTO TESS database to ensure the chosen name doesn't infringe on existing trademarks in the relevant software/SaaS class (Class 009 or 042)."
+  - step: "Domain Acquisition"
+    tasks:
+      - "If the exact `.com` is unavailable or costs $100k, secure a strong modifier (e.g., `get[Name].com` or `[Name]hq.com`) rather than choosing a terrible name just for the `.com`."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Choosing a clever name with zero vowels (e.g., `Fndr`) that customers literally cannot pronounce when recommending it to a friend."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Brand Naming process"
+  - "How do I handle brand naming?"
+  - "Implement brand naming"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the brand naming process"
+  optional:
+    - name: "N/A"
+      type: "string"
+      description: "No optional inputs needed."
+
+outputs:
+  files:
+    - path: "outputs/brand-naming.md"
+      description: "Results of the brand naming process"
+  artifacts:
+    - "Completed brand naming deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

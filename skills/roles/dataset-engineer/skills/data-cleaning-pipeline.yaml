@@ -1,0 +1,113 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "data-cleaning-pipeline"
+display_name: "Raw Data Cleaning & Normalization Pipeline"
+description: >
+  Build automated pipelines to clean raw, unstructured data (e.g., scraped HTML, 
+  messy PDFs, inconsistent CSVs) into pristine, token-efficient JSONL files ready 
+  for LLM fine-tuning or embedding generation.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "dataset-engineer"
+phase: "build"
+applicable_startups:
+  - ai
+priority: "critical"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Clean this dataset."
+  - "Prepare the data for fine-tuning."
+  - "Remove the noise from these documents."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "python scripts/clean_dataset.py --input raw.csv --output clean.jsonl"
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "raw_data_dir"
+      type: "string"
+      description: "Path to the directory containing messy source files."
+  optional:
+    - name: "target_format"
+      type: "string"
+      description: "JSONL (for fine-tuning) vs Parquet (for analytics)."
+      default: "JSONL"
+
+outputs:
+  files:
+    - path: "data/processed/dataset_v1.jsonl"
+      description: "The cleaned dataset ready for model consumption."
+  artifacts:
+    - "A data quality report (missing values, token counts)."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "Deduplication removes 100% of exact string matches."
+    - "No file exceeds the model's maximum token context limit."
+  manual:
+    - "Manual inspection of 100 random records reveals no HTML tags, broken unicode, or irrelevant boilerplate."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+
+safety_notes:
+  - "Implement PII scrubbing (Regex or NLP-based) during the cleaning phase to ensure no social security numbers or credit cards end up in the training set."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Python (Pandas / BeautifulSoup / Regex)"
+      install: "pip install pandas beautifulsoup4"
+  alternatives:
+    - name: "Unstructured.io"
+      when: "Extracting text from highly complex PDFs with tables and images."
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Boilerplate Removal"
+    tasks:
+      - "If scraping web pages, use tools to strip out navigation bars, footers, and cookie banners. Only retain the core article content."
+  - step: "Normalization"
+    tasks:
+      - "Fix broken unicode characters (e.g., replacing `&amp;` with `&`)."
+      - "Standardize whitespace (remove double spaces, excessive newlines)."
+  - step: "Deduplication"
+    tasks:
+      - "Run exact-match deduplication."
+      - "Run fuzzy deduplication (MinHash / Locality Sensitive Hashing) to remove documents that are 95% similar."
+  - step: "Tokenization Check"
+    tasks:
+      - "Run the text through the target model's tokenizer (e.g., `tiktoken` for OpenAI). Drop or chunk any records that exceed the context window."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Feeding raw HTML directly into an LLM context window. HTML tags consume massive amounts of tokens (increasing costs) and confuse the model's attention mechanism."
+  - "Ignoring class imbalance. If 99% of your data is 'Positive' and 1% is 'Negative', the model will just learn to always output 'Positive'."
+
+best_practices:
+  - "Data formatting is just as important as the data itself. For fine-tuning, strictly adhere to the provider's format (e.g., OpenAI's `{\"messages\": [{\"role\": \"user\"...}]}` format)."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "OpenAI: Data preparation for fine-tuning"
+    url: "https://platform.openai.com/docs/guides/fine-tuning/preparing-your-dataset"

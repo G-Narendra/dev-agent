@@ -1,0 +1,115 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "capacity-planning"
+display_name: "Capacity Planning & Scalability Analysis"
+description: >
+  Analyzes system capacity, forecasts growth, and plans infrastructure
+  scaling to ensure the product can handle increasing load without
+  performance degradation or excessive cost.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "sre-engineer"
+phase: "growth"
+applicable_startups:
+  - all
+priority: "growth"
+difficulty: "expert"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Plan for growth and scale."
+  - "Forecast infrastructure needs."
+  - "When will we need to scale?"
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Analyze capacity needs."
+  - "Project infrastructure costs at scale."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "current_usage"
+      type: "file"
+      description: "Current infrastructure metrics (requests/sec, storage, DB connections)."
+    - name: "growth_projections"
+      type: "string"
+      description: "Expected user or traffic growth over next 6-12 months."
+  optional:
+    - name: "cost_budget"
+      type: "string"
+      description: "Monthly infrastructure budget."
+      default: "Current cost + 20%"
+
+outputs:
+  files:
+    - path: "devops/capacity/capacity-plan.md"
+      description: "Capacity plan with scaling recommendations"
+  artifacts:
+    - "A data-driven capacity plan with budget projections and scaling timeline"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Current Capacity Baseline"
+    tasks:
+      - "Measure current resource utilization: CPU, memory, disk IOPS, network bandwidth, DB connections."
+      - "Identify the 'first bottleneck' — which resource will run out first?"
+      - "Measure peak vs. average usage to understand burst requirements."
+      - "Document current cost per unit (e.g., cost per 1M requests, cost per GB stored)."
+  - step: "Growth Forecasting"
+    tasks:
+      - "Use historical data to project growth curves (linear, exponential, seasonal)."
+      - "Model three scenarios: conservative (20% growth), expected (50%), optimistic (100%)."
+      - "Estimate when each bottleneck will hit based on growth projections."
+      - "Account for new features that may change the usage profile."
+  - step: "Scaling Strategy"
+    tasks:
+      - "Determine scaling approach: vertical (bigger instances) vs. horizontal (more instances) vs. both."
+      - "Identify service and database that will need scaling first."
+      - "Plan for database scaling: read replicas, sharding, caching layer, connection pooling."
+      - "Design auto-scaling rules based on metrics (CPU >70%, request latency >500ms)."
+  - step: "Cost Optimization"
+    tasks:
+      - "Analyze reserved instances vs. on-demand pricing for predictable workloads."
+      - "Identify waste: over-provisioned instances, unattached volumes, idle load balancers."
+      - "Set up cost alerts and budgets in the cloud provider."
+      - "Use spot instances for non-critical or batch workloads."
+  - step: "Action Plan & Timeline"
+    tasks:
+      - "Create a timeline for when each scaling action needs to happen."
+      - "Calendar quarterly capacity reviews to reassess against actual growth."
+      - "Define thresholds: at X% utilization, trigger the capacity review process."
+      - "Include cost projections in the plan so finance can budget appropriately."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Over-provisioning 'because we might grow' — wastes money that could go to product."
+  - "Waiting until the system is on fire to plan capacity — reactive scaling is dangerous."
+  - "Only planning for the 'happy path' growth without considering seasonal spikes."
+  - "Not involving finance in capacity planning — surprise cloud bills hurt startup runway."
+best_practices:
+  - "Auto-scale as much as possible — the cloud's main advantage is elastic capacity."
+  - "Under 1000 requests/second, vertical scaling (bigger instance) is usually simpler."
+  - "Startups should optimize for speed of scaling, not cost efficiency."
+  - "A well-designed system that needs capacity increases is a good problem to have."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

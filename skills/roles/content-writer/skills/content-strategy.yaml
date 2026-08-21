@@ -1,0 +1,79 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "content-strategy"
+display_name: "Content Strategy & Distribution"
+description: >
+  Architect an inbound content engine (Blogs, Whitepapers, Newsletters) that drives 
+  high-intent, organic traffic to the top of the startup's funnel.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "content-writer"
+phase: "growth"
+applicable_startups: 
+  - saas
+  - b2b
+priority: "high"
+difficulty: "advanced"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Pillar Content"
+    tasks:
+      - "Write one massive, authoritative 'Pillar' guide (5,000+ words) that comprehensively solves the target customer's biggest problem, acting as an SEO magnet."
+  - step: "Content Repurposing"
+    tasks:
+      - "Chop the Pillar content into 10 LinkedIn posts, 3 Twitter threads, and 1 newsletter issue. Never write a piece of content just to use it once."
+  - step: "Lead Magnets"
+    tasks:
+      - "Gate the most valuable templates or data behind an email capture form to convert anonymous traffic into actionable marketing leads."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Writing 10 generic, 500-word blog posts generated entirely by AI that provide zero novel insights, wasting time and actively hurting the brand's credibility."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Content Strategy process"
+  - "How do I handle content strategy?"
+  - "Implement content strategy"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the content strategy process"
+  optional:
+    - name: "N/A"
+      type: "string"
+      description: "No optional inputs needed."
+
+outputs:
+  files:
+    - path: "outputs/content-strategy.md"
+      description: "Results of the content strategy process"
+  artifacts:
+    - "Completed content strategy deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

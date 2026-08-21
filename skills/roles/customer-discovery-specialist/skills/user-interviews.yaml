@@ -1,0 +1,120 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "user-interviews"
+display_name: "Customer Discovery & Pain Point Validation"
+description: >
+  Prevents the startup from building a product nobody wants. Conducts 
+  unbiased, exploratory interviews with target users before writing any code 
+  to discover their actual unarticulated needs. Covers key patterns to avoid common pitfalls like treating every support ticket the same priority -- without t, and provides actionable best practices for production-ready results.
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "customer-discovery-specialist"
+phase: "ideation"
+applicable_startups:
+  - all
+priority: "critical"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "We have an idea for a startup."
+  - "Why isn't anyone buying our MVP?"
+  - "Talk to 20 users."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Generate user interview script."
+  - "Draft discovery synthesis report."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "target_persona"
+      type: "string"
+      description: "e.g., Freelance graphic designers."
+    - name: "assumed_problem"
+      type: "string"
+      description: "The hypothesis we want to test."
+  optional:
+    - name: "interview_count"
+      type: "string"
+      description: "How many users to talk to."
+      default: "20"
+
+outputs:
+  files:
+    - path: "product/discovery/interview_synthesis.md"
+      description: "The aggregated findings confirming or killing the idea."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "N/A"
+manual:
+  - "The team achieves clarity on whether to build, pivot, or abandon the idea based on hard evidence of user behavior."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "The Confirmation Bias Trap: Never ask leading questions like 'Would you use this feature if we built it?'. The user will say 'yes' just to be polite, and you will waste 6 months building it. Ask about past behavior, not future promises."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Zoom / Dovetail"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Focus on the Past"
+    tasks:
+      - "Ask: 'Tell me about the last time you experienced [Problem]. How did you try to solve it?' If they haven't actively tried to solve it recently, it is not a painful enough problem to build a startup around."
+  - step: "Listen for the 'Workaround'"
+    tasks:
+      - "The holy grail of customer discovery is finding a user who has built a complex, duct-taped Excel spreadsheet to solve a problem. That proves the pain is real and they are desperate for software."
+  - step: "The 'Five Whys'"
+    tasks:
+      - "When a user asks for a feature ('I want a dashboard'), do not write it down as a requirement. Ask 'Why?' 5 times to uncover the root cause ('Because I need to report metrics to my boss'). Build for the root cause."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Treating every support ticket the same priority -- without triage, critical outages wait behind password reset requests."
+  - "Asking customers to repeat information they already provided -- read the ticket history before responding."
+  - "Using templated responses without customization -- customers can tell when they're getting a copy-paste answer."
+  - "Not tracking first response time and resolution time -- without metrics, you can't improve."
+  - "Closing a ticket without confirming the customer's issue is resolved -- the customer reopens it angrier than before."
+  - "Record all interviews (with permission) and force the engineering team to watch the 3 best clips. Engineers build better products when they hear the customer's frustration firsthand."
+
+  - "Follow the 8px grid rule for spacing and sizing — consistent rhythm across the interface improves visual harmony."
+  - "Test every design with real users before shipping — internal assumptions about usability are wrong 70% of the time."
+  - "Ensure all interactive elements have visible focus states for keyboard navigation — accessibility is not optional."
+  - "Design empty states that guide the user toward the next action rather than showing a blank page."
+  - "Use progressive disclosure — show the most important actions first, hide advanced options behind expandable sections."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Not defining clear success criteria before starting a task -- leads to ambiguous outcomes, endless revisions, and wasted effort."
+
+best_practices:
+  - "Document all configuration decisions in an Architecture Decision Record (ADR) so future team members understand why choices were made."
+  - "Implement comprehensive error handling with structured logging at every integration boundary to simplify debugging."
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "The Mom Test (Rob Fitzpatrick)"
+    url: "http://momtestbook.com/"

@@ -1,0 +1,112 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "product-launch-playbook"
+display_name: "Go-to-Market (GTM) Product Launch Playbook"
+description: >
+  Orchestrate the release of a major new feature. Coordinates the engineering 
+  rollout (feature flags, beta groups) with the marketing campaign (Product Hunt, 
+  press release, email blast) to maximize impact.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "cpo"
+phase: "ship"
+applicable_startups:
+  - all
+priority: "critical"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Plan the product launch."
+  - "How are we rolling this feature out?"
+  - "Create the Go To Market plan."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Create a GTM checklist artifact."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "feature_description"
+      type: "string"
+      description: "What is being launched."
+    - name: "launch_date"
+      type: "string"
+      description: "The target public release date."
+  optional:
+    - name: "tier"
+      type: "string"
+      description: "Tier 1 (Major Launch) vs Tier 3 (Silent Update)."
+      default: "Tier 1"
+
+outputs:
+  files:
+    - path: "product/launches/gtm-playbook.md"
+      description: "The master checklist coordinating all departments."
+  artifacts:
+    - "A rollout schedule (Internal → Alpha → Beta → General Availability)."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "N/A"
+  manual:
+    - "The feature launches without taking down production, and marketing drives measurable adoption within week 1."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+
+safety_notes:
+  - "Never launch a Tier 1 feature on a Friday. If it breaks the database, the engineering team will have their weekend ruined, leading to severe burnout."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Notion / LaunchDarkly (Feature Flags)"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "The Engineering Rollout (De-risk)"
+    tasks:
+      - "Use Feature Flags. Do not do a 'Big Bang' deploy. Deploy the code silently, then turn the flag on for 10% of users, monitor errors, and scale to 100%."
+  - step: "The Internal Enablement"
+    tasks:
+      - "Sales needs battle cards (How to sell this feature against competitors)."
+      - "Support needs runbooks (How to troubleshoot when a user complains this feature doesn't work)."
+      - "Do this 2 weeks before the public launch."
+  - step: "The Marketing 'Moment'"
+    tasks:
+      - "Coordinate the blog post, the Product Hunt listing, the email newsletter, and the social media thread to hit simultaneously on Launch Day for maximum algorithmic amplification."
+  - step: "The Post-Launch Monitoring"
+    tasks:
+      - "The launch isn't over when the marketing email goes out. Monitor the analytics dashboard: Are users actually clicking the new button? Is the conversion rate holding?"
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "The 'Silent Launch'. Engineering finishes the feature, merges it to production, and moves on without telling Marketing. No one uses the feature because no one knows it exists."
+  - "Treating a Beta like General Availability. If it's a Beta, tell the users it's a Beta. They will forgive bugs. If you call it a polished release and it crashes, they will churn."
+
+best_practices:
+  - "Use 'Private Betas' to generate FOMO (Fear of Missing Out). Require users to sign up for a waitlist to get early access. This also acts as a safety mechanism to limit initial server load."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Lenny Rachitsky: How to Launch a Product"
+    url: "https://www.lennysnewsletter.com/p/how-to-launch-a-product"

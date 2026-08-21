@@ -1,0 +1,80 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "team-scaling-strategy"
+display_name: "Engineering Org Chart & Scaling Strategy"
+description: >
+  Design the structure of the engineering department as the startup scales from a single
+  pizza-team to multiple specialized squads, ensuring clear lines of reporting and domain ownership.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "vp-engineering"
+phase: "growth"
+applicable_startups: 
+  - all
+priority: "mvp"
+difficulty: "expert"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Squad Formation"
+    tasks:
+      - "Define cross-functional 'Squads' (e.g., Frontend, Backend, QA, PM) oriented around specific product features."
+      - "Assign an Engineering Manager (EM) or Tech Lead to each squad."
+  - step: "Hiring Plan"
+    tasks:
+      - "Identify critical skill gaps preventing roadmap execution."
+      - "Draft technical interview rubrics to ensure a high hiring bar."
+  - step: "Process Standardization"
+    tasks:
+      - "Implement standard RFC (Request for Comments) processes for technical proposals."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Scaling by adding dozens of junior engineers without enough senior engineers to mentor them, resulting in massive tech debt."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Team Scaling Strategy process"
+  - "How do I handle team scaling strategy?"
+  - "Implement team scaling strategy"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the team scaling strategy process"
+  optional:
+    - name: "N/A"
+      type: "string"
+      description: "No optional inputs needed."
+
+outputs:
+  files:
+    - path: "outputs/team-scaling-strategy.md"
+      description: "Results of the team scaling strategy process"
+  artifacts:
+    - "Completed team scaling strategy deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

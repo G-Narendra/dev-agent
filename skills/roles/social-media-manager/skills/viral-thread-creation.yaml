@@ -1,0 +1,80 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "viral-thread-creation"
+display_name: "Viral Twitter / LinkedIn Threads"
+description: >
+  Draft long-form, highly engaging social media threads designed to maximize algorithmic reach,
+  educate the audience, and drive profile clicks and website traffic.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "social-media-manager"
+phase: "growth"
+applicable_startups: 
+  - all
+priority: "mvp"
+difficulty: "advanced"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "The Hook"
+    tasks:
+      - "Write a compelling first tweet/sentence that promises immense value or tells a shocking story (e.g., 'How we scaled to $1M ARR with zero ad spend 🧵')."
+  - step: "The Body"
+    tasks:
+      - "Break down the core concept into 5-8 digestible points."
+      - "Use heavy formatting (line breaks, emojis, bullet points) to increase skimmability."
+      - "Include data, screenshots, or proof points."
+  - step: "The Call to Action"
+    tasks:
+      - "End the thread by asking the user to follow/subscribe, and link back to the startup's core product."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Writing a boring, corporate press release format ('We are thrilled to announce...') which algorithms and users immediately ignore."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Viral Thread Creation process"
+  - "How do I handle viral thread creation?"
+  - "Implement viral thread creation"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the viral thread creation process"
+  optional:
+    - name: "N/A"
+      type: "string"
+      description: "No optional inputs needed."
+
+outputs:
+  files:
+    - path: "outputs/viral-thread-creation.md"
+      description: "Results of the viral thread creation process"
+  artifacts:
+    - "Completed viral thread creation deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

@@ -1,0 +1,86 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "database-tuning"
+display_name: "PostgreSQL / MySQL Performance Tuning"
+description: >
+  Analyze slow database queries, implement optimal indexing strategies, and tune 
+  server parameters to handle massive concurrent transaction loads.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "database-administrator"
+phase: "operations"
+applicable_startups: 
+  - all
+priority: "mvp"
+difficulty: "expert"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Monitoring"
+    tasks:
+      - "Enable `pg_stat_statements` (Postgres) or Slow Query Log (MySQL) to identify bottlenecks."
+      - "Monitor buffer cache hit ratios and connection pool limits (PgBouncer)."
+  - step: "Query Optimization"
+    tasks:
+      - "Use `EXPLAIN ANALYZE` to identify sequential scans on large tables."
+      - "Implement B-Tree, GIN, or composite indexes tailored to the specific query access patterns."
+  - step: "Maintenance"
+    tasks:
+      - "Configure auto-vacuum settings to prevent transaction ID wraparound and table bloat."
+      - "Test point-in-time recovery (PITR) backups quarterly."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Blindly adding an index to every single column in a table, which slows down `INSERT`/`UPDATE` operations massively."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Database Tuning process"
+  - "How do I handle database tuning?"
+  - "Implement database tuning"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the database tuning process"
+  optional:
+    - name: "data_source"
+      type: "string"
+      description: "Source of data to analyze"
+      default: "Internal data"
+    - name: "code_repository"
+      type: "string"
+      description: "Path to the code repository"
+      default: "./"
+
+outputs:
+  files:
+    - path: "outputs/database-tuning.md"
+      description: "Results of the database tuning process"
+  artifacts:
+    - "Completed database tuning deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

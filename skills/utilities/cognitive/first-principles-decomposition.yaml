@@ -1,0 +1,90 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "first-principles-decomposition"
+display_name: "First Principles Decomposition"
+description: >
+  Breaks down complex problems into their most basic, undeniable truths 
+  (axioms) and builds a solution up from there. Prevents "reasoning by analogy" 
+  and exposes hidden assumptions that limit innovation.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "utility"
+phase: "all"
+applicable_startups:
+  - all
+priority: "high"
+difficulty: "expert"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Why is this so expensive?"
+  - "Break this down from first principles."
+  - "Challenge our assumptions about this market."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Generate assumption breakdown."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "problem_statement"
+      type: "string"
+      description: "The accepted reality to challenge (e.g., 'Server costs are too high')."
+  optional:
+    - name: "current_solution"
+      type: "string"
+      description: "How things are done currently."
+      default: "None"
+
+outputs:
+  files:
+    - path: "decisions/first-principles/{problem}.md"
+      description: "The foundational breakdown of the problem."
+  artifacts:
+    - "A list of base truths and a novel solution path."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "N/A"
+  manual:
+    - "The analysis reveals at least one widely held assumption that is factually false or outdated."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+
+safety_notes:
+  - "Avoid pedantry. Do not break down a software problem to the level of quantum mechanics. Stop at the lowest level of *actionable* truth."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Markdown"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Socratic Questioning (The 5 Whys)"
+    tasks:
+      - "List every assumption surrounding the problem."
+      - "Ask 'Why?' for each assumption until you hit a physical, mathematical, or absolute hard constraint."
+  - step: "Identify the Base Truths"
+    tasks:
+      - "Separate the undeniable facts (e.g., 'Bandwidth costs $X per GB') from conventions (e.g., 'We must use AWS')."
+  - step: "Reconstruct the Solution"
+    tasks:
+      - "Ignoring all existing solutions in the market, build a new solution relying *only* on the base truths."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Reasoning by Analogy: Concluding 'We must do X because Company Y did X and they are successful.'"
+  - "Accepting Artificial Constraints: Believing a limitation is physical when it is merely organizational or historical."
+
+best_practices:
+  - "Use mathematical/physics-based thinking to define absolute limits (e.g., the speed of light for network latency)."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Farnam Street: First Principles Thinking"
+    url: "https://fs.blog/first-principles/"

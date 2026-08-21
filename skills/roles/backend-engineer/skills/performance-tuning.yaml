@@ -1,0 +1,120 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "performance-tuning"
+display_name: "Application Performance Tuning"
+description: >
+  Optimizes application code to handle massive throughput with minimal CPU/RAM. 
+  Implements multi-level caching strategies (CDN, Redis, in-memory) and 
+  optimizes the runtime environment (Node.js event loop, Go goroutines). Covers key patterns to avoid common pitfalls like exposing internal stack traces or debug output in production, and provides actionable best practices for production-ready results.
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "backend-engineer"
+phase: "growth"
+applicable_startups:
+  - all
+priority: "high"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "The API is too slow."
+  - "Add caching to this endpoint."
+  - "We are hitting memory limits."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Draft Redis caching middleware."
+  - "Generate load testing script."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "target_endpoint"
+      type: "string"
+      description: "The API route being optimized."
+  optional:
+    - name: "cache_ttl"
+      type: "string"
+      description: "Time to live for cached data."
+      default: "60 seconds"
+
+outputs:
+  files:
+    - path: "src/services/cache.service.ts"
+      description: "The caching layer implementation."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "Load testing (k6/Artillery) confirms the endpoint can sustain 500 RPS with p95 latency under 100ms."
+manual:
+  - "Server instances can be downsized, reducing AWS costs."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "Cache Invalidation: The hardest problem in computer science. Never cache data without explicitly writing the code that invalidates that cache when the underlying data is mutated."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Redis / Memcached"
+      install: "N/A"
+  alternatives:
+    - name: "k6"
+      when: "Running load tests."
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "The CDN Layer"
+    tasks:
+      - "Never serve static assets (images, PDFs) from the backend application server. Offload them to a CDN (Cloudflare/Cloudfront) immediately."
+  - step: "Redis Look-Aside Caching"
+    tasks:
+      - "Implement the Look-Aside pattern: 1. Check Redis. 2. If miss, fetch from DB. 3. Write to Redis with a TTL. 4. Return to user."
+  - step: "Payload Compression"
+    tasks:
+      - "Ensure GZIP or Brotli compression is enabled at the API gateway/reverse proxy layer to reduce network transfer time."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Exposing internal stack traces or debug output in production error responses -- leak sensitive infrastructure details."
+  - "Using synchronous database queries inside a high-throughput API handler -- blocks the event loop and tanks throughput."
+  - "Ignoring database connection pool limits -- starving the pool causes cascading failures across all endpoints."
+  - "Hardcoding pagination limits or skipping pagination entirely -- unbounded result sets crash the API server."
+  - "Omitting request timeout middleware -- slow clients can hold connections open indefinitely, exhausting server resources."
+  - "Use a Stale-While-Revalidate pattern for dashboards. Serve the slightly stale cached data instantly, and kick off a background job to update the cache for the next request."
+
+  - "Implement comprehensive input validation at the API boundary using a schema validator (Zod, Pydantic, Joi)."
+  - "Use structured logging with correlation IDs across all services to trace a single request end-to-end."
+  - "Design for graceful degradation — when a downstream dependency fails, return degraded data rather than a 500 error."
+  - "Implement health check endpoints (/health, /ready) for every service so orchestrators know when to restart or drain traffic."
+  - "Use database connection pooling with proper min/max bounds to handle traffic spikes without overwhelming the database."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Not defining clear success criteria before starting a task -- leads to ambiguous outcomes, endless revisions, and wasted effort."
+
+best_practices:
+  - "Document all configuration decisions in an Architecture Decision Record (ADR) so future team members understand why choices were made."
+  - "Implement comprehensive error handling with structured logging at every integration boundary to simplify debugging."
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "AWS: Caching Strategies"
+    url: "https://aws.amazon.com/builders-library/caching-challenges-and-strategies/"

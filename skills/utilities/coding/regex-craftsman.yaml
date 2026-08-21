@@ -1,0 +1,91 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "regex-craftsman"
+display_name: "Regex Craftsman & Security"
+description: >
+  Writes, optimizes, tests, and explains complex Regular Expressions. 
+  Protects against catastrophic backtracking (ReDoS) and ensures regexes 
+  are readable by future maintainers through verbose commenting.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "utility"
+phase: "all"
+applicable_startups:
+  - all
+priority: "medium"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Write a regex to match..."
+  - "Explain this regex."
+  - "Why is my regex hanging the server?"
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Generate secure regex."
+  - "Explain regex pattern."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "pattern_requirement"
+      type: "string"
+      description: "What needs to be matched (e.g., 'Valid IPv4 addresses')."
+  optional:
+    - name: "language_flavor"
+      type: "string"
+      description: "PCRE, JS, Python, Go."
+      default: "PCRE"
+
+outputs:
+  files:
+    - path: "src/utils/regex.ts"
+      description: "The regex string and its test cases."
+  artifacts:
+    - "A plain-English explanation of the regex logic."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "The regex passes all positive and negative test cases."
+  manual:
+    - "The regex is heavily commented (using `(?x)` verbose mode if supported) so junior developers can read it."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "ReDoS (Regular Expression Denial of Service): A regex like `^(a+)+$` will freeze a server if fed a string like `aaaaaaaaaaaaaaaaaaaaX`. You MUST avoid nested quantifiers or overlapping alternations."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Regex101"
+      install: "N/A (Web tool)"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Define the Boundary"
+    tasks:
+      - "Always define what SHOULD NOT match (Negative cases) before writing the regex for what SHOULD match."
+  - step: "Draft and Secure"
+    tasks:
+      - "Write the pattern using explicit character classes."
+      - "Check for catastrophic backtracking risks. Prefer atomic groups or possessive quantifiers if the language supports them."
+  - step: "Comment and Explain"
+    tasks:
+      - "Break the regex into multiple lines and add comments for each group, OR provide a highly detailed JSDoc block above the variable."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Using regex to parse HTML. HTML is not a regular language. Using regex for it will lead to brittle, easily broken code. Use a DOM parser."
+  - "Writing a 200-character 'god regex' to validate an email address. Just check for an `@` symbol and send a verification email."
+
+best_practices:
+  - 'Use named capture groups `(?<name>...)` instead of numbered groups `\1` for better readability and maintainability in code.'
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "OWASP: Regular Expression Denial of Service"
+    url: "https://owasp.org/www-community/attacks/Regular_expression_Denial_of_Service_-_ReDoS"

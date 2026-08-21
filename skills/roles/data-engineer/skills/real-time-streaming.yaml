@@ -1,0 +1,115 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "real-time-streaming"
+display_name: "Real-Time Event Streaming Architecture"
+description: >
+  Design high-throughput, low-latency streaming pipelines for events that 
+  must be processed instantly (e.g., Fraud Detection, Live Leaderboards, 
+  IoT telemetry) rather than in nightly batches.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "data-engineer"
+phase: "growth"
+applicable_startups:
+  - fintech
+  - iot
+  - adtech
+priority: "medium"
+difficulty: "expert"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Set up Kafka."
+  - "We need real-time data processing."
+  - "Process these events instantly."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Create a Kafka topic schema."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "event_throughput"
+      type: "string"
+      description: "Expected events per second (e.g., 10,000 EPS)."
+    - name: "latency_requirement"
+      type: "string"
+      description: "Does it need to be <50ms or is 5 seconds okay?"
+  optional:
+    - name: "streaming_engine"
+      type: "string"
+      description: "Kafka vs Kinesis vs Pub/Sub."
+      default: "Kafka"
+
+outputs:
+  files:
+    - path: "data/streaming/topology-diagram.md"
+      description: "The architecture of producers, brokers, and consumers."
+  artifacts:
+    - "A schema registry definition for the events."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "The streaming pipeline processes 10,000 events per second with sub-100ms latency without dropping packets."
+  manual:
+    - "Fraud models can score a transaction and block it before the credit card is charged."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+
+safety_notes:
+  - "Data Loss: If a consumer crashes, ensure the stream is configured to 'At-Least-Once' delivery so messages are not permanently lost. The consumer must commit its offset *after* successful processing."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Apache Kafka (Confluent Cloud)"
+      install: "N/A"
+  alternatives:
+    - name: "AWS Kinesis / GCP PubSub"
+      when: "You want a fully managed, serverless stream without managing Kafka brokers."
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Topic Partitioning"
+    tasks:
+      - "Kafka scales through partitions. If you need more throughput, add more partitions. Ensure you pick a good partition key (e.g., `user_id`) so all events for one user go to the same partition, guaranteeing order."
+  - step: "Schema Registry"
+    tasks:
+      - "Never send raw JSON through Kafka. Use Avro or Protobuf with a Schema Registry. If a producer accidentally renames `user_id` to `userId`, the schema registry will reject the message before it breaks downstream consumers."
+  - step: "Stream Processing"
+    tasks:
+      - "Use a tool like Flink, ksqlDB, or Spark Streaming to perform real-time aggregations (e.g., 'Count the number of failed logins per IP over a 5-minute sliding window')."
+  - step: "The Lambda Architecture Strategy"
+    tasks:
+      - "Combine streaming (fast, approximate) with batch processing (slow, perfectly accurate). Use streaming for real-time alerts, but reconcile the final numbers overnight in the data warehouse."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Using Kafka as a database. Streams should have retention limits (e.g., 7 days). If you need to store data forever, sink it to S3/Snowflake. Do not try to query historical data directly from Kafka."
+  - "Over-engineering. If your business only needs reports updated every hour, do not build a real-time Kafka pipeline. A simple hourly Cron job running a SQL script is 10x cheaper and easier to maintain."
+
+best_practices:
+  - "Handle 'Poison Pills'. If a consumer receives a malformed message it cannot process, it must not crash in an infinite loop. It should push the bad message to a Dead Letter Queue (DLQ) and continue processing."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Confluent: Kafka Documentation"
+    url: "https://docs.confluent.io/home/overview.html"

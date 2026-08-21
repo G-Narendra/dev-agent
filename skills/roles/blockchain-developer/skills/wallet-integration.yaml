@@ -1,0 +1,111 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "wallet-integration"
+display_name: "Web3 Wallet Authentication & Signing"
+description: >
+  Integrates cryptocurrency wallets (MetaMask, Phantom, WalletConnect) into 
+  the application. Handles cryptographic message signing, transaction approvals, 
+  and secure session management without relying on traditional passwords. Covers key patterns to avoid common pitfalls like committing private keys or mnemonic phrases to version contr, and provides actionable best practices for production-ready results.
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "blockchain-developer"
+phase: "build"
+applicable_startups:
+  - Web3, Crypto, DeFi
+priority: "critical"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Add a 'Connect Wallet' button."
+  - "Sign in with Ethereum."
+  - "The transaction keeps failing."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Generate RainbowKit integration."
+  - "Draft SIWE (Sign-In with Ethereum) auth flow."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "supported_wallets"
+      type: "string"
+      description: "MetaMask, Coinbase Wallet, Trust Wallet."
+  optional:
+    - name: "auth_strategy"
+      type: "string"
+      description: "Just connect (read-only) vs SIWE (backend auth)."
+      default: "RainbowKit (Connect)"
+
+outputs:
+  files:
+    - path: "src/components/ConnectButton.tsx"
+      description: "The wallet connection UI component."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "N/A"
+manual:
+  - "A user on a mobile device can seamlessly connect their Trust Wallet app to the dApp via WalletConnect and sign a message."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "Impersonation Attacks: If your backend needs to authenticate a user, simply sending their wallet address `0xABC...` to the server is wildly insecure. Anyone can send any address. You MUST implement Cryptographic Signature verification (SIWE)."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "RainbowKit"
+      install: "npm i @rainbow-me/rainbowkit"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Network Validation"
+    tasks:
+      - "Before allowing the user to initiate a transaction, strictly check if they are on the correct network (e.g., Mainnet vs Goerli). If they are on the wrong network, prompt the wallet to switch networks automatically."
+      - "Create a test data factory/seeder so tests are deterministic and repeatable."
+  - step: "Transaction Estimation"
+    tasks:
+      - "Always run an `estimateGas` call before prompting the wallet to sign a transaction. If the transaction is guaranteed to revert (fail), the UI should block the user from signing and wasting their money on gas."
+  - step: "Pending States"
+    tasks:
+      - "Web3 transactions take time (12 seconds on Ethereum). You must implement robust UI states: 'Awaiting Signature' (wallet popup open), 'Transaction Submitted' (waiting for mining), and 'Confirmed'."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Committing private keys or mnemonic phrases to version control -- use hardware wallets or vaults."
+  - "Deploying a contract without running a full static analysis tool (e.g., Slither or Mythril) -- even simple bugs can drain the entire pool."
+  - "Using tx.origin for authentication instead of msg.sender -- opens the contract to phishing attacks."
+  - "Writing upgradeable proxy contracts without a time-lock and multi-sig governance -- a single compromised deployer key = total loss of funds."
+  - "Hardcoding gas limits -- gas costs change with network upgrades; use gas estimation instead."
+best_practices:
+  - "Support EIP-6963 (Multi Injected Provider Discovery). If a user has 3 different wallet extensions installed, your dApp should not crash because they are fighting over the `window.ethereum` object."
+
+  - "Always run both static analysis (Slither) and formal verification before deploying any contract with real funds."
+  - "Use a proxy upgrade pattern (UUPS or transparent) with timelock and multi-sig for any contract holding >$100K."
+  - "Audit the order of operations in every function — check-effects-interactions pattern prevents reentrancy."
+  - "Write comprehensive fuzz tests using Echidna or Foundry for every public/external function."
+  - "Document the economic security assumptions — what would it cost an attacker to break the system?"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Sign-In with Ethereum (SIWE)"
+    url: "https://login.xyz/"

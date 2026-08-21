@@ -1,0 +1,114 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "strategic-partnerships"
+display_name: "Strategic Partnership & Channel Development"
+description: >
+  Identifies, negotiates, and manages strategic partnerships and channel
+  relationships that drive growth, distribution, and competitive advantage.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "business-model-strategist"
+phase: "growth"
+applicable_startups:
+  - all
+priority: "growth"
+difficulty: "expert"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Find strategic partners."
+  - "Develop channel partnerships."
+  - "Build a partnership program."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Identify partnership opportunities."
+  - "Develop partnership program."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "business_model"
+      type: "string"
+      description: "Your business model and what you offer potential partners."
+    - name: "partnership_goals"
+      type: "string"
+      description: "Distribution, integration, co-marketing, or reseller."
+  optional:
+    - name: "target_partner_list"
+      type: "string"
+      description: "Companies you'd like to partner with."
+      default: "To be identified through research"
+
+outputs:
+  files:
+    - path: "strategy/partnerships/partnership-strategy.md"
+      description: "Strategic partnership plan with prioritized targets"
+  artifacts:
+    - "A partnership strategy with identified targets and outreach plan"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Partnership Type Identification"
+    tasks:
+      - "Distribution: partners who can sell/distribute your product to their customers (resellers, affiliates)."
+      - "Integration: partners whose product integrates with yours (tech partnerships, API integrations)."
+      - "Co-marketing: partners with shared audience for joint content, webinars, events."
+      - "Channel: partners who sell complementary products to the same customer."
+  - step: "Partner Research & Qualification"
+    tasks:
+      - "List potential partners based on: shared target audience, complementary product, aligned values."
+      - "Qualify each partner: do they have reach, credibility, and a clear win-win opportunity?"
+      - "Assess partner scale: number of customers, traffic, email list size, social following."
+      - "Check for existing partnerships — over-partnered companies may not prioritize you."
+  - step: "Value Proposition Design"
+    tasks:
+      - "For each partner type, define the value exchange: what do they get vs. what do we get?"
+      - "Integration partners: we build the integration, they get a more valuable product."
+      - "Distribution partners: revenue share (15-30% for referrals, 10-20% for resellers)."
+      - "Co-marketing: shared content creation, cross-promotion, equal value exchange."
+  - step: "Outreach & Negotiation"
+    tasks:
+      - "Find a warm introduction to the partnership team (founder network, mutual contact)."
+      - "Lead with the value for them, not what you want from them."
+      - "Start with a small pilot: test the partnership before committing to a large program."
+      - "Document the agreement: terms, responsibilities, timeline, success metrics."
+  - step: "Partnership Management & Growth"
+    tasks:
+      - "Assign a partnership owner who manages the relationship and tracks results."
+      - "Set up joint success metrics: co-sourced pipeline, integrated users, cross-promotion reach."
+      - "Review partnership performance quarterly: is it generating the expected value?"
+      - "Nurture relationships even when not actively running campaigns."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Treating partnerships as a 'growth hack' — they require sustained investment."
+  - "Partnerships with no clear value exchange — both sides need to win."
+  - "Too many partnerships without focus — spreading the team too thin."
+  - "Partnerships that sound good but have no measurable business impact."
+best_practices:
+  - "The best partnerships are obvious — both sides immediately see the value."
+  - "Start with one partnership, prove the model, then replicate."
+  - "Partnerships are relationships, not transactions — invest in the people."
+  - "A good partnership makes your product more valuable to both customer bases."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

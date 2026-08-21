@@ -1,0 +1,141 @@
+# â”€â”€ IDENTITY â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+name: "objection-handling"
+display_name: "Advanced Objection Handling"
+description: >
+  Systematically dismantles the psychological and financial roadblocks prospects 
+  throw up during a sales cycle. Turns 'No' into 'Not yet', and turns 
+  'It's too expensive' into a conversation about ROI.
+
+# â”€â”€ CLASSIFICATION â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+role: "account-executive"
+phase: "growth"
+applicable_startups:
+  - B2B
+priority: "high"
+difficulty: "advanced"
+
+# â”€â”€ TRIGGER â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+trigger_phrases:
+  - "They are worried about security."
+  - "The prospect says our competitor is cheaper."
+  - "They said they don't have the bandwidth to implement this."
+
+# â”€â”€ ACTIONS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+example_cli_actions:
+  - "Draft objection rebuttal script."
+  - "Generate competitive battlecard."
+
+# â”€â”€ INPUTS / OUTPUTS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+inputs:
+  required:
+    - name: "the_objection"
+      type: "string"
+      description: "Exactly what the prospect said."
+    - name: "competitor_name"
+      type: "string"
+      description: "Who are we losing to?"
+  optional:
+    - name: "industry"
+      type: "string"
+      description: "Context of the buyer."
+      default: "SaaS"
+
+outputs:
+  files:
+    - path: "sales/training/battlecards.md"
+      description: "The playbook for defeating this objection."
+  artifacts:
+    - "N/A"
+
+# â”€â”€ SUCCESS CRITERIA â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+automated:
+  - "N/A"
+manual:
+  - "The prospect explicitly agrees that the objection has been resolved and agrees to the next step."
+
+# â”€â”€ PERMISSIONS & SAFETY â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "The Argument Trap: Never argue with a prospect or tell them they are wrong. If they say 'Your software is slow', do not say 'No it isn't'. Say 'I hear you. Performance is critical. What are you comparing it to?'"
+
+# â”€â”€ TOOLING â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+recommended_tools:
+  primary:
+    - name: "Gong"
+      install: "N/A"
+
+# â”€â”€ IMPLEMENTATION CHECKLIST â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+implementation_checklist:
+  - step: "LAER Framework"
+    tasks:
+      - "Listen, Acknowledge, Explore, Respond. Never respond immediately. Acknowledge the pain ('That makes complete sense'). Explore the root cause ('Can you tell me more about why that specific feature is a dealbreaker?')."
+  - step: "Isolating the Objection"
+    tasks:
+      - "Often, 'Price' is a smokescreen. Isolate it: 'If price were not an issue, is this the product you want?' If they say no, you haven't sold the value yet. Fix the value, not the price."
+  - step: "The 'Judo' Flip"
+    tasks:
+      - "If they say 'You are a startup, it's too risky', flip it: 'Exactly. Because we are a startup, you get the cell phone number of our CTO and 24/7 white-glove support. IBM won't give you that.'"
+
+# â”€â”€ QUALITY GATES â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+anti_patterns:
+  - "Feature dumping in response to an objection. If they are worried about implementation time, showing them 5 more features will only make them feel MORE overwhelmed."
+best_practices:
+  - "Use social proof. 'You aren't the first person to worry about X. In fact, Acme Corp felt the exact same way. But after 3 months, they found Y. Would you like to speak with them?'"
+
+# â”€â”€ REFERENCES â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+references:
+  - title: "Objection Handling Playbook"
+    url: "https://www.saleshacker.com/objection-handling-techniques/"
+
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Objection Handling process"
+  - "How do I handle objection handling?"
+  - "Implement objection handling"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the objection handling process"
+  optional:
+    - name: "N/A"
+      type: "string"
+      description: "No optional inputs needed."
+
+outputs:
+  files:
+    - path: "outputs/objection-handling.md"
+      description: "Results of the objection handling process"
+  artifacts:
+    - "Completed objection handling deliverable"
+
+# ── QUALITY GATES ────────────────────────────────────────────
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start — retrofitting is expensive."
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

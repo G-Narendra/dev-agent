@@ -1,0 +1,114 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "glassdoor-research"
+display_name: "Glassdoor & LinkedIn Company Culture Research"
+description: >
+  Mines Glassdoor reviews and LinkedIn company pages to understand competitor 
+  culture, hiring trends, employee satisfaction, and internal challenges. 
+  Glassdoor reviews reveal what employees (including ex-employees) really 
+  think about a company. High turnover, bad reviews, or specific complaints 
+  about a competitor's product quality or engineering culture are strategic 
+  intelligence for positioning your startup.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "utility"
+phase: "ideation"
+applicable_startups:
+  - all
+priority: "medium"
+difficulty: "beginner"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "What do employees think of competitor X?"
+  - "Check Glassdoor for this company."
+  - "Is this competitor hiring in a specific area?"
+  - "Find out why people leave competitor X."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Search Glassdoor for company reviews."
+  - "Analyze LinkedIn hiring patterns."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "company_name"
+      type: "string"
+      description: "The competitor company name."
+  optional:
+    - name: "focus"
+      type: "string"
+      description: "'culture' (reviews+culture), 'hiring' (LinkedIn job posts), 'leadership' (executive changes), 'all'."
+      default: "all"
+
+outputs:
+  files:
+    - path: "research/company-culture-{company}.md"
+      description: "A report on the company's internal health and hiring signals."
+  artifacts:
+    - "Summary of common employee complaints (e.g., 'bad management', 'legacy codebase')."
+    - "Hiring priorities: what roles are they aggressively hiring for?"
+    - "Leadership changes: who left, who joined, what signals does that send?"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "N/A"
+  manual:
+    - "Identified a competitor weakness (e.g., 'losing senior engineers due to legacy tech stack') that the startup can exploit."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "network"
+
+safety_notes:
+  - "Glassdoor reviews skew negative: employees who are satisfied are less likely to write a review. Take extreme negativity with a grain of salt."
+  - "LinkedIn is rate-limited. Be respectful with search frequency."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Google Search (site:glassdoor.com OR site:linkedin.com)"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Mine Glassdoor Reviews"
+    tasks:
+      - "Use Google: `site:glassdoor.com {company_name} reviews`"
+      - "Filter to 'Most Recent' and read the last 20 reviews (not just the top-rated ones)."
+      - "Extract patterns: Common complaints about product quality, management, work-life balance."
+      - "Pay special attention to reviews mentioning the company's product or technology stack."
+      - "Document direct quotes that reveal specific internal weaknesses."
+  - step: "Analyze LinkedIn Hiring"
+    tasks:
+      - "Search LinkedIn for the company's Careers page or job listings."
+      - "Use Google: `site:linkedin.com/jobs {company_name}`"
+      - "What roles are they hiring for? (Sales hires = growth pressure, Engineering hires = building, Support hires = churn issues)."
+      - "If they're hiring 10+ sales reps but 0 engineers: they're focused on selling what they have, not innovating."
+      - "If they're hiring for roles specific to a new market or technology, that reveals their strategic direction."
+  - step: "Track Leadership Changes"
+    tasks:
+      - "Search: `site:linkedin.com/in {executive_name} {company_name}`"
+      - "Note when key executives joined or left. A CTO leaving mid-engineering push is a red flag."
+      - "Check: who recently joined from a competing company?"
+  - step: "Compile Strategic Insights"
+    tasks:
+      - "Summarize: Employee sentiment (positive/negative trend), Hiring focus areas, Leadership stability."
+      - "Key insight: Where is the competitor vulnerable? (e.g., 'Losing senior engineers = product stagnation incoming')."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Taking one bad review as truth. Look for patterns across multiple reviews."
+  - "Confusing hiring growth with company health. Rapid hiring can also signal high turnover."
+
+best_practices:
+  - "Glassdoor's 'Recommended to a Friend' percentage is the single best metric of employee satisfaction."
+  - "If a competitor is hiring for a role they didn't have 6 months ago (e.g., 'AI Engineer'), that reveals their product roadmap."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Glassdoor"
+    url: "https://www.glassdoor.com/"
+  - title: "LinkedIn Company Pages"
+    url: "https://www.linkedin.com/company/"

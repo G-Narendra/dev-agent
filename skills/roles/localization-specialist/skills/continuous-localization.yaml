@@ -1,0 +1,80 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "continuous-localization"
+display_name: "Continuous i18n & Translation Management"
+description: >
+  Implement a Continuous Localization pipeline where new English strings merged into the
+  codebase are automatically sent to a Translation Management System (TMS) like Lokalise.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "localization-specialist"
+phase: "growth"
+applicable_startups: 
+  - all
+priority: "mvp"
+difficulty: "advanced"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Codebase Preparation"
+    tasks:
+      - "Ensure all hardcoded strings in the frontend are wrapped in i18n functions (e.g., `t('key')`)."
+  - step: "TMS Integration"
+    tasks:
+      - "Connect the GitHub repo to Lokalise or Phrase to automatically sync `en.json`."
+  - step: "Vendor Management"
+    tasks:
+      - "Provide screenshots of the UI to the translation agency so they have visual context."
+      - "Run automated checks for missing translations before a production release."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Releasing a massive feature in France where half the buttons say 'Submit' because the engineering team forgot to add the new strings to the translation file."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Continuous Localization process"
+  - "How do I handle continuous localization?"
+  - "Implement continuous localization"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the continuous localization process"
+  optional:
+    - name: "code_repository"
+      type: "string"
+      description: "Path to the code repository"
+      default: "./"
+
+outputs:
+  files:
+    - path: "outputs/continuous-localization.md"
+      description: "Results of the continuous localization process"
+  artifacts:
+    - "Completed continuous localization deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

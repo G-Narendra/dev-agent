@@ -1,0 +1,83 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "observability-monitoring"
+display_name: "Observability & Monitoring"
+description: >
+  Implement the three pillars of observability (metrics, logs, traces) to ensure 
+  complete visibility into the health of distributed systems.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "site-reliability-engineering"
+phase: "operations"
+applicable_startups: 
+  - all
+priority: "high"
+difficulty: "expert"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Golden Signals"
+    tasks:
+      - "Build a Datadog/Grafana dashboard tracking the Four Golden Signals for every microservice: Latency, Traffic, Errors, and Saturation."
+  - step: "Distributed Tracing"
+    tasks:
+      - "Inject a `trace_id` at the API Gateway and pass it down through every internal microservice request, allowing for cross-service latency debugging in Jaeger/Honeycomb."
+  - step: "Alert Fatigue Prevention"
+    tasks:
+      - "Never alert on CPU usage. Only page engineers for customer-facing Service Level Objective (SLO) breaches, such as 'Checkout error rate > 1%'."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Configuring a PagerDuty alert to fire every time a single pod's CPU hits 80%, waking up the on-call engineer 4 times a night for something that auto-scales anyway."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Observability Monitoring process"
+  - "How do I handle observability monitoring?"
+  - "Implement observability monitoring"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the observability monitoring process"
+  optional:
+    - name: "data_source"
+      type: "string"
+      description: "Source of data to analyze"
+      default: "Internal data"
+    - name: "code_repository"
+      type: "string"
+      description: "Path to the code repository"
+      default: "./"
+
+outputs:
+  files:
+    - path: "outputs/observability-monitoring.md"
+      description: "Results of the observability monitoring process"
+  artifacts:
+    - "Completed observability monitoring deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

@@ -1,0 +1,106 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "product-analytics-framework"
+display_name: "Product Analytics & North Star Metrics"
+description: >
+  Define the quantitative health of the product. Focuses on identifying the 
+  North Star Metric, defining activation funnels, and tracking retention cohorts 
+  to ensure the product is actually solving a problem, not just acquiring users.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "cpo"
+phase: "growth"
+applicable_startups:
+  - all
+priority: "critical"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "What is our North Star Metric?"
+  - "Define the product analytics dashboard."
+  - "How do we measure product-market fit?"
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Create a product metrics dashboard artifact."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "core_value_prop"
+      type: "string"
+      description: "The primary reason a user signs up."
+  optional:
+    - name: "current_analytics_stack"
+      type: "string"
+      description: "Mixpanel, Amplitude, or just Google Analytics."
+      default: "Unknown"
+
+outputs:
+  files:
+    - path: "product/analytics-framework.md"
+      description: "The definitions of the core product metrics."
+  artifacts:
+    - "A definition of the 'Aha Moment' event."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "N/A"
+  manual:
+    - "The product team focuses entirely on improving the North Star Metric instead of debating subjective opinions."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+
+safety_notes:
+  - "Do not track everything. Tracking 500 different events will create massive noise and database costs. Track the 5-10 actions that actually correlate with retention."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Amplitude / Mixpanel"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Define the North Star Metric"
+    tasks:
+      - "Select ONE metric that captures the core value delivered to the customer (e.g., Airbnb: Nights Booked. WhatsApp: Messages Sent. Spotify: Time spent listening)."
+      - "Revenue is NOT a North Star Metric. Revenue is a lagging indicator that happens *because* the North Star Metric was achieved."
+  - step: "Define the Activation Funnel (The 'Aha Moment')"
+    tasks:
+      - "Identify the specific set of actions a new user must take within their first 7 days to understand the value of the product."
+      - "Example: Slack's activation metric was 'Team sends 2,000 messages'."
+  - step: "Cohort Retention Tracking"
+    tasks:
+      - "Track retention based on cohorts (e.g., 'Users who joined in January'). A flattening retention curve at 30% means you have Product-Market Fit. A curve that goes straight to 0% means you have a leaky bucket."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Using 'Registered Users' or 'Pageviews' as your primary metric. These are vanity metrics that always go up and to the right, even if the business is dying."
+  - "Relying purely on qualitative feedback. Users will tell you they love a feature, but analytics will show that only 1% actually click the button."
+
+best_practices:
+  - "Instrument events on the server-side, not the client-side, for critical metrics like billing or core actions. Ad-blockers will block client-side Mixpanel events, skewing your data by up to 30%."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Amplitude: The North Star Playbook"
+    url: "https://amplitude.com/north-star"

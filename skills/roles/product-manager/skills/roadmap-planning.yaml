@@ -1,0 +1,120 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "roadmap-planning"
+display_name: "Strategic Product Roadmap"
+description: >
+  Defines the long-term vision of the product. Translates the startup's 
+  business objectives into a prioritized sequence of features (Now, Next, Later) 
+  that align engineering effort with customer needs. Covers key patterns to avoid common pitfalls like designing for the ideal screen size first -- mobile-first fo, and provides actionable best practices for production-ready results.
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "product-manager"
+phase: "planning"
+applicable_startups:
+  - all
+priority: "critical"
+difficulty: "expert"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "What are we building next quarter?"
+  - "Prioritize these feature requests."
+  - "Draft the product roadmap."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Generate RICE prioritization matrix."
+  - "Draft executive roadmap summary."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "business_okrs"
+      type: "string"
+      description: "Objectives and Key Results for the year."
+    - name: "feature_backlog"
+      type: "string"
+      description: "List of requested features and bug fixes."
+  optional:
+    - name: "timeframe"
+      type: "string"
+      description: "Q1, H1, or 12-month outlook."
+      default: "Quarterly"
+
+outputs:
+  files:
+    - path: "product/strategy/roadmap_Q3.md"
+      description: "The finalized product roadmap."
+  artifacts:
+    - "A prioritized feature list."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "N/A"
+manual:
+  - "Engineering, Marketing, and Sales all understand exactly what the company is building for the next 3 months and *why*."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "The Feature Factory: Do not build a feature just because a single loud enterprise customer asked for it, unless it aligns with the broader product vision. Saying 'No' is the PM's primary job."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Productboard / Notion"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "RICE Scoring"
+    tasks:
+      - "Score every feature request objectively using the RICE framework: Reach (how many users), Impact (how much value), Confidence (how sure are we), Effort (engineering months)."
+  - step: "Now-Next-Later Format"
+    tasks:
+      - "Avoid strict Gantt charts with exact release dates (e.g., 'Feature X on Nov 14th'). Software development is unpredictable. Group features into 'Now' (active sprint), 'Next' (this quarter), and 'Later' (future)."
+  - step: "The 20% Tech Debt Rule"
+    tasks:
+      - "Always allocate at least 20% of the roadmap capacity strictly for engineering tech debt, refactoring, and infrastructure upgrades. If you don't, feature velocity will eventually grind to zero."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Designing for the ideal screen size first -- mobile-first forces better prioritization and prevents content overflow disasters."
+  - "Using color as the only differentiator for states (error, success, disabled) -- inaccessible to colorblind users."
+  - "Shipping UI without loading, empty, and error states -- the user is left guessing what happened."
+  - "Creating components in isolation without real content -- 'lorem ipsum' hides layout problems that real text exposes."
+  - "Ignoring touch target sizes (minimum 44x44px) on mobile -- users fat-finger the wrong button and get frustrated."
+  - "A roadmap is a living document. Review and adjust it at the end of every quarter based on new market realities and shifted priorities."
+
+  - "Follow the 8px grid rule for spacing and sizing — consistent rhythm across the interface improves visual harmony."
+  - "Test every design with real users before shipping — internal assumptions about usability are wrong 70% of the time."
+  - "Ensure all interactive elements have visible focus states for keyboard navigation — accessibility is not optional."
+  - "Design empty states that guide the user toward the next action rather than showing a blank page."
+  - "Use progressive disclosure — show the most important actions first, hide advanced options behind expandable sections."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Not defining clear success criteria before starting a task -- leads to ambiguous outcomes, endless revisions, and wasted effort."
+
+best_practices:
+  - "Document all configuration decisions in an Architecture Decision Record (ADR) so future team members understand why choices were made."
+  - "Implement comprehensive error handling with structured logging at every integration boundary to simplify debugging."
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Intercom: RICE Prioritization"
+    url: "https://www.intercom.com/blog/rice-simple-prioritization-for-product-managers/"

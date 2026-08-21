@@ -1,0 +1,107 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "native-modules"
+display_name: "React Native: Native Modules & Bridging"
+description: >
+  Bridges the gap between JavaScript and native iOS (Swift/Objective-C) or 
+  Android (Kotlin/Java) code. Writes custom native modules when a required 
+  hardware feature or SDK is not available in standard React Native.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "mobile-developer-react-native"
+phase: "build"
+applicable_startups:
+  - all
+priority: "high"
+difficulty: "expert"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "We need to access the Bluetooth API."
+  - "Integrate this native iOS SDK."
+  - "Write a custom Native Module."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Generate native module boilerplate."
+  - "Draft JSI (JavaScript Interface) binding."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "platform"
+      type: "string"
+      description: "iOS, Android, or Both."
+    - name: "hardware_feature"
+      type: "string"
+      description: "E.g., Bluetooth, Biometrics, Custom Camera."
+  optional:
+    - name: "architecture"
+      type: "string"
+      description: "Old Bridge or New Architecture (JSI/TurboModules)."
+      default: "TurboModules"
+
+outputs:
+  files:
+    - path: "ios/RCTCustomModule.m"
+      description: "The iOS native implementation."
+    - path: "android/src/main/java/.../CustomModule.java"
+      description: "The Android native implementation."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "N/A"
+manual:
+  - "The JavaScript thread can successfully invoke the native camera SDK without blocking the UI frame rate."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "Thread Blocking: Never run heavy computation on the main UI thread in a native module. It will freeze the entire React Native app. Always dispatch heavy work to a background thread."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Xcode & Android Studio"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Platform Specific Implementations"
+    tasks:
+      - "Write the iOS implementation in Swift (using an Objective-C header bridge). Write the Android implementation in Kotlin. Ensure the method signatures match exactly."
+  - step: "TurboModules (New Architecture)"
+    tasks:
+      - "Use the New Architecture (JSI) instead of the old asynchronous JSON bridge. JSI allows JavaScript to hold references to C++ objects, enabling synchronous, high-performance native calls."
+  - step: "Event Emitters"
+    tasks:
+      - "If the native code needs to send continuous data back to JS (like a Bluetooth stream), implement `RCTEventEmitter` on iOS and `ReactContextBaseJavaModule` on Android."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Writing a native module for something that could easily be solved in JavaScript just because 'native is faster'. The bridge communication overhead is often slower than just running JS."
+best_practices:
+  - "Always handle native permissions gracefully. If your native module tries to access the Camera without requesting permission first, the OS will instantly crash the app."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "React Native: Native Modules"
+    url: "https://reactnative.dev/docs/native-modules-intro"

@@ -1,0 +1,78 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "release-management"
+display_name: "Product Release Management"
+description: >
+  Coordinate cross-functional teams (Engineering, Marketing, Sales, Support) to ensure 
+  product launches are smooth, well-communicated, and bug-free.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "product-manager"
+phase: "operations"
+applicable_startups: 
+  - all
+priority: "high"
+difficulty: "advanced"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Feature Flags"
+    tasks:
+      - "Ensure engineering merges the code behind a Feature Flag (e.g., LaunchDarkly) so the code can be in production but hidden from users until launch day."
+  - step: "Support Training"
+    tasks:
+      - "Conduct a live training session with the Customer Support team 3 days before launch, providing them with FAQs and troubleshooting guides."
+  - step: "Marketing Alignment"
+    tasks:
+      - "Coordinate with Marketing to ensure the blog post, email blast, and Product Hunt launch all go live at the exact moment the feature flag is flipped to 100%."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Engineering deploying a massive UI overhaul at 4 PM on a Friday without telling the Support team, causing chaos when users flood the chat with questions."
+
+best_practices:
+  - "Write problem statements before solution descriptions."
+  - "Prioritize using a framework (RICE, MoSCoW) -- not gut feeling."
+  - "Validate assumptions with real user data before committing resources."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Release Management process"
+  - "How do I handle release management?"
+  - "Implement release management"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the release management process"
+  optional:
+    - name: "N/A"
+      type: "string"
+      description: "No optional inputs needed."
+
+outputs:
+  files:
+    - path: "outputs/release-management.md"
+      description: "Results of the release management process"
+  artifacts:
+    - "Completed release management deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Intercom on Product Management"
+    url: "https://www.intercom.com/resources/books/intercom-on-product-management"
+  - title: "SVPG Product Management"
+    url: "https://www.svpg.com/articles/"

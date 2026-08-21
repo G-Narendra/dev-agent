@@ -1,0 +1,105 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "superuser-cultivation"
+display_name: "Superuser & Moderator Cultivation"
+description: >
+  Identifies and empowers the most active and helpful community members. 
+  Transitions the burden of community support and moderation from paid 
+  employees to passionate volunteers.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "community-manager"
+phase: "growth"
+applicable_startups:
+  - all
+priority: "high"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "I spend too much time answering support questions."
+  - "How do we get the community to manage itself?"
+  - "Reward our best users."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Generate superuser criteria."
+  - "Draft ambassador invite email."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "community_size"
+      type: "string"
+      description: "How many active members."
+  optional:
+    - name: "reward_type"
+      type: "string"
+      description: "Swag, exclusive access, titles."
+      default: "Exclusive Discord Role"
+
+outputs:
+  files:
+    - path: "community/ambassador-program.md"
+      description: "The internal playbook for managing superusers."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "N/A"
+manual:
+  - "90% of basic 'How do I do X?' questions in the community are answered by other users, not the Community Manager."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "Do not give ban/kick moderation powers to a superuser just because they are active. Moderation requires emotional maturity, not just product knowledge."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Orbit / Commsor"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Identify the 1%"
+    tasks:
+      - "Use analytics (like Orbit) or manual observation to find the users who answer questions accurately and positively."
+  - step: "The 'Ask'"
+    tasks:
+      - "DM them privately. Do not ask them to 'work for free'. Ask them to join an exclusive 'Ambassador' or 'MVP' program to get closer to the core team."
+  - step: "Empowerment & Access"
+    tasks:
+      - "Create a private channel just for them. Share sneak peeks of upcoming features, ask for their feedback before the public, and give them a special colored role."
+  - step: "The Swag Drop"
+    tasks:
+      - "Send them a high-quality hoodie or mug unexpectedly. Physical items cement digital loyalty."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Paying community members cash to moderate. This shifts the relationship from 'passionate fan' to 'underpaid employee'."
+best_practices:
+  - "Publicly recognize superusers. Give them a shoutout in the monthly newsletter or all-hands meeting."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Orbit Model: Cultivating Community"
+    url: "https://orbit.love/model"

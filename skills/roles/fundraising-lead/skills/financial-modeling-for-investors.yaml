@@ -1,0 +1,116 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "financial-modeling-for-investors"
+display_name: "Financial Modeling & Projections for Investors"
+description: >
+  Builds comprehensive financial models that project revenue, costs, and
+  cash flow for the next 3-5 years. Creates investor-ready financial
+  projections with clear assumptions, unit economics, scenario analysis,
+  and capital requirements.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "fundraising-lead"
+phase: "planning"
+applicable_startups:
+  - all
+priority: "mvp"
+difficulty: "expert"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Build a financial model for investors."
+  - "Create revenue projections."
+  - "How much money do we need to raise?"
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Build financial model."
+  - "Create 5-year projections."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "business_model"
+      type: "string"
+      description: "How you make money (subscription, usage-based, marketplace take rate)."
+    - name: "current_financials"
+      type: "file"
+      description: "Current revenue, costs, and cash position (if any)."
+  optional:
+    - name: "funding_target"
+      type: "string"
+      description: "Amount you plan to raise."
+      default: "TBD — model will determine this"
+
+outputs:
+  files:
+    - path: "finance/financial-model-v1.xlsx"
+      description: "Complete financial model with projections"
+  artifacts:
+    - "An investor-ready financial model with clearly documented assumptions"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Revenue Model"
+    tasks:
+      - "Define revenue drivers: customers, pricing tiers, growth rate, churn rate."
+      - "Model revenue by tier: Free (conversion rate → Paid), Pro, Enterprise."
+      - "Include expansion revenue: upsells, cross-sells, usage overages."
+      - "Project monthly and annual revenue for 3-5 years."
+  - step: "Cost Structure"
+    tasks:
+      - "Model COGS: hosting, API costs, payment processing fees, support staff."
+      - "Model operating expenses: salaries, marketing, sales commissions, office, legal."
+      - "Add headcount plan: how many hires and when, with salary bands."
+      - "Include one-time costs: legal fees for fundraising, equipment, incorporation."
+  - step: "Unit Economics"
+    tasks:
+      - "Calculate CAC (Customer Acquisition Cost) by channel."
+      - "Calculate LTV (Lifetime Value) using ARPU, gross margin, and churn."
+      - "Show LTV/CAC ratio (target >3x for SaaS)."
+      - "Calculate payback period (months to recover CAC)."
+  - step: "Scenario Analysis"
+    tasks:
+      - "Create three scenarios: conservative (base case), expected (target), optimistic (stretch)."
+      - "Vary key assumptions: growth rate, churn, pricing, hiring timeline."
+      - "Show cash position under each scenario — when does the company run out of money?"
+      - "Determine the 'runway extension' each round of funding provides."
+  - step: "Capital Requirements"
+    tasks:
+      - "Calculate how much money you need to reach the next milestone."
+      - "Model the timing of fundraising based on cash runway."
+      - "Show the use of funds: hiring, marketing, R&D, G&A."
+      - "Include a 'buffer' (20%) for unexpected delays or opportunities."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Using single number projections — investors expect ranges and scenarios."
+  - "Inflating TAM with '1% of a $10B market' without bottom-up justification."
+  - "Ignoring churn — investors assume some churn, hiding it destroys credibility."
+  - "Overly optimistic cost assumptions — startups always cost more than expected."
+best_practices:
+  - "The most important page of the financial model is the 'Assumptions' page."
+  - "Investors care more about directionally correct projections than precise numbers."
+  - "Show you understand the key levers of your business, not just the outputs."
+  - "Update the model as you get real data — projections vs. actuals build credibility."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

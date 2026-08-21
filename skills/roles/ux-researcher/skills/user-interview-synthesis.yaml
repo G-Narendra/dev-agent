@@ -1,0 +1,114 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "user-interview-synthesis"
+display_name: "UX Research & Interview Synthesis"
+description: >
+  Uncovers the real problem. Conducts deep qualitative research with 
+  users, bypassing what they *say* they want to discover what they 
+  actually *need*, preventing the startup from building useless features. Covers key patterns to avoid common pitfalls like designing for the ideal screen size first -- mobile-first fo, and provides actionable best practices for production-ready results.
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "ux-researcher"
+phase: "ideation"
+applicable_startups:
+  - all
+priority: "critical"
+difficulty: "expert"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Users aren't using the feature."
+  - "What should we build next?"
+  - "Run a usability test."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Generate user interview script."
+  - "Draft thematic affinity map."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "research_goal"
+      type: "string"
+      description: "e.g., Why are users churning in Month 2?"
+    - name: "user_segment"
+      type: "string"
+      description: "e.g., Enterprise Admins."
+  optional:
+    - name: "methodology"
+      type: "string"
+      description: "User Interviews vs Usability Testing."
+      default: "User Interviews"
+
+outputs:
+  files:
+    - path: "product/research/q3_churn_synthesis.md"
+      description: "The core insights driving the next roadmap."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "N/A"
+manual:
+  - "The research accurately identifies the root cause of user friction, directly leading to a product change that increases retention by >10%."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+safety_notes:
+  - "The 'Leading Question' Bias: Never ask a user 'Would you pay $10 for this feature?' or 'Do you like this design?' They will lie to please you. Asking leading questions ruins the data and causes the startup to build features nobody buys."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Dovetail / Maze / Zoom"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "The 'Mom Test' Interview Protocol"
+    tasks:
+      - "Never talk about your idea. Talk about their life. Do not ask: 'Would you use a fitness app?' Ask: 'Walk me through exactly what you did the last time you went to the gym.' Past behavior is the only predictor of future behavior."
+      - "Create a test data factory/seeder so tests are deterministic and repeatable."
+  - step: "Usability Testing (Task-Based)"
+    tasks:
+      - "Give the user a prototype and a task: 'Show me how you would export this report to PDF.' Do not help them. Do not explain the UI. Watch them silently. When they click the wrong button and get confused, you have found the UI flaw."
+      - "Create a test data factory/seeder so tests are deterministic and repeatable."
+  - step: "Affinity Mapping (Synthesis)"
+    tasks:
+      - "Do not just hand the CEO a 5-hour Zoom recording. Transcribe the interviews. Extract individual quotes onto digital sticky notes. Group the quotes by theme (e.g., 'Navigation Confusion'). Turn those themes into actionable engineering tickets."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Designing for the ideal screen size first -- mobile-first forces better prioritization and prevents content overflow disasters."
+  - "Using color as the only differentiator for states (error, success, disabled) -- inaccessible to colorblind users."
+  - "Shipping UI without loading, empty, and error states -- the user is left guessing what happened."
+  - "Creating components in isolation without real content -- 'lorem ipsum' hides layout problems that real text exposes."
+  - "Ignoring touch target sizes (minimum 44x44px) on mobile -- users fat-finger the wrong button and get frustrated."
+best_practices:
+  - "Ask 'The Five Whys'. When a user says 'I don't like this dashboard', ask 'Why?' (It's too cluttered). 'Why is it cluttered?' (I only care about one metric). 'Why only one metric?' Keep digging until you hit the root business constraint."
+
+  - "Follow the 8px grid rule for spacing and sizing — consistent rhythm across the interface improves visual harmony."
+  - "Test every design with real users before shipping — internal assumptions about usability are wrong 70% of the time."
+  - "Ensure all interactive elements have visible focus states for keyboard navigation — accessibility is not optional."
+  - "Design empty states that guide the user toward the next action rather than showing a blank page."
+  - "Use progressive disclosure — show the most important actions first, hide advanced options behind expandable sections."
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Nielsen Norman Group: User Interviews"
+    url: "https://www.nngroup.com/articles/user-interviews/"

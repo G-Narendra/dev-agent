@@ -1,0 +1,85 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "fullstack-development"
+display_name: "End-to-End Feature Development"
+description: >
+  Implement a complete feature spanning the database schema, backend API route,
+  and frontend React component using a unified stack (e.g., Next.js App Router).
+  Covers server-driven options like Convex (reactive BaaS with real-time sync) and
+  desktop delivery via Tauri (Rust-based, lightweight native app shell).
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "fullstack-engineer"
+phase: "build"
+applicable_startups: 
+  - all
+priority: "mvp"
+difficulty: "advanced"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Data Layer"
+    tasks:
+      - "Update Prisma schema and run migrations."
+  - step: "Server Layer"
+    tasks:
+      - "Implement Server Actions or API routes for data mutation."
+  - step: "Client Layer"
+    tasks:
+      - "Build the React component and wire it up to the server mutation using optimistic updates."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Leaking server secrets (API keys) into the client bundle by omitting `server-only` pragmas."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Fullstack Development process"
+  - "How do I handle fullstack development?"
+  - "Implement fullstack development"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the fullstack development process"
+  optional:
+    - name: "data_source"
+      type: "string"
+      description: "Source of data to analyze"
+      default: "Internal data"
+    - name: "code_repository"
+      type: "string"
+      description: "Path to the code repository"
+      default: "./"
+
+outputs:
+  files:
+    - path: "outputs/fullstack-development.md"
+      description: "Results of the fullstack development process"
+  artifacts:
+    - "Completed fullstack development deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "React / Next.js Documentation"
+    url: "https://react.dev"
+  - title: "PostgreSQL Documentation"
+    url: "https://postgresql.org/docs"

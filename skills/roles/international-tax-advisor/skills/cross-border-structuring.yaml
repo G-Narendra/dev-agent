@@ -1,0 +1,78 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "cross-border-structuring"
+display_name: "Cross-Border Corporate Tax Structuring"
+description: >
+  Design the legal entity structure for international expansion, manage transfer pricing agreements,
+  and ensure compliance with global VAT/GST regulations.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "international-tax-advisor"
+phase: "growth"
+applicable_startups: 
+  - all
+priority: "mvp"
+difficulty: "expert"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Entity Structuring"
+    tasks:
+      - "Determine if a new market requires a wholly-owned subsidiary or just a branch office."
+  - step: "Transfer Pricing"
+    tasks:
+      - "Draft Intercompany Agreements detailing how intellectual property and services are billed between the US parent and foreign subs."
+  - step: "Sales Tax / VAT"
+    tasks:
+      - "Implement a tax calculation engine (e.g., Stripe Tax, Avalara) to automatically collect digital VAT based on the buyer's IP address."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Ignoring European VAT laws because the company is US-based, resulting in the EU threatening to block the service entirely."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Cross Border Structuring process"
+  - "How do I handle cross border structuring?"
+  - "Implement cross border structuring"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the cross border structuring process"
+  optional:
+    - name: "N/A"
+      type: "string"
+      description: "No optional inputs needed."
+
+outputs:
+  files:
+    - path: "outputs/cross-border-structuring.md"
+      description: "Results of the cross border structuring process"
+  artifacts:
+    - "Completed cross border structuring deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

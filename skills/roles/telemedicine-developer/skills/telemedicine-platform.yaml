@@ -1,0 +1,84 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "telemedicine-platform"
+display_name: "Telemedicine Platform Development"
+description: >
+  Builds HIPAA-compliant telemedicine applications. Specializes in video 
+  consultation infrastructure, EHR integration, appointment scheduling, 
+  e-prescription workflows, and patient-provider communication platforms.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "telemedicine-developer"
+phase: "build"
+applicable_startups:
+  - healthtech
+priority: "critical"
+difficulty: "advanced"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Video Consultation"
+    tasks:
+      - "Integrate HIPAA-compliant video SDK (Twilio, Agora, Daily.co)."
+      - "Implement waiting room, screen sharing, and recording features."
+  - step: "EHR Integration"
+    tasks:
+      - "Integrate with major EHR systems (Epic, Cerner, Practice Fusion)."
+      - "Implement FHIR-compliant data exchange."
+  - step: "E-Prescriptions"
+    tasks:
+      - "Integrate with e-prescription services (Surescripts, DrFirst)."
+      - "Implement medication history and interaction checks."
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Telemedicine Platform process"
+  - "How do I handle telemedicine platform?"
+  - "Implement telemedicine platform"
+  - "Builds HIPAA-compliant telemedicine applications"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the telemedicine platform process"
+  optional:
+    - name: "N/A"
+      type: "string"
+      description: "No optional inputs needed."
+
+outputs:
+  files:
+    - path: "outputs/telemedicine-platform.md"
+      description: "Results of the telemedicine platform process"
+  artifacts:
+    - "Completed telemedicine platform deliverable"
+# ── QUALITY GATES ────────────────────────────────────────────
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start — retrofitting is expensive."
+anti_patterns:
+  - "Building the video consultation feature without considering rural bandwidth limitations."
+  - "Storing PHI in logs or error tracking systems without proper de-identification."
+  - "Integrating with EHR systems using screen scraping instead of FHIR-compliant APIs."
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

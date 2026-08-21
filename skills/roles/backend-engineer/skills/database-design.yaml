@@ -1,0 +1,80 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "database-design"
+display_name: "Relational Database Design (PostgreSQL)"
+description: >
+  Architect highly normalized relational database schemas, design performant indexes, 
+  and write optimized raw SQL queries for complex reporting.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "backend-engineer"
+phase: "build"
+applicable_startups: 
+  - all
+priority: "mvp"
+difficulty: "advanced"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Schema Normalization"
+    tasks:
+      - "Design the schema to 3rd Normal Form (3NF) to eliminate data redundancy and prevent update anomalies."
+  - step: "Indexing Strategy"
+    tasks:
+      - "Add B-Tree indexes to foreign keys and columns frequently used in `WHERE` clauses."
+      - "Implement Partial Indexes or GIN indexes for JSONB columns if using document-style storage in Postgres."
+  - step: "Migration Management"
+    tasks:
+      - "Use a strict migration system (Prisma, Flyway) ensuring all schema changes are version-controlled and applied atomically."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Creating a table with 50 columns, no foreign key constraints, and zero indexes, leading to catastrophic full-table scans as the app scales."
+
+best_practices:
+  - "Design APIs with idempotency in mind -- same request, same result."
+  - "Always validate inputs at the API boundary before processing."
+  - "Use database transactions for operations that modify multiple records."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Database Design process"
+  - "How do I handle database design?"
+  - "Implement database design"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the database design process"
+  optional:
+    - name: "data_source"
+      type: "string"
+      description: "Source of data to analyze"
+      default: "Internal data"
+
+outputs:
+  files:
+    - path: "outputs/database-design.md"
+      description: "Results of the database design process"
+  artifacts:
+    - "Completed database design deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "PostgreSQL Documentation"
+    url: "https://postgresql.org/docs"
+  - title: "Node.js Documentation"
+    url: "https://nodejs.org/en/docs/"

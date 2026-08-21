@@ -1,0 +1,110 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "investor-negotiation-prep"
+display_name: "Investor Pitching & Negotiation Preparation"
+description: >
+  Prepares a founder for venture capital or angel investor meetings. Generates 
+  due diligence checklists, standard term sheet definitions (SAFE vs Priced Round), 
+  and mock Q&A based on the startup's industry.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "founder-ceo"
+phase: "growth"
+applicable_startups:
+  - all
+priority: "high"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "I have a meeting with an investor."
+  - "What is a SAFE note?"
+  - "Help me prepare for my pitch."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Generate Q&A flashcards."
+  - "Create data room checklist."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "funding_stage"
+      type: "string"
+      description: "Pre-seed, Seed, Series A."
+  optional:
+    - name: "industry"
+      type: "string"
+      description: "B2B SaaS, Consumer Social, DeepTech."
+      default: "Software"
+
+outputs:
+  files:
+    - path: "business/fundraising/due-diligence-checklist.md"
+      description: "Items needed for a Data Room."
+    - path: "business/fundraising/investor-faq.md"
+      description: "Standard questions to have answers for."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "N/A"
+manual:
+  - "The founder understands the difference between Post-Money and Pre-Money valuation caps."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "network (Researching market comparables)"
+
+safety_notes:
+  - "Financial Advice: Never advise the founder on what valuation they 'deserve'. Provide market averages for their stage and industry, but remind them that valuation is driven by market demand."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Y Combinator SAFE Documents"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Term Sheet Education"
+    tasks:
+      - "Explain the YC Post-Money SAFE (Simple Agreement for Future Equity)."
+      - "Define Valuation Cap vs Discount Rate."
+  - step: "Data Room Preparation"
+    tasks:
+      - "Generate a checklist for the Data Room (Notion/Google Drive): Pitch Deck, Cap Table, Incorporation Docs, Financial Projections, Customer Contracts."
+  - step: "The 5 Core Questions"
+    tasks:
+      - "Prepare the founder to answer: 1. Why you? 2. Why now? 3. How big can this get? 4. What is the go-to-market strategy? 5. What is the unfair advantage?"
+  - step: "Reverse Diligence"
+    tasks:
+      - "Provide the founder with 3 questions THEY should ask the investor (e.g., 'What is your typical check size?', 'Do you lead rounds?')."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Advising the founder to sign an NDA before pitching. Venture Capitalists do not sign NDAs. Telling a founder to ask for one makes them look amateur."
+  - "Focusing solely on the product. Investors invest in teams and markets, not just code."
+
+best_practices:
+  - "Advise the founder to set up a 'standard' SAFE with no side-letters or custom terms for their pre-seed round to ensure a fast, clean close."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Y Combinator SAFE Financing Documents"
+    url: "https://www.ycombinator.com/documents"

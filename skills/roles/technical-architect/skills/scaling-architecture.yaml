@@ -1,0 +1,83 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "scaling-architecture"
+display_name: "Horizontal Scaling & Sharding Architecture"
+description: >
+  Design distributed systems capable of scaling from 1k to 1M concurrent users 
+  using stateless microservices, read replicas, and database sharding.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "technical-architect"
+phase: "growth"
+applicable_startups: 
+  - all
+priority: "critical"
+difficulty: "expert"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Stateless compute"
+    tasks:
+      - "Ensure all API servers are 100% stateless. Never store user sessions in server memory; use Redis or signed JWTs so load balancers can route requests anywhere."
+  - step: "Database Replication"
+    tasks:
+      - "Separate database reads from writes. Send all complex `SELECT` queries to a read replica, leaving the primary database strictly for high-throughput `INSERT/UPDATE` operations."
+  - step: "Caching Layer"
+    tasks:
+      - "Implement a Look-Aside cache (e.g., Redis/Memcached) for the top 5% of most frequently accessed database rows to relieve pressure on the primary database."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Storing uploaded user images directly on the EC2 instance's local disk, causing the images to disappear permanently when the auto-scaler kills the instance."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Scaling Architecture process"
+  - "How do I handle scaling architecture?"
+  - "Implement scaling architecture"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the scaling architecture process"
+  optional:
+    - name: "data_source"
+      type: "string"
+      description: "Source of data to analyze"
+      default: "Internal data"
+    - name: "target_audience"
+      type: "string"
+      description: "Target user or customer segment"
+      default: "Primary user persona"
+
+outputs:
+  files:
+    - path: "outputs/scaling-architecture.md"
+      description: "Results of the scaling architecture process"
+  artifacts:
+    - "Completed scaling architecture deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

@@ -1,0 +1,84 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "red-teaming-idea"
+display_name: "Red-Teaming the Startup Idea"
+description: >
+  Subject the startup idea to rigorous, adversarial questioning to expose structural weaknesses,
+  distribution challenges, or flawed assumptions about human behavior.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "idea-critic"
+phase: "ideation"
+applicable_startups: 
+  - all
+priority: "mvp"
+difficulty: "advanced"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  manual:
+    - "Produces a written report of at least 3 fatal flaws that must be mitigated before proceeding."
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Adversarial Questioning"
+    tasks:
+      - "Challenge the Distribution: 'Google and Meta control all top-of-funnel. How will you acquire users for <$1 without VC money?'"
+      - "Challenge the Habit: 'Users are lazy. Why will they open this app every day instead of just using Excel/WhatsApp?'"
+      - "Challenge the Moat: 'If this works, what stops OpenAI or Apple from cloning it next Tuesday as a free feature?'"
+  - step: "Post-Mortem Analysis"
+    tasks:
+      - "Research 2-3 failed startups in this exact space."
+      - "Document exactly why they died (e.g., 'CAC > LTV', 'Hardware is hard')."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Validating an idea because 'there are no competitors.' If there are no competitors, there usually is no market."
+  - "Assuming users will change their deep-rooted habits just because the UI is slightly better."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Red Teaming Idea process"
+  - "How do I handle red teaming idea?"
+  - "Implement red teaming idea"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the red teaming idea process"
+  optional:
+    - name: "N/A"
+      type: "string"
+      description: "No optional inputs needed."
+
+outputs:
+  files:
+    - path: "outputs/red-teaming-idea.md"
+      description: "Results of the red teaming idea process"
+  artifacts:
+    - "Completed red teaming idea deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

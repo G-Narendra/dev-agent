@@ -1,0 +1,85 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "sdk-development"
+display_name: "SDK & Library Development"
+description: >
+  Builds developer SDKs and client libraries that wrap APIs into idiomatic, 
+  delightful developer experiences. Handles multi-language support, auth 
+  management, retry logic, rate limiting, and documentation.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "sdk-engineer"
+phase: "build"
+applicable_startups:
+  - devtools
+priority: "critical"
+difficulty: "advanced"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "API Wrapping"
+    tasks:
+      - "Design SDK interfaces that abstract API complexity."
+      - "Implement automatic retry with exponential backoff."
+  - step: "Multi-Language Support"
+    tasks:
+      - "Build SDKs for major languages (Python, JS/TS, Go, Java)."
+      - "Use code generation to keep SDKs in sync."
+  - step: "DX Quality"
+    tasks:
+      - "Write comprehensive docs with runnable examples."
+      - "Add type hints/signatures for IDE autocompletion."
+      - "Publish to package registries (npm, PyPI, etc.)."
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Sdk Development process"
+  - "How do I handle sdk development?"
+  - "Implement sdk development"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the sdk development process"
+  optional:
+    - name: "code_repository"
+      type: "string"
+      description: "Path to the code repository"
+      default: "./"
+
+outputs:
+  files:
+    - path: "outputs/sdk-development.md"
+      description: "Results of the sdk development process"
+  artifacts:
+    - "Completed sdk development deliverable"
+# ── QUALITY GATES ────────────────────────────────────────────
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start — retrofitting is expensive."
+anti_patterns:
+  - "Writing SDK docs as an afterthought — developers will churn on confusing DX."
+  - "Hand-writing code for each language when code generation maintains consistency."
+  - "Not including retry logic or rate limit handling — every consumer implements it wrong."
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

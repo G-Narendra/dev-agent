@@ -1,0 +1,79 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "kotlin-native-architecture"
+display_name: "Kotlin Multiplatform/Native Architecture"
+description: >
+  Architect native Android applications and shared business logic modules using 
+  Kotlin Multiplatform (KMP) for cross-platform efficiency.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "mobile-developer-kotlin"
+phase: "build"
+applicable_startups: 
+  - consumer
+  - saas
+priority: "high"
+difficulty: "expert"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Shared Business Logic"
+    tasks:
+      - "Extract all networking, database (SQLDelight), and view-model logic into a shared KMP module. Leave ONLY the pure UI rendering (Jetpack Compose/SwiftUI) to the native platform."
+  - step: "Coroutines & Flow"
+    tasks:
+      - "Use Kotlin Coroutines and `StateFlow` exclusively for reactive programming. Avoid RxJava legacy patterns in modern Kotlin codebases."
+  - step: "Memory Management"
+    tasks:
+      - "Ensure proper lifecycle awareness when collecting Flows in the UI to prevent memory leaks when an Activity/Fragment goes into the background."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Putting Android-specific imports (like `android.content.Context`) inside the shared KMP module, instantly breaking the iOS build."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Kotlin Native Architecture process"
+  - "How do I handle kotlin native architecture?"
+  - "Implement kotlin native architecture"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the kotlin native architecture process"
+  optional:
+    - name: "N/A"
+      type: "string"
+      description: "No optional inputs needed."
+
+outputs:
+  files:
+    - path: "outputs/kotlin-native-architecture.md"
+      description: "Results of the kotlin native architecture process"
+  artifacts:
+    - "Completed kotlin native architecture deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

@@ -1,0 +1,106 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "cross-functional-coordination"
+display_name: "Cross-Functional Coordination & Communication"
+description: >
+  Establish the operating cadence of the company. Ensures Engineering, Product, 
+  Sales, and Marketing are aligned and not operating in silos. Includes running 
+  effective all-hands meetings and leadership stand-ups.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "coo"
+phase: "growth"
+applicable_startups:
+  - all
+priority: "critical"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "The teams aren't talking to each other."
+  - "Set up an operating cadence."
+  - "Design the all-hands meeting."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Create a company meeting cadence artifact."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "team_size"
+      type: "string"
+      description: "Total headcount of the company."
+  optional:
+    - name: "remote_culture"
+      type: "string"
+      description: "In-office vs Hybrid vs Fully Remote."
+      default: "Hybrid"
+
+outputs:
+  files:
+    - path: "operations/operating-cadence.md"
+      description: "The schedule and agenda for all major company meetings."
+  artifacts:
+    - "An All-Hands presentation template."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "N/A"
+  manual:
+    - "Sales knows what Engineering is building this quarter, and Engineering knows what Sales promised the customers."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+
+safety_notes:
+  - "Meeting Bloat: Do not attempt to fix silos by inviting everyone to every meeting. This destroys productivity. Fix silos through public, written documentation and focused leadership syncs."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Notion / Slack"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "The Executive Sync (Weekly)"
+    tasks:
+      - "Monday mornings, 60 minutes. strictly for the C-Suite and VPs."
+      - "Agenda: 1. Metrics Review (15m), 2. Roadblocks (What is stuck?) (15m), 3. Strategic Deep Dive (30m)."
+  - step: "The All-Hands Meeting (Bi-Weekly or Monthly)"
+    tasks:
+      - "Keep it under 60 minutes. Agenda: 1. Core metric update, 2. Product Demos (show, don't tell), 3. Customer wins/losses, 4. Transparent Q&A."
+      - "Use a tool like Slido for anonymous Q&A to ensure hard questions are surfaced."
+  - step: "The Written Cadence"
+    tasks:
+      - "Replace status update meetings with written updates. Every Friday, every department head publishes a 1-page summary to a public Slack channel: 'What we shipped, what failed, what's next'."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Using the All-Hands meeting to read a list of KPIs off a spreadsheet. Employees will tune out immediately. The All-Hands is for alignment and inspiration, not accounting."
+  - "The 'Hub and Spoke' model where all communication goes through the COO. The COO's job is to build the systems that allow teams to communicate directly with each other."
+
+best_practices:
+  - "The 'Product-Marketing Sync': Mandate a bi-weekly meeting specifically between the Product Lead and Marketing Lead. Most product launches fail because Marketing wasn't told what was being built until a week before launch."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "First Round Review: The Operating Cadence"
+    url: "https://review.firstround.com/"

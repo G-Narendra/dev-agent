@@ -1,0 +1,115 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "alert-routing"
+display_name: "Alerting Strategy & Incident Routing"
+description: >
+  Designs the alerting rules and routing topology (PagerDuty, Opsgenie, Slack) 
+  to ensure critical issues wake up engineers, while non-critical issues 
+  just create a Jira ticket. Prevents alert fatigue.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "monitoring-engineer"
+phase: "growth"
+applicable_startups:
+  - all
+priority: "critical"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Set up PagerDuty."
+  - "Alert the team when the database goes down."
+  - "We are getting too many false alarms."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Configure Prometheus Alertmanager rules."
+  - "Set up PagerDuty escalation policies."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "alert_definitions"
+      type: "config"
+      description: "List of conditions (e.g., 'CPU > 90% for 5 mins')."
+  optional:
+    - name: "routing_tool"
+      type: "string"
+      description: "PagerDuty, Opsgenie, Slack."
+      default: "PagerDuty"
+
+outputs:
+  files:
+    - path: "monitoring/alert-rules.yml"
+      description: "The declarative alerting rules."
+  artifacts:
+    - "An Escalation Policy defining who gets called and when."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "Alerts successfully trigger a test incident in PagerDuty."
+manual:
+  - "Engineers are NEVER paged outside of business hours for issues that do not impact customers."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "network (API access to alerting tools)"
+
+safety_notes:
+  - "Alert Fatigue: If an alert fires 10 times a day and the engineer just hits 'Acknowledge' without fixing anything, the alert is useless. Delete the alert or fix the underlying issue. Alert fatigue causes real outages to be ignored."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "PagerDuty / Opsgenie"
+      install: "N/A"
+  alternatives:
+    - name: "Slack (Dedicated #alerts channel)"
+      when: "Pre-PMF startups that don't need phone-call paging yet."
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Severity Classification"
+    tasks:
+      - "Define SEV-1 (Critical, page immediately, e.g., API down)."
+      - "Define SEV-2 (High, page immediately, e.g., Payments failing)."
+      - "Define SEV-3 (Medium, Slack message only, e.g., Background job queue backed up)."
+  - step: "Rule Configuration (Symptom vs Cause)"
+    tasks:
+      - "Alert on SYMPTOMS (e.g., 'High Error Rate' or 'High Latency'), not CAUSES (e.g., 'High CPU'). High CPU doesn't matter if the customer experience is still fine."
+      - "Add a 'For' duration. E.g., 'Error rate > 5% FOR 3 minutes' to prevent flapping from a momentary network blip."
+  - step: "Escalation Policies"
+    tasks:
+      - "Configure Level 1 (Primary On-Call)."
+      - "Configure Level 2 (Backup On-Call, pages after 15 mins of no acknowledgment)."
+      - "Configure Level 3 (Engineering Manager/CTO, pages after 30 mins)."
+  - step: "Runbook Attachment"
+    tasks:
+      - "Every alert MUST contain a link to a Runbook explaining how to fix it. An alert that just says 'Redis Down' is useless at 3 AM."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Alerting on CPU or Memory usage. If CPU is at 99% but p95 latency is fine and error rates are zero, the system is just highly efficient. Don't wake someone up for that."
+  - "Email alerts. Nobody reads automated emails. Route to Slack or PagerDuty."
+
+best_practices:
+  - "Conduct a monthly 'Alert Review' to delete noisy alerts."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Google SRE Book: Alerting"
+    url: "https://sre.google/sre-book/monitoring-distributed-systems/"

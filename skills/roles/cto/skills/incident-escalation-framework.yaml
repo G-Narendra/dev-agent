@@ -1,0 +1,112 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "incident-escalation-framework"
+display_name: "Incident Response & Escalation Framework"
+description: >
+  Establish the definitive playbook for when production systems go down. 
+  Defines Severity levels (Sev1-Sev4), on-call rotation policies, communication 
+  protocols, and the blameless post-mortem process.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "cto"
+phase: "operations"
+applicable_startups:
+  - all
+priority: "critical"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "The site is down."
+  - "Establish an on-call rotation."
+  - "How do we handle Sev1 incidents?"
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Create an incident response playbook artifact."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "engineering_team_size"
+      type: "string"
+      description: "Number of available engineers for the rotation."
+  optional:
+    - name: "pagerduty_integration"
+      type: "string"
+      description: "Is PagerDuty/OpsGenie configured?"
+      default: "Yes"
+
+outputs:
+  files:
+    - path: "engineering/operations/incident-response-playbook.md"
+      description: "The official guide on what to do when things break."
+  artifacts:
+    - "A template for the Blameless Post-Mortem."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "Mean Time to Acknowledge (MTTA) is < 5 minutes for Sev1."
+  manual:
+    - "During an outage, engineers follow the protocol instead of panicking or stepping on each other's toes."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+
+safety_notes:
+  - "Burnout Prevention: Do not put the entire team on a 24/7 rotation. If you don't have enough engineers for a healthy rotation, the CTO/Founders must take the pager on weekends."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "PagerDuty / Opsgenie"
+      install: "N/A"
+  alternatives:
+    - name: "Incident.io / Rootly"
+      when: "Need heavy Slack automation for incident war rooms."
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Severity Classification"
+    tasks:
+      - "Sev1 (Critical): Site is entirely down or data is actively being corrupted. Pager goes off 24/7. All hands on deck."
+      - "Sev2 (Major): Core feature is broken for a subset of users, but a workaround exists. Page during waking hours."
+      - "Sev3 (Minor): Non-critical bug affecting few users. Handle during business hours."
+  - step: "Role Assignment during an Incident"
+    tasks:
+      - "Incident Commander (IC): Coordinates the response, does NOT write code. Keeps track of time and delegates."
+      - "Resolvers: The engineers actually looking at logs and pushing fixes."
+      - "Communicator: Drafts updates for the public Status Page and internal stakeholders."
+  - step: "The Blameless Post-Mortem"
+    tasks:
+      - "Within 48 hours of resolution, hold a meeting to establish the root cause using the '5 Whys' framework."
+      - "The rule is strictly 'Blameless'. You do not ask 'Why did Bob push bad code?'. You ask 'Why did the CI pipeline allow bad code to be deployed?'."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Alert Fatigue. Configuring the pager to wake up engineers at 3 AM for a CPU spike that resolved itself in 5 minutes. Engineers will learn to ignore the pager."
+  - "The 'Hero' Culture. Relying on one senior engineer to save the day every time the system goes down, instead of distributing knowledge and runbooks."
+
+best_practices:
+  - "Create 'Runbooks' for common alerts. When an alert fires, it should link to a document saying 'If you see this error, run this script to restart the worker'."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "PagerDuty: Incident Response Guide"
+    url: "https://response.pagerduty.com/"

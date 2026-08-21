@@ -1,0 +1,81 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "contract-negotiation"
+display_name: "Enterprise Contract Redlining"
+description: >
+  Review, redline, and negotiate Master Services Agreements (MSAs), Statements of Work (SOWs), 
+  and Data Processing Agreements (DPAs) with enterprise procurement teams.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "corporate-lawyer"
+phase: "growth"
+applicable_startups: 
+  - enterprise
+priority: "mvp"
+difficulty: "expert"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Initial Review"
+    tasks:
+      - "Review inbound redlines from the counterparty's legal team."
+      - "Identify non-standard clauses regarding indemnification, liability caps, and termination rights."
+  - step: "Redlining"
+    tasks:
+      - "Reject unlimited liability clauses. Cap liability at 1x or 2x the annual contract value (ACV)."
+      - "Ensure governing law and jurisdiction are favorable to the startup (e.g., Delaware)."
+  - step: "Execution"
+    tasks:
+      - "Finalize clean copies and route for e-signature via DocuSign."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Accepting 'uncapped indemnification' for a $10,000/year software contract, exposing the entire startup to infinite risk."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Contract Negotiation process"
+  - "How do I handle contract negotiation?"
+  - "Implement contract negotiation"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the contract negotiation process"
+  optional:
+    - name: "data_source"
+      type: "string"
+      description: "Source of data to analyze"
+      default: "Internal data"
+
+outputs:
+  files:
+    - path: "outputs/contract-negotiation.md"
+      description: "Results of the contract negotiation process"
+  artifacts:
+    - "Completed contract negotiation deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

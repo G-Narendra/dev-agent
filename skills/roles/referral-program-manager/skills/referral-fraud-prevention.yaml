@@ -1,0 +1,106 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "referral-fraud-prevention"
+display_name: "Referral Fraud Detection & Prevention"
+description: >
+  Implement rules and systems to prevent malicious actors from exploiting 
+  referral programs (e.g., self-referrals, stolen credit cards, bot farms) 
+  to extract cash or credits from the company.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "referral-program-manager"
+phase: "growth"
+applicable_startups:
+  - all
+priority: "critical"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Stop fake referrals."
+  - "Users are exploiting the invite system."
+  - "Audit our referral payouts."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Create a fraud ruleset artifact."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "referral_data"
+      type: "file"
+      description: "Log of all referrals including IP addresses, email domains, and payment methods."
+  optional:
+    - name: "payout_model"
+      type: "string"
+      description: "Cash vs Account Credit."
+      default: "Account Credit"
+
+outputs:
+  files:
+    - path: "security/referral-fraud-rules.md"
+      description: "Rules for identifying and blocking fraudulent actors."
+  artifacts:
+    - "A list of flagged accounts for manual review."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "Fraudulent referral payouts drop to < 1%."
+  manual:
+    - "Legitimate users are not caught in the crossfire (low false-positive rate)."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+
+safety_notes:
+  - "Fraudsters often use stolen credit cards to trigger the 'paid signup' event, collect the affiliate cash, and disappear before the chargebacks hit. Put a holding period on all cash payouts."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Stripe Radar / Custom SQL Heuristics"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Payout Delays"
+    tasks:
+      - "Implement a minimum 30-day holding period before any cash or credit is paid out to an affiliate. This allows time for chargebacks or immediate churn to process."
+  - step: "Heuristic Flags"
+    tasks:
+      - "Flag: Referrer and Referee share the same IP address or device fingerprint (Self-referral)."
+      - "Flag: Referee uses a disposable email address (e.g., Mailinator, 10minutemail)."
+      - "Flag: Referrer suddenly brings in 500 signups in 1 hour from a low-quality geographic region."
+  - step: "Activation Requirements"
+    tasks:
+      - "Never pay for a raw 'signup'. Only pay out the reward when the referee completes a 'High Intent Action' (e.g., pays their first invoice, completes KYC, connects a bank account)."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Using a purely automated system to ban users. If the system has a false positive and bans a massive influencer who legitimately brought in 100 sales, the PR disaster will be immense."
+  - "Offering cash rewards for a 'freemium' signup. This will bankrupt the startup in a week."
+
+best_practices:
+  - "Make the reward 'Account Credit' instead of 'Cash' whenever possible. Fraudsters want liquid cash. Account credit is only valuable if they actually intend to use the product."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Stripe: Preventing Fraud"
+    url: "https://stripe.com/docs/radar/fraud"

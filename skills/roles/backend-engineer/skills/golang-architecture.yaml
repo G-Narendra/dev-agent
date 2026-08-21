@@ -1,0 +1,80 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "golang-architecture"
+display_name: "Golang Microservices Architecture"
+description: >
+  Architect extremely fast, concurrent backend microservices in Go, utilizing goroutines 
+  and channels for high-throughput data processing.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "backend-engineer"
+phase: "build"
+applicable_startups: 
+  - deeptech
+  - devtools
+priority: "high"
+difficulty: "expert"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Concurrency Patterns"
+    tasks:
+      - "Use Worker Pools and Channels for batch processing massive datasets, rather than spawning 100,000 unbounded goroutines and crashing the server."
+  - step: "Error Handling"
+    tasks:
+      - "Never ignore errors (`_`). Explicitly check `if err != nil` and wrap the error with context before returning it up the stack."
+  - step: "Dependency Injection"
+    tasks:
+      - "Define interfaces for database repositories and external APIs to allow for easy mocking in unit tests."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Using `panic()` for standard business logic errors (like 'User Not Found') instead of returning an error, causing the entire HTTP server to crash."
+
+best_practices:
+  - "Design APIs with idempotency in mind -- same request, same result."
+  - "Always validate inputs at the API boundary before processing."
+  - "Use database transactions for operations that modify multiple records."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Golang Architecture process"
+  - "How do I handle golang architecture?"
+  - "Implement golang architecture"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the golang architecture process"
+  optional:
+    - name: "data_source"
+      type: "string"
+      description: "Source of data to analyze"
+      default: "Internal data"
+
+outputs:
+  files:
+    - path: "outputs/golang-architecture.md"
+      description: "Results of the golang architecture process"
+  artifacts:
+    - "Completed golang architecture deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "PostgreSQL Documentation"
+    url: "https://postgresql.org/docs"
+  - title: "Node.js Documentation"
+    url: "https://nodejs.org/en/docs/"

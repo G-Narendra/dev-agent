@@ -1,0 +1,106 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "viral-loop-engineering"
+display_name: "Viral Loop & Referral Mechanics"
+description: >
+  Designs Product-Led Growth (PLG) mechanics that incentivize existing users 
+  to invite new users. Constructs the K-Factor equation to ensure the viral 
+  loop is mathematically sustainable.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "growth-hacker"
+phase: "planning"
+applicable_startups:
+  - consumer-social
+  - plg-saas
+priority: "critical"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Build a referral program."
+  - "How do we get users to invite their friends?"
+  - "Design the viral loop."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Calculate K-factor."
+  - "Draft referral email."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "product_value"
+      type: "string"
+      description: "What is the core value the user gets?"
+  optional:
+    - name: "incentive_budget"
+      type: "string"
+      description: "Can we give away money, or just features?"
+      default: "Feature unlocks"
+
+outputs:
+  files:
+    - path: "growth/viral-loop-spec.md"
+      description: "The engineering spec for the referral feature."
+  artifacts:
+    - "A K-Factor projection spreadsheet."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "N/A"
+manual:
+  - "The K-Factor (Invites Sent * Conversion Rate) is greater than 1.0, meaning the product grows exponentially without paid marketing."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "Spam Compliance: Never force a user to hand over their email contacts to proceed in the app. This violates privacy laws (GDPR) and infuriates users."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "PostHog / Mixpanel"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Identify the Incentive (Two-Sided)"
+    tasks:
+      - "The best viral loops reward BOTH the sender and the receiver (e.g., Dropbox: 'Give 500MB, Get 500MB'). A one-sided incentive feels like spam."
+  - step: "Frictionless Sharing"
+    tasks:
+      - "Provide a 1-click 'Copy Link' button. Pre-fill the invite email/tweet with compelling copy. Do not make the user write the pitch."
+  - step: "The Landing Experience"
+    tasks:
+      - "When the receiver clicks the link, they should land on a personalized page: 'Your friend Sarah gave you $10!' (Not just the generic homepage)."
+  - step: "Instrumenting the K-Factor"
+    tasks:
+      - "Track: 1) Percentage of active users who invite, 2) Number of invites sent per user, 3) Conversion rate of those invites."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Adding a 'Share on Facebook' button to a B2B SaaS dashboard. Context matters. B2B users want to invite teammates, not their grandmother."
+best_practices:
+  - "Embed the viral loop into the core product usage (e.g., Calendly: Every time you use the product to schedule a meeting, the receiver sees the Calendly brand)."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Andrew Chen: What's your viral loop?"
+    url: "https://andrewchen.com/viral-loop/"

@@ -1,0 +1,79 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "regional-campaign-orchestration"
+display_name: "Multi-Region Marketing Orchestration"
+description: >
+  Plan and execute a unified marketing campaign across multiple countries, adjusting
+  creative assets, messaging, and ad platforms for each specific region.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "global-marketing-manager"
+phase: "growth"
+applicable_startups: 
+  - all
+priority: "mvp"
+difficulty: "advanced"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Regional Strategy"
+    tasks:
+      - "Identify the primary marketing channel for the target region (e.g., LINE in Japan, Meta in US)."
+      - "Allocate budget based on regional CAC (Customer Acquisition Cost) benchmarks."
+  - step: "Localization"
+    tasks:
+      - "Coordinate with native-speaking copywriters to transcreate (not just translate) the campaign hook."
+  - step: "Launch & Optimization"
+    tasks:
+      - "Monitor ROAS daily, shifting budget away from underperforming regions instantly."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Running an English-language Google Ad campaign globally, wasting 80% of the budget on clicks from users who cannot read the landing page."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Regional Campaign Orchestration process"
+  - "How do I handle regional campaign orchestration?"
+  - "Implement regional campaign orchestration"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the regional campaign orchestration process"
+  optional:
+    - name: "N/A"
+      type: "string"
+      description: "No optional inputs needed."
+
+outputs:
+  files:
+    - path: "outputs/regional-campaign-orchestration.md"
+      description: "Results of the regional campaign orchestration process"
+  artifacts:
+    - "Completed regional campaign orchestration deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

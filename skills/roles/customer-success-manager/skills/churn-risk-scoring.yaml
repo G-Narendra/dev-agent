@@ -1,0 +1,109 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "churn-risk-scoring"
+display_name: "Customer Health & Churn Risk Scoring"
+description: >
+  Builds a quantitative model to predict which customers are likely to cancel 
+  their subscription (churn) before they actually do. Combines product usage 
+  data, support ticket volume, and relationship sentiment.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "customer-success-manager"
+phase: "growth"
+applicable_startups:
+  - saas
+priority: "critical"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Identify at-risk accounts."
+  - "Set up the customer health score."
+  - "Why are people churning?"
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Calculate health scores."
+  - "Generate at-risk report."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "telemetry_data"
+      type: "string"
+      description: "Login frequency, feature usage."
+  optional:
+    - name: "support_data"
+      type: "string"
+      description: "Number of Zendesk/Intercom tickets."
+      default: "None"
+
+outputs:
+  files:
+    - path: "business/success/health-score-model.md"
+      description: "The formula used to calculate Red/Yellow/Green health."
+  artifacts:
+    - "A list of 'Red' accounts requiring immediate intervention."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "N/A"
+manual:
+  - "CSMs intervene 60 days before renewal for 'Red' accounts, successfully saving 30% of at-risk revenue."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "Do not rely purely on automated data. An account might log in every day (Green data score) but the champion just quit (Red sentiment score). Blended scoring is required."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Catalyst / Planhat"
+      install: "N/A"
+  alternatives:
+    - name: "HubSpot Custom Properties"
+      when: "A dedicated CS platform is too expensive."
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Define the 'Aha' Metric"
+    tasks:
+      - "Identify the 1-2 actions that correlate most with retention (e.g., Slack's '2,000 messages sent'). If an account hasn't hit this metric in 30 days, flag them as Yellow."
+  - step: "Breadth vs Depth Scoring"
+    tasks:
+      - "Score Breadth: How many seats are actually active? (If they paid for 100 but only 5 log in, they are churning)."
+      - "Score Depth: Are they using the sticky, advanced features, or just the basic ones?"
+  - step: "Support Ticket Sentiment"
+    tasks:
+      - "Too many support tickets = frustration (Risk). ZERO support tickets = apathy and non-usage (Severe Risk). The sweet spot is a few tickets showing active engagement."
+  - step: "The Intervention Playbook"
+    tasks:
+      - "When an account turns Red, the CSM must execute a specific playbook (e.g., email the executive sponsor, offer a free training session, waive a minor fee)."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Waiting until 2 weeks before renewal to check if the customer is happy. Churn is decided in month 3, not month 11."
+best_practices:
+  - "Track 'Sponsor Departure' as an automatic Red flag. If the person who bought the software leaves the company, the new person will likely cancel it to bring in their preferred tool."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Sixteen Ventures: Customer Success Metrics"
+    url: "https://sixteenventures.com/customer-success-metrics"

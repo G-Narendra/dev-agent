@@ -1,0 +1,111 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "culture-building"
+display_name: "Culture Building & Core Values"
+description: >
+  Define, enforce, and scale the startup's culture intentionally. Ensures that 
+  early hires embody the exact behavioral traits required for the company to 
+  survive extreme adversity, pivoting, and hyper-growth without fracturing.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "ceo"
+phase: "growth"
+applicable_startups:
+  - all
+priority: "high"
+difficulty: "expert"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "How do we define our core values?"
+  - "The team is losing its early startup feel."
+  - "We need to fix our culture."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Draft core values document."
+  - "Generate culture fit interview rubric."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "founder_principles"
+      type: "string"
+      description: "The non-negotiable beliefs of the founders (e.g., 'Speed over perfection')."
+  optional:
+    - name: "current_headcount"
+      type: "string"
+      description: "Number of employees (culture scales differently at 10 vs 100)."
+      default: "Under 50"
+
+outputs:
+  files:
+    - path: "hr/culture/core-values.md"
+      description: "The official company manifesto."
+  artifacts:
+    - "A behavioral interview scorecard for recruiters."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "N/A"
+manual:
+  - "Employees autonomously make the same decision the CEO would have made when faced with ambiguity, because the cultural framework guides them."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "Culture Dilution: The biggest threat to culture is tolerating a high-performer who violates the core values. It signals to everyone else that the values are fake."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Notion / Confluence"
+      install: "N/A"
+  alternatives:
+    - name: "Lattice"
+      when: "Tying core values to performance reviews."
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Value Operationalization"
+    tasks:
+      - "Do not just write values on a wall. Operationalize them by tying them directly to the performance review and bonus structure (e.g., 'Did this person exhibit Radical Ownership?')."
+  - step: "The Culture Fit Interview"
+    tasks:
+      - "Dedicate an entire interview round exclusively to behavioral questions that test the candidate against the core values, completely separate from technical vetting."
+  - step: "Firing for Culture"
+    tasks:
+      - "Willingly fire a 'brilliant jerk' (a high-performing engineer who destroys team morale) to prove to the rest of the company that the cultural values actually matter."
+  - step: "The Onboarding Indoctrination"
+    tasks:
+      - "The CEO must personally spend 1 hour with every new hire class explaining exactly WHY the values exist and sharing the origin stories behind them."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Defining the culture as 'We have ping pong tables and free beer' rather than 'How we treat each other when the servers are on fire at 2 AM'."
+  - "Selecting generic, meaningless corporate values like 'Integrity' and 'Excellence' that do not help anyone make a difficult trade-off decision."
+
+best_practices:
+  - "Make values actionable trade-offs. E.g., 'Default to Action' inherently means 'We accept some mistakes in exchange for speed'. This tells employees exactly how to behave."
+  - "Praise publicly based on values. 'Shoutout to Sarah for showing *Customer Obsession* by staying late to fix the enterprise bug.'"
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "First Round: How to Build a Culture"
+    url: "https://review.firstround.com/8-culture-changing-lessons-from-a-startup-veteran"

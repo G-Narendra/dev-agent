@@ -1,0 +1,107 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "requirements-gathering"
+display_name: "Requirements Gathering & User Stories"
+description: >
+  Systematically extracts business needs from non-technical stakeholders and 
+  translates them into structured Epics, User Stories, and rigorous 
+  Acceptance Criteria (Given-When-Then format).
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "business-analyst"
+phase: "planning"
+applicable_startups:
+  - all
+priority: "critical"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Write the requirements for the new feature."
+  - "Create the Jira tickets."
+  - "The developers don't know what to build."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Generate BDD acceptance criteria."
+  - "Draft user story."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "feature_request"
+      type: "string"
+      description: "The raw, unstructured idea from the stakeholder."
+  optional:
+    - name: "target_users"
+      type: "string"
+      description: "Who is using this feature?"
+      default: "All users"
+
+outputs:
+  files:
+    - path: "docs/product/epics/feature-requirements.md"
+      description: "The structured requirements document."
+  artifacts:
+    - "A list of formatted User Stories."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "N/A"
+manual:
+  - "Engineers can build the feature without having to ask the stakeholder a single clarifying question during the sprint."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "Never write requirements prescribing 'how' the system should be coded (e.g., 'Use a Redis cache'). Write 'what' the system must do (e.g., 'Load in under 200ms'). Let the engineers decide the 'how'."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Jira / Linear"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "The 5 Whys"
+    tasks:
+      - "When a stakeholder asks for a feature (e.g., 'I need an export to CSV button'), ask 'Why' until you uncover the root problem ('Because our current dashboard doesn't show the total sum'). Fix the root problem instead."
+  - step: "User Story Formatting"
+    tasks:
+      - "Format: 'As a [Persona], I want to [Action], so that [Business Value].'"
+      - "Example: 'As a Manager, I want to approve expense reports via email, so that I don't have to log into the portal while traveling.'"
+  - step: "BDD Acceptance Criteria"
+    tasks:
+      - "Write exact testable states using Given-When-Then."
+      - "'GIVEN an expense report > $500, WHEN the manager clicks approve, THEN require secondary VP approval.'"
+  - step: "Edge Case Identification"
+    tasks:
+      - "Document the 'Unhappy Paths'. What happens if the network fails? What happens if the input is negative?"
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Vague Acceptance Criteria (e.g., 'The page should look good and load fast')."
+best_practices:
+  - "If a User Story takes more than 5 days for an engineer to build, it is too large. Break it down into smaller stories."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Behavior-Driven Development (BDD)"
+    url: "https://cucumber.io/docs/bdd/"

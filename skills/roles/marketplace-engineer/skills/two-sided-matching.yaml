@@ -1,0 +1,80 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "two-sided-matching"
+display_name: "Two-Sided Search & Matchmaking"
+description: >
+  Implement the core search and matchmaking engine to connect buyers with sellers
+  using geospatial, temporal, and relevance-based algorithms.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "marketplace-engineer"
+phase: "build"
+applicable_startups: 
+  - marketplace
+priority: "mvp"
+difficulty: "advanced"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Inventory Indexing"
+    tasks:
+      - "Index supply-side entities in a search engine (e.g., Elasticsearch, Typesense, or Postgres pg_trgm)."
+  - step: "Filtering & Geospatial"
+    tasks:
+      - "Implement PostGIS or radius-based search if the marketplace is localized (e.g., Uber, Airbnb)."
+      - "Implement availability filtering (temporal matchmaking)."
+  - step: "Ranking Algorithm"
+    tasks:
+      - "Sort results based on supplier reputation, response time, and conversion rate to optimize liquidity."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Using a basic SQL `LIKE '%search%'` query for a massive marketplace, resulting in terrible relevance and slow performance."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Two Sided Matching process"
+  - "How do I handle two sided matching?"
+  - "Implement two sided matching"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the two sided matching process"
+  optional:
+    - name: "code_repository"
+      type: "string"
+      description: "Path to the code repository"
+      default: "./"
+
+outputs:
+  files:
+    - path: "outputs/two-sided-matching.md"
+      description: "Results of the two sided matching process"
+  artifacts:
+    - "Completed two sided matching deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

@@ -1,0 +1,80 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "export-control-management"
+display_name: "Export Control & Sanctions Compliance"
+description: >
+  Classify the startup's technology under federal export laws (EAR/ITAR) and implement 
+  geoblocking and KYC checks to prevent illegal sales to sanctioned entities.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "trade-compliance-officer"
+phase: "operations"
+applicable_startups: 
+  - hardware
+  - deeptech
+priority: "mvp"
+difficulty: "expert"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Classification"
+    tasks:
+      - "Determine the exact Export Control Classification Number (ECCN) for the product (especially if it uses advanced encryption)."
+  - step: "Sanctions Screening"
+    tasks:
+      - "Integrate an OFAC screening API to check all new customers against global terror/sanctions watchlists."
+  - step: "Geoblocking"
+    tasks:
+      - "Instruct engineering to IP-block traffic from comprehensively sanctioned countries (e.g., Iran, North Korea, Syria)."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Selling a cutting-edge drone navigation AI to a shell company in the UAE without realizing it is being immediately shipped to a sanctioned military."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Export Control Management process"
+  - "How do I handle export control management?"
+  - "Implement export control management"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the export control management process"
+  optional:
+    - name: "code_repository"
+      type: "string"
+      description: "Path to the code repository"
+      default: "./"
+
+outputs:
+  files:
+    - path: "outputs/export-control-management.md"
+      description: "Results of the export control management process"
+  artifacts:
+    - "Completed export control management deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

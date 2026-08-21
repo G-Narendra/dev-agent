@@ -1,0 +1,105 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "aws-architecture"
+display_name: "AWS Cloud Architecture & Networking"
+description: >
+  Designs the foundational networking and security topology of the AWS cloud. 
+  Configures VPCs, public/private subnets, NAT Gateways, and Route53 to ensure 
+  the database is completely shielded from the public internet.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "cloud-engineer"
+phase: "build"
+applicable_startups:
+  - all
+priority: "critical"
+difficulty: "expert"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Design the AWS network."
+  - "The database is exposed to the internet."
+  - "Set up a peering connection."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Draft VPC network topology."
+  - "Generate Security Group rules."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "compliance_level"
+      type: "string"
+      description: "Standard, HIPAA, SOC2."
+    - name: "region"
+      type: "string"
+      description: "Primary AWS region."
+  optional:
+    - name: "multi_az"
+      type: "string"
+      description: "Deploy across multiple Availability Zones?"
+      default: "Yes"
+
+outputs:
+  files:
+    - path: "infrastructure/aws/network.md"
+      description: "The architectural blueprint."
+  artifacts:
+    - "A CIDR block mapping."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "AWS Inspector / Security Hub reports zero critical network vulnerabilities."
+manual:
+  - "A hacker cannot ping or connect to the database port from outside the AWS network."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "The '0.0.0.0/0' Trap: Never open an SSH port (22) or Database port (5432) to `0.0.0.0/0` in a Security Group. This allows the entire internet to attempt to brute-force your infrastructure."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "AWS CLI"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "VPC Subnetting"
+    tasks:
+      - "Create Public Subnets for Load Balancers. Create Private Subnets for App Servers. Create Isolated Data Subnets for RDS Databases (no route to the internet at all)."
+  - step: "High Availability (Multi-AZ)"
+    tasks:
+      - "Never put all your EC2 instances in a single Availability Zone (AZ). Replicate them across 3 AZs. If one AWS data center burns down, the app stays online."
+  - step: "Egress Control"
+    tasks:
+      - "Route outbound internet traffic from private subnets through a NAT Gateway. For extreme security (SOC2), restrict which external APIs the NAT Gateway is allowed to talk to."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Using AWS root account credentials for daily tasks. Create IAM users immediately, enable MFA, and throw away the root password into a secure vault."
+best_practices:
+  - "Use AWS Systems Manager (SSM) Session Manager to access EC2 instances instead of managing SSH keys and opening Port 22."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "AWS Well-Architected Framework"
+    url: "https://aws.amazon.com/architecture/well-architected/"

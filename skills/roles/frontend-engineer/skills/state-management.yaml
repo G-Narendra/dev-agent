@@ -1,0 +1,78 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "state-management"
+display_name: "Advanced Global State Management"
+description: >
+  Architect client-side state using modern tools (Zustand, Redux Toolkit, Context) to 
+  prevent prop-drilling and unnecessary re-renders in complex SPAs.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "frontend-engineer"
+phase: "build"
+applicable_startups: 
+  - all
+priority: "high"
+difficulty: "advanced"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "State Separation"
+    tasks:
+      - "Separate 'Server State' (API data managed by React Query) from 'Client State' (UI toggles managed by Zustand)."
+  - step: "Immutability"
+    tasks:
+      - "Ensure all state updates are immutable to prevent React rendering bugs."
+  - step: "Re-render Optimization"
+    tasks:
+      - "Use atomic state selectors so that a component only re-renders when the specific slice of state it cares about changes, not the entire global store."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Using React Context to store a massive, frequently updating data object, causing every component that consumes the context to re-render 60 times a second."
+
+best_practices:
+  - "Use TypeScript for type safety across the entire frontend codebase."
+  - "Keep components small -- one component, one responsibility."
+  - "Test components in isolation and in integration."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the State Management process"
+  - "How do I handle state management?"
+  - "Implement state management"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the state management process"
+  optional:
+    - name: "N/A"
+      type: "string"
+      description: "No optional inputs needed."
+
+outputs:
+  files:
+    - path: "outputs/state-management.md"
+      description: "Results of the state management process"
+  artifacts:
+    - "Completed state management deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "React / Next.js Documentation"
+    url: "https://react.dev"
+  - title: "MDN Web Docs"
+    url: "https://developer.mozilla.org"

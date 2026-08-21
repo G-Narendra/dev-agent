@@ -1,0 +1,79 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "smart-contract-dev"
+display_name: "Smart Contract Development & Auditing"
+description: >
+  Write secure, gas-optimized smart contracts in Solidity, write comprehensive test suites 
+  using Foundry/Hardhat, and deploy them to EVM-compatible networks.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "web3-engineer"
+phase: "build"
+applicable_startups: 
+  - web3
+priority: "mvp"
+difficulty: "expert"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Development"
+    tasks:
+      - "Write Solidity contracts adhering strictly to OpenZeppelin security standards."
+  - step: "Testing"
+    tasks:
+      - "Write fuzz tests and invariant tests using Foundry to simulate edge cases."
+  - step: "Security Audit"
+    tasks:
+      - "Run static analysis tools (e.g., Slither) to catch common vulnerabilities like Reentrancy."
+      - "Coordinate with an external auditing firm before mainnet deployment."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Deploying a staking contract to mainnet that has a reentrancy vulnerability, allowing a hacker to drain the entire liquidity pool in one transaction."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Smart Contract Dev process"
+  - "How do I handle smart contract dev?"
+  - "Implement smart contract dev"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the smart contract dev process"
+  optional:
+    - name: "N/A"
+      type: "string"
+      description: "No optional inputs needed."
+
+outputs:
+  files:
+    - path: "outputs/smart-contract-dev.md"
+      description: "Results of the smart contract dev process"
+  artifacts:
+    - "Completed smart contract dev deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

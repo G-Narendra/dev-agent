@@ -1,0 +1,102 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "velocity-tracking"
+display_name: "Velocity Tracking & Burndown Analysis"
+description: >
+  Tracks the engineering team's output over time. Uses Burndown charts and 
+  Control Charts to identify bottlenecks, improve estimation accuracy, and 
+  give leadership realistic release dates.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "scrum-master"
+phase: "growth"
+applicable_startups:
+  - all
+priority: "medium"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "When will the feature be done?"
+  - "Are we going to hit the sprint goal?"
+  - "Calculate our velocity."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Generate burndown chart."
+  - "Calculate average velocity."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "sprint_data"
+      type: "string"
+      description: "Points committed vs Points completed for the last 3 sprints."
+  optional:
+    - name: "cycle_time"
+      type: "string"
+      description: "Time it takes a ticket to go from 'In Progress' to 'Done'."
+      default: "Not tracked"
+
+outputs:
+  files:
+    - path: "engineering/agile/velocity-report.md"
+      description: "The historical analysis of team output."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "N/A"
+manual:
+  - "The team's velocity stabilizes (stops jumping wildly between 20 points and 60 points), allowing for accurate quarter-level roadmapping."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "Weaponizing Metrics: Velocity is a capacity planning tool, NOT a performance metric. If leadership says 'You must increase velocity by 20%', the team will simply inflate their estimates (point inflation) to hit the fake metric."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Jira Reports"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "The Burndown Chart"
+    tasks:
+      - "Monitor the burndown mid-sprint. If the line is flat for 5 days and plummets on the last day, it means engineers aren't breaking tickets down into small enough chunks, or QA is bottlenecked at the end."
+  - step: "Calculate Rolling Velocity"
+    tasks:
+      - "Take the average points completed over the last 3 sprints. That is the exact number of points you bring into the next sprint. No more, no less."
+  - step: "Control Chart (Cycle Time)"
+    tasks:
+      - "Track 'Cycle Time' (how long a ticket sits in 'In Progress'). If a 1-point ticket takes 6 days to move to 'Done', you have a massive CI/CD or Code Review bottleneck."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Counting 'partially done' tickets at the end of the sprint. If a 5-point ticket is 99% done but not deployed, it counts as ZERO points for velocity purposes. No partial credit in Agile."
+best_practices:
+  - "Do not compare Team A's velocity to Team B's velocity. A '5 point' ticket means something entirely different to two different teams."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Atlassian: Agile Metrics"
+    url: "https://www.atlassian.com/agile/metrics"

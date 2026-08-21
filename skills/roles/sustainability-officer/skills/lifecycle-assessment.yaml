@@ -1,0 +1,80 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "lifecycle-assessment"
+display_name: "Product Lifecycle Assessment (LCA)"
+description: >
+  Conduct a rigorous, data-driven analysis of a physical product's environmental impact 
+  from raw material extraction through to end-of-life disposal.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "sustainability-officer"
+phase: "operations"
+applicable_startups: 
+  - hardware
+  - climatetech
+priority: "mvp"
+difficulty: "advanced"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Data Gathering"
+    tasks:
+      - "Audit the Bill of Materials (BOM). Trace the origin and extraction method of all rare earth metals or plastics."
+  - step: "The LCA Analysis"
+    tasks:
+      - "Calculate the carbon footprint of manufacturing, shipping, user power consumption, and disposal."
+  - step: "Optimization"
+    tasks:
+      - "Redesign packaging to eliminate single-use plastics and reduce shipping weight (which instantly lowers freight costs)."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Focusing all sustainability efforts on replacing plastic straws in the office breakroom while the company's servers use gigawatts of coal-powered electricity."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Lifecycle Assessment process"
+  - "How do I handle lifecycle assessment?"
+  - "Implement lifecycle assessment"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the lifecycle assessment process"
+  optional:
+    - name: "data_source"
+      type: "string"
+      description: "Source of data to analyze"
+      default: "Internal data"
+
+outputs:
+  files:
+    - path: "outputs/lifecycle-assessment.md"
+      description: "Results of the lifecycle assessment process"
+  artifacts:
+    - "Completed lifecycle assessment deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

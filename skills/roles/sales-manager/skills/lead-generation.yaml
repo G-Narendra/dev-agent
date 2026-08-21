@@ -1,0 +1,120 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "lead-generation"
+display_name: "Outbound Lead Generation & Prospecting"
+description: >
+  Builds targeted lists of ideal customers (B2B) and executes cold outreach 
+  campaigns. Masters email deliverability, personalization at scale, and 
+  bypassing gatekeepers to secure meetings for Account Executives. Covers key patterns to avoid common pitfalls like using a single sales script for all prospects -- enterprise,, and provides actionable best practices for production-ready results.
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "sales-manager"
+phase: "growth"
+applicable_startups:
+  - B2B, SaaS, Enterprise
+priority: "high"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "We need more demos booked."
+  - "Our cold emails are going to spam."
+  - "Find me the emails of 500 CTOs."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Draft cold email sequence."
+  - "Generate Apollo search filters."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "ideal_customer_profile"
+      type: "string"
+      description: "Who are we targeting? (e.g., VP of HR at companies > 500 people)."
+    - name: "value_proposition"
+      type: "string"
+      description: "Why should they take a 15-minute meeting?"
+  optional:
+    - name: "outreach_channel"
+      type: "string"
+      description: "Email, LinkedIn, or Cold Call."
+      default: "Cold Email"
+
+outputs:
+  files:
+    - path: "sales/outreach/sequence_ctos.md"
+      description: "The 4-step email sequence."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "N/A"
+manual:
+  - "Cold email open rates exceed 40%, and reply rates (positive or negative) exceed 5%."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "Domain Reputation Burn: Never send 1,000 cold emails a day from your primary domain (e.g., `@startup.com`). If you get flagged as spam, your internal employee emails will stop working. Use burner domains (e.g., `@trystartup.com`)."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Apollo / Instantly.ai"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Domain Warmup"
+    tasks:
+      - "Before sending a single cold email, run the newly purchased domains through a warmup tool (sending fake emails back and forth to build reputation) for at least 14 days."
+  - step: "The Short Copy Rule"
+    tasks:
+      - "A cold email should never be longer than 5 sentences. No one reads a 4-paragraph essay from a stranger. State the problem, state the solution, ask for permission to send more info."
+  - step: "Multi-Channel Follow Up"
+    tasks:
+      - "Do not rely on a single channel. If they don't reply to Email 1, view their LinkedIn profile. If they don't reply to Email 2, send a LinkedIn connection request."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Using a single sales script for all prospects -- enterprise, SMB, and mid-market buyers have fundamentally different needs."
+  - "Ignoring the CRM data hygiene -- duplicate contacts and stale leads make pipeline forecasting unreliable."
+  - "Sending cold emails without personalization -- generic templates get marked as spam instantly."
+  - "Neglecting post-meeting follow-up -- deals die when there's no clear next step within 24 hours."
+  - "Compensating reps purely on new logos without retention incentives -- encourages signing bad-fit customers who churn quickly."
+  - "Instead of asking for a 30-minute meeting on the first email, ask an 'Interest-Based' CTA. E.g., 'If this is a priority right now, mind if I send over a 2-minute video?'"
+
+  - "Implement a structured sales methodology (MEDDIC, BANT, Challenger) — random discovery calls miss critical qualification criteria."
+  - "Review pipeline hygiene weekly — deals without activity in 30 days should be moved to stale or lost."
+  - "Use lead scoring based on engagement data (email opens, site visits, demo requests) — prioritize hot leads over cold outreach."
+  - "Record every sales call and have reps self-critique one call per week — the fastest improvement comes from hearing yourself."
+  - "Build a sales playbook that documents common objections, competitive battlecards, and proof points for each ICP segment."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Not defining clear success criteria before starting a task -- leads to ambiguous outcomes, endless revisions, and wasted effort."
+
+best_practices:
+  - "Document all configuration decisions in an Architecture Decision Record (ADR) so future team members understand why choices were made."
+  - "Implement comprehensive error handling with structured logging at every integration boundary to simplify debugging."
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Apollo: Cold Email Best Practices"
+    url: "https://www.apollo.io/blog/cold-email-best-practices/"

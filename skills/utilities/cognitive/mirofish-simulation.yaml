@@ -1,0 +1,170 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "mirofish-simulation"
+display_name: "MiroFish — Multi-Agent Predictive Simulation Engine"
+description: >
+  Leverages MiroFish's open-source multi-agent AI engine to spawn thousands of 
+  autonomous AI agents — each with unique personas, memories, and behavioral 
+  goals — to simulate social dynamics, market reactions, and stakeholder debates. 
+  Instead of asking a single AI for an opinion, get a swarm-level prediction 
+  based on emergent consensus.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "utility"
+phase: "all"
+applicable_startups:
+  - all
+priority: "high"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Simulate how users will react to this product."
+  - "Spawn agents with different mindsets to debate this decision."
+  - "Run a market prediction simulation."
+  - "Test this pricing strategy against different customer personas."
+  - "What would happen if we launch this feature?"
+  - "Predict how the community will respond to this announcement."
+  - "Create a digital twin of our target market."
+  - "A/B test this messaging strategy with a simulated audience."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Clone the MiroFish repository."
+  - "Configure agent personas for a specific market simulation."
+  - "Run a multi-agent debate on a startup decision."
+  - "Generate a predictive report from swarm behavior."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "scenario"
+      type: "string"
+      description: "The scenario, decision, or question to simulate (e.g., 'Should we pivot to a freemium model?', 'How will indie developers react to our new API pricing?')."
+  optional:
+    - name: "agent_profile_count"
+      type: "integer"
+      description: "Number of distinct AI personas to spawn for the simulation."
+      default: 100
+    - name: "persona_source"
+      type: "string"
+      description: "Base personas to use — options: 'target_market', 'investors', 'competitors', 'users', 'general_public', 'experts'."
+      default: "target_market"
+    - name: "simulation_rounds"
+      type: "integer"
+      description: "How many rounds of debate/interaction to run."
+      default: 5
+
+outputs:
+  files:
+    - path: "research/simulation-{scenario-slug}.md"
+      description: "Comprehensive predictive simulation report."
+  artifacts:
+    - "Consensus heatmap showing what % of agents agreed on each outcome."
+    - "Key dissenting opinions and their reasoning (the 'minority report')."
+    - "Emergent risks and opportunities discovered through agent interaction."
+    - "Recommended actions based on simulation results."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "The simulation completes all specified rounds without error."
+    - "At least 50% of agents produce meaningful, non-random outputs."
+  manual:
+    - "The simulation reveals insights that a single AI consultation would have missed."
+    - "The dissenting opinions highlight genuine risks or blind spots."
+    - "The report provides actionable, specific recommendations — not generic advice."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "network"
+  - "filesystem"
+
+safety_notes:
+  - "MiroFish is an experimental open-source project — expect rough edges, limited documentation, and potential breaking changes."
+  - "Multi-agent simulations can produce unexpected or biased results if the underlying language model has inherent biases. Always review the simulation report critically."
+  - "Simulations are PREDICTIONS, not PROPHECIES. They reflect probable outcomes based on the personas and scenario you configure, not guaranteed future events."
+  - "The project was created by an independent developer (Guo Hangjiang). Verify the latest version from the official GitHub repository before use."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "MiroFish (GitHub)"
+      url: "https://github.com/666ghj/MiroFish"
+      description: "The official open-source MiroFish repository — clone and run locally."
+  alternatives:
+    - name: "MiroFish Web UI"
+      url: "https://mirofish.us/"
+      description: "Community-hosted web interface for MiroFish (availability may vary)."
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Set Up MiroFish"
+    tasks:
+      - "Clone the MiroFish repository: `git clone https://github.com/666ghj/MiroFish.git`"
+      - "Create a virtual environment: `python -m venv venv && source venv/bin/activate` (or `venv\\Scripts\\activate` on Windows)"
+      - "Install dependencies within the venv: `pip install -r requirements.txt`"
+      - "NEVER install dependencies or packages globally. Always use the project venv."
+      - "Read the MiroFish documentation to understand the configuration format."
+  - step: "Define Agent Personas"
+    tasks:
+      - "Based on the scenario, define distinct agent personas with:"
+      - "  • Demographic attributes (age, occupation, income level, tech literacy)"
+      - "  • Behavioral goals (what they want to achieve, what they fear)"
+      - "  • Knowledge level (expert, novice, enthusiast, skeptic)"
+      - "  • Communication style (analytical, emotional, terse, verbose)"
+      - "For a startup building a cinema story AI, example personas:"
+      - "  • A Bollywood screenwriter (age: 45, 20 years experience, skeptical of AI)"
+      - "  • A Hollywood indie filmmaker (age: 30, budget-conscious, excited about tools)"
+      - "  • A Kollywood producer (age: 55, cost-focused, wants to see ROI proof)"
+      - "  • A film school student (age: 22, tech-native, early adopter)"
+      - "  • A studio executive (age: 50, risk-averse, cares about copyright)"
+      - "Configure these personas in MiroFish's agent configuration format."
+      - "For small simulations, define 10-20 distinct personas. For large simulations, parameterize variations to generate 100+ agents."
+  - step: "Configure the Knowledge Graph"
+    tasks:
+      - "Prepare the 'seed' information that agents will debate:"
+      - "  • The core question or decision (e.g., 'Should cinema story AI charge per-script or subscription?')"
+      - "  • Relevant market data (market size, existing tools, pricing benchmarks)"
+      - "  • Key constraints (budget, timeline, technical feasibility)"
+      - "Feed this into MiroFish's knowledge graph system."
+  - step: "Run the Simulation"
+    tasks:
+      - "Execute the MiroFish simulation with the configured agents and knowledge graph."
+      - "Monitor the simulation as agents interact, form opinions, and influence each other."
+      - "Allow the simulation to run through all specified rounds."
+      - "If agents converge to consensus too quickly, reduce similarity — if they remain polarized, increase interaction time."
+  - step: "Analyze the Results"
+    tasks:
+      - "Extract the consensus positions — what did the majority of agents agree on?"
+      - "Identify the dissenting positions — what did the minority believe, and why?"
+      - "Look for emergent patterns that were not pre-programmed into any single agent."
+      - "Map the opinion evolution — how did beliefs shift across simulation rounds?"
+      - "Compile a `research/simulation-{scenario-slug}.md` report with:"
+      - "  • Executive summary of the consensus finding"
+      - "  • Heatmap of agent opinions across key dimensions"
+      - "  • Key quotes from representative agent outputs"
+      - "  • Risks and opportunities discovered"
+      - "  • Recommended actions with confidence levels"
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Using identical or near-identical personas. If all agents agree from the start, the simulation provides no unique insight. Personas must have genuine differences."
+  - "Overfitting the personas to prove a predetermined conclusion. Let the simulation reveal truth, don't configure it to produce a specific answer."
+  - "Treating simulation results as factual market research. MiroFish is a prediction tool — always validate critical findings with real-world data using other research utilities (reddit-deep-research, competitive-teardown, etc.)."
+  - "Ignoring the minority report. The most valuable insights often come from dissenting agents who spot risks the majority missed."
+
+best_practices:
+  - "Run multiple simulations with different persona distributions to test sensitivity. If results change dramatically with small persona tweaks, the prediction is fragile."
+  - "Combine MiroFish with real-data utilities: run the simulation first to identify hypotheses, then validate them using Reddit research, competitive analysis, etc."
+  - "For critical decisions (pricing, positioning, market entry), run simulations with 3 different persona sets: optimistic, pessimistic, and neutral."
+  - "Document the persona definitions and configuration separately so you can reproduce and refine the simulation later."
+  - "Use MiroFish simulations as a 'pre-mortem' tool — ask agents 'Why did the startup fail?' to proactively identify risks."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "MiroFish GitHub Repository"
+    url: "https://github.com/666ghj/MiroFish"
+  - title: "MiroFish Web UI"
+    url: "https://mirofish.us/"
+  - title: "MiroFish — Multi-Agent Simulation Engine (Intro)"
+    url: "https://github.com/666ghj/MiroFish#readme"

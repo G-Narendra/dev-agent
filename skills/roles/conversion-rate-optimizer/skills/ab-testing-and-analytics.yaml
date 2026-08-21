@@ -1,0 +1,79 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "ab-testing-and-analytics"
+display_name: "A/B Testing & Funnel Optimization"
+description: >
+  Design and execute statistically rigorous A/B and multivariate tests on landing pages
+  and checkout flows to maximize conversion rates.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "conversion-rate-optimizer"
+phase: "growth"
+applicable_startups: 
+  - ecommerce
+  - saas
+priority: "mvp"
+difficulty: "advanced"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Behavioral Analysis"
+    tasks:
+      - "Review Hotjar/CrazyEgg heatmaps and session recordings to find where users are rage-clicking or getting confused."
+  - step: "Hypothesis Generation"
+    tasks:
+      - "Write a formal hypothesis: 'If we move the social proof testimonials above the fold, then conversion will increase by 5% because it builds immediate trust.'"
+  - step: "Experiment Execution"
+    tasks:
+      - "Launch the variant in VWO/Optimizely and run the test until statistical significance is reached."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Testing 15 different random changes on a landing page at the exact same time without a hypothesis, making it impossible to know which change actually drove the conversion increase."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Ab Testing And Analytics process"
+  - "How do I handle ab testing and analytics?"
+  - "Implement ab testing and analytics"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the ab testing and analytics process"
+  optional:
+    - name: "N/A"
+      type: "string"
+      description: "No optional inputs needed."
+
+outputs:
+  files:
+    - path: "outputs/ab-testing-and-analytics.md"
+      description: "Results of the ab testing and analytics process"
+  artifacts:
+    - "Completed ab testing and analytics deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

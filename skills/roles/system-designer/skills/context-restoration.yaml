@@ -1,0 +1,104 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "context-restoration"
+display_name: "Staff System Designer: State Hydration & Recovery"
+description: >
+  Operates at the Principal/Staff Engineer level (10+ years FAANG). Engineers 
+  the 'Cold Start' recovery mechanisms. When a system or agent crashes and 
+  reboots, this skill meticulously hydrates the memory pool from durable 
+  storage, recalculates deltas, and resumes execution seamlessly.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "system-designer"
+phase: "operate"
+applicable_startups:
+  - all
+priority: "high"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Restore the context."
+  - "Resume the session."
+  - "Load previous state."
+  - "/context-restore"
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Read and parse state_snapshot.md."
+  - "Re-initialize agent memory buffer."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "target_snapshot_path"
+      type: "string"
+      description: "Path to the saved context file."
+  optional:
+    - name: "override_flags"
+      type: "string"
+      description: "Any variables to forcefully override upon boot."
+      default: "none"
+
+outputs:
+  files:
+    - path: "system_memory"
+      description: "Active RAM memory pool is hydrated."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "N/A"
+manual:
+  - "Agent resumes executing the exact task it was performing before the crash, without repeating already-completed steps."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "file_read"
+safety_notes:
+  - "The 'Corrupted State' Crash Loop: If the system crashed *because* the saved context was mathematically invalid, blindly restoring it will cause an infinite crash loop. Implement strict schema validation (Zod/Joi) when reading the context file. If validation fails, fallback to a safe checkpoint."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Zod / JSON Schema"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Schema Validation (Hydration Gate)"
+    tasks:
+      - "Load the JSON or Markdown file from disk. Immediately parse it through a strict schema validator. Ensure all required fields (e.g., `current_phase`, `completed_tasks`) are present and properly typed."
+  - step: "Idempotent Resume"
+    tasks:
+      - "Analyze the restored context to find the last completed task. Ensure the system resumes exactly at the *next* logical step. Do not re-trigger API calls or mutations (like sending an email) that were marked as completed in the context."
+  - step: "Context Window Optimization"
+    tasks:
+      - "If the restored context is too large for the LLM's context window, execute a summarization routine before hydrating the active prompt, keeping only the high-signal vectors."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Blind Trust: Deserializing data from disk and directly executing it (e.g., Python `pickle` or Node `eval()`). If the context file was maliciously modified, this results in Remote Code Execution (RCE). Only parse strict JSON/Markdown."
+
+best_practices:
+  - "Use a write-ahead log (WAL) mentality. Before the system attempts an action, it logs the intent. Upon restoration, it checks if the intent was fulfilled. If not, it safely restarts the action."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Designing Data-Intensive Applications: Fault Tolerance"
+    url: "https://dataintensive.net/"

@@ -1,0 +1,79 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "regulatory-auditing"
+display_name: "SOC2 & ISO27001 Audit Preparation"
+description: >
+  Establish the policies, access controls, and logging mechanisms required to pass 
+  a strict SOC2 Type II or ISO27001 security audit.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "compliance-officer"
+phase: "operations"
+applicable_startups: 
+  - all
+priority: "mvp"
+difficulty: "advanced"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Policy Creation"
+    tasks:
+      - "Draft and enforce the Information Security Policy, Access Control Policy, and Incident Response Plan."
+  - step: "Access Control"
+    tasks:
+      - "Enforce Principle of Least Privilege (PoLP): No developer has raw access to production databases without a temporary, audited token."
+      - "Mandate MFA and SSO (e.g., Okta) for all corporate applications."
+  - step: "Continuous Monitoring"
+    tasks:
+      - "Implement a compliance automation platform (e.g., Vanta or Drata) to continuously monitor cloud infrastructure."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Writing policies in a Word doc to pass the audit, but completely ignoring them in day-to-day engineering operations."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Regulatory Auditing process"
+  - "How do I handle regulatory auditing?"
+  - "Implement regulatory auditing"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the regulatory auditing process"
+  optional:
+    - name: "N/A"
+      type: "string"
+      description: "No optional inputs needed."
+
+outputs:
+  files:
+    - path: "outputs/regulatory-auditing.md"
+      description: "Results of the regulatory auditing process"
+  artifacts:
+    - "Completed regulatory auditing deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

@@ -1,0 +1,78 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "fulfillment-optimization"
+display_name: "3PL & Fulfillment Optimization"
+description: >
+  Design the pick/pack/ship architecture to reduce order fulfillment time, 
+  minimize dimensional weight shipping costs, and handle returns efficiently.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "supply-chain-logistics"
+phase: "growth"
+applicable_startups: 
+  - ecommerce
+priority: "high"
+difficulty: "advanced"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Dimensional Weight (DIM) Optimization"
+    tasks:
+      - "Audit the custom packaging sizes. Reduce the box height by just 1 inch if there is empty air; shipping carriers charge by volume (DIM weight), not just physical weight."
+  - step: "Multi-Node Fulfillment"
+    tasks:
+      - "Once hitting 1,000 orders/day, split inventory into 2 warehouses (e.g., Nevada and Pennsylvania) so 80% of US customers can receive 2-day ground shipping."
+  - step: "Frictionless Returns"
+    tasks:
+      - "Integrate a self-serve portal (like Loop Returns). Automatically generate the RMA and return label so customer support doesn't have to manually email PDFs."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Shipping a small 2-ounce jewelry item inside a massive 12x12x12 box, causing UPS to charge you $18 for shipping 'empty air'."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Fulfillment Optimization process"
+  - "How do I handle fulfillment optimization?"
+  - "Implement fulfillment optimization"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the fulfillment optimization process"
+  optional:
+    - name: "N/A"
+      type: "string"
+      description: "No optional inputs needed."
+
+outputs:
+  files:
+    - path: "outputs/fulfillment-optimization.md"
+      description: "Results of the fulfillment optimization process"
+  artifacts:
+    - "Completed fulfillment optimization deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

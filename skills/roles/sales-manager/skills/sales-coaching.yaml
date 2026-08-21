@@ -1,0 +1,80 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "sales-coaching"
+display_name: "Pipeline Management & AE Coaching"
+description: >
+  Manage a team of quota-carrying Account Executives, enforce CRM hygiene, run weekly pipeline
+  reviews, and provide actionable feedback through call shadowing.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "sales-manager"
+phase: "growth"
+applicable_startups: 
+  - b2b
+priority: "mvp"
+difficulty: "advanced"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Pipeline Review (Weekly)"
+    tasks:
+      - "Interrogate every deal in the 'Commit' stage. Verify the prospect has confirmed the timeline in writing."
+      - "Purge dead deals from the pipeline to maintain accurate forecasting."
+  - step: "Coaching"
+    tasks:
+      - "Listen to 2 recorded Gong/Chorus calls per rep per week."
+      - "Provide specific feedback on objection handling and discovery questioning."
+  - step: "Performance Management"
+    tasks:
+      - "Identify reps missing activity metrics early (leading indicators) rather than waiting for them to miss revenue quota (lagging indicator)."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Jumping onto an AE's call and taking over the entire conversation, effectively turning the AE into a silent observer and destroying their authority with the prospect."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Sales Coaching process"
+  - "How do I handle sales coaching?"
+  - "Implement sales coaching"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the sales coaching process"
+  optional:
+    - name: "N/A"
+      type: "string"
+      description: "No optional inputs needed."
+
+outputs:
+  files:
+    - path: "outputs/sales-coaching.md"
+      description: "Results of the sales coaching process"
+  artifacts:
+    - "Completed sales coaching deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

@@ -1,0 +1,199 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "minimalist-agent-workflow"
+display_name: "Minimalist Agent Workflow (Plan → Compress → Validate → Iterate)"
+description: >
+  Combines all hidden-gem tools into a single production workflow
+  that produces minimal, production-ready code. The workflow has
+  four stages: PLAN (architecture with Decision Ladder + context
+  engineering), GENERATE (write code with compression enforced),
+  VALIDATE (check with toolchain — biome/oxc/Ruff/hyperfine/
+  minify), and ITERATE (refine based on validation and loops).
+  This is the master orchestration utility that ties together
+  ai-code-compression, production-toolchain, context-engineering,
+  and modern-cli-arsenal into one repeatable pipeline.
+
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "utility"
+phase: "all"
+applicable_startups:
+  - all
+priority: "critical"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Build a production-ready feature."
+  - "Generate minimal, production-quality code."
+  - "Set up the full development toolchain."
+  - "Configure the agent for optimal efficiency."
+  - "Implement with the complete workflow."
+  - "Run the full code generation pipeline."
+  - "End-to-end feature with validation."
+  - "Production-ready implementation."
+  - "Ship this feature with full toolchain."
+  - "Implement with all hidden gems."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Run the complete Plan → Generate → Validate → Iterate workflow for a feature."
+  - "Configure a new project with the full minimalist toolchain."
+  - "Audit an existing project and apply the workflow retroactively."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "task_description"
+      type: "string"
+      description: "What to build or implement."
+  optional:
+    - name: "project_path"
+      type: "string"
+      description: "Path to the project directory."
+      default: "Current directory"
+    - name: "tech_stack"
+      type: "string"
+      description: "Technology stack to use (auto-detected from project if not provided)."
+      default: "Auto-detected"
+    - name: "validation_level"
+      type: "string"
+      description: "How strict validation should be: lint, benchmark, full."
+      default: "lint"
+
+outputs:
+  files:
+    - path: "outputs/workflow-run-{timestamp}.json"
+      description: "Full workflow log with compression ratios, validation results, and iteration count."
+  artifacts:
+    - "Minimal, production-ready code that passes all validation gates."
+    - "Toolchain configuration files (biome.json, ruff.toml, etc.)"
+    - "Benchmark comparison (before/after optimization metrics)."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "Code passes linting (biome/ruff check), formatting (biome/ruff format), and tests."
+    - "Compression ratio ≥ 30% reduction vs unguided AI generation."
+    - "Benchmark shows no regression (or improvement) after compression."
+  manual:
+    - "The code is minimal, readable, and production-ready."
+    - "No unnecessary abstractions, imports, or files were created."
+    - "Error handling and security validation survived compression."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+  - "shell_execution"
+  - "network"
+
+safety_notes:
+  - "Validation should catch any over-compression that removed critical code. If tests fail after compression, revert and re-apply with looser gates."
+  - "This workflow is INTENTIONAL by design — every line of code is justified by the Decision Ladder."
+  - "Do NOT apply compression to third-party vendored code or configuration files."
+  - "The workflow assumes tools are installed via the project's venv or package manager — never globally."
+  - "For maximum effect, use CONTEXT.md (see context-engineering utility) to set permanent rules."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "This Workflow (Plan → Compress → Validate → Iterate)"
+      install: "N/A — Follow the implementation checklist below"
+      url: "https://github.com/DietrichGebert/ponytail"
+  alternatives:
+    - name: "See ai-code-compression utility for Decision Ladder tools"
+      install: "Reference utilities/coding/ai-code-compression.yaml"
+      url: "https://github.com/DietrichGebert/ponytail"
+    - name: "See production-toolchain utility for validation tools"
+      install: "Reference utilities/coding/production-toolchain.yaml"
+      url: "https://github.com/biomejs/biome"
+    - name: "See modern-cli-arsenal utility for pipeline tools"
+      install: "Reference utilities/coding/modern-cli-arsenal.yaml"
+      url: "https://github.com/BurntSushi/ripgrep"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "PHASE 1 — PLAN: Architecture with Decision Ladder"
+    tasks:
+      - "Read `utilities/cognitive/context-engineering.yaml` and create/update CONTEXT.md with:"
+      - "   → Tech stack and framework constraints"
+      - "   → Project conventions and naming patterns"
+      - "   → Security requirements (no credentials in code, input validation, etc.)"
+      - "   → NEGATIVE examples: what NOT to do (over-engineering patterns to avoid)"
+      - "Apply the Ponytail Decision Ladder to the architecture plan:"
+      - "   GATE 1 (YAGNI): For each proposed feature/file/class, ask 'Do we actually need this?'"
+      - "   GATE 2 (REUSE): 'Can we extend existing code instead of creating new?'"
+      - "   GATE 3 (STDLIB): 'Can the language's stdlib do this without a package?'"
+      - "   GATE 4 (NATIVE APIs): 'Can HTML/CSS/OS native features do this?'"
+      - "   GATE 5 (SIMPLICITY): 'What's the MINIMUM architecture that works?'"
+      - "Document the plan in `outputs/workflow-plan-{timestamp}.md`."
+  - step: "PHASE 2 — GENERATE: Write Code with Compression Enforced"
+    tasks:
+      - "Use Caveman prompting prefix for each code generation request:"
+      - "   'Senior engineer mindset. YAGNI. Stdlib first. No abstractions until needed. Write minimal production code.'"
+      - "Or inject Decision Ladder into the agent's system prompt (see ai-code-compression utility)."
+      - "Generate code in small, focused units (one function, one component, one file per session)."
+      - "After each unit, manually check: 'Did I just add anything that fails the Decision Ladder? If yes, remove it.'"
+      - "Prefer diff-based edits over full-file rewrites when modifying existing code."
+      - "Use `rg 'TODO|FIXME|HACK' src/ -l` and address any the AI inserted — remove unnecessary comments."
+  - step: "PHASE 3 — VALIDATE: Check with Production Toolchain"
+    tasks:
+      - "Run the production toolchain in this order:"
+      - "   1. `biome check . --apply` OR `ruff check . --fix` — lint and auto-fix"
+      - "   2. `biome format .` OR `ruff format .` — format code"
+      - "   3. Run all project tests — verify nothing is broken"
+      - "   4. `tokei src/ --output json | jq '.[] | {language, code}'` — measure LOC"
+      - "Optional (if performance matters):"
+      - "   5. `hyperfine --warmup 3 'old-command' 'new-command' --export-json bench.json`"
+      - "   6. `minify --all --output dist/ src/` — minify for deployment"
+      - "Document validation results in `outputs/workflow-validation-{timestamp}.json`."
+  - step: "PHASE 4 — ITERATE: Refine Based on Validation"
+    tasks:
+      - "If lint errors: fix them and re-validate."
+      - "If tests fail: determine if compression removed critical code (revert) or if tests need updating."
+      - "If LOC is too high: re-apply Decision Ladder to the generated code specifically."
+      - "If benchmark shows regression: identify the bottleneck and optimize."
+      - "After fixes, re-run Phase 3 validation entirely."
+      - "MAXIMUM 3 iterations. After that, the code is production-ready or the architecture needs rethinking."
+  - step: "Final Verification and Documentation"
+    tasks:
+      - "Run FINAL validation: lint + tests pass, LOC documented, benchmark stable."
+      - "Remove any temporary files created during the workflow."
+      - "Update CONTEXT.md with any new patterns discovered during the workflow."
+      - "Write the workflow summary:"
+      - "   → What was built"
+      - "   → Compression ratio (LOC before/after or vs baseline)"
+      - "   → Tools used"
+      - "   → Any trade-offs made"
+      - "Mark the feature as complete in the project state."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Skipping the PLAN phase and jumping straight to code generation. This is the #1 source of over-engineering."
+  - "Applying compression after writing all the code — compression must be enforced DURING generation, not after."
+  - "Running validation only once at the end. Validate after EACH small unit of generation."
+  - "Over-iterating: if it takes more than 3 iterations to get right, the plan or architecture is wrong."
+  - "Installing tools during the workflow — all tools should be pre-installed before starting."
+  - "Writing CONTEXT.md after starting generation — it must be written BEFORE any code generation."
+
+best_practices:
+  - "This workflow is an application of LOOP ENGINEERING at the micro level (within a feature) and macro level (across phases)."
+  - "The Decision Ladder is the MOST IMPORTANT part — it prevents problems before they exist. Don't skip it."
+  - "Validation tools (biome, Ruff) are fast. Run them OFTEN. They take milliseconds and cost nothing."
+  - "Use `tokei` before and after to measure the compression ratio objectively."
+  - "Save workflow runs to `outputs/` so you can compare compression ratios across iterations."
+  - "The workflow applies to ANY language — the tools change but the PLAN → GENERATE → VALIDATE → ITERATE cycle stays the same."
+  - "For Python-only projects: skip biome, use Ruff. For JS/TS-only: skip Ruff, use biome."
+  - "This utility is the 'master controller' — it references the other utilities rather than duplicating them."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "ai-code-compression utility (Decision Ladder + Ponytail)"
+    url: "https://github.com/DietrichGebert/ponytail"
+  - title: "production-toolchain utility (biome, Ruff, oxc, hyperfine, etc.)"
+    url: "https://github.com/biomejs/biome"
+  - title: "context-engineering utility (CONTEXT.md creation)"
+    url: "https://docs.cursor.com/context/rules-for-ai"
+  - title: "modern-cli-arsenal utility (rg, jq, fd, etc.)"
+    url: "https://github.com/BurntSushi/ripgrep"
+  - title: "LOOP-ENGINEERING.md (Loop Protocol)"
+    url: ""

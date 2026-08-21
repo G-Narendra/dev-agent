@@ -1,0 +1,80 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "founder-alignment"
+display_name: "Founder Alignment & Equity Structuring"
+description: >
+  Establish the legal and operational framework between co-founders to ensure long-term
+  stability, clear decision rights, and protection of the cap table.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "co-founder"
+phase: "ideation"
+applicable_startups: 
+  - all
+priority: "mvp"
+difficulty: "advanced"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "The Difficult Conversation"
+    tasks:
+      - "Discuss and document 'What happens if one of us gets fired or wants to leave in 6 months?'"
+      - "Agree on target salaries and when the company can afford to pay them."
+  - step: "Equity Structuring"
+    tasks:
+      - "Sign the Founder Restricted Stock Purchase Agreement (RSPA)."
+      - "Ensure standard 4-year vesting with a 1-year cliff is implemented."
+  - step: "Role Division"
+    tasks:
+      - "Explicitly document who has the final say (tie-breaker) on Product, Hiring, and Fundraising."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Splitting equity 50/50 without a vesting schedule, resulting in one founder leaving after 2 months but keeping half the company forever."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Founder Alignment process"
+  - "How do I handle founder alignment?"
+  - "Implement founder alignment"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the founder alignment process"
+  optional:
+    - name: "N/A"
+      type: "string"
+      description: "No optional inputs needed."
+
+outputs:
+  files:
+    - path: "outputs/founder-alignment.md"
+      description: "Results of the founder alignment process"
+  artifacts:
+    - "Completed founder alignment deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

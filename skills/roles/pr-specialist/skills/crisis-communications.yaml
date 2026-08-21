@@ -1,0 +1,105 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "crisis-communications"
+display_name: "Crisis Communications & Damage Control"
+description: >
+  Manages the external messaging during a catastrophic event (e.g., a massive 
+  data breach, founder scandal, or critical system outage). Focuses on 
+  transparency, legal compliance, and reputation salvage.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "pr-specialist"
+phase: "growth"
+applicable_startups:
+  - all
+priority: "critical"
+difficulty: "expert"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "We had a data breach."
+  - "The server deleted user data."
+  - "Draft an apology letter."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Draft incident response blog."
+  - "Review statement with Legal."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "incident_details"
+      type: "string"
+      description: "What exactly happened? (e.g., AWS bucket left public)."
+  optional:
+    - name: "legal_constraints"
+      type: "string"
+      description: "What are we NOT allowed to say?"
+      default: "Do not admit unproven liability."
+
+outputs:
+  files:
+    - path: "marketing/pr/crisis-statement.md"
+      description: "The public-facing statement."
+  artifacts:
+    - "Internal talking points for employees."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "N/A"
+manual:
+  - "The crisis is contained within a 48-hour news cycle, and customer churn is minimized through transparent communication."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "Legal Review: Every single word of a crisis statement involving data loss or financial impact MUST be approved by legal counsel before publishing."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Google Docs (for live collaboration)"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Fact Gathering (The War Room)"
+    tasks:
+      - "Do not speak until you have the facts. Establish a war room with Engineering, Legal, and PR. Determine exactly who was affected."
+  - step: "The 'Golden Hour' Response"
+    tasks:
+      - "Issue a holding statement within 1 hour: 'We are aware of the issue regarding X. Our engineering team is currently investigating. We will provide a full update at [Time].'"
+  - step: "The Apology Framework"
+    tasks:
+      - "When the facts are known, write the statement using the 4 Rs: Regret (Apologize genuinely), Responsibility (Own the mistake, do not blame vendors), Remedy (How are you fixing it right now?), Reform (How will you prevent it forever?)."
+  - step: "Internal Comms"
+    tasks:
+      - "Send a Slack message to ALL employees telling them exactly what to say (and what NOT to say) if customers or journalists message them on LinkedIn."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "The 'Non-Apology Apology' (e.g., 'We are sorry if anyone felt offended by our data breach'). Own the mistake entirely."
+best_practices:
+  - "If the news is going to be bad, release all the bad news at once. Do not let the story leak out over 5 days (the 'death by a thousand cuts')."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "HBR: Communicating During a Crisis"
+    url: "https://hbr.org/2020/03/communicating-through-the-coronavirus-crisis"

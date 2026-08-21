@@ -1,0 +1,105 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "passive-candidate-sourcing"
+display_name: "Executive & Technical Talent Sourcing"
+description: >
+  Hunts the unhuntable. Discovers and recruits elite '10x' engineers, 
+  designers, and executives who are not actively looking for a job, 
+  convincing them to leave their comfortable FAANG jobs for your startup.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "recruiter"
+phase: "build"
+applicable_startups:
+  - all
+priority: "high"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "We need a Staff Engineer."
+  - "Find me a VP of Sales."
+  - "Nobody is applying to the job post."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Generate Boolean search string."
+  - "Draft highly personalized outreach email."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "open_role"
+      type: "string"
+      description: "e.g., Principal Rust Engineer."
+    - name: "deal_closer"
+      type: "string"
+      description: "Why would they leave Google for us?"
+  optional:
+    - name: "target_companies"
+      type: "string"
+      description: "List of companies to poach from."
+      default: "Stripe, Airbnb, Coinbase"
+
+outputs:
+  files:
+    - path: "hr/recruiting/sourcing_strategy_staff_eng.md"
+      description: "The targeted hit-list of 50 passive candidates."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "N/A"
+manual:
+  - "The recruiter achieves a >30% response rate from passive, high-tier candidates, reducing Time-to-Fill for critical roles to under 45 days."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "The Generic Spam Penalty: Never send 'Dear Candidate, I saw your impressive profile on LinkedIn' to a Staff Engineer. They receive 20 of these a day. Generic outreach destroys the startup's employer brand and guarantees the candidate will block you."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "LinkedIn Recruiter / Gem / GitHub Search"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "X-Ray Sourcing (Beyond LinkedIn)"
+    tasks:
+      - "The best engineers are not active on LinkedIn. Use Google X-Ray Search to find them where they live. Search GitHub for users contributing to specific open-source Rust repositories, or search StackOverflow for high-reputation users answering niche AWS questions."
+  - step: "The 'Founder-Led' Outreach Illusion"
+    tasks:
+      - "Candidates ignore recruiters. They reply to Founders. Draft the outreach email, but send it directly from the CEO or CTO's email account. 'Hi [Name], I'm the CEO of X. Our engineering team read your blog post on Y. We're solving that exact problem. Let's chat.'"
+  - step: "The Calibration Profile"
+    tasks:
+      - "Before sending 100 emails, find exactly 3 LinkedIn profiles of people who are the 'perfect fit'. Send them to the Hiring Manager. Ask: 'If I get these 3 people on the phone, will you interview them tomorrow?'. Do not source without calibration."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Selling the 'perks' instead of the 'problem'. Elite talent does not care about free snacks or ping pong tables. They care about the technical complexity of the problem, the caliber of the team they will work with, and the equity upside."
+best_practices:
+  - "Implement the 'Sell, Assess, Sell' framework. In the first call, do not ask them 'What is your biggest weakness?' Sell them on the vision. Assess them in the technical round. Sell them again when closing the offer."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "First Round: Sourcing and Recruiting"
+    url: "https://review.firstround.com/the-anatomy-of-the-perfect-technical-interview-from-a-former-amazon-vp"

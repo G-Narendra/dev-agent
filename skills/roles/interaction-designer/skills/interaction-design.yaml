@@ -1,0 +1,79 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "interaction-design"
+display_name: "Interaction Design & Micro-Interactions"
+description: >
+  Design intuitive UI/UX principles that reduce cognitive load, utilizing micro-interactions 
+  to provide immediate feedback to user actions.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "interaction-designer"
+phase: "planning"
+applicable_startups: 
+  - all
+priority: "high"
+difficulty: "advanced"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "State Feedback"
+    tasks:
+      - "Ensure every interactive element (button, link, input) has explicitly designed `:hover`, `:active`, `:focus`, and `:disabled` states."
+  - step: "Animation Timing"
+    tasks:
+      - "Keep all micro-interaction animations (e.g., modal openings, tooltips) under 200ms to make the application feel incredibly snappy."
+  - step: "Progressive Disclosure"
+    tasks:
+      - "Hide complex or advanced settings behind a 'More Options' toggle to keep the primary UI clean and focused on the core task."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Designing a form submit button that doesn't change to a 'Loading' state when clicked, causing the user to impatiently click it 5 times and trigger 5 API requests."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Interaction Design process"
+  - "How do I handle interaction design?"
+  - "Implement interaction design"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the interaction design process"
+  optional:
+    - name: "target_audience"
+      type: "string"
+      description: "Target user or customer segment"
+      default: "Primary user persona"
+
+outputs:
+  files:
+    - path: "outputs/interaction-design.md"
+      description: "Results of the interaction design process"
+  artifacts:
+    - "Completed interaction design deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

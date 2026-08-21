@@ -1,0 +1,111 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "performance-review-cycle"
+display_name: "Performance Reviews & 360 Feedback"
+description: >
+  Establish a culture of continuous, constructive feedback. Moves the company 
+  away from 'gut-feel' promotions towards structured, bi-annual reviews that 
+  evaluate both hard output and cultural alignment.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "hr-manager"
+phase: "growth"
+applicable_startups:
+  - all
+priority: "high"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "It's time for performance reviews."
+  - "How do we decide who gets a raise?"
+  - "Set up 360 feedback."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Create a performance review template."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "review_cycle"
+      type: "string"
+      description: "Q1/Q3 (Bi-annual) or Annual."
+    - name: "employee_level"
+      type: "string"
+      description: "Junior vs Senior vs Executive."
+  optional:
+    - name: "review_type"
+      type: "string"
+      description: "Manager-only vs 360 (Peers included)."
+      default: "360 Feedback"
+
+outputs:
+  files:
+    - path: "hr/performance/review-template-2024.md"
+      description: "The form employees and managers will fill out."
+  artifacts:
+    - "A 9-Box Grid for talent calibration."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "N/A"
+  manual:
+    - "No employee is 'surprised' by a bad review, because managers are trained to give continuous feedback year-round."
+    - "Top performers receive clear paths to promotion, reducing voluntary churn."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+
+safety_notes:
+  - "Confidentiality: 360 peer feedback MUST be anonymized before being presented to the employee, unless the culture specifically mandates radical open transparency (like Bridgewater). Otherwise, it destroys team trust."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Lattice / Culture Amp"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "The Self-Evaluation"
+    tasks:
+      - "Force employees to write their own review first. 'What were your top 3 achievements? Where did you fall short? What do you want to do next year?' This anchors the conversation."
+  - step: "Peer Feedback (360)"
+    tasks:
+      - "Ask 3 peers to provide feedback. Keep it simple: 'What should [Name] Stop doing, Start doing, and Continue doing?'"
+  - step: "The Manager Calibration (9-Box)"
+    tasks:
+      - "Before managers deliver reviews to employees, all managers must sit in a room and calibrate. Map employees on a 9-Box Grid (Performance vs Potential). This prevents Manager A from giving everyone 'Excellent' while Manager B gives everyone 'Average'."
+  - step: "The Delivery Conversation"
+    tasks:
+      - "Separate the Performance conversation from the Compensation (Raise) conversation by at least a week. If you talk about money, the employee will hear absolutely nothing you say about their actual performance."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "The 'Recency Bias'. A manager giving a terrible annual review because the employee made a mistake last week, completely forgetting the 11 months of stellar work before that. Managers must keep a running log."
+  - "Using performance reviews to fire people. If an employee is failing, they should be put on a Performance Improvement Plan (PIP) immediately. Do not wait 6 months for the formal review cycle to tell them."
+
+best_practices:
+  - "Evaluate 'How' they achieved the results, not just 'What'. If an AE hit 200% of their quota but bullied the SDR team and created a toxic environment, they cannot receive a 'Top Tier' rating."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "First Round Review: Performance Reviews"
+    url: "https://review.firstround.com/"

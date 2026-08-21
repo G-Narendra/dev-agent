@@ -1,0 +1,105 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "account-expansion"
+display_name: "Customer Success Account Expansion (Upsell)"
+description: >
+  Drives Net Revenue Retention (NRR) above 100%. Transforms a $10k/year 
+  contract into a $50k/year contract by strategically upselling new features, 
+  adding more seats, and expanding the software into other departments.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "customer-success-manager"
+phase: "growth"
+applicable_startups:
+  - B2B, Enterprise, SaaS
+priority: "high"
+difficulty: "expert"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "They are hitting their usage limits."
+  - "How do we upsell this account?"
+  - "Pitch them the Enterprise tier."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Generate account whitespace analysis."
+  - "Draft upsell proposal."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "account_name"
+      type: "string"
+      description: "The client company."
+    - name: "current_usage"
+      type: "string"
+      description: "e.g., They are using 95% of their allotted seats."
+  optional:
+    - name: "upsell_target"
+      type: "string"
+      description: "More seats vs New feature add-on."
+      default: "More Seats"
+
+outputs:
+  files:
+    - path: "cs/accounts/expansion_plan_acme.md"
+      description: "The strategy to grow the account."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "N/A"
+manual:
+  - "The account upgrades their contract, increasing Annual Recurring Revenue (ARR) by at least 20% without requiring a full sales cycle."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "The 'Hostage' Trap: Never force an upsell by holding the client's data hostage or breaking existing workflows. If an upsell feels predatory rather than consultative, the client will migrate to a competitor at renewal."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Gainsight / Salesforce"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Whitespace Analysis"
+    tasks:
+      - "Look at the client's org chart on LinkedIn. If you sold the tool to the US Marketing team, find the VP of Marketing for Europe. Ask your US champion to introduce you to their European counterpart."
+  - step: "The 'Over-Limit' Conversation"
+    tasks:
+      - "If a client hits their usage limit (e.g., 10,000 API calls), do not immediately block their access. Let them go over the limit for a week, then call them: 'You guys are growing fast! Let's get you on the unlimited plan so you don't face interruptions.'"
+  - step: "Quarterly Business Reviews (QBR)"
+    tasks:
+      - "Never pitch an upsell randomly. Use the QBR. Show them a slide: 'Last quarter, we saved you 500 hours. If you buy the Automation Add-on, we project we can save you 1,500 hours next quarter.'"
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Pitching an upsell to a churn-risk account. If a client is unhappy with the core product, trying to sell them a $5,000 add-on will infuriate them. Fix the core issue first."
+best_practices:
+  - "Give the Customer Success Manager a quota. They should be compensated for expansions (e.g., 5-10% commission on the upsell). Incentivize them to hunt for growth inside existing accounts."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Totango: Upselling and Cross-Selling"
+    url: "https://www.totango.com/blog/customer-success-upsell-strategy"

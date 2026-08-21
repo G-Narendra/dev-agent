@@ -1,0 +1,169 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "vibe-coding-research"
+display_name: "Vibe Coding Methodology & Tool Stack"
+description: >
+  Implements the "vibe coding" paradigm (coined by Andrej Karpathy, 
+  Feb 2025) — intent-driven software development where the developer 
+  shifts from writing syntax to describing outcomes in natural language. 
+  Maps the complete vibe coding stack (Cursor, Claude Code, Windsurf, 
+  Bolt.new, Cline, Aider, Lovable, v0) and enforces the rigorous 
+  Intent → Generate → Review/Test → Refine cycle needed to prevent 
+  "security debt" and low-quality AI-generated code.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "utility"
+phase: "all"
+applicable_startups:
+  - all
+priority: "high"
+difficulty: "intermediate"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Use vibe coding to build this."
+  - "What's the vibe coding stack?"
+  - "Let the AI do the coding while I design."
+  - "I want to describe the app and have it built."
+  - "Speed up development with AI."
+  - "Vibe code this feature."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Set up vibe coding environment."
+  - "Research best AI coding tools."
+  - "Create vibe coding workflow."
+  - "Apply context engineering."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "project_intent"
+      type: "string"
+      description: "What the user wants to build (in natural language)."
+  optional:
+    - name: "project_type"
+      type: "string"
+      description: "Web app, API, CLI tool, mobile app, game."
+      default: "Auto-detected from description"
+    - name: "tech_stack_preference"
+      type: "string"
+      description: "Preferred tech stack if any."
+      default: "Best fit for the project type"
+
+outputs:
+  files:
+    - path: "docs/vibe-coding-workflow.md"
+      description: "The vibe coding workflow plan with tool selection."
+  artifacts:
+    - "Recommended AI coding tool stack with setup instructions."
+    - "Context engineering prompt templates for the chosen tools."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "All AI-generated code passes linting and type-checking."
+    - "No hardcoded secrets, SQL injections, or known vulnerable dependencies in generated code."
+  manual:
+    - "The generated code is reviewed by a human before production deployment."
+    - "Every AI-generated file has a corresponding test file."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+  - "network"
+
+safety_notes:
+  - "Vibe coding IS NOT a replacement for code review. Treat ALL AI-generated code as untrusted input."
+  - "Security debt is the #1 risk: AI models may generate code with hardcoded credentials, SQL injection vulnerabilities, or outdated dependencies."
+  - "The AI model that wrote the code is the WORST at reviewing it. Switch to a different model or session for code review."
+  - "Never vibe-code production infrastructure (database migrations, auth systems, payment processing) without manual verification."
+  - "Vibe coding works best for prototyping and low-risk projects. Enterprise projects need strict governance."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Claude Code (Anthropic)"
+      install: "npx @anthropic/claude-code"
+      url: "https://docs.anthropic.com/en/docs/claude-code"
+  alternatives:
+    - name: "Cursor (AI-Native IDE)"
+      install: "Download from cursor.com"
+      url: "https://cursor.com"
+    - name: "Windsurf (Agentic IDE)"
+      install: "Download from codeium.com/windsurf"
+      url: "https://codeium.com/windsurf"
+    - name: "Cline (BYO Model)"
+      install: "VS Code extension"
+      url: "https://github.com/cline/cline"
+    - name: "Aider (Terminal AI Pair Programming)"
+      install: "pip install aider-chat (in venv)"
+      url: "https://github.com/Aider-AI/aider"
+    - name: "Bolt.new (Web Prototyping)"
+      install: "N/A (Web app at bolt.new)"
+      url: "https://bolt.new"
+    - name: "Lovable (App Builder)"
+      install: "N/A (Web app at lovable.dev)"
+      url: "https://lovable.dev"
+    - name: "v0 by Vercel (UI Generation)"
+      install: "N/A (Web app at v0.dev)"
+      url: "https://v0.dev"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Choose the Right Tool for the Job"
+    tasks:
+      - "For repository-level refactoring and complex multi-file changes → Claude Code (terminal agent, best codebase awareness)."
+      - "For day-to-day editor-integrated coding → Cursor (best balance of AI + visible diffs)."
+      - "For rapid web prototyping → Bolt.new or Lovable (describe an app, it builds it in browser)."
+      - "For UI component generation → v0 by Vercel (describe UI, get React/Tailwind code)."
+      - "For BYO-model (bring your own API key) → Cline or Aider (open source, flexible)."
+      - "For enterprise teams needing governance → GitHub Copilot (best compliance and audit trails)."
+  - step: "Apply Context Engineering"
+    tasks:
+      - "Write a SYSTEM PROMPT or CONTEXT FILE that the AI reads before starting. Include: architecture decisions, tech stack, coding conventions, security constraints, and project goals."
+      - "Provide EXISTING code examples in the project so the AI matches the style."
+      - "Define test expectations upfront: 'All generated code must have corresponding unit tests.'"
+      - "Document architectural constraints: 'Use Server Components by default, client components only when interactivity is needed.'"
+  - step: "Execute the Intent → Generate → Review → Refine Cycle"
+    tasks:
+      - "INTENT: Describe what to build in natural language. Be specific about inputs, outputs, edge cases."
+      - "GENERATE: Let the AI write the code. For complex features, break into smaller tasks."
+      - "REVIEW: Run linters, type-checkers, and security scanners on the generated code. NEVER skip this step."
+      - "REFINE: Feed review findings back to the AI. Iterate until all checks pass."
+      - "Switch to a DIFFERENT AI model/session for the review phase. The model that wrote the code is worst at reviewing it."
+  - step: "Security Audit Automatically"
+    tasks:
+      - "Run `rg 'password|secret|api_key|token' --type-add 'code:*.{py,js,ts,jsx,tsx,go,rs}' --type code` to find hardcoded secrets."
+      - "Check for SQL injection patterns: `rg 'execute\\(.*\\$'` or similar pattern in the target language."
+      - "Run `npm audit` or `pip audit` to check for vulnerable dependencies."
+      - "Use `tokei` on the output to ensure code quantity matches expectations (no bloat)."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Treating the first AI output as production-ready — it NEVER is."
+  - "Vibe-coding security-critical code (auth, payments, encryption) without manual review."
+  - "Using the same AI session to review code it just wrote — the model is biased toward its own output."
+  - "Assuming AI-generated code follows your project's conventions without explicitly telling it to."
+  - "Vibe-coding without tests — AI-generated code is more likely to have edge-case bugs."
+
+best_practices:
+  - "Write a `CONTEXT.md` file in your project root that the AI reads first. This is your context engineering playbook."
+  - "Use the 'rubber duck' approach: explain what you want the code to do in simple terms before generating."
+  - "Break large features into 5-10 line prompts rather than one massive prompt."
+  - "Run `git diff` after every AI change to review exactly what changed."
+  - "Pair vibe coding with a strict CI/CD pipeline that catches AI-generated issues automatically."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Andrej Karpathy — 'Vibe Coding' Origin (Feb 2025)"
+    url: "https://x.com/karpathy/status/1886192184808149383"
+  - title: "IBM — What is Vibe Coding?"
+    url: "https://www.ibm.com/think/topics/vibe-coding"
+  - title: "Best AI Coding Tools Reddit Recommends (2026)"
+    url: "https://diyai.io/ai-tools/reddit/best-ai-coding-tools-on-reddit/"
+  - title: "Cursor — AI-Native IDE"
+    url: "https://cursor.com"
+  - title: "Claude Code — Terminal AI Agent"
+    url: "https://docs.anthropic.com/en/docs/claude-code"
+  - title: "r/vibecoding — Reddit Community"
+    url: "https://reddit.com/r/vibecoding"

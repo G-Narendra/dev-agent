@@ -1,0 +1,115 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "cash-flow-burn-management"
+display_name: "Cash Flow & Burn Rate Management"
+description: >
+  The single most important survival skill for a CEO. Manage the startup's 
+  bank account, calculate the exact runway, and determine when to hire, 
+  when to fire, and when to start raising the next round of funding.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "founder-ceo"
+phase: "operations"
+applicable_startups:
+  - all
+priority: "critical"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "How much runway do we have?"
+  - "What is our burn rate?"
+  - "Can we afford to hire 3 engineers?"
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Calculate monthly burn rate."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "bank_balance"
+      type: "string"
+      description: "Total cash currently in the bank."
+    - name: "monthly_revenue"
+      type: "string"
+      description: "Cash collected (not just booked) last month."
+    - name: "monthly_expenses"
+      type: "string"
+      description: "Total cash out (payroll, AWS, rent) last month."
+  optional:
+    - name: "growth_projections"
+      type: "string"
+      description: "Expected MoM revenue growth."
+      default: "Flat (Conservative)"
+
+outputs:
+  files:
+    - path: "finance/runway-model.csv"
+      description: "The 24-month cash flow projection."
+  artifacts:
+    - "A clear 'Zero Cash Date' for the company."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "N/A"
+  manual:
+    - "The startup maintains a minimum of 18 months of runway at all times."
+    - "The company never misses a payroll cycle due to poor cash flow management."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+
+safety_notes:
+  - "Payroll Taxes: NEVER use the money you withheld from employee paychecks (for taxes) to fund company operations. It is a federal crime in the US and the founders can be held personally, criminally liable, even if the LLC goes bankrupt."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Excel / Pry / Standard Metrics"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Calculate Net Burn"
+    tasks:
+      - "Gross Burn = Total cash spent in a month."
+      - "Net Burn = Gross Burn minus Cash Revenue. If you spend $100k and make $40k, your Net Burn is $60k. This is the only number that matters for survival."
+  - step: "Calculate Runway (The Death Clock)"
+    tasks:
+      - "Formula: Bank Balance / Net Burn. ($1.2M in bank / $60k net burn = 20 months of runway). The CEO must know this exact number every single day."
+  - step: "Fundraising Triggers"
+    tasks:
+      - "Fundraising takes 3-6 months. Therefore, you MUST start fundraising when you have 9-12 months of runway left. If you start fundraising with 3 months of runway, VCs will smell desperation and either pass or offer terrible terms."
+  - step: "Scenario Planning (Best/Worst Case)"
+    tasks:
+      - "Build a 'Default Alive' model. If revenue goes to absolute zero tomorrow, how long can we survive if we cut all non-essential software and marketing? If the answer is < 6 months, you are in the danger zone."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Confusing 'Bookings' with 'Cash Flow'. Just because a client signed a $120k annual contract today does not mean you have $120k to spend. If they are paying Net-90, you won't see that cash for 3 months. Always model cash, not revenue."
+  - "Hiring ahead of revenue. 'If we hire 5 salespeople, we will triple revenue'. Unless you have $5M in the bank, do not hire 5 salespeople at once. Hire 1, prove the ROI, then hire the next."
+
+best_practices:
+  - "The 'Silicon Valley Bank' Rule. Never keep 100% of the startup's cash in a single banking institution. Split the treasury across at least two major, systemically important banks (e.g., Chase, Morgan Stanley) to prevent a catastrophic bank failure from killing the company."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Paul Graham: Default Alive or Default Dead"
+    url: "http://www.paulgraham.com/aord.html"

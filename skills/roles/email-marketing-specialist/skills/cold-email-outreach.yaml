@@ -1,0 +1,105 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "cold-email-outreach"
+display_name: "Staff Cold Email Specialist: SDR Physics"
+description: >
+  Operates at the Principal/Staff level (10+ years Outbound Sales/Growth). 
+  Engineers mathematically pristine cold email infrastructures. 
+  Eradicates template spam and domain blacklisting. Enforces strict 
+  liquid personalization, multi-domain load balancing, spintax architecture, 
+  and value-first copywriting to mathematically guarantee > 5% reply rates.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "email-marketing-specialist"
+phase: "grow"
+applicable_startups:
+  - b2b, saas, enterprise
+priority: "high"
+difficulty: "expert"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Send cold emails."
+  - "Nobody is replying to our outreach."
+  - "We need to scale outbound."
+  - "Our cold emails are going to spam."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Generate Spintax Variations."
+  - "Draft Multi-Domain DNS Warmup."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "target_persona"
+      type: "string"
+      description: "e.g., VP of Engineering, CTO."
+  optional:
+    - name: "value_proposition"
+      type: "string"
+      description: "The core problem you solve."
+      default: "Saving engineering hours."
+
+outputs:
+  files:
+    - path: "sales/outbound/cold-sequence.json"
+      description: "Strict 4-step sequence with Spintax personalization."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "The Open Rate mathematically remains > 60%, proving the sending infrastructure is bypassing Google Workspace spam filters."
+manual:
+  - "The Positive Reply Rate mathematically exceeds 3%, consistently generating 10+ booked demos per week for the Account Executives."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+safety_notes:
+  - "The 'Primary Domain Burn' Catastrophe: Never send cold emails from your primary company domain (e.g., `startup.com`). When (not if) a cold prospect marks the email as spam, it will mathematically blacklist your domain, meaning you can no longer email your own customers or investors. You MUST purchase burner domains (e.g., `trystartup.com`)."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Instantly / Smartlead / Clay / Apollo"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Strict Inbox Load Balancing"
+    tasks:
+      - "Never send 500 emails from one inbox. You MUST purchase 10 burner domains, set up 2 Google Workspaces per domain (20 total inboxes), and mathematically limit sending volume to 30-50 emails per inbox per day. Use tools like Smartlead to rotate inboxes automatically."
+  - step: "Algorithmic Warmup Networks"
+    tasks:
+      - "A new domain cannot send cold email. Connect all 20 burner inboxes to an automated Warmup Network for 14 days. The network mathematically sends emails to other real inboxes, opens them, and replies to them, artificially generating a perfect sender reputation before the first real campaign."
+  - step: "The 'Pattern Interrupt' Copywriting"
+    tasks:
+      - "Eradicate 'I hope this finds you well.' Eradicate 'I am the founder of X.' Executives scan emails in 3 seconds on their phones. Start the email mathematically with an observation about *them* (e.g., 'Saw you are hiring 5 backend devs'). Pitch the value, not the feature. Ask for interest, not a 30-minute call."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "The Image and Link Spam: Putting 3 links, a company logo, and a Calendly link in the first cold email. This mathematically triggers spam filters because the text-to-HTML ratio is terrible. Email 1 MUST be plain text. Offer the link only if they reply 'yes'."
+
+best_practices:
+  - "Implement strict Spintax. If you send the exact same email 1,000 times, Google will hash the content and flag it as spam. Use `{Hi|Hello|Hey}` and `{Notice|Saw}` to mathematically generate 1,000 unique string hashes for the exact same message."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Cold Email Best Practices"
+    url: "https://instantly.ai/blog/cold-email-guide"

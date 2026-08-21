@@ -1,0 +1,80 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "technical-content-creation"
+display_name: "Technical Tutorials & Conference Speaking"
+description: >
+  Create high-value technical content (blog posts, YouTube tutorials, GitHub repos) and 
+  deliver talks at industry conferences to build grassroots adoption.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "product-evangelist"
+phase: "growth"
+applicable_startups: 
+  - devtools
+priority: "mvp"
+difficulty: "advanced"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Content Creation"
+    tasks:
+      - "Write deep-dive technical tutorials (e.g., 'How to build a real-time chat app using our WebSockets API')."
+      - "Publish open-source boilerplate code on GitHub for users to fork."
+  - step: "Community Engagement"
+    tasks:
+      - "Host a weekly live stream on Twitch/YouTube coding with the product."
+      - "Answer questions on StackOverflow related to the product domain."
+  - step: "Event Speaking"
+    tasks:
+      - "Submit CFPs (Call for Papers) to speak at major developer conferences."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Giving a 'technical talk' at a conference that is actually just a 30-minute sales pitch for the enterprise tier of the product."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Technical Content Creation process"
+  - "How do I handle technical content creation?"
+  - "Implement technical content creation"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the technical content creation process"
+  optional:
+    - name: "N/A"
+      type: "string"
+      description: "No optional inputs needed."
+
+outputs:
+  files:
+    - path: "outputs/technical-content-creation.md"
+      description: "Results of the technical content creation process"
+  artifacts:
+    - "Completed technical content creation deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

@@ -1,0 +1,80 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "relevance-tuning"
+display_name: "Search Relevance & Faceting"
+description: >
+  Optimize the search engine's ranking algorithm to ensure the most valuable, 
+  highly-rated products appear at the top, even when users misspell queries.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "search-engineer"
+phase: "operations"
+applicable_startups: 
+  - ecommerce
+  - marketplace
+priority: "high"
+difficulty: "advanced"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Typo Tolerance"
+    tasks:
+      - "Configure fuzzy matching with a Levenshtein distance of 1 or 2, allowing a user who searches for 'iphne' to instantly see results for 'iphone'."
+  - step: "Custom Ranking Factors"
+    tasks:
+      - "Do not rely purely on keyword matches. Multiply the BM25 text score by the product's 'Number of Sales' or 'Average Rating' so popular items rank higher."
+  - step: "Synonym Dictionaries"
+    tasks:
+      - "Implement a synonym dictionary so a search for 'sneakers' automatically matches products explicitly labeled as 'running shoes'."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Using a basic SQL `WHERE title LIKE '%query%'` for an E-commerce store with 100,000 products, resulting in 5-second load times and zero typo tolerance."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Relevance Tuning process"
+  - "How do I handle relevance tuning?"
+  - "Implement relevance tuning"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the relevance tuning process"
+  optional:
+    - name: "target_audience"
+      type: "string"
+      description: "Target user or customer segment"
+      default: "Primary user persona"
+
+outputs:
+  files:
+    - path: "outputs/relevance-tuning.md"
+      description: "Results of the relevance tuning process"
+  artifacts:
+    - "Completed relevance tuning deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

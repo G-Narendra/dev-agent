@@ -1,0 +1,108 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "gdpr-data-mapping"
+display_name: "GDPR/CCPA Data Mapping & Deletion"
+description: >
+  Maps the flow of Personally Identifiable Information (PII) throughout the 
+  system. Establishes protocols for handling 'Right to be Forgotten' (data 
+  deletion) and Subject Access Requests (DSAR).
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "compliance-officer"
+phase: "planning"
+applicable_startups:
+  - all
+priority: "critical"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "A user asked us to delete all their data."
+  - "Are we GDPR compliant?"
+  - "Where is user data stored?"
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Generate Record of Processing Activities (RoPA)."
+  - "Draft Data Deletion SOP."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "database_schema"
+      type: "string"
+      description: "Description of where users are stored."
+  optional:
+    - name: "third_party_tools"
+      type: "string"
+      description: "Intercom, Mixpanel, Stripe."
+      default: "None"
+
+outputs:
+  files:
+    - path: "compliance/gdpr/data-map.md"
+      description: "The RoPA tracking where all PII lives."
+  artifacts:
+    - "A deletion runbook for engineering."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "N/A"
+manual:
+  - "When a user requests deletion, the startup can securely erase their data from the DB, Mixpanel, and Intercom within the legal 30-day window."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "Do not delete financial transaction data (e.g., Stripe records). GDPR allows you to retain data required for tax and legal compliance."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Transcend / DataGrail"
+      install: "N/A"
+  alternatives:
+    - name: "Manual Runbooks"
+      when: "Early stage, less than 10 deletion requests per month."
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Data Mapping (RoPA)"
+    tasks:
+      - "Document exactly what PII you collect (email, IP, address), why you collect it (legal basis), and where it lives (Postgres, Mixpanel)."
+  - step: "The Deletion Runbook (Hard vs Soft Delete)"
+    tasks:
+      - "Establish the engineering protocol: Do we `DELETE FROM users` or do we update the row to `email: 'deleted_123', name: 'deleted'` to preserve database referential integrity?"
+  - step: "Third-Party Propagation"
+    tasks:
+      - "Ensure the runbook includes steps to log into Intercom/HubSpot/Amplitude and manually delete the user's profile there as well."
+  - step: "Cookie Consent"
+    tasks:
+      - "Implement a banner that blocks non-essential cookies (Google Analytics, Facebook Pixel) UNTIL the European user explicitly clicks 'Accept'."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Ignoring backup databases. If you delete a user from production, but then restore a database backup from yesterday, that user is back. You must have a process to re-delete them or purge backups."
+best_practices:
+  - "Use UUIDs instead of emails as foreign keys across your system. It makes data anonymization infinitely easier."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "GDPR Information Portal"
+    url: "https://gdpr.eu/"

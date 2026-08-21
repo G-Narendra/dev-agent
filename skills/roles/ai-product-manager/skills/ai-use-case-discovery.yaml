@@ -1,0 +1,145 @@
+# â”€â”€ IDENTITY â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+name: "ai-use-case-discovery"
+display_name: "AI Use Case Discovery & Validation"
+description: >
+  Evaluate whether a proposed AI feature is actually necessary or just a distraction. 
+  Filters ideas based on technical feasibility, cost of inference, and actual user value. 
+  Prevents the 'slap a chatbot on it' anti-pattern.
+
+# â”€â”€ CLASSIFICATION â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+role: "ai-product-manager"
+phase: "ideation"
+applicable_startups:
+  - ai
+  - b2b-saas
+priority: "critical"
+difficulty: "advanced"
+
+# â”€â”€ TRIGGER â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+trigger_phrases:
+  - "Should we add AI to this feature?"
+  - "Evaluate this AI idea."
+  - "We need an AI strategy."
+
+# â”€â”€ ACTIONS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+example_cli_actions:
+  - "Create an AI feasibility matrix."
+
+# â”€â”€ INPUTS / OUTPUTS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+inputs:
+  required:
+    - name: "proposed_feature"
+      type: "string"
+      description: "The AI feature idea (e.g., 'AI-powered email summarizer')."
+    - name: "user_problem"
+      type: "string"
+      description: "The core struggle this is trying to solve."
+  optional:
+    - name: "available_data"
+      type: "string"
+      description: "Do we actually have the data required to do this?"
+      default: "null"
+
+outputs:
+  files:
+    - path: "product/ai-use-case-evaluation.md"
+      description: "The Go/No-Go decision document."
+  artifacts:
+    - "A cost-benefit analysis (API cost per user vs Willingness to Pay)."
+
+# â”€â”€ SUCCESS CRITERIA â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+success_criteria:
+  automated:
+    - "N/A"
+  manual:
+    - "The team kills AI projects that could be solved with a simple deterministic `if/else` statement."
+
+# â”€â”€ PERMISSIONS & SAFETY â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+permissions_needed:
+  - "filesystem"
+
+safety_notes:
+  - "AI is non-deterministic. If a feature requires 100% accuracy every single time (e.g., calculating payroll taxes), do NOT use Generative AI."
+
+# â”€â”€ TOOLING â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+recommended_tools:
+  primary:
+    - name: "Notion / Markdown"
+      install: "N/A"
+
+# â”€â”€ IMPLEMENTATION CHECKLIST â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+implementation_checklist:
+  - step: "The 'Dumb Rule' Test"
+    tasks:
+      - "Ask: Can this problem be solved with 5 lines of regex or a SQL query? If yes, use regex/SQL. Do not use a $0.05 per-call LLM to do string matching."
+  - step: "Cost of Goods Sold (COGS) Analysis"
+    tasks:
+      - "Calculate the inference cost. If an AI feature costs $0.10 per run, and a user runs it 100 times a month, that's $10 in COGS. If the user only pays $15/month for the app, the margin is destroyed."
+  - step: "Latency Expectations"
+    tasks:
+      - "LLMs are slow (often taking 2-5 seconds to stream). Does the user context allow for a 5-second wait? If the feature requires instant <100ms feedback, generative AI is the wrong tool."
+
+# â”€â”€ QUALITY GATES â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+anti_patterns:
+  - "Adding a generic floating chatbot to the bottom right of a SaaS dashboard that only answers 'I don't know' to 90% of user queries. This damages brand trust."
+  - "Assuming AI is a magic wand. An AI model trained on garbage data will output garbage at scale."
+
+best_practices:
+  - "The best AI features are invisible. Instead of a chat interface, use AI in the background to auto-categorize data, pre-fill forms, or highlight anomalies before the user even asks."
+
+# â”€â”€ REFERENCES â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+references:
+  - title: "Lenny's Newsletter: How to build AI products"
+    url: "https://www.lennysnewsletter.com/"
+
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Ai Use Case Discovery process"
+  - "How do I handle ai use case discovery?"
+  - "Implement ai use case discovery"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the ai use case discovery process"
+  optional:
+    - name: "target_audience"
+      type: "string"
+      description: "Target user or customer segment"
+      default: "Primary user persona"
+
+outputs:
+  files:
+    - path: "outputs/ai-use-case-discovery.md"
+      description: "Results of the ai use case discovery process"
+  artifacts:
+    - "Completed ai use case discovery deliverable"
+
+# ── QUALITY GATES ────────────────────────────────────────────
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start — retrofitting is expensive."
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

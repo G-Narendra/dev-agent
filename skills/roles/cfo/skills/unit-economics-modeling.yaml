@@ -1,0 +1,117 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "unit-economics-modeling"
+display_name: "Unit Economics & CAC/LTV Modeling"
+description: >
+  Calculate and track the fundamental health of the business model. 
+  Focuses on Customer Acquisition Cost (CAC), Lifetime Value (LTV), 
+  Payback Periods, and Gross Margin per user.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "cfo"
+phase: "growth"
+applicable_startups:
+  - all
+priority: "critical"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Are our unit economics positive?"
+  - "Calculate LTV to CAC."
+  - "Model the payback period."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Create a unit economics spreadsheet."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "marketing_spend"
+      type: "string"
+      description: "Total sales & marketing spend for the period."
+    - name: "new_customers"
+      type: "string"
+      description: "Number of new customers acquired in that period."
+    - name: "churn_rate"
+      type: "string"
+      description: "Monthly customer churn percentage."
+  optional:
+    - name: "gross_margin"
+      type: "string"
+      description: "Revenue minus Cost of Goods Sold (COGS)."
+      default: "80% (SaaS Standard)"
+
+outputs:
+  files:
+    - path: "finance/unit-economics-model.csv"
+      description: "The core calculations for the business."
+  artifacts:
+    - "A dashboard of the 4 key metrics for investors."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "N/A"
+  manual:
+    - "The LTV:CAC ratio is consistently above 3:1."
+    - "The Payback Period is under 12 months."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+
+safety_notes:
+  - "Do not manipulate CAC calculations to look better for investors by hiding 'Sales Salaries' and only counting 'Ad Spend'. True CAC is Fully-Loaded CAC."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Excel / Google Sheets"
+      install: "N/A"
+  alternatives:
+    - name: "Baremetrics / ChartMogul"
+      when: "Need automated real-time tracking directly from Stripe."
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Fully Loaded CAC"
+    tasks:
+      - "Formula: (Total Marketing Spend + Total Sales Salaries + Marketing Software Costs) / New Customers."
+      - "Do not calculate 'Blended CAC' (including organic traffic) if you are trying to measure the efficiency of your paid ads."
+  - step: "Lifetime Value (LTV)"
+    tasks:
+      - "Formula: (Average Revenue Per User x Gross Margin) / Churn Rate."
+      - "Note: Using Gross Margin in the numerator is critical. If a user pays $100 but costs $40 in server fees, the value is $60, not $100."
+  - step: "Payback Period Calculation"
+    tasks:
+      - "Formula: CAC / (MRR x Gross Margin)."
+      - "This tells you how many months it takes to break even on a customer. If payback is 24 months, but your runway is 12 months, you will go bankrupt while growing."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Calculating LTV for a 3-month-old startup by projecting a 1% churn rate over 10 years. You don't have enough data to predict 10-year LTV yet."
+  - "Ignoring COGS. An AI startup charging $20/month but spending $15/month on OpenAI API calls has a 25% gross margin, which ruins standard SaaS LTV calculations."
+
+best_practices:
+  - "Track cohorts. Unit economics usually look terrible in Year 1. What matters to investors is that your Q4 cohorts have a much faster payback period than your Q1 cohorts."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "David Skok: SaaS Metrics 2.0"
+    url: "https://www.forentrepreneurs.com/saas-metrics-2/"

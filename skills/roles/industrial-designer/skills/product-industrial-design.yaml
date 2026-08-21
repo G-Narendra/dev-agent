@@ -1,0 +1,84 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "product-industrial-design"
+display_name: "Industrial & Product Design"
+description: >
+  Designs physical products from concept to manufacturing. Covers ergonomics, 
+  materials selection, CAD modeling, rapid prototyping, and design for 
+  manufacturability (DFM). Creates products that are functional and beautiful.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "industrial-designer"
+phase: "planning"
+applicable_startups:
+  - iot-hardware
+priority: "high"
+difficulty: "advanced"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Concept Development"
+    tasks:
+      - "Sketch product concepts with user-centered design principles."
+      - "Select materials based on cost, durability, and aesthetics."
+  - step: "CAD Modeling"
+    tasks:
+      - "Create detailed 3D CAD models of the product."
+      - "Design for assembly and manufacturing tolerances."
+  - step: "Prototyping"
+    tasks:
+      - "3D print or CNC prototype for ergonomic and fit testing."
+      - "Iterate on design based on physical prototype feedback."
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Product Industrial Design process"
+  - "How do I handle product industrial design?"
+  - "Implement product industrial design"
+  - "Designs physical products from concept to manufacturing"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the product industrial design process"
+  optional:
+    - name: "N/A"
+      type: "string"
+      description: "No optional inputs needed."
+
+outputs:
+  files:
+    - path: "outputs/product-industrial-design.md"
+      description: "Results of the product industrial design process"
+  artifacts:
+    - "Completed product industrial design deliverable"
+# ── QUALITY GATES ────────────────────────────────────────────
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start — retrofitting is expensive."
+anti_patterns:
+  - "Finalizing the design before creating a physical prototype for ergonomic testing."
+  - "Designing for aesthetics over manufacturability — leading to high unit costs."
+  - "Selecting materials without considering supply chain lead times and minimum order quantities."
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

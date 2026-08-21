@@ -1,0 +1,111 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "fundraising-financial-prep"
+display_name: "Fundraising Financial Prep & Cap Table"
+description: >
+  Prepare the financial models, pro-forma P&L, and clean capitalization table 
+  required for a Series A/B data room. Ensures the startup is 'audit-ready' 
+  for rigorous Venture Capital due diligence.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "cfo"
+phase: "growth"
+applicable_startups:
+  - all
+priority: "critical"
+difficulty: "expert"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Prepare the data room for Series A."
+  - "Model the cap table dilution."
+  - "Create the 3-year financial projection."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Create a data room checklist."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "current_cap_table"
+      type: "file"
+      description: "List of all current shareholders, SAFEs, and option pools."
+    - name: "historical_financials"
+      type: "file"
+      description: "Trailing 12 months of Profit & Loss (P&L)."
+  optional:
+    - name: "target_raise"
+      type: "string"
+      description: "How much capital is being raised?"
+      default: "$5M"
+
+outputs:
+  files:
+    - path: "finance/fundraising/financial-model-v1.xlsx"
+      description: "The primary Excel model for investors."
+  artifacts:
+    - "A Cap Table scenario analysis (Pre vs Post-Money dilution)."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "N/A"
+  manual:
+    - "The financial model stands up to VC due diligence without revealing major accounting errors."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+
+safety_notes:
+  - "Data Room Security. Do not send actual PII (e.g., employee social security numbers on payroll documents) into the investor data room. Redact sensitive HR info."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Carta / Excel"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Cap Table Cleanup"
+    tasks:
+      - "Ensure all previous SAFEs and Convertible Notes are properly accounted for, including their specific valuation caps and discount rates."
+      - "Model the 'Option Pool Shuffle'. VCs will require you to expand the employee option pool (usually to 10-15%) *pre-money*, meaning the dilution hits the founders, not the new investors."
+  - step: "The 3-Year Projection Model"
+    tasks:
+      - "Build a bottom-up revenue model. Do not say 'We will capture 1% of a $10B market'. Say 'We will hire 5 SDRs, each making 50 calls a day, booking 10 demos a week, converting at 20%...'"
+  - step: "Expense Modeling"
+    tasks:
+      - "Ensure the expenses match the revenue goals. If the model projects $10M in revenue, the hosting costs and headcount must reflect the reality of supporting that scale."
+  - step: "Data Room Structure"
+    tasks:
+      - "Organize folders logically: 1. Corporate/Legal (incorporation docs), 2. Financials (Historical & Projections), 3. HR (Org chart, contracts), 4. IP/Tech."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Hardcoding numbers in the Excel model. If an investor changes the 'Churn Rate' assumption cell, the entire model must dynamically recalculate all the way down to cash flow."
+  - "Projecting profitability in Year 2 of a venture-backed startup. VCs want you to reinvest revenue into aggressive growth, not declare a tiny profit."
+
+best_practices:
+  - "Keep the model simple. A 3-tab model that clearly shows the growth engine is vastly superior to a 20-tab behemoth that no one can understand."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Y Combinator: Series A Guide"
+    url: "https://www.ycombinator.com/library/4A-a-guide-to-seed-fundraising"

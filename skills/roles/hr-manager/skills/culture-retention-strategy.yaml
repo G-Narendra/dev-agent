@@ -1,0 +1,108 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "culture-retention-strategy"
+display_name: "Company Culture & Talent Retention"
+description: >
+  Operationalize the startup's core values. Moves 'Culture' from a poster on the 
+  wall to tangible daily behaviors that prevent top-tier talent from leaving 
+  for a 10% raise at a competitor.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "hr-manager"
+phase: "growth"
+applicable_startups:
+  - all
+priority: "medium"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "People are quitting."
+  - "Improve employee retention."
+  - "How do we define our culture?"
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Create a culture strategy doc."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "core_values"
+      type: "string"
+      description: "The 3-5 defining behaviors of the company (e.g., 'Move Fast', 'Default to Transparency')."
+  optional:
+    - name: "current_churn_rate"
+      type: "string"
+      description: "What percentage of the team leaves every year?"
+      default: "15%"
+
+outputs:
+  files:
+    - path: "hr/culture/retention-strategy.md"
+      description: "Actionable steps to improve eNPS (Employee Net Promoter Score)."
+  artifacts:
+    - "A framework for the weekly All-Hands meeting."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "N/A"
+  manual:
+    - "Voluntary employee turnover drops below 10% annually."
+    - "eNPS (Employee Net Promoter Score) is consistently above +40."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+
+safety_notes:
+  - "Toxic High Performers: You MUST be willing to fire a brilliant '10x engineer' or top sales rep if they routinely violate the core values (e.g., they are abusive to juniors). If you keep them, the rest of the company will instantly realize the 'Values' are fake."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Culture Amp / Officevibe"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Operationalize the Values"
+    tasks:
+      - "If a value is 'Default to Transparency', you must operationalize it: Make all Slack channels public by default. Share the Board Deck with all employees. Values are decisions, not words."
+  - step: "The Pulse Survey (eNPS)"
+    tasks:
+      - "Do not wait for exit interviews to find out why people are unhappy. Send an anonymous, 2-question survey every month: 1. 'On a scale of 1-10, how likely are you to recommend working here?', 2. 'What is one thing we can improve?'"
+  - step: "The All-Hands Meeting"
+    tasks:
+      - "Use the weekly All-Hands to publicly praise behaviors that align with the values. Create a specific award (e.g., The 'Move Fast' Trophy) and give it to a different employee every week."
+  - step: "Stay Interviews"
+    tasks:
+      - "Have managers conduct 'Stay Interviews' with their top performers. 'Why do you stay here? What would make you leave? What do you want to learn this year?' Address retention proactively."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Confusing 'Culture' with 'Perks'. Ping-pong tables, free beer, and bean bag chairs do not create a good culture. Psychological safety, clear expectations, and solving hard problems create a good culture."
+  - "Forced Fun. Mandating that introverted engineers attend a 3-hour Zoom trivia night after working a 10-hour day. Give people their time back."
+
+best_practices:
+  - "Celebrate Failure. If a startup never fails, it isn't taking enough risk. Have a section in the All-Hands where a leader publicly shares a project they completely botched and what they learned from it."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Netflix: Culture Deck"
+    url: "https://jobs.netflix.com/culture"

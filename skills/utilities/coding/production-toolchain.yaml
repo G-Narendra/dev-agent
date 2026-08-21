@@ -1,0 +1,214 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "production-toolchain"
+display_name: "Production Toolchain (Hidden Gem CLI Arsenal)"
+description: >
+  Maps hidden-gem production tools into the AI agent's toolkit.
+  These are the next-generation tools discovered from Reddit, 
+  GitHub, and developer communities — Rust/Go-based replacements 
+  that are 10-100x faster than traditional tooling. Covers code 
+  quality (oxc, biome, Ruff), benchmarking (hyperfine), asset 
+  minification (minify by tdewolff), productivity (zoxide, atuin, 
+  eza, btop), and underrated AI agents (Amazon Q Developer CLI, 
+  Cline). These tools make AI agents dramatically more efficient 
+  by providing high-speed validation and structured output.
+
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "utility"
+phase: "all"
+applicable_startups:
+  - all
+priority: "high"
+difficulty: "intermediate"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Optimize this code for production."
+  - "Make this faster / more performant."
+  - "Set up a linter for this project."
+  - "We need faster tooling."
+  - "Benchmark this code."
+  - "Minify these assets for deployment."
+  - "Find and fix performance issues."
+  - "Navigate this project faster."
+  - "Check code quality across the codebase."
+  - "Set up code formatting."
+  - "Profile this application."
+  - "Compress HTML/CSS/JS for production."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Lint and format code with biome (JS/TS/JSON/CSS)."
+  - "Lint Python code with Ruff (10-100x faster than Flake8)."
+  - "Benchmark code changes with hyperfine."
+  - "Minify HTML/CSS/JS/SVG/XML with minify (tdewolff)."
+  - "Navigate project directories with zoxide."
+  - "Search shell history with atuin."
+  - "View directory structure with eza (modern ls)."
+  - "Monitor system resources with btop."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "tool_category"
+      type: "string"
+      description: "What kind of tool is needed (code_quality, benchmarking, minification, productivity, monitoring)."
+  optional:
+    - name: "target_path"
+      type: "string"
+      description: "Path to the project or file to operate on."
+      default: "Current directory"
+    - name: "output_format"
+      type: "string"
+      description: "JSON, table, or human-readable output."
+      default: "JSON"
+
+outputs:
+  files:
+    - path: "outputs/production-audit-{timestamp}.json"
+      description: "Combined output from toolchain tools (lint results, benchmark data, minification stats)."
+  artifacts:
+    - "A project configured with the appropriate production toolchain."
+    - "Performance benchmark comparisons (before/after)."
+    - "Minified assets ready for deployment."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "All production tools exit with code 0 and produce expected output."
+    - "Benchmark results show measurable improvement after optimization."
+  manual:
+    - "The project now has automated code quality checks in CI/CD."
+    - "Minified assets are consistently smaller than originals."
+    - "Developer navigation speed is improved."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+  - "shell_execution"
+
+safety_notes:
+  - "Some tools (biome, Ruff) change project configuration files. Always check git diff before committing."
+  - "hyperfine runs the command multiple times — don't use with destructive operations (e.g., database resets)."
+  - "zoxide and atuin modify your shell config. Install them from the project's venv/tools dir, not globally."
+  - "For Windows: use scoop install for most tools. Some (biome, oxc) may need npm/npx."
+  - "Always benchmark against the original code before optimizing — don't optimize what isn't slow."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "biome (Rust-based formatter + linter)"
+      install: "npx @biomejs/biome init OR scoop install biome"
+      url: "https://github.com/biomejs/biome"
+    - name: "Ruff (Python linter in Rust)"
+      install: "pip install ruff (in venv) OR scoop install ruff"
+      url: "https://github.com/astral-sh/ruff"
+    - name: "zoxide (Smarter cd)"
+      install: "scoop install zoxide OR cargo install zoxide"
+      url: "https://github.com/ajeetdsouza/zoxide"
+    - name: "hyperfine (CLI benchmarking)"
+      install: "scoop install hyperfine OR cargo install hyperfine"
+      url: "https://github.com/sharkdp/hyperfine"
+  alternatives:
+    - name: "oxc (Oxidation Compiler — next-gen JS/TS)"
+      install: "npm install -g @oxidation/oxlint OR npx oxlint@latest"
+      url: "https://github.com/oxc-project/oxc"
+    - name: "minify (tdewolff — multi-format minifier)"
+      install: "scoop install minify OR go install github.com/tdewolff/minify/cmd/minify@latest"
+      url: "https://github.com/tdewolff/minify"
+    - name: "atuin (Shell history search)"
+      install: "scoop install atuin OR cargo install atuin"
+      url: "https://github.com/atuinsh/atuin"
+    - name: "eza (Modern ls)"
+      install: "scoop install eza OR cargo install eza"
+      url: "https://github.com/eza-community/eza"
+    - name: "btop (System monitor)"
+      install: "scoop install btop OR winget install btop"
+      url: "https://github.com/aristocratos/btop"
+    - name: "Amazon Q Developer CLI (Underrated free tier agent)"
+      install: "npm install -g @amazonq/amazonq OR npx @amazonq/amazonq"
+      url: "https://docs.aws.amazon.com/amazonq/latest/qdeveloper-ug/command-line.html"
+    - name: "Cline (Agentic VSCode extension with BYOK)"
+      install: "Install from VSCode Marketplace: 'Cline' extension"
+      url: "https://github.com/cline/cline"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Identify Which Tool Fits the Task"
+    tasks:
+      - "JS/TS/JSON/CSS linting + formatting → biome (faster and simpler than Prettier + ESLint combined)."
+      - "Python linting → Ruff (10-100x faster than Flake8, Pylint, or Pyright)."
+      - "Next-gen JS toolchain (linter, bundler, minifier) → oxc (Rust-based, fastest in class)."
+      - "Benchmark any CLI command → hyperfine (gives mean, median, min, max, stddev across N runs)."
+      - "Minify HTML/CSS/JS/JSON/SVG/XML for deployment → minify (tdewolff, Go-based, multi-format)."
+      - "Navigate directories effortlessly → zoxide (remembers your most-used dirs, jumps with `z <partial>`)."
+      - "Search terminal history → atuin (encrypted, searchable, cross-machine history)."
+      - "List directory with git status + icons → eza (better than `ls -la`)."
+      - "System resource monitoring → btop (GPU-aware, mouse-clickable dashboard)."
+      - "Free tier AI agent for code generation → Amazon Q Developer CLI (underrated, deep AWS context)."
+      - "Agentic IDE coding with custom models → Cline (BYOK, runs agentic loops in VSCode)."
+  - step: "Install and Configure for Project"
+    tasks:
+      - "biome: `npx @biomejs/biome init` — creates biome.json. Run `npx biome check .` for lint+format."
+      - "Ruff: `pip install ruff` in venv, then `ruff check .` or `ruff format .`."
+      - "hyperfine: `hyperfine --warmup 3 'python old.py' 'python optimized.py' --export-json results.json`"
+      - "minify: `minify --all --output dist/ src/` — minifies all supported files in src/ to dist/."
+      - "zoxide: Add to shell config: `eval \"$(zoxide init bash)\"` (or zsh/powershell)."
+      - "atuin: `atuin init bash | source` — replaces shell history with searchable database."
+  - step: "Chain Tools for Production Readiness"
+    tasks:
+      - "Lint and fix: `biome check . --apply` (auto-fixable issues) + `ruff check . --fix`"
+      - "Benchmark optimization: `hyperfine --warmup 5 'rg \"TODO\" .' 'grep -r \"TODO\" .'`"
+      - "Minify build: `minify --all --output dist/ --format=json src/ | jq '{files: [.files[] | {name, original, minified, ratio}]}'`"
+      - "Code quality scan: `oxlint . --format json | jq '.warnings[] | {severity, message, file}'`"
+      - "Navigate to project: `z my-project` → jump to most-used matching directory (zoxide)"
+  - step: "Verify Toolchain Integration"
+    tasks:
+      - "Add biome/ruff checks to the project's CI/CD pipeline."
+      - "Add a `benchmark` script using hyperfine to the project's package.json."
+      - "Add a `minify` npm script that runs minify on the build output."
+      - "Document the toolchain in the project's README or CONTRIBUTING.md."
+      - "Run `which zoxide && which atuin && which eza` to confirm productivity tools are available."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Using ESLint + Prettier when biome does both faster and better — two configs, two node_modules entries, double CI time."
+  - "Using Flake8 or Pylint when Ruff exists — 10-100x slower with the same rules."
+  - "Benchmarking with `time` when hyperfine exists — hyperfine gives statistical significance, warm-up runs, and JSON output."
+  - "Using Python's `htmlmin` or `cssmin` when minify (tdewolff) does all formats in one Go binary."
+  - "Navigating with bare `cd` and `ls` when zoxide and eza are available — zoxide learns your habits."
+  - "Installing ALL tools blindly — install only what the current project needs."
+
+best_practices:
+  - "Most of these tools are written in Rust or Go — they don't need a runtime installed (no Python, no Node)."
+  - "biome > Prettier + ESLint for NEW projects. For existing projects, migrate incrementally."
+  - "Ruff is compatible with Flake8 rules out of the box — `ruff check .` with no config uses sensible defaults."
+  - "hyperfine accepts any shell command — use it to compare ANY two approaches, not just code benchmarks."
+  - "zoxide learns from 'cd' usage — the more you use it, the better it gets. Start scoping your project immediately."
+  - "Amazon Q Developer CLI is free and deeply integrated with AWS — great for cloud-native projects."
+  - "Pair this utility with `utilities/coding/modern-cli-arsenal.yaml` for the complete CLI stack."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "oxc — Oxidation Compiler"
+    url: "https://github.com/oxc-project/oxc"
+  - title: "biome — All-in-one Formatter + Linter"
+    url: "https://github.com/biomejs/biome"
+  - title: "Ruff — Python Linter in Rust"
+    url: "https://github.com/astral-sh/ruff"
+  - title: "hyperfine — CLI Benchmarking"
+    url: "https://github.com/sharkdp/hyperfine"
+  - title: "minify — Go Multi-Format Minifier"
+    url: "https://github.com/tdewolff/minify"
+  - title: "zoxide — Smarter cd"
+    url: "https://github.com/ajeetdsouza/zoxide"
+  - title: "atuin — Shell History"
+    url: "https://github.com/atuinsh/atuin"
+  - title: "eza — Modern ls"
+    url: "https://github.com/eza-community/eza"
+  - title: "btop — System Monitor"
+    url: "https://github.com/aristocratos/btop"
+  - title: "Amazon Q Developer CLI"
+    url: "https://docs.aws.amazon.com/amazonq/latest/qdeveloper-ug/command-line.html"
+  - title: "Cline — Agentic VSCode"
+    url: "https://github.com/cline/cline"

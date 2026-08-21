@@ -1,0 +1,85 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "valuation-modeling"
+display_name: "Real Estate Valuation Modeling"
+description: >
+  Builds automated valuation models (AVMs) for real estate. Combines 
+  public property data, market trends, comparable sales, and machine 
+  learning to estimate property values with high accuracy.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "valuation-model-engineer"
+phase: "build"
+applicable_startups:
+  - proptech
+priority: "critical"
+difficulty: "expert"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Data Sources"
+    tasks:
+      - "Integrate public property records, tax assessments, and MLS data."
+      - "Collect market trend data, interest rates, and local economic indicators."
+  - step: "Model Development"
+    tasks:
+      - "Build hedonic pricing model or machine learning AVM."
+      - "Engineer features from property attributes and location data."
+  - step: "Validation"
+    tasks:
+      - "Backtest model against actual sale prices."
+      - "Measure prediction error (MAPE, RMSE) and iterate."
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Valuation Modeling process"
+  - "How do I handle valuation modeling?"
+  - "Implement valuation modeling"
+  - "Builds automated valuation models (AVMs) for real estate"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the valuation modeling process"
+  optional:
+    - name: "data_source"
+      type: "string"
+      description: "Source of data to analyze"
+      default: "Internal data"
+
+outputs:
+  files:
+    - path: "outputs/valuation-modeling.md"
+      description: "Results of the valuation modeling process"
+  artifacts:
+    - "Completed valuation modeling deliverable"
+# ── QUALITY GATES ────────────────────────────────────────────
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start — retrofitting is expensive."
+anti_patterns:
+  - "Training on stale data — real estate markets shift faster than annual updates."
+  - "Ignoring location granularity — zip code level is too coarse for accurate valuation."
+  - "Relying entirely on public records without incorporating MLS listing data."
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

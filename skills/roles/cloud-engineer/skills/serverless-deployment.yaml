@@ -1,0 +1,120 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "serverless-deployment"
+display_name: "Serverless Computing & Edge Deployment"
+description: >
+  Architects cost-effective, infinitely scalable applications using AWS Lambda, 
+  API Gateway, and DynamoDB. Eliminates the need to patch or manage operating 
+  systems, paying only for the exact compute milliseconds consumed. Covers key patterns to avoid common pitfalls like exposing cloud storage buckets (s3, gcs, blob) to the public, and provides actionable best practices for production-ready results.
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "cloud-engineer"
+phase: "growth"
+applicable_startups:
+  - all
+priority: "high"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Deploy this as a Lambda function."
+  - "Move the cron jobs to serverless."
+  - "The cold starts are too slow."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Generate Serverless Framework config."
+  - "Draft AWS SAM template."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "runtime"
+      type: "string"
+      description: "Node.js, Python, Go."
+    - name: "trigger_event"
+      type: "string"
+      description: "HTTP API, S3 Upload, EventBridge Cron."
+  optional:
+    - name: "memory_size"
+      type: "string"
+      description: "RAM allocation for the Lambda."
+      default: "1024 MB"
+
+outputs:
+  files:
+    - path: "serverless.yml"
+      description: "The deployment configuration."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "API latency remains under 200ms despite sudden traffic spikes from 0 to 10,000 concurrent requests."
+manual:
+  - "Infrastructure costs scale down to exactly $0.00 when the application has zero traffic overnight."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "Recursive Loops: Be incredibly careful when triggering a Lambda from an S3 bucket. If the Lambda writes a *new* file back to that same bucket, it will trigger itself infinitely, causing a massive AWS bill in minutes."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Serverless Framework"
+      install: "npm i -g serverless"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Cold Start Mitigation"
+    tasks:
+      - "Keep the deployment package tiny (under 50MB). Do not bundle heavy SDKs. If cold starts are unacceptable, use AWS Provisioned Concurrency to keep environments warm."
+  - step: "Statelessness"
+    tasks:
+      - "Never assume the container environment persists between requests. Do not store variables in global memory. Always read/write state to a fast external DB (DynamoDB/Redis)."
+  - step: "Granular IAM Roles"
+    tasks:
+      - "Give each Lambda function its own unique IAM execution role. The 'Image Resizer' Lambda should only have write access to the 'Images' S3 bucket, nothing else."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Exposing cloud storage buckets (S3, GCS, Blob) to the public internet -- sensitive data leaks are the #1 cloud security incident."
+  - "Hardcoding cloud credentials (access keys, secrets) in source code or config files -- use IAM roles or secrets manager."
+  - "Using a single massive instance type instead of auto-scaling groups -- leads to unnecessary cost and single point of failure."
+  - "Opening all ports (0.0.0.0) for 'convenience' during development -- a single missed port close can become a backdoor."
+  - "Forgetting to set resource limits on serverless functions -- unbounded memory usage can cause 10x cost spikes."
+  - "Tuning memory: In AWS Lambda, increasing memory also proportionally increases CPU power. Sometimes a 1024MB Lambda is cheaper than a 128MB Lambda because it executes the task 10x faster."
+
+  - "Enable deletion protection and versioning on all cloud storage buckets — accidental deletion of production data is unrecoverable."
+  - "Use Infrastructure as Code (Terraform, Pulumi, CDK) for all cloud resources — manual console changes are invisible and unrepeatable."
+  - "Set up budget alerts at 50%, 80%, and 100% of projected cloud spend to prevent bill shock."
+  - "Implement auto-scaling with proper min/max limits to handle traffic spikes without runaway costs."
+  - "Tag every cloud resource with environment, owner, and cost-center — untagged resources are candidate for cleanup."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Not defining clear success criteria before starting a task -- leads to ambiguous outcomes, endless revisions, and wasted effort."
+
+best_practices:
+  - "Document all configuration decisions in an Architecture Decision Record (ADR) so future team members understand why choices were made."
+  - "Implement comprehensive error handling with structured logging at every integration boundary to simplify debugging."
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Serverless Best Practices"
+    url: "https://www.serverless.com/framework/docs/providers/aws/guide/best-practices"

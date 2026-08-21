@@ -1,0 +1,120 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "growth-loop-architecture"
+display_name: "Product-Led Growth (PLG) & Viral Loops"
+description: >
+  Transitions the startup from 'buying' customers with ads to 'acquiring' 
+  customers through the product itself. Engineers viral referral loops, 
+  freemium upgrade paths, and frictionless onboarding to drive compound growth. Covers key patterns to avoid common pitfalls like launching a campaign without utm parameters -- you won't kno, and provides actionable best practices for production-ready results.
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "head-of-growth"
+phase: "growth"
+applicable_startups:
+  - PLG, SaaS, Consumer
+priority: "critical"
+difficulty: "expert"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Our Customer Acquisition Cost is too high."
+  - "How do we get viral growth?"
+  - "Optimize the free-to-paid conversion."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Generate viral loop wireframe."
+  - "Draft freemium paywall triggers."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "core_product_action"
+      type: "string"
+      description: "e.g., Sending an invoice, sharing a document."
+    - name: "current_cac"
+      type: "string"
+      description: "How much are we paying for a user now?"
+  optional:
+    - name: "monetization_model"
+      type: "string"
+      description: "Freemium vs Free Trial."
+      default: "Freemium"
+
+outputs:
+  files:
+    - path: "product/growth/viral_loop_spec.md"
+      description: "The mathematical breakdown of the K-Factor."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "N/A"
+manual:
+  - "The product achieves a K-Factor > 0.2 (every 5 users naturally invite 1 new user), permanently lowering blended CAC by 30%."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "The Dark Pattern Trap: Never trick users into inviting their friends by disguising the 'Invite All Contacts' button as a 'Next' button during onboarding. Apple and Google will ban your app, and users will hate your brand."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Amplitude / Mixpanel"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "The Natural Referral"
+    tasks:
+      - "Growth hacks don't work. The loop must be natural to the product. If you use Calendly, you send a link to someone to book a meeting. The receiver experiences the product and signs up. Engineer features that inherently involve a second user."
+  - step: "Reverse-Engineering the Paywall"
+    tasks:
+      - "Do not put the paywall at the beginning (before they know the value). Let them do all the hard work (e.g., designing the perfect resume), and put the paywall at the very end when they click 'Download PDF'. The sunk-cost fallacy drives conversion."
+  - step: "Friction Eradication"
+    tasks:
+      - "For every required input field you remove from the signup flow, conversion goes up 10%. Implement 'Sign in with Google' and defer asking for their 'Company Name' until after they have experienced the 'Aha!' moment."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Launching a campaign without UTM parameters -- you won't know which channel drove the conversions."
+  - "A/B testing with a sample size too small to reach statistical significance -- making decisions on noise rather than signal."
+  - "Optimizing for vanity metrics (impressions, page views) instead of actionable KPIs (conversion rate, revenue, retention)."
+  - "Running ads without conversion tracking pixel installed -- you're paying for clicks but can't measure ROI."
+  - "Ignoring mobile page speed for SEO -- Google's mobile-first indexing means a slow mobile site kills rankings."
+  - "Implement a 'Growth Council'. Once a week, Product, Marketing, and Engineering must sit in a room and review one single metric (e.g., Activation Rate). If a feature doesn't move that metric, it doesn't get built."
+
+  - "Set up end-to-end conversion tracking before launching any campaign — measure from impression to purchase."
+  - "Run A/B tests until they reach 95% statistical significance before making decisions — premature conclusions are worse than no test."
+  - "Build audience segments based on behavior, not just demographics — what users do is more predictive than who they are."
+  - "Test email deliverability (SPF, DKIM, DMARC) before sending any campaign — authentication failures land in spam folders."
+  - "Create a content calendar 30 days ahead and batch-create content — consistency beats intensity in content marketing."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Not defining clear success criteria before starting a task -- leads to ambiguous outcomes, endless revisions, and wasted effort."
+
+best_practices:
+  - "Document all configuration decisions in an Architecture Decision Record (ADR) so future team members understand why choices were made."
+  - "Implement comprehensive error handling with structured logging at every integration boundary to simplify debugging."
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Reforge: Advanced Growth Strategy"
+    url: "https://www.reforge.com/advanced-growth-strategy"

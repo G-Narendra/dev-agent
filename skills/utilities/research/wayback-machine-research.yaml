@@ -1,0 +1,121 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "wayback-machine-research"
+display_name: "Wayback Machine Historical Competitor Analysis"
+description: >
+  Uses the Wayback Machine (Internet Archive) to analyze how competitors' 
+  websites, pricing, and positioning have evolved over time. Reveals strategy 
+  pivots, pricing changes, feature additions, and positioning shifts that 
+  aren't visible from the current homepage. This is competitive intelligence 
+  that tells you where the market is heading.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "utility"
+phase: "ideation"
+applicable_startups:
+  - all
+priority: "high"
+difficulty: "intermediate"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "How did competitor X's pricing change over time?"
+  - "What did X look like when they launched?"
+  - "Analyze competitor history via Wayback Machine."
+  - "See how this product evolved."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Query Wayback Machine CDX API."
+  - "Compare historical snapshots of competitor pages."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "competitor_urls"
+      type: "string"
+      description: "Comma-separated list of competitor domains (e.g., 'hubspot.com, salesforce.com')."
+    - name: "analysis_focus"
+      type: "string"
+      description: "'pricing' (pricing history), 'positioning' (landing page changes), 'features' (product page evolution), 'all'."
+      default: "all"
+
+outputs:
+  files:
+    - path: "research/wayback-history-{competitor}.md"
+      description: "A timeline analysis of the competitor's strategic evolution."
+  artifacts:
+    - "Timeline of pricing changes with specific dollar amounts and tier changes."
+    - "Positioning evolution: how their tagline and value prop changed over time."
+    - "Key insights: what triggered major shifts (hiring, funding rounds, market events)."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "N/A"
+  manual:
+    - "Discovered a competitor strategy pivot that validates the startup's approach."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "network"
+
+safety_notes:
+  - "Wayback Machine snapshots are not always complete. A 6-month gap doesn't mean the site was down — it may just not have been crawled."
+  - "Some pages are excluded via robots.txt. Respect this — if Archive.org respects it, so should you."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Wayback Machine Web UI"
+      install: "N/A (web.archive.org)"
+  alternatives:
+    - name: "Wayback Machine CDX API"
+      when: "Programmatic access to snapshot timestamps."
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Find the Earliest Snapshot"
+    tasks:
+      - "Go to: `web.archive.org/web/{competitor_url}`"
+      - "Click the earliest year in the timeline bar. This is likely their first website — it shows their original vision."
+      - "Document the original tagline, value proposition, and feature set."
+  - step: "Track Pricing Evolution"
+    tasks:
+      - "Bookmark their `/pricing` page snapshots at 6-month intervals."
+      - "Document: When did they introduce new tiers? When did they raise prices? When did they add 'Enterprise' pricing?"
+      - "Price increases often signal: (1) they found product-market fit, (2) they need revenue for investors."
+      - "Removing a free tier is the strongest signal that their growth strategy shifted from 'adoption' to 'monetization'."
+  - step: "Track Positioning Evolution"
+    tasks:
+      - "Compare the homepage tagline year over year."
+      - "Changes in positioning reveal market shifts: Did they pivot from 'small business' to 'enterprise'?"
+      - "Extract the exact wording of their value proposition at each stage."
+  - step: "Track Feature / Product Launches"
+    tasks:
+      - "Check the `/features` or `/product` pages over time."
+      - "Document when major features were added. Compare to their funding timeline."
+      - "A sudden explosion of features after a funding round tells you how they spent the money."
+  - step: "Cross-Reference with Other Events"
+    tasks:
+      - "Correlate website changes with: Crunchbase funding announcements, leadership changes on LinkedIn, press releases."
+      - "Example: 'They added Enterprise pricing 3 months after their Series B → they're under pressure to show revenue growth.'"
+  - step: "Compile Strategic Timeline"
+    tasks:
+      - "Create a rich timeline document with: Date | Change | Strategic Signal | Our Response"
+      - "Focus on signals that inform the startup's differentiation."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Looking at only one page. Always check the pricing page, features page, about page, and blog over time."
+  - "Assuming a pivot means failure. Many successful startups pivoted multiple times before finding PMF."
+
+best_practices:
+  - "Combine Wayback Machine analysis with Crunchbase funding history. A pricing change right after a funding round tells a different story than one during a quiet period."
+  - "Check the blog over time. The topics they wrote about reveal their strategic priorities at each stage."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Wayback Machine / Internet Archive"
+    url: "https://web.archive.org/"
+  - title: "Wayback Machine CDX API Documentation"
+    url: "https://github.com/internetarchive/wayback/tree/master/wayback-cdx-server"

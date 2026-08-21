@@ -1,0 +1,109 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "api-integration-patterns"
+display_name: "API Integration & Data Transformation"
+description: >
+  Designs API integration patterns for connecting the startup's product to
+  enterprise systems. Covers data mapping, transformation, error handling,
+  and synchronization strategies.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "solutions-architect"
+phase: "growth"
+applicable_startups:
+  - all
+priority: "mvp"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Design API integration with their legacy system."
+  - "Map our data model to their schema."
+  - "Set up data synchronization between systems."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Design data transformation pipeline."
+  - "Map API integration patterns."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "source_system"
+      type: "string"
+      description: "The client's existing system and data format."
+    - name: "target_system"
+      type: "string"
+      description: "Your product's system and expected data format."
+  optional:
+    - name: "sync_frequency"
+      type: "string"
+      description: "Real-time, batch hourly, or daily."
+      default: "Near real-time (event-driven)"
+
+outputs:
+  files:
+    - path: "sales/integrations/{prospect}-integration-design.md"
+      description: "API integration design document"
+  artifacts:
+    - "A working integration pipeline with error handling and monitoring"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Integration Pattern Selection"
+    tasks:
+      - "API-to-API: direct REST/gRPC calls between systems — simple but tight coupling."
+      - "Event-driven: publish events to a message bus (Kafka, SQS) — decoupled and scalable."
+      - "File-based: exchange CSV/JSON/XML files via SFTP or S3 — good for batch processing."
+      - "Database-level: direct DB access or CDC (Change Data Capture) — useful for legacy systems."
+  - step: "Data Transformation Design"
+    tasks:
+      - "Map source data model to target data model — field-by-field mapping."
+      - "Define transformation rules: field renames, type conversions, default values, conditional logic."
+      - "Build a middleware transformation layer — never put custom mapping in your core product."
+      - "Handle data validation: what happens when data doesn't match the expected schema?"
+  - step: "Error Handling & Reliability"
+    tasks:
+      - "Implement dead letter queues for failed messages — inspect and retry or discard."
+      - "Design retry logic with exponential backoff for transient failures."
+      - "Implement idempotency — processing the same message twice should have the same effect."
+      - "Set up monitoring and alerting for integration failures."
+  - step: "Synchronization Strategy"
+    tasks:
+      - "Full sync: all data, periodically — simple but expensive at scale."
+      - "Incremental sync: only changed data — efficient but needs change tracking."
+      - "Bi-directional sync: both systems update each other — complex, need conflict resolution."
+      - "Define the source of truth for each data field to prevent update conflicts."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Exposing your internal API directly to enterprise clients — create a dedicated integration API."
+  - "Assuming the client's data is clean — always validate and sanitize incoming data."
+  - "No idempotency — processing the same event twice causes duplicate data."
+  - "Tight coupling to the client's schema — their schema WILL change."
+best_practices:
+  - "Design integrations to be 'forgiving' — accept what you can, reject what you can't, fail gracefully."
+  - "Use adapters for each integration — a new client means a new adapter, not changes to your core."
+  - "Log every API request and response — integration debugging is impossible without logs."
+  - "Set up a sandbox environment where clients can test integrations before going live."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

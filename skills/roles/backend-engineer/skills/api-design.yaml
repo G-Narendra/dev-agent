@@ -1,0 +1,105 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "api-design"
+display_name: "REST & GraphQL API Architecture"
+description: >
+  Designs intuitive, versioned, and scalable APIs that frontend teams and 
+  external partners actually enjoy using. Ensures strict adherence to HTTP 
+  semantics, payload validation, and idempotency.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "backend-engineer"
+phase: "build"
+applicable_startups:
+  - all
+priority: "critical"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Design the checkout API."
+  - "We need to version the mobile endpoints."
+  - "Draft the OpenAPI spec."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Generate OpenAPI / Swagger documentation."
+  - "Draft GraphQL schema."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "resource_model"
+      type: "string"
+      description: "The core entity (e.g., User, Order, Payment)."
+  optional:
+    - name: "api_style"
+      type: "string"
+      description: "REST, GraphQL, or gRPC."
+      default: "REST"
+
+outputs:
+  files:
+    - path: "engineering/api/openapi.yaml"
+      description: "The fully documented API contract."
+  artifacts:
+    - "A Postman collection."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "API schema validation passes against the OpenAPI linter without warnings."
+manual:
+  - "Frontend developers can integrate the API solely by reading the Swagger docs without asking backend developers how it works."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "Breaking Changes: Never change the type of an existing field (e.g., changing an ID from an Integer to a String) without bumping the major API version, as it will crash legacy mobile apps."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Swagger / OpenAPI 3.0"
+      install: "npm i -g swagger-cli"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Resource Naming"
+    tasks:
+      - "Use plural nouns for REST endpoints, not verbs. Use `POST /users`, not `POST /create_user`."
+  - step: "Idempotency Implementation"
+    tasks:
+      - "Require an `Idempotency-Key` header for any `POST` request that mutates state (like charging a credit card) so that network retries don't charge the user twice."
+  - step: "Pagination & Filtering"
+    tasks:
+      - "Never return an unbounded array. Always implement cursor-based or offset-based pagination on `GET` requests returning lists."
+  - step: "Error Standardization"
+    tasks:
+      - "Return standard RFC 7807 problem details for errors. Include a `code`, `message`, and `reference_url` for the developer to fix the issue."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Returning HTTP 200 OK with a JSON payload of `{ \"error\": \"User not found\" }`. Use the correct HTTP status code (404)."
+best_practices:
+  - "API First Design. Write the OpenAPI spec BEFORE writing the backend code. Hand the mock server to the frontend team immediately."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Stripe API Design Guidelines"
+    url: "https://stripe.com/docs/api"

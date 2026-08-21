@@ -1,0 +1,109 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "cohort-economics"
+display_name: "Cohort-Based Economics Analysis"
+description: >
+  Analyze unit economics not as a static average, but dynamically across monthly 
+  or quarterly cohorts. Identifies if newer cohorts of customers are behaving 
+  better (due to product improvements) or worse (due to exhausting the early adopter channel).
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "unit-economics-analyst"
+phase: "growth"
+applicable_startups:
+  - all
+priority: "growth"
+difficulty: "expert"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run a cohort analysis on our economics."
+  - "Are our newer users more profitable?"
+  - "Calculate LTV by signup month."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Create a cohort triangle matrix in a spreadsheet artifact."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "customer_data"
+      type: "file"
+      description: "CSV containing user_id, signup_date, total_revenue, churn_date."
+  optional:
+    - name: "cohort_size"
+      type: "string"
+      description: "Group by 'month' or 'quarter'."
+      default: "month"
+
+outputs:
+  files:
+    - path: "finance/cohort-economics.csv"
+      description: "The cohort matrix showing retention and LTV progression."
+  artifacts:
+    - "A heatmap visualizing month-over-month retention degradation."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "Generates a standard 'triangle' cohort retention matrix."
+  manual:
+    - "Leadership can clearly see the 'smile' curve if expansion revenue outpaces churn."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+
+safety_notes:
+  - "Ensure PII is stripped from the customer data CSV before running analysis."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Python (Pandas)"
+      install: "pip install pandas seaborn"
+  alternatives:
+    - name: "ChartMogul / Baremetrics"
+      when: "Stripe is the single source of truth and you prefer a managed SaaS solution."
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Data Preparation"
+    tasks:
+      - "Group users by their signup month (the 'cohort')."
+      - "Calculate the size of each cohort (N)."
+  - step: "Retention Tracking"
+    tasks:
+      - "For each cohort, calculate the percentage of users remaining at Month 1, Month 2, Month 3, etc."
+  - step: "Revenue Tracking (Net Dollar Retention)"
+    tasks:
+      - "For each cohort, track the total revenue generated in Month 1, Month 2, etc., divided by the original cohort size."
+      - "Identify if Net Dollar Retention (NDR) exceeds 100% (meaning upgrades outpace cancellations)."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Looking only at blended (average) churn. If you have a leaky bucket but keep pouring in more new users, the blended churn rate looks artificially low until growth slows down."
+  - "Comparing the LTV of a 3-year-old cohort to a 3-month-old cohort without normalizing for time. You must compare Month 3 of Cohort A against Month 3 of Cohort B."
+
+best_practices:
+  - "Look for 'Net Negative Churn' in the revenue cohorts. The holy grail is when the revenue from Month 12 is >100% of the revenue from Month 1, even after some users have canceled, because the remaining users upgraded to higher tiers."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Lenny's Newsletter: What is good retention?"
+    url: "https://www.lennysnewsletter.com/p/what-is-good-retention-issue-29"

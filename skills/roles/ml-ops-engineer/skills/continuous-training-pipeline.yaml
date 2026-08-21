@@ -1,0 +1,109 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "continuous-training-pipeline"
+display_name: "Continuous Training (CT) Pipeline"
+description: >
+  Builds the automated CI/CD equivalent for Machine Learning. When data drift 
+  is detected, this pipeline automatically fetches new data, retrains the model, 
+  evaluates it against the current production model, and promotes it if it wins.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "ml-ops-engineer"
+phase: "growth"
+applicable_startups:
+  - ai-startups
+priority: "medium"
+difficulty: "expert"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Automate the model retraining."
+  - "We are spending too much time retraining manually."
+  - "Build the CT pipeline."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Trigger Airflow DAG."
+  - "Execute Kubeflow pipeline."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "training_script"
+      type: "file"
+      description: "The Python script to train the model."
+  optional:
+    - name: "orchestrator"
+      type: "string"
+      description: "Airflow, Kubeflow, GitHub Actions."
+      default: "GitHub Actions"
+
+outputs:
+  files:
+    - path: "mlops/pipelines/retraining-dag.py"
+      description: "The orchestration code."
+  artifacts:
+    - "A newly minted, superior model artifact."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "The new model is only pushed to the Model Registry if its F1-Score on the holdout test set is > 2% higher than the currently deployed model."
+manual:
+  - "Data scientists no longer run Jupyter notebooks locally to update the production model."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+  - "network"
+
+safety_notes:
+  - "Catastrophic Forgetting: Ensure the pipeline retains a portion of historical data during retraining. If it only trains on the last 30 days, it might forget how to handle seasonality (e.g., Black Friday)."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Kubeflow / MLflow"
+      install: "N/A"
+  alternatives:
+    - name: "AWS SageMaker Pipelines"
+      when: "Fully locked into the AWS ecosystem."
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Data Extraction Step"
+    tasks:
+      - "Pipeline step 1: Query the Data Warehouse for the last 90 days of fresh data + ground truth labels."
+  - step: "Training & Hyperparameter Tuning"
+    tasks:
+      - "Pipeline step 2: Spin up a GPU instance, run the training script, and use a tool like Optuna for hyperparameter search."
+  - step: "Model Evaluation (The Gate)"
+    tasks:
+      - "Pipeline step 3: Score the new 'Candidate Model' against the 'Champion Model' (currently in production) using a static, golden test dataset."
+  - step: "Promotion"
+    tasks:
+      - "If the Candidate beats the Champion, tag it as 'Production' in MLflow and trigger the deployment webhooks."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Automatically deploying the newly retrained model to 100% of traffic. Always use Shadow Mode or Canary Deployment (10% of traffic) to ensure it doesn't crash the server."
+best_practices:
+  - "Store every single model artifact forever in cloud storage, linked to the exact Git commit of the code and the hash of the data it was trained on (Reproducibility)."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Google: MLOps Continuous Delivery and Automation Pipelines"
+    url: "https://cloud.google.com/architecture/mlops-continuous-delivery-and-automation-pipelines-in-machine-learning"

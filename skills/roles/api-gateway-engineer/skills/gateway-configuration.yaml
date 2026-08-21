@@ -1,0 +1,116 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "gateway-configuration"
+display_name: "API Gateway Reverse Proxy Configuration"
+description: >
+  Sets up the foundational reverse proxy configuration for an API Gateway. 
+  Handles SSL termination, CORS, request tracing, and payload size limits 
+  before traffic hits the internal microservices.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "api-gateway-engineer"
+phase: "planning"
+applicable_startups:
+  - all
+priority: "critical"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Setup the API gateway."
+  - "Configure NGINX as a reverse proxy."
+  - "Fix the CORS errors on the API."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Generate NGINX or Kong configuration file."
+  - "Test config syntax with `nginx -t`."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "backend_services"
+      type: "config"
+      description: "Mapping of URL paths to internal service IPs/DNS (e.g., /api/users -> http://user-service:3000)."
+  optional:
+    - name: "allowed_origins"
+      type: "string"
+      description: "Domains allowed for CORS."
+      default: "*"
+
+outputs:
+  files:
+    - path: "gateway/nginx.conf"
+      description: "The declarative gateway configuration."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "Gateway successfully proxies `/api/test` to the internal test service."
+    - "Preflight OPTIONS requests return correct CORS headers."
+  manual:
+    - "Internal service IPs are completely hidden from the public internet."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+  - "network"
+
+safety_notes:
+  - "Security: The API Gateway should be the ONLY service exposed to the public internet. All backend microservices must sit in a private subnet."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "NGINX"
+      install: "apt-get install nginx"
+  alternatives:
+    - name: "Kong or Caddy"
+      when: "Need dynamic configuration via API (Kong) or auto-HTTPS (Caddy)."
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Reverse Proxy Rules"
+    tasks:
+      - "Map incoming paths to upstream servers using `proxy_pass`."
+      - "Ensure the `Host` and `X-Real-IP` headers are passed down to the backend services."
+  - step: "CORS Configuration"
+    tasks:
+      - "Configure the gateway to intercept `OPTIONS` requests."
+      - "Return `Access-Control-Allow-Origin`, `Access-Control-Allow-Methods`, and `Access-Control-Allow-Headers`."
+  - step: "Payload and Timeout Limits"
+    tasks:
+      - "Set a strict `client_max_body_size` (e.g., 2MB) to prevent buffer overflow/DDoS via massive file uploads, unless it's a specific upload endpoint."
+      - "Configure `proxy_read_timeout` so the gateway doesn't hang indefinitely if a backend service dies."
+  - step: "Request Tracing"
+    tasks:
+      - "Generate a `X-Request-ID` at the gateway level and pass it to the backend. This is critical for tracing logs across microservices."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Using `Access-Control-Allow-Origin: *` in production when credentials (cookies) are involved. It is a massive security risk."
+  - "Allowing the gateway to expose backend server errors (stack traces) to the client. Intercept 500s and return a standard JSON error."
+
+best_practices:
+  - "Terminate SSL at the gateway. Do not force internal microservices to manage SSL certificates. The internal network traffic can be unencrypted if the VPC is secure."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "NGINX Reverse Proxy Guide"
+    url: "https://docs.nginx.com/nginx/admin-guide/web-server/reverse-proxy/"

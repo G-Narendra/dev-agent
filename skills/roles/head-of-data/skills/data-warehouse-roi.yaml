@@ -1,0 +1,105 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "data-warehouse-roi"
+display_name: "Data Strategy & Infrastructure ROI"
+description: >
+  Treats Data as a Product. Ensures the startup is not spending $50k/month 
+  on Snowflake compute just to generate a dashboard nobody looks at. Aligns 
+  data engineering efforts directly with revenue-generating initiatives.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "head-of-data"
+phase: "growth"
+applicable_startups:
+  - all
+priority: "high"
+difficulty: "expert"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Our Snowflake bill is out of control."
+  - "The data team is a bottleneck."
+  - "Why do we have 500 unused dashboards?"
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Generate Snowflake cost-reduction script."
+  - "Draft Data Team SLA (Service Level Agreement)."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "current_data_spend"
+      type: "string"
+      description: "Monthly cost of Snowflake/BigQuery/Fivetran."
+    - name: "primary_stakeholder"
+      type: "string"
+      description: "Marketing, Sales, Product."
+  optional:
+    - name: "data_team_size"
+      type: "string"
+      description: "How many engineers/analysts?"
+      default: "3"
+
+outputs:
+  files:
+    - path: "data/strategy/infrastructure_roi_audit.md"
+      description: "The plan to cut costs and increase business impact."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "N/A"
+manual:
+  - "Data infrastructure costs are reduced by 30% while the delivery speed of critical business reports increases by 2x."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "The Compliance Black Hole: Never implement aggressive cost-cutting by deleting raw historical data that the startup is legally required to keep for 7 years (e.g., Financial transactions, HIPAA logs). Move it to AWS Glacier (Cold Storage), but never delete it."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Snowflake / dbt / Monte Carlo"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "The Dashboard Purge"
+    tasks:
+      - "Run an audit on Looker/Metabase. If a dashboard hasn't been viewed in 30 days, archive it. If an ETL pipeline is running every hour to feed a dashboard nobody looks at, pause the pipeline and save the compute costs."
+  - step: "Warehouse Cost Optimization"
+    tasks:
+      - "Stop running heavy dbt models at 10 AM on an X-Large warehouse while analysts are trying to run ad-hoc queries. Schedule heavy batch transformations for 2 AM on a dedicated, auto-suspending cluster."
+  - step: "Data as a Product (SLA)"
+    tasks:
+      - "The Data team must operate like a Software team. If the 'Daily Revenue' table is broken at 9 AM, that is a Sev-1 incident. Establish an SLA: 'Core tables will be updated by 8 AM with 99.9% uptime.'"
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Acting as a 'SQL Vending Machine'. If the Head of Data allows analysts to just write SQL queries all day for every random request from Sales, the team will drown. Force stakeholders to use self-serve BI tools for basic questions."
+best_practices:
+  - "Implement FinOps alerting. If a junior analyst writes a Cartesian Join (`CROSS JOIN`) that accidentally spins up 100 nodes and starts burning $100/minute, Snowflake MUST auto-kill the query and alert Slack instantly."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "dbt Labs: Data Team Structure"
+    url: "https://www.getdbt.com/data-teams/"

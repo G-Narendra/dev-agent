@@ -1,0 +1,79 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "clinical-trial-design"
+display_name: "Clinical Trial Protocol Design"
+description: >
+  Draft robust clinical trial protocols (RCTs) that prove the software's efficacy 
+  beyond the placebo effect to satisfy investors, payers, and regulators.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "clinical-operations"
+phase: "planning"
+applicable_startups: 
+  - healthtech
+  - deeptech
+priority: "critical"
+difficulty: "expert"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Endpoint Selection"
+    tasks:
+      - "Define exactly one Primary Endpoint (e.g., 'HbA1c reduction at 12 weeks'). Do not have 10 primary endpoints; it dilutes statistical power and looks like p-hacking."
+  - step: "Control Arm Justification"
+    tasks:
+      - "Ensure the control arm is receiving the Standard of Care (SoC), not just a 'waitlist' control, to prove the software is actually better than existing treatments."
+  - step: "IRB Approval"
+    tasks:
+      - "Submit the protocol, informed consent forms, and patient recruitment ads to an independent IRB to ensure patient safety and ethical compliance."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Running an 'internal study' with 5 employees and claiming your sleep tracking app is 'clinically proven' to cure insomnia."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Clinical Trial Design process"
+  - "How do I handle clinical trial design?"
+  - "Implement clinical trial design"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the clinical trial design process"
+  optional:
+    - name: "N/A"
+      type: "string"
+      description: "No optional inputs needed."
+
+outputs:
+  files:
+    - path: "outputs/clinical-trial-design.md"
+      description: "Results of the clinical trial design process"
+  artifacts:
+    - "Completed clinical trial design deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

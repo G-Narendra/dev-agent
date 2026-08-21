@@ -1,0 +1,79 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "chunking-strategies"
+display_name: "Semantic Chunking & Parsing"
+description: >
+  Design advanced text chunking algorithms that maintain context boundaries (paragraphs, 
+  Markdown headers, code blocks) rather than arbitrarily splitting by character count.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "rag-engineer"
+phase: "build"
+applicable_startups: 
+  - ai
+priority: "high"
+difficulty: "advanced"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Semantic Boundaries"
+    tasks:
+      - "Never chunk in the middle of a sentence. Use an NLP sentence tokenizer or Markdown header parser to ensure chunks contain complete, atomic thoughts."
+  - step: "Context Overlap"
+    tasks:
+      - "Implement a 10-15% token overlap between consecutive chunks to ensure pronouns and references at the edges are not lost."
+  - step: "Parent-Child Retrieval"
+    tasks:
+      - "Store small chunks for highly accurate similarity search, but return the larger Parent Document to the LLM to provide maximum context."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Splitting a Python script purely by a 500-character limit, resulting in chunks that contain half a function definition, making the RAG context completely useless."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Chunking Strategies process"
+  - "How do I handle chunking strategies?"
+  - "Implement chunking strategies"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the chunking strategies process"
+  optional:
+    - name: "code_repository"
+      type: "string"
+      description: "Path to the code repository"
+      default: "./"
+
+outputs:
+  files:
+    - path: "outputs/chunking-strategies.md"
+      description: "Results of the chunking strategies process"
+  artifacts:
+    - "Completed chunking strategies deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

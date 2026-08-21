@@ -1,0 +1,105 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "vector-search"
+display_name: "Vector Database & Semantic Search"
+description: >
+  Designs and implements vector search architecture for Retrieval-Augmented 
+  Generation (RAG) pipelines. Manages vector databases (Pinecone, Qdrant, Milvus), 
+  handles indexing, and optimizes similarity search algorithms (Cosine, Dot Product).
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "rag-engineer"
+phase: "build"
+applicable_startups:
+  - all
+priority: "critical"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "We need to search our internal documents."
+  - "Connect the RAG pipeline to Pinecone."
+  - "The semantic search results are irrelevant."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Generate vector DB connection script."
+  - "Draft hybrid search query (BM25 + Vector)."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "vector_db"
+      type: "string"
+      description: "Pinecone, Qdrant, Weaviate, pgvector."
+    - name: "embedding_model"
+      type: "string"
+      description: "OpenAI `text-embedding-3-small`, Cohere, etc."
+  optional:
+    - name: "metadata_schema"
+      type: "string"
+      description: "What tags to filter by (e.g., date, author)."
+      default: "None"
+
+outputs:
+  files:
+    - path: "ai/retrieval/vector_store.py"
+      description: "The database interface logic."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "Top-K retrieval accuracy (Recall@5) is consistently above 85% on the golden dataset."
+manual:
+  - "Querying for a highly specific technical term returns the exact documentation page in less than 200ms."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "Dimension Mismatch: You cannot change embedding models without completely wiping and rebuilding the vector database. If the DB expects 1536 dimensions and you send 1024, it will crash."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Pinecone / Qdrant"
+      install: "pip install pinecone-client"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Metadata Filtering"
+    tasks:
+      - "Always attach metadata (Document ID, Date, Author) to the vector payload. This allows for 'Pre-filtering' (e.g., 'Search for this concept, but ONLY in documents from 2023') which drastically improves accuracy."
+  - step: "Hybrid Search (Keyword + Semantic)"
+    tasks:
+      - "Vector search is bad at exact keyword matches (e.g., 'SKU-9942'). Implement Hybrid Search: combine Dense vector search (meaning) with Sparse BM25 search (exact keywords) and use Reciprocal Rank Fusion to combine the results."
+  - step: "Namespace Isolation"
+    tasks:
+      - "If building a multi-tenant B2B app, strictly isolate data. Use 'Namespaces' or pass a hard `tenant_id` metadata filter on every query so Company A can never accidentally retrieve Company B's vectors."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Retrieving the top 50 chunks and stuffing them all into the LLM context window. This causes 'Lost in the Middle' syndrome where the LLM ignores context. Retrieve 5-10 highly relevant chunks."
+best_practices:
+  - "Separate the Chunk from the Document. Store a small, dense summary vector in the DB, but when it matches, retrieve the massive full-page parent document to send to the LLM (Parent Document Retrieval)."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Pinecone: What is a Vector Database?"
+    url: "https://www.pinecone.io/learn/vector-database/"

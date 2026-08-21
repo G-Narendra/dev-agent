@@ -1,0 +1,109 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "escalation-management"
+display_name: "Escalation & Crisis Management"
+description: >
+  Manages escalations from enterprise customers during critical incidents.
+  Coordinates internal resources, communicates with stakeholders, and ensures
+  timely resolution while maintaining customer trust.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "technical-account-manager"
+phase: "growth"
+applicable_startups:
+  - all
+priority: "mvp"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "The client is escalating a critical issue."
+  - "Manage an enterprise escalation."
+  - "Coordinate incident response with the customer."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Manage escalation process."
+  - "Communicate incident status to customer."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "escalation_details"
+      type: "string"
+      description: "What happened, impact, and customer's stated urgency."
+    - name: "customer_info"
+      type: "string"
+      description: "Customer name, contract value, and relationship history."
+  optional:
+    - name: "involved_teams"
+      type: "string"
+      description: "Engineering, Support, Product teams involved."
+      default: "Support + Engineering"
+
+outputs:
+  files:
+    - path: "sales/escalations/{customer}-escalation-log.md"
+      description: "Escalation management log and resolution summary"
+  artifacts:
+    - "A successfully managed escalation with a satisfied customer and internal post-mortem"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Initial Triage"
+    tasks:
+      - "Acknowledge the escalation immediately — customers escalate because they feel unheard."
+      - "Assess severity: is this a P0 (complete outage), P1 (major feature broken), or P2 (important but not blocking)?"
+      - "Determine if the escalation is technical (bug/outage) or relationship (unmet expectations)."
+      - "Set up a dedicated Slack channel with the customer's team for real-time updates."
+  - step: "Internal Coordination"
+    tasks:
+      - "Assemble the response team: TAM (you), support engineer, engineering lead, product manager."
+      - "Hold a quick triage huddle: what's broken, who's working on it, what's the ETA?"
+      - "Remove blockers: expedite code reviews, bypass normal release processes for hotfixes."
+      - "Set internal update cadence: every 30 min for P0, every 2 hours for P1."
+  - step: "Customer Communication"
+    tasks:
+      - "Send structured updates every hour: what we know, what we're doing, when to expect next update."
+      - "Be transparent about the issue — customers trust honesty over vague reassurances."
+      - "If the fix will take longer than expected, communicate that proactively."
+      - "Use the customer's preferred communication channel (Slack, email, phone, Zoom)."
+  - step: "Resolution & Post-Mortem"
+    tasks:
+      - "Once resolved, verify with the customer that everything is working as expected."
+      - "Schedule a post-mortem call within 48 hours to review the incident."
+      - "Share the root cause analysis and preventive measures — customers want to know it won't happen again."
+      - "Document the escalation in your CRM for future reference and pattern detection."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Going silent — not communicating for hours while the customer is in crisis."
+  - "Over-promising on timelines — 'We'll fix it in 10 minutes' when it takes 2 hours."
+  - "Blaming internal teams to the customer — keep internal issues internal."
+  - "Losing sight of the relationship during technical troubleshooting — the customer needs empathy, not just fixes."
+best_practices:
+  - "An escalation handled well can actually strengthen the customer relationship."
+  - "Escalate internally before the customer has to escalate to you — proactively address brewing issues."
+  - "Track escalation patterns — if the same customer escalates frequently, there's a systemic issue to address."
+  - "After an escalation, the customer's trust is fragile — over-invest in relationship building for the next 30 days."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

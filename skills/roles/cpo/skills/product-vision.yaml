@@ -1,0 +1,105 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "product-vision"
+display_name: "Product Vision & Roadmap Strategy"
+description: >
+  Defines the 12-to-36 month trajectory of the product. Bridges the gap 
+  between the CEO's macro business vision and the engineering team's daily 
+  sprint tasks. Decides what markets to enter and what features to kill.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "cpo"
+phase: "planning"
+applicable_startups:
+  - all
+priority: "critical"
+difficulty: "expert"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "What are we building next year?"
+  - "The sales team wants this custom feature."
+  - "Define the product roadmap."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Generate product roadmap."
+  - "Draft feature deprecation memo."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "business_objectives"
+      type: "string"
+      description: "Company goals (e.g., Move upmarket, decrease churn)."
+    - name: "customer_insights"
+      type: "string"
+      description: "Aggregated feedback from the user base."
+  optional:
+    - name: "competitor_moves"
+      type: "string"
+      description: "Recent feature launches by rivals."
+      default: "None"
+
+outputs:
+  files:
+    - path: "product/strategy/product-roadmap.md"
+      description: "The official product timeline (Now/Next/Later)."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "N/A"
+manual:
+  - "Product updates directly drive the primary business metric (e.g., a new enterprise feature directly results in closing 3 massive contracts)."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "The Sales Dictatorship: Never allow a single large prospect to hijack the entire product roadmap by promising to sign a contract 'if you just build this one custom feature'."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Productboard / Aha!"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Theme-Based Roadmapping"
+    tasks:
+      - "Do not organize the roadmap by specific features (e.g., 'Add PayPal integration'). Organize by Themes (e.g., 'Reduce checkout friction'). This gives engineering the flexibility to find the best solution."
+  - step: "The 'Now/Next/Later' Framework"
+    tasks:
+      - "Ditch timeline-based roadmaps (Gantt charts). Use Now/Next/Later. 'Now' is highly detailed. 'Next' is loosely scoped. 'Later' is pure exploration."
+  - step: "Killing Features"
+    tasks:
+      - "Audit the product analytics. Find the feature that is used by less than 2% of users but causes 20% of the bugs. Deprecate it and delete the code."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Feature Factory mode. Shipping 15 minor UI tweaks a month to look busy, while ignoring the massive architectural changes needed to actually win the market."
+best_practices:
+  - "The CPO's primary job is saying 'No'. You must ruthlessly reject 90% of good ideas to ensure the team has the bandwidth to execute the 10% of great ideas."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Marty Cagan: Inspired"
+    url: "https://svpg.com/inspired-how-to-create-tech-products-customers-love-2nd-edition/"

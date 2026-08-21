@@ -1,0 +1,117 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "performance-load-testing"
+display_name: "Performance & Load Testing"
+description: >
+  Simulate high traffic volumes to identify the breaking points of the backend 
+  infrastructure before a real-world traffic spike (e.g., a Black Friday sale 
+  or a viral marketing campaign) takes the system down.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "qa-engineer"
+phase: "growth"
+applicable_startups:
+  - e-commerce
+  - media
+priority: "high"
+difficulty: "expert"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Will the servers survive the launch?"
+  - "Run a load test."
+  - "Simulate 10,000 concurrent users."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "k6 run load-test.js"
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "target_endpoint"
+      type: "string"
+      description: "The API route being tested (e.g., `/api/checkout`)."
+    - name: "expected_traffic"
+      type: "string"
+      description: "Target Requests Per Second (RPS)."
+  optional:
+    - name: "test_type"
+      type: "string"
+      description: "Load Test (Expected traffic) vs Stress Test (Push to breaking point)."
+      default: "Load Test"
+
+outputs:
+  files:
+    - path: "qa/performance/k6-results.json"
+      description: "The raw metrics output from the test."
+  artifacts:
+    - "A report detailing the bottleneck (CPU, DB Connections, etc.)."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "P95 response time remains under 500ms at 1,000 requests per second."
+    - "Error rate (HTTP 500s) remains under 1%."
+  manual:
+    - "The engineering team identifies that the database connection pool is the bottleneck *before* the marketing launch."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+  - "network"
+
+safety_notes:
+  - "NEVER run a load test against the Production environment during peak business hours. You are effectively initiating a DDoS attack against your own company. Use Staging, or run in Production at 3:00 AM on a Sunday."
+  - "Ensure third-party vendors (Stripe, Twilio) are mocked or notified. If you send 10,000 fake SMS messages through Twilio during a test, you will be billed for them."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "k6 (Grafana)"
+      install: "brew install k6"
+  alternatives:
+    - name: "JMeter / Artillery"
+      when: "Managing legacy enterprise testing frameworks."
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Scripting the User Journey"
+    tasks:
+      - "Don't just hammer the homepage. Script realistic flows: User logs in -> Fetches cart -> Adds item -> Caches hit -> Database write."
+  - step: "The Ramp-Up Phase"
+    tasks:
+      - "Configure the test to 'Ramp Up'. Start with 10 Virtual Users (VUs), hold for 1 min, jump to 500 VUs, hold for 5 mins. This reveals exactly when autoscaling triggers (or fails to trigger)."
+  - step: "Monitoring the Infrastructure"
+    tasks:
+      - "A load test is useless if you aren't watching the backend metrics simultaneously. Have Datadog/AWS CloudWatch open. Is the CPU spiking? Is the DB memory maxed out? Are we dropping packets?"
+  - step: "The Spike/Stress Test"
+    tasks:
+      - "Once comfortable with the Load Test, run a 'Stress Test'. Double the traffic until the system crashes. You *must* know how it fails. Does it fail gracefully with 429s, or does the entire database corrupt?"
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Testing over a VPN or a weak local WiFi connection. If you run a 10,000 VU test from your MacBook, your local router will crash before the cloud server does. Run the load test generator *from* a high-bandwidth cloud VM (e.g., AWS EC2)."
+  - "Relying entirely on horizontal autoscaling. Autoscaling takes 3-5 minutes to spin up new servers. In a viral traffic spike, your system will be dead before the new servers boot. Pre-scale the infrastructure."
+
+best_practices:
+  - "Analyze the P95 and P99 latency, not the Average latency. The Average might be 50ms, but the P99 might be 30 seconds, meaning 1% of your users are experiencing complete failure."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "k6: Types of Load Testing"
+    url: "https://k6.io/docs/test-types/introduction/"

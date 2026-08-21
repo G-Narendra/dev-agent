@@ -1,0 +1,120 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "pricing-strategy"
+display_name: "SaaS Pricing & Packaging Strategy"
+description: >
+  Designs the monetization engine. Determines whether the startup should 
+  charge per-seat, usage-based, or flat-fee. Optimizes the pricing tiers 
+  to maximize revenue extraction without destroying user adoption. Covers key patterns to avoid common pitfalls like training on the full dataset without a holdout test set -- m, and provides actionable best practices for production-ready results.
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "business-model-strategist"
+phase: "growth"
+applicable_startups:
+  - SaaS, B2B, Consumer Subscriptions
+priority: "critical"
+difficulty: "expert"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "We need to raise our prices."
+  - "Should we switch to usage-based pricing?"
+  - "How do we structure our Enterprise tier?"
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Generate pricing tier matrix."
+  - "Draft price increase email to existing customers."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "current_pricing"
+      type: "string"
+      description: "e.g., $10/user/month."
+    - name: "unit_economics"
+      type: "string"
+      description: "How much does it cost us to serve 1 user?"
+  optional:
+    - name: "competitor_pricing"
+      type: "string"
+      description: "What does the market leader charge?"
+      default: "TBD"
+
+outputs:
+  files:
+    - path: "strategy/pricing_v2_model.md"
+      description: "The new packaging tiers and value metrics."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "N/A"
+manual:
+  - "The new pricing model increases Average Revenue Per User (ARPU) by 25% while maintaining a conversion rate within 5% of the historical baseline."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "The Bait and Switch: Never forcefully migrate legacy 'Lifetime Deal' or deeply discounted early-adopter customers to a massive new pricing tier with 30 days notice. It will trigger a PR disaster and massive churn. Grandfather them in."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Excel / Stripe Billing"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Identify the Value Metric"
+    tasks:
+      - "Do not blindly charge 'per seat'. If your software doesn't require collaboration (e.g., an SEO tool), users will just share 1 login. Find the true value metric (e.g., charge per 1000 API calls, or per GB of data)."
+  - step: "The 'Decoy' Tier"
+    tasks:
+      - "Use the decoy effect. If you want people to buy the $50/mo 'Pro' plan, create a $150/mo 'Enterprise' plan right next to it. Suddenly, the $50 plan looks like a bargain."
+  - step: "Feature Gating (Packaging)"
+    tasks:
+      - "Put Single Sign-On (SSO/SAML) and SOC-2 Audit reports exclusively in the Enterprise tier. Enterprise buyers physically require these features and are completely price-insensitive to getting them."
+      - "Add feature flags so the new code can be deployed dark and enabled via toggle."
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Training on the full dataset without a holdout test set -- model performance metrics will be unrealistically optimistic."
+  - "Serving an ML model without input validation -- adversarial inputs can cause silent incorrect predictions."
+  - "Not monitoring for data drift in production -- a model that was 95% accurate at launch can degrade to 60% as real-world data shifts."
+  - "Using default hyperparameters without any tuning -- can leave 10-30% performance on the table."
+  - "Deploying a model to production without a rollback plan -- a bad model can degrade user experience until manually caught."
+  - "Every SaaS company should raise their prices by 5-10% every single year just to keep up with inflation and the added value of new features."
+
+  - "Split data into train/validation/test sets before any exploration — data leakage from test set inflates accuracy metrics."
+  - "Log model inputs, outputs, and predictions in production for debugging regressions and data drift detection."
+  - "Implement canary deployments for model updates — serve the new model to 5% of traffic first and monitor for regressions."
+  - "Pin dependencies and model versions in production builds — an unexpected library update can silently change model behavior."
+  - "Add input validation that rejects out-of-distribution samples — the model was not trained on data outside its domain."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Not defining clear success criteria before starting a task -- leads to ambiguous outcomes, endless revisions, and wasted effort."
+
+best_practices:
+  - "Document all configuration decisions in an Architecture Decision Record (ADR) so future team members understand why choices were made."
+  - "Implement comprehensive error handling with structured logging at every integration boundary to simplify debugging."
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Patrick Campbell: Monetizing Innovation"
+    url: "https://www.profitwell.com/recur/all/pricing-strategy"

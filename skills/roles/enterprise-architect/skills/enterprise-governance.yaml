@@ -1,0 +1,109 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "enterprise-governance"
+display_name: "Enterprise Architecture Governance & Standards"
+description: >
+  Defines and enforces enterprise architecture standards, governance
+  processes, and compliance frameworks. Ensures technology decisions
+  align with business strategy and regulatory requirements.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "enterprise-architect"
+phase: "planning"
+applicable_startups:
+  - all
+priority: "high"
+difficulty: "expert"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Set up architecture governance."
+  - "Define technology standards."
+  - "Create enterprise architecture review process."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Design governance framework."
+  - "Create architecture review process."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "business_context"
+      type: "string"
+      description: "Industry, regulatory requirements, and strategic goals."
+    - name: "current_tech_landscape"
+      type: "string"
+      description: "Current technology stack and architecture maturity."
+  optional:
+    - name: "governance_level"
+      type: "string"
+      description: "Light (startup), Moderate (scale-up), or Strict (regulated enterprise)."
+      default: "Moderate"
+
+outputs:
+  files:
+    - path: "architecture/governance/governance-framework.md"
+      description: "Architecture governance framework and standards"
+  artifacts:
+    - "A governance framework that balances control with engineering velocity"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Governance Tier Definition"
+    tasks:
+      - "Tier 1 (Critical): changes affecting customer data, security, or revenue — requires Architecture Review Board (ARB) approval."
+      - "Tier 2 (Significant): new services, major dependencies, API changes — requires peer review."
+      - "Tier 3 (Standard): routine changes, bug fixes, minor improvements — follows standard dev process."
+      - "Define the review cadence: weekly ARB for Tier 1, ad-hoc for Tier 2, none for Tier 3."
+  - step: "Technology Standards"
+    tasks:
+      - "Define the approved technology stack: programming languages, frameworks, databases, cloud services."
+      - "Create a 'technology radar': Adopt (encouraged), Trial (allowed with oversight), Assess (researching), Hold (discouraged)."
+      - "Document standard patterns: API design, error handling, logging, monitoring, security."
+      - "Create 'golden paths' — the preferred way to implement common capabilities."
+  - step: "Architecture Review Process"
+    tasks:
+      - "Define what triggers an architecture review: new service, new data store, external API integration."
+      - "Require an Architecture Decision Record (ADR) for every Tier 1 and Tier 2 change."
+      - "Review for: consistency with enterprise standards, security implications, operational impact, cost."
+      - "Provide feedback within a defined SLA (e.g., 3 business days for Tier 1)."
+  - step: "Compliance & Audit"
+    tasks:
+      - "Map architecture decisions to compliance requirements (SOC2, HIPAA, PCI, GDPR)."
+      - "Create an audit trail: every significant architecture decision is documented and approved."
+      - "Conduct quarterly architecture reviews to identify drift from standards."
+      - "Maintain a 'technical debt register' for areas that need improvement."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Bureaucratic governance that slows every decision — startups need speed, not red tape."
+  - "Governance without enforcement — standards that no one follows are worse than no standards."
+  - "Excluding engineers from governance — they'll resist standards imposed from above."
+  - "One-size-fits-all governance — what works for billing may not work for a marketing campaign."
+best_practices:
+  - "The best governance is the kind teams WANT to follow because it makes their lives easier."
+  - "Govern nothing that you don't need to govern — every rule is a tax on velocity."
+  - "Review governance rules quarterly — remove those that no longer serve their purpose."
+  - "Build governance into tooling: CI/CD gates, lint rules, and automated checks are better than manual review."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

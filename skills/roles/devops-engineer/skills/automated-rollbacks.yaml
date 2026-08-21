@@ -1,0 +1,81 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "automated-rollbacks"
+display_name: "Automated Deployment Rollbacks"
+description: >
+  Design deployment pipelines with immediate, automated rollback triggers based on 
+  health checks and error rates to prevent prolonged production outages.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "devops-engineer"
+phase: "growth"
+applicable_startups: 
+  - enterprise
+  - saas
+priority: "high"
+difficulty: "advanced"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Health Check Monitors"
+    tasks:
+      - "Configure Datadog/NewRelic to monitor the exact HTTP 500 error rate for 10 minutes following every production deployment."
+  - step: "Automated Triggers"
+    tasks:
+      - "If the error rate exceeds 1% during the monitoring window, automatically trigger the CI/CD pipeline to redeploy the previous Git commit tag."
+  - step: "Database Backward Compatibility"
+    tasks:
+      - "Ensure all database migrations are non-destructive (e.g., adding a column, not deleting one) so that if code rolls back, it doesn't crash against a changed schema."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Writing destructive database migrations (e.g., dropping a table) in the same PR as the application code, making it physically impossible to rollback the code without dropping data."
+
+best_practices:
+  - "Infrastructure as Code should be version-controlled alongside app code."
+  - "Implement health checks and readiness probes for all services."
+  - "Use immutable infrastructure -- never SSH into running containers."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Automated Rollbacks process"
+  - "How do I handle automated rollbacks?"
+  - "Implement automated rollbacks"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the automated rollbacks process"
+  optional:
+    - name: "N/A"
+      type: "string"
+      description: "No optional inputs needed."
+
+outputs:
+  files:
+    - path: "outputs/automated-rollbacks.md"
+      description: "Results of the automated rollbacks process"
+  artifacts:
+    - "Completed automated rollbacks deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Docker Documentation"
+    url: "https://docs.docker.com"
+  - title: "Kubernetes Documentation"
+    url: "https://kubernetes.io/docs"
+  - title: "AWS Documentation"
+    url: "https://docs.aws.amazon.com"

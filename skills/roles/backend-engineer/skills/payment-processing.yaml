@@ -1,0 +1,81 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "payment-processing"
+display_name: "Payment Processing & Billing (Stripe)"
+description: >
+  Integrate robust payment gateways (e.g., Stripe) to handle one-time purchases, 
+  recurring subscriptions, dunning management, and webhook reconciliation.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "backend-engineer"
+phase: "build"
+applicable_startups: 
+  - ecommerce
+  - saas
+priority: "mvp"
+difficulty: "expert"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Idempotency"
+    tasks:
+      - "Pass an `Idempotency-Key` with every charge request to ensure a user is never double-charged during network retries."
+  - step: "Webhook Handling"
+    tasks:
+      - "Verify the Stripe signature payload on all incoming webhooks to prevent spoofed 'payment success' events."
+      - "Process webhooks asynchronously using a background queue (e.g., BullMQ) so the endpoint always returns a 200 OK immediately."
+  - step: "Dunning & State Management"
+    tasks:
+      - "Update the local database user state strictly based on `invoice.paid` and `customer.subscription.deleted` webhook events, not frontend API calls."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Relying on the frontend client to tell the backend 'The payment was successful, please upgrade the user', allowing a malicious user to simply spoof the API call and get free access."
+
+best_practices:
+  - "Design APIs with idempotency in mind -- same request, same result."
+  - "Always validate inputs at the API boundary before processing."
+  - "Use database transactions for operations that modify multiple records."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Payment Processing process"
+  - "How do I handle payment processing?"
+  - "Implement payment processing"
+  - "Integrate robust payment gateways (e"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the payment processing process"
+  optional:
+    - name: "N/A"
+      type: "string"
+      description: "No optional inputs needed."
+
+outputs:
+  files:
+    - path: "outputs/payment-processing.md"
+      description: "Results of the payment processing process"
+  artifacts:
+    - "Completed payment processing deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "PostgreSQL Documentation"
+    url: "https://postgresql.org/docs"
+  - title: "Node.js Documentation"
+    url: "https://nodejs.org/en/docs/"

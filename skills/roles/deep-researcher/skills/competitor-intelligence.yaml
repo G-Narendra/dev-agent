@@ -1,0 +1,111 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "competitor-intelligence"
+display_name: "Competitor Intelligence & Teardown"
+description: >
+  Conducts deep competitive intelligence analysis to uncover competitor 
+  strategies, product roadmaps, pricing models, customer sentiment, and 
+  market positioning. Goes beyond surface-level feature comparisons to 
+  reveal strategic weaknesses and opportunities.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "deep-researcher"
+phase: "ideation"
+applicable_startups:
+  - all
+priority: "critical"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Analyze our competitors deeply."
+  - "What are our competitors doing?"
+  - "Competitive teardown of this space."
+  - "Uncover competitor weaknesses."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Run competitor teardown."
+  - "Analyze competitor product roadmap."
+  - "Map competitive landscape."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "competitors"
+      type: "string"
+      description: "List of competitor names or market segment to analyze."
+    - name: "analysis_depth"
+      type: "string"
+      description: "Light (public info), Medium (+ customer reviews), Deep (+ hiring, patents, financials)."
+  optional:
+    - name: "your_product"
+      type: "string"
+      description: "Your product description for differential analysis."
+
+outputs:
+  files:
+    - path: "research/competitive/{segment}-competitive-analysis.md"
+      description: "Comprehensive competitive intelligence report"
+  artifacts:
+    - "A strategic competitive analysis with actionable recommendations"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Public Surface Analysis"
+    tasks:
+      - "Audit competitor websites: messaging, positioning, pricing pages, feature listings."
+      - "Read their documentation and developer guides to understand product depth."
+      - "Analyze their blog and content strategy for focus areas."
+      - "Track their changelog and product announcements for roadmap signals."
+  - step: "Customer Sentiment Mining"
+    tasks:
+      - "Scrape G2, Capterra, Trustpilot reviews for pain points and praise patterns."
+      - "Mine Reddit, Hacker News, and Twitter for organic competitor mentions."
+      - "Identify common complaints that represent your opportunity."
+      - "Find power users who are frustrated with limitations."
+  - step: "Signal Extraction from Indirect Sources"
+    tasks:
+      - "Track competitor hiring: roles being filled reveal product direction."
+      - "Monitor patent filings for technology investments."
+      - "Analyze funding rounds and investor announcements for growth priorities."
+      - "Follow competitor founders and execs on Twitter for strategic hints."
+  - step: "Strategic Synthesis"
+    tasks:
+      - "Build a positioning map: competitors plotted by price vs. features."
+      - "Identify gaps: what no competitor is doing well (your wedge)."
+      - "Create a 'competitor blindspots' section — areas they're ignoring."
+      - "Provide specific recommendations: where to compete, where to differentiate."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Just listing features — feature comparison tables are table stakes."
+  - "Assuming competitors are static — they ship too, track changes over time."
+  - "Obsessing over direct competitors while ignoring indirect substitutes."
+  - "Letting competitor analysis dictate your roadmap entirely."
+best_practices:
+  - "The best opportunities are where competitors are getting complaints, not praise."
+  - "Track competitors monthly, not once at launch."
+  - "Look at adjacent markets — competitors from other verticals entering yours."
+  - "Include non-obvious competitors: internal solutions, no-code workarounds."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Competitive Teardown Utility"
+    url: "path:./utilities/research/competitive-teardown.yaml"
+  - title: "How to Run a Competitive Teardown"
+    url: "https://www.growthhackers.com/articles/how-to-run-a-competitive-teardown"

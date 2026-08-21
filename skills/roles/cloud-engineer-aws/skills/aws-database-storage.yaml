@@ -1,0 +1,110 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "aws-database-storage"
+display_name: "AWS Database & Storage Management"
+description: >
+  Selects, configures, and manages AWS database and storage services. Covers
+  RDS, DynamoDB, ElastiCache, S3, and EFS — choosing the right storage for
+  each workload and optimizing for performance, cost, and durability.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "cloud-engineer-aws"
+phase: "build"
+applicable_startups:
+  - all
+priority: "mvp"
+difficulty: "expert"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Set up our database on RDS."
+  - "Choose between DynamoDB and RDS."
+  - "Configure S3 buckets for file storage."
+  - "Set up ElastiCache for caching."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Design database architecture."
+  - "Configure S3 storage strategy."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "data_workload"
+      type: "string"
+      description: "Relational, document, cache, file storage, or time-series."
+    - name: "data_volume"
+      type: "string"
+      description: "Expected data size and growth rate."
+  optional:
+    - name: "compliance"
+      type: "string"
+      description: "GDPR, HIPAA, SOC2 requirements."
+      default: "Standard"
+
+outputs:
+  files:
+    - path: "infrastructure/aws/database-storage-architecture.md"
+      description: "Database and storage architecture design"
+  artifacts:
+    - "A configured database cluster with backup and disaster recovery"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Database Selection"
+    tasks:
+      - "RDS (Aurora): relational data, complex queries, joins, ACID compliance — default for most startups."
+      - "DynamoDB: key-value, high throughput, auto-scaling, single-digit millisecond latency at any scale."
+      - "ElastiCache (Redis/Memcached): caching, session storage, real-time leaderboards, rate limiting."
+      - "DocumentDB: MongoDB-compatible, document storage for content management, catalogs."
+  - step: "RDS Configuration"
+    tasks:
+      - "Use Multi-AZ for high availability (automatic failover to standby in another AZ)."
+      - "Enable automated backups (7-35 day retention) with point-in-time recovery."
+      - "Set up read replicas for read-heavy workloads (up to 15 replicas)."
+      - "Use Provisioned IOPS (io2) for consistent performance, gp3 for cost-effective general use."
+  - step: "S3 Storage Strategy"
+    tasks:
+      - "Use S3 Standard for frequently accessed data, S3 Intelligent-Tiering for unknown patterns."
+      - "Enable S3 Versioning for data protection against accidental deletion."
+      - "Set lifecycle policies: transition to Glacier after 30 days, delete after 365 days."
+      - "Block all public access by default — use pre-signed URLs for temporary access."
+  - step: "Backup & Disaster Recovery"
+    tasks:
+      - "Automate daily database snapshots with 30-day retention."
+      - "Cross-region replication for S3 buckets containing critical data."
+      - "Test disaster recovery procedures quarterly — restore from backup and verify."
+      - "Document RTO (Recovery Time Objective) and RPO (Recovery Point Objective)."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Using RDS when DynamoDB is more appropriate (and vice versa)."
+  - "No backups or untested backups — they don't count if you've never restored from them."
+  - "Public S3 buckets — the #1 cause of AWS data breaches."
+  - "Using the same instance class for dev and prod — performance surprises at launch."
+best_practices:
+  - "Start with RDS Aurora (serverless v2) — it auto-scales and is compatible with MySQL/PostgreSQL."
+  - "Use DynamoDB with on-demand capacity for unpredictable workloads, provisioned for predictable ones."
+  - "Enable deletion protection on all production databases."
+  - "Use S3 Intelligent-Tiering to automatically optimize storage costs."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "AWS Documentation"
+    url: "https://docs.aws.amazon.com"
+  - title: "AWS Well-Architected Framework"
+    url: "https://aws.amazon.com/architecture/well-architected/"

@@ -1,0 +1,78 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "liquidity-pool-design"
+display_name: "DEX Liquidity & Market Making"
+description: >
+  Architect the initial liquidity bootstrapping strategy for a decentralized exchange (DEX), 
+  managing slippage, permanent loss risk, and LP incentives.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "tokenomics-expert"
+phase: "growth"
+applicable_startups: 
+  - web3
+priority: "high"
+difficulty: "expert"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Initial Pair Pricing"
+    tasks:
+      - "Calculate the exact ratio of Token-to-USDC required in the initial Uniswap V3 pool to establish the target Fully Diluted Valuation (FDV)."
+  - step: "Liquidity Mining Incentives"
+    tasks:
+      - "Design a decaying yield curve for Liquidity Providers (LPs) that heavily rewards early capital but scales down as TVL (Total Value Locked) reaches critical mass."
+  - step: "Impermanent Loss Modeling"
+    tasks:
+      - "Simulate severe market volatility using Python to determine the exact price points where LPs will suffer catastrophic impermanent loss and withdraw liquidity."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Launching a token on a DEX with only $5,000 of initial liquidity, allowing a single bot to buy 20% of the supply and instantly drain the pool."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Liquidity Pool Design process"
+  - "How do I handle liquidity pool design?"
+  - "Implement liquidity pool design"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the liquidity pool design process"
+  optional:
+    - name: "N/A"
+      type: "string"
+      description: "No optional inputs needed."
+
+outputs:
+  files:
+    - path: "outputs/liquidity-pool-design.md"
+      description: "Results of the liquidity pool design process"
+  artifacts:
+    - "Completed liquidity pool design deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

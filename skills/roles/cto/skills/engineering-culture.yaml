@@ -1,0 +1,104 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "engineering-culture"
+display_name: "Engineering Culture & Standards"
+description: >
+  Sets the behavioral standards for the engineering organization. Defines how 
+  code is reviewed, how incidents are handled blamelessly, and how engineers 
+  collaborate. Creates an environment that attracts top-tier talent.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "cto"
+phase: "growth"
+applicable_startups:
+  - all
+priority: "high"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Engineers are fighting in PR comments."
+  - "We have a toxic blame culture."
+  - "Set the engineering guidelines."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Draft engineering manifesto."
+  - "Create post-mortem template."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "current_friction"
+      type: "string"
+      description: "Where is the engineering team experiencing conflict?"
+  optional:
+    - name: "team_size"
+      type: "string"
+      description: "Number of developers."
+      default: "10-50"
+
+outputs:
+  files:
+    - path: "engineering/culture-handbook.md"
+      description: "The official engineering standards."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "N/A"
+manual:
+  - "Engineers willingly admit to causing production outages because they know they will not be fired; the system will be fixed instead."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "Culture cannot be outsourced to HR. The CTO must personally embody and enforce the engineering culture every single day."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "GitHub Wiki / Notion"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Blameless Post-Mortems"
+    tasks:
+      - "Establish a strict rule: When the site goes down, we never ask 'Who did this?' We ask 'Why did the system allow this to happen?' Treat human error as a system failure."
+  - step: "Code Review Etiquette"
+    tasks:
+      - "Document how to leave a PR review. Ban aggressive language ('This is stupid'). Enforce constructive language ('Consider extracting this to a separate function for testability')."
+  - step: "Continuous Learning"
+    tasks:
+      - "Institute 'Tech Talks' every other Friday where an engineer presents a new technology or architecture they built to the rest of the company."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "The 'Hero' Culture. Celebrating the engineer who stays up until 4 AM to fix the servers, rather than firing the manager who allowed the system to be that fragile."
+  - "Metrics Obsession. Measuring developer productivity by 'Lines of Code' or 'Number of Commits'. This immediately leads to garbage code."
+
+best_practices:
+  - "Optimize for Developer Happiness. If CI takes 45 minutes to run, stop building features and fix the CI pipeline. Slow tools destroy culture."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Google SRE: Postmortem Culture"
+    url: "https://sre.google/sre-book/postmortem-culture/"

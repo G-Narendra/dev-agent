@@ -1,0 +1,105 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "sbir-grant-proposal"
+display_name: "Non-Dilutive Grant Writing (SBIR/STTR)"
+description: >
+  Secures free money from the government. Navigates the labyrinthine 
+  bureaucracy of the NSF, NIH, and DoD to win highly competitive SBIR 
+  (Small Business Innovation Research) grants to fund deep-tech R&D.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "grant-writer"
+phase: "ideation"
+applicable_startups:
+  - DeepTech, BioTech, Defense, HardTech
+priority: "high"
+difficulty: "expert"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "We need non-dilutive funding."
+  - "Apply for the NSF Phase 1 grant."
+  - "Write the commercialization plan."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Generate SBIR Project Summary."
+  - "Draft NIH Specific Aims page."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "funding_agency"
+      type: "string"
+      description: "NSF, NIH, DoD, DoE."
+    - name: "innovation_claim"
+      type: "string"
+      description: "What exactly is the scientific breakthrough?"
+  optional:
+    - name: "grant_phase"
+      type: "string"
+      description: "Phase I ($250k) vs Phase II ($1M)."
+      default: "Phase I"
+
+outputs:
+  files:
+    - path: "finance/grants/nsf_phase_1_proposal.md"
+      description: "The 15-page heavily structured proposal document."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "N/A"
+manual:
+  - "The proposal passes administrative review, receives positive panel scoring, and secures $250k+ in non-dilutive capital."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "The Compliance Death Sentence: Never deviate from the agency's formatting rules. If the NSF says '11-point Arial font, 1-inch margins, max 15 pages', and you use 10-point font to fit more text, the PDF will be instantly rejected by a computer before a human ever reads it."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Grants.gov / Research.gov"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "The 'Elevator Pitch' Summary"
+    tasks:
+      - "The Project Summary is the only thing most reviewers will actually read carefully. It MUST clearly state: 1. The Broader Impact (Why society cares). 2. The Intellectual Merit (Why the science is hard). 3. The Commercial Potential (Why you'll make money)."
+  - step: "The Commercialization Plan"
+    tasks:
+      - "Agencies don't fund science projects; they fund businesses. You must prove that if the R&D succeeds, you have a go-to-market strategy to sell it. If your plan is 'We will put it on the internet and people will buy it', you will lose."
+  - step: "Letters of Support"
+    tasks:
+      - "A proposal with 0 letters of support will fail. You must get 3 Letters of Support from potential Enterprise customers saying: 'If the startup successfully builds this, we intend to buy it for $1M.' This proves market demand."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Writing the grant like a marketing brochure. Reviewers are PhD scientists, not VCs. Do not use buzzwords like 'Synergistic AI-driven paradigms'. Use hard, quantifiable, falsifiable scientific hypotheses."
+best_practices:
+  - "Register for SAM.gov instantly. The government registration process takes 4-6 weeks and requires notarized letters. If you start writing the grant 2 weeks before the deadline, you will miss it because you don't have a CAGE code."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "SBIR.gov: The Official Guide"
+    url: "https://www.sbir.gov/"

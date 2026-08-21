@@ -1,0 +1,79 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "user-flow-mapping"
+display_name: "User Flow Mapping (AppFlow)"
+description: >
+  Map out the entire logical path a user takes through the application, ensuring 
+  no dead ends and optimizing the path to conversion.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "interaction-designer"
+phase: "planning"
+applicable_startups: 
+  - all
+priority: "high"
+difficulty: "advanced"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Entry & Exit Points"
+    tasks:
+      - "Define exactly how a user enters the flow (e.g., marketing email) and what the ultimate success state looks like (e.g., receipt page)."
+  - step: "Unhappy Paths"
+    tasks:
+      - "Explicitly map out the flow when a credit card is declined, or when a user tries to access a feature they don't have permissions for."
+  - step: "State Persistence"
+    tasks:
+      - "Design the flow so that if a user accidentally closes the browser mid-checkout, their data is saved and they resume exactly where they left off."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Designing only the 'Happy Path' where everything works perfectly, leaving engineering to completely guess how the UI should behave during an API error."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the User Flow Mapping process"
+  - "How do I handle user flow mapping?"
+  - "Implement user flow mapping"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the user flow mapping process"
+  optional:
+    - name: "target_audience"
+      type: "string"
+      description: "Target user or customer segment"
+      default: "Primary user persona"
+
+outputs:
+  files:
+    - path: "outputs/user-flow-mapping.md"
+      description: "Results of the user flow mapping process"
+  artifacts:
+    - "Completed user flow mapping deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

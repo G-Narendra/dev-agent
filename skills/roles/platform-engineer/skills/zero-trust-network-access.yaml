@@ -1,0 +1,112 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "zero-trust-network-access"
+display_name: "Zero Trust Architecture & Network Security"
+description: >
+  Abolish the traditional 'Castle and Moat' VPN model. Implement a Zero Trust 
+  architecture where every single request, even from internal microservices or 
+  employees, must be strictly authenticated and authorized based on identity.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "platform-engineer"
+phase: "growth"
+applicable_startups:
+  - all
+priority: "critical"
+difficulty: "expert"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "We need a VPN."
+  - "Secure the internal admin panel."
+  - "Implement Zero Trust."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Configure Cloudflare Access policies."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "identity_provider"
+      type: "string"
+      description: "Okta, Google Workspace, or Azure AD."
+    - name: "target_application"
+      type: "string"
+      description: "What are we securing? (e.g., The internal Retool dashboard, SSH access)."
+  optional:
+    - name: "ztna_vendor"
+      type: "string"
+      description: "Cloudflare Zero Trust vs Tailscale vs Twingate."
+      default: "Cloudflare Zero Trust"
+
+outputs:
+  files:
+    - path: "platform/security/ztna-policies.json"
+      description: "The access control matrix (Who can access What)."
+  artifacts:
+    - "A secure tunnel connecting the internal app to the identity provider."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "All internal tools (Grafana, Admin Panel) block traffic from the public internet entirely, only accepting traffic routed through the ZTNA tunnel."
+  manual:
+    - "Employees no longer complain about 'the VPN being slow or disconnecting'."
+    - "A compromised employee laptop cannot automatically ping or infect the production database (lateral movement is blocked)."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+  - "network"
+
+safety_notes:
+  - "The 'Break Glass' Scenario: If Okta/Google goes down, how do you access the production servers to fix a critical bug? You MUST configure a highly secure, audited 'break-glass' SSH key for emergency use only."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Cloudflare Zero Trust / Tailscale"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Identity as the Perimeter"
+    tasks:
+      - "Stop trusting IP addresses. An IP address can be spoofed. Trust cryptographic identity (e.g., 'Is this request signed by a valid Okta token?')."
+  - step: "Device Posture Checks"
+    tasks:
+      - "Zero Trust means checking the user AND the device. If the CEO logs in with the correct password, but they are on an unmanaged, infected hotel computer, block the access. Require MDM (Mobile Device Management) presence."
+  - step: "Micro-Segmentation"
+    tasks:
+      - "If a hacker breaches the Marketing microservice, they should not be able to ping the Billing microservice. Implement strict Network Policies (e.g., in Kubernetes or AWS Security Groups) so services can only talk to exactly what they need to."
+  - step: "Service-to-Service Authentication (mTLS)"
+    tasks:
+      - "It's not just humans that need Zero Trust. Microservice A must prove its identity to Microservice B using mutual TLS (mTLS). Use a service mesh (like Istio or Linkerd) to automate certificate rotation."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Using a traditional IPsec VPN for a remote workforce. It routes all traffic through a single choke point (slow), and once a hacker gets past the VPN, they have god-mode access to the entire flat network."
+  - "Leaving internal admin panels exposed to the public internet, protected only by a 'Username/Password' form. Brute force attacks will eventually break it. Put it behind ZTNA."
+
+best_practices:
+  - "Implement 'Just-in-Time' (JIT) access. If an engineer needs production SSH access, they request it in Slack, a manager approves it, the ZTNA grants access for exactly 1 hour, and then it automatically revokes it."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Cloudflare: What is Zero Trust?"
+    url: "https://www.cloudflare.com/learning/security/glossary/what-is-zero-trust/"

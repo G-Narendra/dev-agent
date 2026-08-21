@@ -1,0 +1,78 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "api-ecosystem-partnerships"
+display_name: "Technical API & Ecosystem Partnerships"
+description: >
+  Identify and execute deeply technical partnerships where the startup's API is embedded 
+  into a larger enterprise platform, driving indirect revenue.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "partnership-development-lead"
+phase: "growth"
+applicable_startups: 
+  - b2b
+priority: "mvp"
+difficulty: "expert"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Ecosystem Mapping"
+    tasks:
+      - "Identify the top 3 platforms (e.g., Salesforce, Shopify) where the target customers already spend their time."
+  - step: "Value Proposition Design"
+    tasks:
+      - "Create a pitch detailing exactly how embedding your API will increase the partner's own user retention."
+  - step: "Contracting"
+    tasks:
+      - "Negotiate OEM (Original Equipment Manufacturer) pricing, white-labeling terms, and API rate limits."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Signing a partnership agreement but failing to secure engineering resources on either side, resulting in vaporware."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Api Ecosystem Partnerships process"
+  - "How do I handle api ecosystem partnerships?"
+  - "Implement api ecosystem partnerships"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the api ecosystem partnerships process"
+  optional:
+    - name: "N/A"
+      type: "string"
+      description: "No optional inputs needed."
+
+outputs:
+  files:
+    - path: "outputs/api-ecosystem-partnerships.md"
+      description: "Results of the api ecosystem partnerships process"
+  artifacts:
+    - "Completed api ecosystem partnerships deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

@@ -1,0 +1,111 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "advanced-react-patterns"
+display_name: "Advanced React Design Patterns"
+description: >
+  Implements advanced React patterns like Render Props, Higher Order 
+  Components (HOCs), and Compound Components to build highly reusable, 
+  flexible UI libraries that scale across massive codebases. Covers key patterns to avoid common pitfalls like loading the entire javascript bundle on initial page load --, and provides actionable best practices for production-ready results.
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "frontend-engineer"
+phase: "growth"
+applicable_startups:
+  - all
+priority: "high"
+difficulty: "expert"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "We have 15 different button components."
+  - "Refactor this massive UI component."
+  - "Build a reusable modal library."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Generate compound component structure."
+  - "Draft custom React hook."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "component_name"
+      type: "string"
+      description: "E.g., Dropdown, Modal, Accordion."
+  optional:
+    - name: "styling_solution"
+      type: "string"
+      description: "Tailwind, Styled Components."
+      default: "Tailwind"
+
+outputs:
+  files:
+    - path: "src/components/ui/Select/index.tsx"
+      description: "The flexible compound component."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "N/A"
+manual:
+  - "Other engineers can easily compose the component (e.g., `<Select.Trigger>`, `<Select.Option>`) without needing to pass 25 different boolean props into a single element."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "Premature Abstraction: Do not build an infinitely flexible compound component if the feature is only used in one place. Only apply these patterns when a component is reused 3+ times in different contexts."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Radix UI (Headless)"
+      install: "npm i @radix-ui/react-dialog"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Compound Components"
+    tasks:
+      - "Stop passing arrays of data into components (e.g., `<Menu items={data} />`). Build compound components using React Context so consumers can compose them (e.g., `<Menu><MenuItem /></Menu>`)."
+  - step: "Custom Hooks for Logic Extraction"
+    tasks:
+      - "Separate UI from Logic. Extract all `useState` and `useEffect` logic into a custom hook (e.g., `useToggle()`), leaving the component file purely for returning JSX."
+      - "Set up alert fatigue prevention -- only alert on symptoms, not causes."
+  - step: "Headless UI Pattern"
+    tasks:
+      - "If building an internal design system, build the components 'headless' first (handling accessibility, focus traps, keyboard events) and apply styling separately."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Loading the entire JavaScript bundle on initial page load -- split code by route using dynamic imports."
+  - "Ignoring Cumulative Layout Shift by omitting explicit width/height attributes on images -- causes jarring layout jumps."
+  - "Using inline styles instead of a CSS architecture (utility classes, CSS modules, styled-components) -- leads to specificity war spaghetti."
+  - "Forgetting to set `loading=\"lazy\"` on below-the-fold images -- wastes bandwidth on images the user may never scroll to."
+  - "Bundling large libraries like moment.js or lodash for a single trivial function -- use native APIs or tree-shakeable alternatives."
+best_practices:
+  - "Use specialized libraries like Radix UI or Headless UI as the accessible foundation for your design system, rather than trying to write W3C-compliant keyboard navigation from scratch."
+
+  - "Implement code splitting at the route level using dynamic imports so users only load code for the page they visit."
+  - "Optimize Core Web Vitals: LCP under 2.5s, FID under 100ms, CLS under 0.1 — these directly impact SEO ranking."
+  - "Serve images in next-gen formats (WebP, AVIF) with responsive srcset for different viewport sizes."
+  - "Use semantic HTML elements (nav, main, article, section) — screen readers and SEO bots rely on document structure."
+  - "Implement proper error boundaries in React that catch render errors and show a fallback UI instead of a white screen."
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Kent C. Dodds: Advanced React Patterns"
+    url: "https://kentcdodds.com/blog/compound-components-with-react-hooks"

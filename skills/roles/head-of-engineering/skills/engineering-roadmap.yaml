@@ -1,0 +1,105 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "engineering-roadmap"
+display_name: "Strategic Engineering Roadmap & Tech Debt Allocation"
+description: >
+  Balances the desperate need for new features with the terrifying reality 
+  of a crumbling codebase. Acts as the negotiator between the CTO (who wants 
+  perfect code) and the CEO (who wants features yesterday).
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "head-of-engineering"
+phase: "growth"
+applicable_startups:
+  - all
+priority: "critical"
+difficulty: "expert"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Engineering is moving too slow."
+  - "We have to rewrite the backend."
+  - "How much time should we spend on tech debt?"
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Generate capacity allocation matrix."
+  - "Draft technical debt business case."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "total_engineering_headcount"
+      type: "string"
+      description: "How many devs are available?"
+    - name: "product_roadmap_demands"
+      type: "string"
+      description: "What features must be built?"
+  optional:
+    - name: "current_tech_debt_level"
+      type: "string"
+      description: "Low, Moderate, Critical."
+      default: "Moderate"
+
+outputs:
+  files:
+    - path: "eng/planning/q3_engineering_allocation.md"
+      description: "The percentage split of time across all disciplines."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "N/A"
+manual:
+  - "The team ships 80% of promised product features while simultaneously reducing P99 API latency by resolving targeted technical debt."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "The 'Stop the World' Rewrite: NEVER authorize a complete rewrite of the codebase from scratch (e.g., 'Let's throw away the Python app and rewrite it in Go'). You will spend 18 months shipping zero features, the VCs will panic, and the startup will die. Refactor incrementally."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Linear / Jira"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "The 70-20-10 Allocation Budget"
+    tasks:
+      - "Enforce strict boundaries. 70% of engineering time goes to Product Features (Revenue). 20% goes to Technical Debt (Stability). 10% goes to 'Keep the Lights On' (Bugs/Support). Never let Product steal the 20%."
+  - step: "Translating Tech Debt into Business Language"
+    tasks:
+      - "The CEO doesn't care that 'The ORM is inefficient'. Translate it: 'If we don't fix the database queries, AWS costs will increase by $10k/month and the app will crash during Black Friday.' Now the CEO cares."
+  - step: "The 'Iron Triangle' Negotiation"
+    tasks:
+      - "Scope, Time, Quality. You can only pick two. If the CEO demands the feature by Friday (Time) and it must be bug-free (Quality), the Head of Engineering MUST cut the Scope in half. Never compromise on Quality."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Measuring engineering speed by story points. If you pressure teams to deliver more story points, they will simply inflate their estimates. Measure outcomes: Deployment Frequency and Lead Time."
+best_practices:
+  - "Implement 'Fix-It Fridays'. Every other Friday, engineers are forbidden from working on product features. They can only fix bugs, improve test coverage, or automate their own workflows."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Will Larson: An Elegant Puzzle (Systems of Engineering Management)"
+    url: "https://lethain.com/elegant-puzzle/"

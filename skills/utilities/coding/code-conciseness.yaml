@@ -1,0 +1,92 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "code-conciseness"
+display_name: "Code Conciseness (The 'Ponytail' Skill)"
+description: >
+  Acts as a strict second-pass refactoring tool. Takes working code and 
+  ruthlessly eliminates dead paths, redundant variables, and verbose logic. 
+  Achieves maximum functionality in minimum lines without sacrificing readability.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "utility"
+phase: "all"
+applicable_startups:
+  - all
+priority: "high"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Make this code shorter."
+  - "Refactor this to be more concise."
+  - "Apply the Ponytail skill."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Refactor function for conciseness."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "source_code"
+      type: "string"
+      description: "The verbose, working code."
+  optional:
+    - name: "target_language"
+      type: "string"
+      description: "Python, TS, Go, etc."
+      default: "Inferred from source"
+
+outputs:
+  files:
+    - path: "src/refactored-file.ext"
+      description: "The concise version of the code."
+  artifacts:
+    - "A diff showing the line count reduction."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "The unit tests still pass perfectly."
+    - "Cyclomatic complexity is reduced."
+  manual:
+    - "The code can be read and understood by a mid-level engineer faster than the original."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+
+safety_notes:
+  - "Do NOT play 'Code Golf'. The goal is not to write a 1-line unreadable Regex to replace a simple function. Conciseness must serve clarity."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Language-specific formatters (Prettier, Black, Gofmt)"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Remove Fluff"
+    tasks:
+      - "Delete commented-out code."
+      - "Remove variable assignments that are immediately returned (e.g., `let x = 5; return x;` -> `return 5;`)."
+  - step: "Idiomatic Replacements"
+    tasks:
+      - "Replace verbose `if/else` assignments with ternaries or nullish coalescing."
+      - "Replace manual loops with array mapping/filtering/reducing where language-appropriate."
+  - step: "Early Returns"
+    tasks:
+      - "Invert `if` conditions to return early and eliminate deep nesting."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Sacrificing variable naming for length (e.g., changing `user_account_id` to `uId`)."
+  - "Over-chaining: `foo().bar().baz().qux()` all on one line, making stack traces impossible to read."
+
+best_practices:
+  - "If a block of logic takes 10 lines to do what a standard library function does in 1, use the standard library."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Clean Code: Functions"
+    url: "https://gist.github.com/wojteklu/73c6914cc446146b8b533c0988cf8d29"

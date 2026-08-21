@@ -1,0 +1,98 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "competitive-teardown"
+display_name: "Deep Competitive Teardown & Reverse Engineering"
+description: >
+  Systematically reverse-engineers a competitor's product, tech stack, pricing, 
+  and go-to-market strategy using only publicly available information. 
+  Finds the gaps where the startup can attack.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "utility"
+phase: "ideation"
+applicable_startups:
+  - all
+priority: "high"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Analyze our biggest competitor."
+  - "What tech stack is Company X using?"
+  - "Do a teardown of Y."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Analyze Wappalyzer data."
+  - "Scrape pricing page history."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "competitor_url"
+      type: "string"
+      description: "The domain of the competitor."
+  optional:
+    - name: "focus_area"
+      type: "string"
+      description: "Tech Stack vs GTM vs Product UX."
+      default: "Holistic Overview"
+
+outputs:
+  files:
+    - path: "research/competitors/{competitor-name}-teardown.md"
+      description: "The complete dossier on the competitor."
+  artifacts:
+    - "A SWOT Analysis (Strengths, Weaknesses, Opportunities, Threats)."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "N/A"
+  manual:
+    - "The report identifies exactly how the competitor acquires customers and what their technical moat is."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "network"
+
+safety_notes:
+  - "Corporate Espionage: Do not attempt to breach or illegally access a competitor's internal systems. Rely purely on OSINT, public APIs, browser DevTools, and legitimate user accounts."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "BuiltWith / Wappalyzer"
+      install: "N/A (Browser Extension/Web)"
+  alternatives:
+    - name: "Ahrefs / SEMrush"
+      when: "Analyzing their SEO and organic traffic strategy."
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Tech Stack Inference"
+    tasks:
+      - "Check HTTP response headers (`x-powered-by`)."
+      - "Inspect the DOM for framework artifacts (e.g., `__NEXT_DATA__` for Next.js)."
+      - "Use BuiltWith to identify their analytics, CRM, and ad trackers."
+  - step: "Hiring & Roadmap Mapping"
+    tasks:
+      - "Look at their open job postings on LinkedIn. If they are hiring 5 'Enterprise Sales' reps, they are moving upmarket. If they are hiring 'AI Engineers', you know what their next feature is."
+  - step: "Pricing Architecture"
+    tasks:
+      - "How do they charge? (Per seat, usage-based, flat tier). Check the Wayback Machine to see how their pricing has evolved over the last 2 years. Did they recently increase prices? That's an opportunity."
+  - step: "The Burner Account UX Teardown"
+    tasks:
+      - "Sign up for a free trial. Document the onboarding flow, the 'Aha!' moment, and where the UX feels clunky."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Obsessing over competitors. A teardown is useful once per quarter. If you spend every day watching competitors, you will just end up copying their mistakes. Focus on the customer."
+  - "Assuming their UI is perfect. Just because a $1B company designed a feature a certain way doesn't mean it's right; it might just be legacy debt."
+
+best_practices:
+  - "Read their 1-star reviews on G2 or Capterra. That tells you exactly what to build first to steal their unhappiest customers."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "First Round Review: How to do a competitive analysis"
+    url: "https://review.firstround.com/"

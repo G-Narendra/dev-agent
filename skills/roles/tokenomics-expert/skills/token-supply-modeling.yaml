@@ -1,0 +1,78 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "token-supply-modeling"
+display_name: "Tokenomics & Supply Modeling"
+description: >
+  Mathematically model the token supply, inflation curves, and vesting schedules to 
+  ensure long-term economic sustainability and prevent pump-and-dump scenarios.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "tokenomics-expert"
+phase: "planning"
+applicable_startups: 
+  - web3
+priority: "high"
+difficulty: "expert"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Vesting Cliffs"
+    tasks:
+      - "Enforce strict, mathematically enforced smart-contract vesting schedules for Team and Advisor allocations (minimum 12-month cliff, 36-month linear vest)."
+  - step: "Inflation vs Deflation"
+    tasks:
+      - "Model the emission rate against the token burn mechanics (e.g., transaction fees burned) to ensure the asset doesn't dilute to zero over 5 years."
+  - step: "The Utility Sink"
+    tasks:
+      - "Design a mandatory, recurring sink where users MUST spend or lock the token to access the core utility of the protocol, driving baseline demand."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Designing a token model where 80% of the supply unlocks on Day 1 for private investors, instantly collapsing the price and destroying retail trust."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Token Supply Modeling process"
+  - "How do I handle token supply modeling?"
+  - "Implement token supply modeling"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the token supply modeling process"
+  optional:
+    - name: "N/A"
+      type: "string"
+      description: "No optional inputs needed."
+
+outputs:
+  files:
+    - path: "outputs/token-supply-modeling.md"
+      description: "Results of the token supply modeling process"
+  artifacts:
+    - "Completed token supply modeling deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

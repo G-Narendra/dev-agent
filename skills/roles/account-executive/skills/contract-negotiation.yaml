@@ -1,0 +1,142 @@
+# â”€â”€ IDENTITY â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+name: "contract-negotiation"
+display_name: "Enterprise Contract Negotiation"
+description: >
+  Navigates the complex legal and procurement maze of Fortune 500 companies. 
+  Defends the startup's pricing, mitigates liability caps, and pushes the deal 
+  across the finish line without yielding to unreasonable vendor demands.
+
+# â”€â”€ CLASSIFICATION â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+role: "account-executive"
+phase: "growth"
+applicable_startups:
+  - B2B, Enterprise SaaS
+priority: "critical"
+difficulty: "expert"
+
+# â”€â”€ TRIGGER â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+trigger_phrases:
+  - "Procurement is pushing back on the price."
+  - "They want an unlimited liability cap."
+  - "Negotiate the MSA."
+
+# â”€â”€ ACTIONS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+example_cli_actions:
+  - "Draft procurement response email."
+  - "Generate concession strategy."
+
+# â”€â”€ INPUTS / OUTPUTS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+inputs:
+  required:
+    - name: "client_objection"
+      type: "string"
+      description: "What term are they refusing?"
+    - name: "deal_value"
+      type: "string"
+      description: "ACV of the contract."
+  optional:
+    - name: "competitor_presence"
+      type: "string"
+      description: "Are we in a bidding war?"
+      default: "None"
+
+outputs:
+  files:
+    - path: "sales/deals/acme_negotiation_plan.md"
+      description: "The give/get matrix for the negotiation."
+  artifacts:
+    - "N/A"
+
+# â”€â”€ SUCCESS CRITERIA â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+automated:
+  - "N/A"
+manual:
+  - "The MSA is signed within the current quarter without discounting the software by more than 15%."
+
+# â”€â”€ PERMISSIONS & SAFETY â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "Verbal Agreements: Never promise an enterprise client a custom feature over a Zoom call ('Sure, we can build that for you') just to close the deal. Unless it is explicitly scoped in the SOW, you are setting the engineering team up for failure."
+
+# â”€â”€ TOOLING â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+recommended_tools:
+  primary:
+    - name: "DocuSign / Ironclad"
+      install: "N/A"
+
+# â”€â”€ IMPLEMENTATION CHECKLIST â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+implementation_checklist:
+  - step: "The 'Give/Get' Framework"
+    tasks:
+      - "Never give a concession for free. If the client demands a 20% discount, say 'I can approve a 20% discount if you agree to a multi-year contract paid entirely upfront.' Always trade value."
+  - step: "Multi-Threading Procurement"
+    tasks:
+      - "Procurement's only job is to reduce price. Do not negotiate solely with them. Use your internal Champion (the VP who actually wants your software) to pressure Procurement from the inside."
+  - step: "Identify the Walk-Away Point"
+    tasks:
+      - "Before entering the final negotiation, explicitly agree with the CEO on the Walk-Away point (e.g., 'We will not accept a liability cap higher than 2x the ACV'). Be prepared to walk away."
+
+# â”€â”€ QUALITY GATES â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+anti_patterns:
+  - "Sending the contract over on the last day of the month and begging them to sign 'to hit my quota'. Procurement smells desperation and will leverage it for massive discounts."
+best_practices:
+  - "Create a Mutual Action Plan (MAP) at the beginning of the deal. 'To go live by October 1st, we must finish legal review by Sept 15th.' Use this timeline to drive urgency."
+
+# â”€â”€ REFERENCES â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+references:
+  - title: "Gong: Contract Negotiation Tactics"
+    url: "https://www.gong.io/blog/sales-negotiation/"
+
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Contract Negotiation process"
+  - "How do I handle contract negotiation?"
+  - "Implement contract negotiation"
+  - "Navigates the complex legal and procurement maze of Fortune 500 companies"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the contract negotiation process"
+  optional:
+    - name: "N/A"
+      type: "string"
+      description: "No optional inputs needed."
+
+outputs:
+  files:
+    - path: "outputs/contract-negotiation.md"
+      description: "Results of the contract negotiation process"
+  artifacts:
+    - "Completed contract negotiation deliverable"
+
+# ── QUALITY GATES ────────────────────────────────────────────
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start — retrofitting is expensive."
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

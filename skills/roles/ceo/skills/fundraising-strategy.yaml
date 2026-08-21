@@ -1,0 +1,115 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "fundraising-strategy"
+display_name: "Venture Capital Fundraising Strategy"
+description: >
+  Drives the end-to-end fundraising process. Crafts the pitch deck, builds the 
+  investor CRM, and structures the Seed/Series A round to minimize dilution 
+  while maximizing capital and strategic partner value. Covers key patterns to avoid common pitfalls like training on the full dataset without a holdout test set -- m, and provides actionable best practices for production-ready results.
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "ceo"
+phase: "growth"
+applicable_startups:
+  - all
+priority: "critical"
+difficulty: "expert"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "We need to raise a Series A."
+  - "Draft the pitch deck."
+  - "How much money should we ask for?"
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Generate investor target list."
+  - "Draft email intro to VC."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "current_arr"
+      type: "string"
+      description: "Annual Recurring Revenue."
+    - name: "target_raise"
+      type: "string"
+      description: "Amount of capital needed."
+  optional:
+    - name: "round_type"
+      type: "string"
+      description: "Seed, Series A."
+      default: "Seed"
+
+outputs:
+  files:
+    - path: "fundraising/pitch_deck_outline.md"
+      description: "The narrative structure of the pitch."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "N/A"
+manual:
+  - "The round is oversubscribed and closes within 90 days with a tier-1 lead investor."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "Running Out of Cash: Never start fundraising with less than 6 months of runway. VCs smell desperation and will either pass or offer predatory terms. Start raising when you have 9-12 months of cash."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Affinity / Notion"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "The Investor CRM"
+    tasks:
+      - "Treat fundraising like a B2B Enterprise sales funnel. Build a CRM of 100 target investors. Grade them Tier 1, 2, and 3. Pitch Tier 3 first to practice and refine the deck before talking to Sequoia."
+  - step: "The Narrative Arc"
+    tasks:
+      - "The pitch deck must answer: Why this? Why now? Why us? If the 'Why Now' is weak (e.g., 'We just decided to build it'), investors will pass. Tie it to a massive macro shift (e.g., AI breakthroughs)."
+  - step: "Creating FOMO"
+    tasks:
+      - "Never lie about having term sheets. But schedule all first meetings in the exact same 2-week block. When VCs see you are taking 5 meetings a day, genuine FOMO (Fear of Missing Out) is created naturally."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Training on the full dataset without a holdout test set -- model performance metrics will be unrealistically optimistic."
+  - "Serving an ML model without input validation -- adversarial inputs can cause silent incorrect predictions."
+  - "Not monitoring for data drift in production -- a model that was 95% accurate at launch can degrade to 60% as real-world data shifts."
+  - "Using default hyperparameters without any tuning -- can leave 10-30% performance on the table."
+  - "Deploying a model to production without a rollback plan -- a bad model can degrade user experience until manually caught."
+  - "Set up a 'Data Room' (Google Drive) containing your P&L, Cap Table, and Customer Contracts before you take the first meeting. If a VC says 'We are interested, send the data', send it 5 minutes later."
+
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Not defining clear success criteria before starting a task -- leads to ambiguous outcomes, endless revisions, and wasted effort."
+
+best_practices:
+  - "Document all configuration decisions in an Architecture Decision Record (ADR) so future team members understand why choices were made."
+  - "Implement comprehensive error handling with structured logging at every integration boundary to simplify debugging."
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Y Combinator: How to Raise a Seed Round"
+    url: "https://www.ycombinator.com/library/4A-a-guide-to-seed-fundraising"

@@ -1,0 +1,108 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "content-repurposing-framework"
+display_name: "Content Repurposing & Distribution Engine"
+description: >
+  Implements a 'Hub and Spoke' model to maximize the ROI of content creation. 
+  Takes one high-effort 'Hero' piece of content (like a webinar or whitepaper) 
+  and slices it into 20+ smaller pieces of micro-content for social media.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "content-strategist"
+phase: "growth"
+applicable_startups:
+  - all
+priority: "high"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "We need more social media content."
+  - "Repurpose this webinar."
+  - "We are spending too much time creating content."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Generate tweet thread from blog."
+  - "Extract short-form video clips."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "hero_content"
+      type: "file"
+      description: "The path or URL to the long-form content."
+  optional:
+    - name: "target_platforms"
+      type: "string"
+      description: "Twitter, LinkedIn, TikTok."
+      default: "LinkedIn, Twitter"
+
+outputs:
+  files:
+    - path: "marketing/social/repurposed-campaign.md"
+      description: "The drafted micro-content assets."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "N/A"
+manual:
+  - "A single 60-minute podcast generates enough social media content to feed the editorial calendar for an entire week."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+
+safety_notes:
+  - "Context Collapse: When extracting a 15-second clip from a 1-hour interview, ensure the clip does not misrepresent the speaker's original intent."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "OpusClip / Descript"
+      install: "N/A"
+  alternatives:
+    - name: "Claude/GPT-4"
+      when: "Summarizing text-based Hero content into tweet threads."
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Identify the Hero Asset"
+    tasks:
+      - "Select a high-value, data-dense asset (e.g., 'The 2024 State of Cybersecurity Report' or a recorded CEO AMA)."
+  - step: "Extraction (Text)"
+    tasks:
+      - "Turn 1 Report into: 3 Blog Posts (deep diving into specific chapters), 1 Twitter Thread (summarizing the top 5 stats), 3 LinkedIn Posts (contrarian opinions from the report)."
+  - step: "Extraction (Video/Audio)"
+    tasks:
+      - "Turn 1 Webinar into: 5 YouTube Shorts / TikToks (highlighting the 'aha' moments), 1 Audio-only Podcast episode, 3 GIFs for the newsletter."
+  - step: "Distribution Scheduling"
+    tasks:
+      - "Do not post all 20 assets on the same day. Drip them out over a 3-week campaign using a scheduling tool (Buffer/Hootsuite)."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Copy-pasting a link to a blog post on LinkedIn and saying 'New post! Read here.' Algorithms penalize external links. Write native, value-first content on the platform."
+best_practices:
+  - "The 'Zero-Click' Strategy: Give away the best insights natively in the tweet/post. Do not force the user to click the link to get value."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "GaryVee Content Model"
+    url: "https://garyvaynerchuk.com/the-garyvee-content-strategy-how-to-grow-and-distribute-your-brands-social-media-content/"

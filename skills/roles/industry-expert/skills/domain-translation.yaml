@@ -1,0 +1,83 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "domain-translation"
+display_name: "Industry Regulatory & Workflow Mapping"
+description: >
+  Analyze deep industry workflows (e.g., medical claims processing) and translate them 
+  into compliant, actionable product requirements for the engineering team.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "industry-expert"
+phase: "planning"
+applicable_startups: 
+  - healthtech
+  - govtech
+priority: "mvp"
+difficulty: "expert"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Regulatory Mapping"
+    tasks:
+      - "Identify the exact compliance frameworks the product must adhere to (e.g., HIPAA, FedRAMP)."
+      - "Flag potential regulatory blockers before the architecture is finalized."
+  - step: "Workflow Translation"
+    tasks:
+      - "Map out how a practitioner (e.g., a doctor) actually works today."
+      - "Write PRDs detailing exactly what data must be captured to comply with industry standards."
+  - step: "Pilot Introductions"
+    tasks:
+      - "Facilitate warm introductions to friendly institutions willing to run a Beta test."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Allowing engineers to build a healthcare app that stores PHI (Protected Health Information) in an unencrypted database because they didn't know the law."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Domain Translation process"
+  - "How do I handle domain translation?"
+  - "Implement domain translation"
+  - "Analyze deep industry workflows (e"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the domain translation process"
+  optional:
+    - name: "data_source"
+      type: "string"
+      description: "Source of data to analyze"
+      default: "Internal data"
+
+outputs:
+  files:
+    - path: "outputs/domain-translation.md"
+      description: "Results of the domain translation process"
+  artifacts:
+    - "Completed domain translation deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

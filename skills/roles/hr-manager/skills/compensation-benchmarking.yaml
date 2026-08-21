@@ -1,0 +1,114 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "compensation-benchmarking"
+display_name: "Compensation Benchmarking & Salary Bands"
+description: >
+  Prevents pay inequity and runaway payroll costs. Establishes clear, 
+  data-driven salary bands and equity packages to ensure the startup 
+  remains competitive in the talent market without burning through runway. Covers key patterns to avoid common pitfalls like writing job descriptions that focus entirely on requirements, and provides actionable best practices for production-ready results.
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "hr-manager"
+phase: "growth"
+applicable_startups:
+  - all
+priority: "high"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "How much should we pay a Senior Engineer?"
+  - "Employees are complaining about pay equity."
+  - "We need to set salary bands."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Generate salary band matrix."
+  - "Draft equity refresh policy."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "target_market"
+      type: "string"
+      description: "San Francisco vs Remote Global."
+    - name: "company_stage"
+      type: "string"
+      description: "Seed (heavy equity) vs Series C (heavy cash)."
+  optional:
+    - name: "percentile_target"
+      type: "string"
+      description: "Do we pay at the 50th or 75th percentile?"
+      default: "75th Percentile"
+
+outputs:
+  files:
+    - path: "hr/compensation/2026_salary_bands.xlsx"
+      description: "The definitive grid for all compensation."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "N/A"
+manual:
+  - "The startup achieves a 90% offer acceptance rate without exceeding the quarterly finance budget, and gender/race pay gaps are mathematically eliminated."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "The Salary History Ban: In many US states (like California and New York), it is illegal to ask a candidate 'What is your current salary?'. You must price the job, not the person. Base the offer on the internal salary bands, never on the candidate's previous pay."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Pave / Option Impact / Carta"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Establish the Compensation Philosophy"
+    tasks:
+      - "The CEO must decide: Do we pay 50th percentile cash and 90th percentile equity? Or 75th percentile cash and 50th percentile equity? You cannot be 90th percentile in both unless you are Google. Document this philosophy."
+  - step: "Build the Geographic Tiers"
+    tasks:
+      - "If you hire remote, decide on a geographic policy. Tier 1 (SF/NYC = 100% pay). Tier 2 (Austin/Denver = 85% pay). Tier 3 (Global = 70% pay). Or, adopt a 'Location Agnostic' policy (everyone gets SF pay). Pick one and stick to it."
+      - "Set up automated rollback mechanism that triggers if health checks fail after deployment."
+  - step: "Equity Refresh Grants"
+    tasks:
+      - "If an engineer joins at Seed, their options vest over 4 years. At Year 3, they will start interviewing elsewhere because their 'golden handcuffs' are almost gone. Implement a 'Refresh Grant' at Year 2.5 to lock them in for another 4 years."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Writing job descriptions that focus entirely on requirements and nothing on company culture or mission -- candidates self-select out."
+  - "Using unstructured interviews where each candidate gets different questions -- makes fair comparison impossible."
+  - "Relying solely on resume screening without skills-based assessments -- introduces unconscious bias and misses great candidates."
+  - "Delaying feedback to candidates for more than a week -- top talent accepts other offers while waiting."
+  - "Ignoring internal mobility -- hiring externally for every role demotivates existing employees and increases turnover."
+best_practices:
+  - "Publish the salary bands internally. Transparency forces fairness. If you are terrified of your employees seeing what the bands are, your compensation structure is fundamentally broken and biased."
+
+  - "Structured interviews with consistent rubrics produce 2x better hiring outcomes than unstructured conversations."
+  - "Track source-of-hire data — without it, you're guessing which channels actually produce quality candidates."
+  - "Set up an employee referral program with meaningful rewards — referred hires have higher retention and faster ramp time."
+  - "Conduct stay interviews (not just exit interviews) to proactively address what makes employees consider leaving."
+  - "Benchmark compensation against market data annually — losing a key hire over 10% below-market pay is expensive."
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "GitLab: Compensation Calculator Methodology"
+    url: "https://about.gitlab.com/handbook/total-rewards/compensation/"

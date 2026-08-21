@@ -1,0 +1,108 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "sprint-planning-ceremony"
+display_name: "Sprint Planning & Backlog Grooming"
+description: >
+  Facilitates the Sprint Planning ceremony. Ensures that only fully scoped, 
+  estimated tickets are pulled into the sprint, and that the total points do 
+  not exceed the team's historical velocity.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "scrum-master"
+phase: "build"
+applicable_startups:
+  - all
+priority: "critical"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Start the sprint."
+  - "The backlog is a mess."
+  - "We keep missing our sprint goals."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Generate sprint backlog."
+  - "Calculate sprint capacity."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "team_velocity"
+      type: "string"
+      description: "Historical average of points completed per sprint."
+  optional:
+    - name: "sprint_length"
+      type: "string"
+      description: "1 week, 2 weeks, 4 weeks."
+      default: "2 weeks"
+
+outputs:
+  files:
+    - path: "engineering/agile/sprint-plan.md"
+      description: "The committed tickets for the upcoming sprint."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "N/A"
+manual:
+  - "The engineering team successfully completes 90%+ of the committed sprint points without working weekend overtime."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "Scope Creep: Never allow the Product Owner to inject a new 5-point ticket mid-sprint without explicitly removing 5 points of existing work from the sprint."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Jira / Linear"
+      install: "N/A"
+  alternatives:
+    - name: "Planning Poker App"
+      when: "Estimating story points remotely."
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Backlog Refinement (Pre-Planning)"
+    tasks:
+      - "Before the planning meeting, ensure all top tickets have Acceptance Criteria. If a ticket just says 'Fix login bug' with no details, throw it back to the Product Manager."
+  - step: "Capacity Planning"
+    tasks:
+      - "Check the calendar. If 2 engineers are taking a 3-day vacation this sprint, manually reduce the team's capacity by 20%."
+  - step: "Story Point Estimation"
+    tasks:
+      - "Use Planning Poker (Fibonacci sequence: 1, 2, 3, 5, 8). If the team votes and someone says '1' and another says '8', make them debate it until they reach consensus."
+  - step: "The Commitment"
+    tasks:
+      - "Once the sprint is full, ask the team: 'Can we actually do this?' If they hesitate, remove the bottom ticket. Close the sprint scope."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Treating Story Points as 'Hours'. Points measure complexity and risk, not time. A 1-point task might take 4 hours of waiting on a build, while a 3-point task might take 1 hour of intense algorithmic coding."
+best_practices:
+  - "Allocate 20% of every sprint explicitly to Tech Debt and refactoring. If you only build features, the codebase will eventually collapse."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Atlassian: Sprint Planning Guide"
+    url: "https://www.atlassian.com/agile/scrum/sprint-planning"

@@ -1,0 +1,108 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "end-to-end-type-safety"
+display_name: "End-to-End Type Safety (tRPC / GraphQL)"
+description: >
+  Establish a rigid type boundary between the frontend and backend. 
+  Ensures that if a backend engineer renames a property in the API response, 
+  the frontend build fails immediately at compile time, eliminating runtime errors.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "fullstack-engineer"
+phase: "build"
+applicable_startups:
+  - all
+priority: "critical"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Share types between frontend and backend."
+  - "Implement tRPC."
+  - "Stop API mismatch errors."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "npm install @trpc/server @trpc/client zod"
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "architecture"
+      type: "string"
+      description: "Monorepo (Next.js) vs Separate Repos."
+  optional:
+    - name: "technology"
+      type: "string"
+      description: "tRPC vs GraphQL/Codegen vs OpenAPI generation."
+      default: "tRPC"
+
+outputs:
+  files:
+    - path: "src/server/routers/_app.ts"
+      description: "The root router defining the API contract."
+  artifacts:
+    - "A unified Zod validation schema."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "Changing an API return type on the backend causes the `tsc` command on the frontend to throw an error."
+  manual:
+    - "Frontend engineers get full autocomplete (IntelliSense) for API responses in their IDE without having to look at Swagger docs."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+
+safety_notes:
+  - "Never trust the client types for security. Even if TypeScript says the client can only send a valid `userId`, the backend MUST still validate the raw JSON payload at runtime using Zod/Joi."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "tRPC + Zod"
+      install: "N/A"
+  alternatives:
+    - name: "GraphQL + GraphQL Code Generator"
+      when: "Serving multiple different clients (Web, iOS, Android, Public API) that need to query different shapes of data."
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Define Input Validation"
+    tasks:
+      - "Create a Zod schema for the API input (e.g., `z.object({ id: z.string().uuid() })`)."
+  - step: "Create the Router (tRPC)"
+    tasks:
+      - "Define a backend procedure that takes the Zod schema as input, performs the DB query, and returns the result."
+  - step: "Client Integration"
+    tasks:
+      - "Export the type signature of the Router (NOT the actual code) from the backend to the frontend using `export type AppRouter = typeof appRouter;`."
+      - "Use the tRPC React Query hooks on the frontend. The `data` variable will magically be typed to match the backend's exact return signature."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Using `any` on the frontend when parsing API responses. This defeats the entire purpose of TypeScript."
+  - "Manually copy-pasting TypeScript interfaces between the frontend and backend repositories. They will drift out of sync within a week."
+
+best_practices:
+  - "If using separate repositories (not a monorepo), use an automated process (like OpenAPI generator or GraphQL Codegen) running in CI to publish a private NPM package containing the types, which the frontend installs."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "tRPC Documentation"
+    url: "https://trpc.io/docs"

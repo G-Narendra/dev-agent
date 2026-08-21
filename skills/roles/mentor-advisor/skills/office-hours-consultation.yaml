@@ -1,0 +1,79 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "office-hours-consultation"
+display_name: "Expert Office Hours & Mentorship"
+description: >
+  Provide high-leverage, direct tactical advice to the founding team during blocked 
+  phases of product development or go-to-market execution.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "mentor-advisor"
+phase: "operations"
+applicable_startups: 
+  - all
+priority: "high"
+difficulty: "expert"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Problem Deconstruction"
+    tasks:
+      - "Force the founders to explain the core bottleneck in exactly one sentence before offering any prescriptive advice."
+  - step: "Pattern Matching"
+    tasks:
+      - "Draw upon historical patterns (e.g., 'When Company X faced this, they did Y') rather than guessing based on theory."
+  - step: "Actionable Accountability"
+    tasks:
+      - "End every office hours session by writing down exactly what the founders are committing to achieving before the next meeting."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Giving generic, philosophical advice ('Just build a great product!') when the founders explicitly asked how to structure their Stripe webhook integration."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Office Hours Consultation process"
+  - "How do I handle office hours consultation?"
+  - "Implement office hours consultation"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the office hours consultation process"
+  optional:
+    - name: "code_repository"
+      type: "string"
+      description: "Path to the code repository"
+      default: "./"
+
+outputs:
+  files:
+    - path: "outputs/office-hours-consultation.md"
+      description: "Results of the office hours consultation process"
+  artifacts:
+    - "Completed office hours consultation deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

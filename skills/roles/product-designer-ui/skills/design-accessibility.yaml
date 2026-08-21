@@ -1,0 +1,109 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "design-accessibility"
+display_name: "Accessible Design & WCAG Compliance"
+description: >
+  Designs interfaces that are accessible to users with disabilities — visual,
+  auditory, motor, and cognitive. Ensures WCAG 2.1 AA compliance and follows
+  inclusive design principles.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "product-designer-ui"
+phase: "planning"
+applicable_startups:
+  - all
+priority: "mvp"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Make our design accessible."
+  - "Ensure WCAG compliance."
+  - "Design for users with disabilities."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Audit accessibility compliance."
+  - "Design accessible components."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "design_assets"
+      type: "file"
+      description: "Mockups or design files to evaluate."
+    - name: "compliance_level"
+      type: "string"
+      description: "WCAG A, AA, or AAA."
+  optional:
+    - name: "target_market"
+      type: "string"
+      description: "Markets with accessibility laws (EU, US, UK)."
+      default: "US (ADA / Section 508)"
+
+outputs:
+  files:
+    - path: "design/accessibility/a11y-audit-report.md"
+      description: "Accessibility audit with issues and fixes"
+  artifacts:
+    - "An accessible design system compliant with WCAG AA standards"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Color & Contrast"
+    tasks:
+      - "Ensure all text meets WCAG AA contrast: 4.5:1 for normal text, 3:1 for large text (18px+ bold or 24px+ regular)."
+      - "Never rely solely on color to convey information — use icons, patterns, and labels."
+      - "Check all states: default, hover, active, focus, disabled for adequate contrast."
+      - "Test colorblind simulations (deuteranopia, protanopia, tritanopia) on all screens."
+  - step: "Keyboard & Focus"
+    tasks:
+      - "Ensure all interactive elements are keyboard accessible (Tab, Enter, Escape, Arrow keys)."
+      - "Design visible focus indicators — never use outline: none without a replacement."
+      - "Establish a logical tab order that follows the visual layout."
+      - "Implement skip navigation links for users who navigate by keyboard."
+  - step: "Screen Reader Support"
+    tasks:
+      - "Add descriptive alt text for all images (decorative images get alt='')."
+      - "Use semantic HTML elements (button, nav, main, header, footer) for landmarks."
+      - "Provide ARIA labels where native semantics are insufficient."
+      - "Test with VoiceOver (Mac) and NVDA (Windows) — don't just check code."
+  - step: "Inclusive Content & Interaction"
+    tasks:
+      - "Write clear, simple language — avoid jargon and idioms."
+      - "Provide multiple ways to complete tasks (mouse, keyboard, touch, voice)."
+      - "Ensure motion and time-based interactions can be paused or disabled."
+      - "Design forgiving inputs: flexible formats for dates, phone numbers, addresses."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Treating accessibility as a checklist at the end — it's a design philosophy from day one."
+  - "Using auto-generated alt text — it's usually wrong or unhelpful."
+  - "Designing for WCAG compliance without understanding real user needs."
+  - "Removing focus outlines because they 'look ugly' — that breaks keyboard navigation."
+best_practices:
+  - "Accessibility benefits everyone: captions help users in noisy environments, good contrast helps in sunlight."
+  - "Test with real assistive technology users before launch."
+  - "Automated tools catch ~30% of issues — manual testing is essential."
+  - "Include people with disabilities in your user testing panels."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

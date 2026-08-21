@@ -1,0 +1,116 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "ci-cd-pipeline"
+display_name: "CI/CD Pipeline Architecture & Automation"
+description: >
+  Designs and implements continuous integration (testing, linting, building) 
+  and continuous deployment (pushing to registry, triggering rollouts) 
+  using GitHub Actions or GitLab CI.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "devops-engineer"
+phase: "growth"
+applicable_startups:
+  - all
+priority: "critical"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Set up GitHub Actions."
+  - "Automate the deployments."
+  - "How do we run tests on every PR?"
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Create .github/workflows/main.yml."
+  - "Trigger a manual workflow dispatch."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "git_provider"
+      type: "string"
+      description: "GitHub, GitLab, Bitbucket."
+  optional:
+    - name: "deployment_target"
+      type: "string"
+      description: "AWS ECS, Vercel, Kubernetes, Render."
+      default: "AWS ECS"
+
+outputs:
+  files:
+    - path: ".github/workflows/ci.yml"
+      description: "PR validation pipeline."
+    - path: ".github/workflows/cd.yml"
+      description: "Deployment pipeline triggered on main branch merge."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "Opening a Pull Request automatically runs tests, linting, and type checking, blocking merge on failure."
+manual:
+  - "Merging to the `main` branch results in live code in production within 5-10 minutes with zero human intervention."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+  - "network (GitHub API)"
+
+safety_notes:
+  - "Never hardcode deployment secrets (AWS keys, database URLs) in the workflow YAML. Always use the Git provider's encrypted secrets vault (e.g., `${{ secrets.AWS_ACCESS_KEY_ID }}`)."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "GitHub Actions"
+      install: "N/A"
+  alternatives:
+    - name: "GitLab CI"
+      when: "The codebase is hosted on GitLab."
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "CI (Continuous Integration)"
+    tasks:
+      - "Trigger: `on: pull_request`."
+      - "Jobs: Checkout code, setup Node/Python, install dependencies, run linter, run unit tests."
+      - "Caching: Configure dependency caching (e.g., `actions/setup-node@v3` with `cache: 'npm'`) to cut workflow times in half."
+  - step: "Security Scanning"
+    tasks:
+      - "Add a job using `npm audit` or `trivy` to block PRs that introduce critical CVEs in dependencies."
+  - step: "CD (Continuous Deployment)"
+    tasks:
+      - "Trigger: `on: push` to `main` branch."
+      - "Jobs: Build Docker image, tag with Git SHA, push to ECR/DockerHub, update ECS task definition or K8s manifest."
+  - step: "OIDC Authentication"
+    tasks:
+      - "Configure OpenID Connect (OIDC) between GitHub Actions and your cloud provider (AWS/GCP). This allows you to deploy WITHOUT storing long-lived IAM keys in GitHub secrets."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Running E2E tests on every single commit. It takes too long and wastes CI minutes. Run unit tests on commit, E2E tests on PR creation or nightly."
+  - "Using `latest` for action versions (e.g., `uses: actions/checkout@latest`). Always pin to a major version (e.g., `v3`) to prevent pipeline breaks when the action author releases a breaking change."
+
+best_practices:
+  - "Fail Fast: Put the fastest jobs (linting, type checking) first. If there's a missing semicolon, developers should know in 10 seconds, not after waiting 10 minutes for Docker to build."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "GitHub Actions Documentation"
+    url: "https://docs.github.com/en/actions"

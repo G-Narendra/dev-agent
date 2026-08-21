@@ -1,0 +1,106 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "industry-trend-analysis"
+display_name: "Industry Trend & Market Dynamics Analysis"
+description: >
+  Identifies and analyzes macro-level industry trends, market dynamics,
+  regulatory changes, and technological shifts that could impact the
+  startup's market opportunity or competitive position.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "market-researcher"
+phase: "ideation"
+applicable_startups:
+  - all
+priority: "medium"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "What are the trends in this industry?"
+  - "Analyze market dynamics."
+  - "Is this market growing or shrinking?"
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Research industry trends."
+  - "Analyze market growth trajectory."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "industry"
+      type: "string"
+      description: "The industry or sector to analyze."
+  optional:
+    - name: "time_horizon"
+      type: "string"
+      description: "Short (1yr), medium (3yr), or long (5-10yr) trends."
+      default: "medium"
+
+outputs:
+  files:
+    - path: "research/industry/{segment}-trends.md"
+      description: "Industry trend analysis report"
+  artifacts:
+    - "A trend analysis with market timing recommendations"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Macro Trend Identification"
+    tasks:
+      - "Identify PESTEL factors: Political, Economic, Social, Technological, Environmental, Legal."
+      - "Research industry reports from Gartner, Forrester, IDC, McKinsey, CB Insights."
+      - "Analyze venture capital investment trends in the space (PitchBook, Crunchbase)."
+      - "Track regulatory changes that could create or destroy market opportunities."
+  - step: "Market Timing Assessment"
+    tasks:
+      - "Is the market early (too early to enter), growing (ideal timing), mature (consolidating), or declining?"
+      - "Analyze adoption curves — where is the market on the technology adoption lifecycle?"
+      - "Check if infrastructure exists (e.g., Stripe for payments, AWS for cloud) that enables new solutions."
+      - "Identify 'catalysts' — upcoming events, regulations, or tech shifts that will accelerate adoption."
+  - step: "Substitution & Disruption Analysis"
+    tasks:
+      - "Identify what customers currently use instead of your solution."
+      - "Analyze switching costs — how hard is it for customers to change?"
+      - "Look for adjacent disruptions — technology shifts in other industries affecting yours."
+      - "Assess the 'good enough' threshold — will incumbents improve before you can gain traction?"
+  - step: "Strategic Recommendations"
+    tasks:
+      - "Synthesize findings into a market timing recommendation."
+      - "Provide 'tailwinds' (factors helping you) and 'headwinds' (factors hurting you)."
+      - "Recommend strategic moves based on trends (e.g., 'enter now', 'wait for catalyst', 'pivot to adjacent space')."
+      - "Include risk scenarios: best case, base case, worst case for market development."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Extrapolating a trend linearly when it's actually a cyclical pattern."
+  - "Confusing a fad (Clubhouse) with a lasting trend (social audio)."
+  - "Ignoring demographics — population aging is one of the most predictable trends."
+  - "Being overly optimistic about timing — many markets take longer to develop than expected."
+best_practices:
+  - "The best time to enter a market is right after a 'platform shift' (mobile, cloud, AI)."
+  - "Look at analogous markets that have already matured to predict patterns."
+  - "Track early signals on Reddit and Hacker News before they hit mainstream analyst reports."
+  - "The 'hype cycle' is real — don't confuse hype with market readiness."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

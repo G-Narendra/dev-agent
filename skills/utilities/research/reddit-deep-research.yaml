@@ -1,0 +1,96 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "reddit-deep-research"
+display_name: "Reddit Deep OSINT & Pain Discovery"
+description: >
+  Systematically extracts authentic user opinions, pain points, and product 
+  feedback from Reddit. Bypasses marketing fluff to find raw, unfiltered 
+  frustrations that indicate a viable startup opportunity.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "utility"
+phase: "all"
+applicable_startups:
+  - all
+priority: "high"
+difficulty: "intermediate"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "What do people hate about X?"
+  - "Find complaints about Y."
+  - "Search Reddit for product ideas."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Query Reddit search API."
+  - "Extract sentiment from top comments."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "target_niche"
+      type: "string"
+      description: "The industry or software category (e.g., 'CRM', 'Plumbing')."
+  optional:
+    - name: "search_operators"
+      type: "string"
+      description: "Specific phrases like 'I hate', 'frustrated with'."
+      default: "\"sucks\" OR \"frustrated with\" OR \"alternative to\""
+
+outputs:
+  files:
+    - path: "research/reddit-pain-points-{niche}.md"
+      description: "A compiled report of the most upvoted complaints."
+  artifacts:
+    - "A list of direct quotes proving market pain."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "N/A"
+  manual:
+    - "The extracted quotes clearly identify a missing feature or poor user experience in an existing multi-million dollar product."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "network"
+
+safety_notes:
+  - "Selection Bias: Remember that Reddit is not a perfectly representative sample of the global population. It skews heavily male, young, and tech-savvy. Do not build a product for nurses based solely on Reddit."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Google Search (site:reddit.com)"
+      install: "N/A"
+  alternatives:
+    - name: "Reddit API (PRAW)"
+      when: "Automating sentiment analysis at scale."
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Identify the Subreddits"
+    tasks:
+      - "Do not just search all of Reddit. Find the 3 most concentrated watering holes (e.g., `r/SaaS`, `r/Entrepreneur`, `r/Marketing`)."
+  - step: "Execute Dork Queries"
+    tasks:
+      - "Run queries like: `site:reddit.com/r/sales \"Salesforce\" AND (\"hate\" OR \"slow\" OR \"expensive\")`."
+  - step: "Analyze the Comments (Not just the Posts)"
+    tasks:
+      - "The real gold is in the comments. Look for highly upvoted comments that say 'This exactly. I would pay $100/mo just to solve this specific sub-problem'."
+  - step: "Compile the Voice of Customer (VoC)"
+    tasks:
+      - "Group the complaints into categories (e.g., 'UI is clunky', 'Customer support is dead', 'Pricing is predatory')."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Taking self-promotional posts seriously. If a post says 'I found this amazing tool!', check their post history. It's usually the founder."
+  - "Ignoring downvoted opinions. Sometimes the harsh truth gets downvoted by fanboys of a specific software."
+
+best_practices:
+  - "Search for 'Alternative to [Competitor]'. People asking for alternatives usually list *why* they are leaving in the post body."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "GummySearch: How to validate ideas on Reddit"
+    url: "https://gummysearch.com/"

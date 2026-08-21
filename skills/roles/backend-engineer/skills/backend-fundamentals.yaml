@@ -1,0 +1,80 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "backend-fundamentals"
+display_name: "Backend Fundamentals & Idempotency"
+description: >
+  Implement core backend patterns including idempotency keys, rate limiting, and 
+  secure session management to ensure a resilient API.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "backend-engineer"
+phase: "build"
+applicable_startups: 
+  - all
+priority: "high"
+difficulty: "expert"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Idempotency"
+    tasks:
+      - "Require an `Idempotency-Key` header on all `POST` requests (especially payments) so if a client retries a network timeout, the server doesn't charge them twice."
+  - step: "Rate Limiting"
+    tasks:
+      - "Implement a Redis-backed sliding window rate limiter at the API gateway layer, restricting users to 100 requests per minute to prevent abuse."
+  - step: "Pagination"
+    tasks:
+      - "Never return an unbounded array. Implement cursor-based pagination (using the last seen ID) for all list endpoints instead of slow offset pagination."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Writing a payment endpoint without idempotency, causing a user who double-clicks the 'Submit Order' button to be charged twice."
+
+best_practices:
+  - "Design APIs with idempotency in mind -- same request, same result."
+  - "Always validate inputs at the API boundary before processing."
+  - "Use database transactions for operations that modify multiple records."
+  - "Consider Elixir/Phoenix (BEAM VM) or Erlang for apps needing extreme concurrency, fault tolerance, and real-time features like LiveView."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Backend Fundamentals process"
+  - "How do I handle backend fundamentals?"
+  - "Implement backend fundamentals"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the backend fundamentals process"
+  optional:
+    - name: "code_repository"
+      type: "string"
+      description: "Path to the code repository"
+      default: "./"
+
+outputs:
+  files:
+    - path: "outputs/backend-fundamentals.md"
+      description: "Results of the backend fundamentals process"
+  artifacts:
+    - "Completed backend fundamentals deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "PostgreSQL Documentation"
+    url: "https://postgresql.org/docs"
+  - title: "Node.js Documentation"
+    url: "https://nodejs.org/en/docs/"

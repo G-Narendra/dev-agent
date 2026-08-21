@@ -1,0 +1,117 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "coroutines"
+display_name: "Kotlin Coroutines & Flow"
+description: >
+  Manages background threading and asynchronous tasks in Android using Kotlin 
+  Coroutines and StateFlow/SharedFlow. Eliminates callback hell and strictly 
+  controls which threads execute network logic versus UI updates. Covers key patterns to avoid common pitfalls like storing sensitive tokens or credentials in plaintext in user, and provides actionable best practices for production-ready results.
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "mobile-developer-kotlin"
+phase: "build"
+applicable_startups:
+  - all
+priority: "high"
+difficulty: "expert"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run this database query in the background."
+  - "Convert this RxJava code to Coroutines."
+  - "The UI thread is blocked."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Generate suspend function."
+  - "Draft StateFlow repository."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "task_description"
+      type: "string"
+      description: "E.g., Fetching user data, saving to Room DB."
+  optional:
+    - name: "flow_type"
+      type: "string"
+      description: "StateFlow (state) vs SharedFlow (events)."
+      default: "StateFlow"
+
+outputs:
+  files:
+    - path: "app/src/main/.../repository/UserRepository.kt"
+      description: "The data layer using Coroutines."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "N/A"
+manual:
+  - "StrictMode reports 0 disk or network reads occurring on the main UI thread."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "Job Leaks: Launching a coroutine in `GlobalScope` is dangerous. If the user navigates away from the screen, the background task will keep running forever, wasting battery and potentially crashing the app. Use `viewModelScope`."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Kotlinx Coroutines"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Dispatcher Switching"
+    tasks:
+      - "Always use `withContext(Dispatchers.IO)` when making network requests or reading from the Room database. Never execute I/O operations on `Dispatchers.Main`."
+  - step: "Lifecycle Aware Collection"
+    tasks:
+      - "When collecting a `StateFlow` in an Android Fragment or Compose UI, use `repeatOnLifecycle(Lifecycle.State.STARTED)` to ensure the flow pauses when the app is in the background."
+  - step: "Exception Handling"
+    tasks:
+      - "Do not let exceptions crash the coroutine hierarchy. Use a `CoroutineExceptionHandler` or wrap suspend functions in a standard Kotlin `try/catch` block to handle network timeouts gracefully."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Storing sensitive tokens or credentials in plaintext in UserDefaults/SharedPreferences -- use the platform Keychain/Keystore."
+  - "Ignoring memory warnings on low-end devices -- mobile apps crash silently when the OS kills them for memory pressure."
+  - "Blocking the main thread with network calls or heavy computation -- the UI freezes and the OS shows an Application Not Responding dialog."
+  - "Forcing users to download large assets on cellular data -- check connectivity and defer to WiFi."
+  - "Not handling deep link fallbacks -- if your app isn't installed, the link should gracefully open the app store."
+  - "Use `StateFlow` to represent UI state (it always holds a value and is conflated). Use `SharedFlow` to represent one-off events like 'Show a Toast message' (it doesn't hold state)."
+
+  - "Test on the lowest-spec device you support, not just the latest flagship — that's what most of your users have."
+  - "Implement offline-first architecture using local storage and sync — mobile networks are unreliable."
+  - "Handle deep links and universal links properly — they're the primary way users return to your app from elsewhere."
+  - "Use ProGuard/R8 (Android) or app thinning (iOS) to reduce APK/IPA size — smaller apps have higher install conversion."
+  - "Add pull-to-refresh and retry mechanisms on all data screens — mobile users expect to manually refresh when data feels stale."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Not defining clear success criteria before starting a task -- leads to ambiguous outcomes, endless revisions, and wasted effort."
+
+best_practices:
+  - "Document all configuration decisions in an Architecture Decision Record (ADR) so future team members understand why choices were made."
+  - "Implement comprehensive error handling with structured logging at every integration boundary to simplify debugging."
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Android: Kotlin Coroutines"
+    url: "https://developer.android.com/kotlin/coroutines"

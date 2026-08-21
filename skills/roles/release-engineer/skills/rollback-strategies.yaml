@@ -1,0 +1,115 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "rollback-strategies"
+display_name: "Rollback & Recovery Strategies"
+description: >
+  Designs and implements rollback strategies for production deployments.
+  Covers automated rollback triggers, database rollbacks, feature flag
+  toggles, and recovery runbooks for common failure scenarios.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "release-engineer"
+phase: "ship"
+applicable_startups:
+  - all
+priority: "mvp"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Plan rollback strategy for this release."
+  - "How do we recover if the deployment fails?"
+  - "Design our rollback process."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Design rollback strategy."
+  - "Write recovery runbook."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "deployment_method"
+      type: "string"
+      description: "Blue/green, canary, rolling, or feature flags."
+    - name: "failure_scenarios"
+      type: "string"
+      description: "Types of failures to plan for (app, DB, config)."
+  optional:
+    - name: "rollback_time_target"
+      type: "string"
+      description: "Maximum acceptable rollback time."
+      default: "10 minutes"
+
+outputs:
+  files:
+    - path: "devops/release/rollback-runbook.md"
+      description: "Rollback procedures and recovery runbooks"
+  artifacts:
+    - "Tested rollback procedures for all deployment types"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Rollback Strategy Selection"
+    tasks:
+      - "Blue/green: keep the old environment running — switch DNS/load balancer on failure."
+      - "Canary: ramp down the canary percentage and route all traffic back to stable."
+      - "Rolling: re-deploy the previous working version to all instances."
+      - "Feature flags: toggle the flag off instead of rolling back the deployment."
+  - step: "Database Migration Rollback"
+    tasks:
+      - "Always write DOWN migrations alongside UP migrations."
+      - "Test that the DOWN migration actually restores the previous state without data loss."
+      - "For schema changes: add columns (safe), remove columns (needs downtime), rename (use staged approach)."
+      - "Automatically run the DOWN migration if the application health check fails."
+  - step: "Configuration & Secrets Rollback"
+    tasks:
+      - "Version all configuration files with the deployment artifact."
+      - "Use a secrets manager with versioning for API keys and credentials."
+      - "Automatically revert configuration back to the previous version on rollback."
+      - "Ensure rollback doesn't invalidate active user sessions or tokens."
+  - step: "Automated Rollback Triggers"
+    tasks:
+      - "Define automated rollback conditions: error rate spikes >5%, p99 latency >1s, any 500 status."
+      - "Set up a grace period (60s) before automated rollback to avoid false positives."
+      - "Log the rollback reason, affected users, and duration for post-mortem analysis."
+      - "Create a manual override — someone should always be able to stop an automated rollback."
+  - step: "Testing & Runbooks"
+    tasks:
+      - "Document the rollback runbook step-by-step so anyone can execute it."
+      - "Practice rollbacks in staging — they should be a no-brainer muscle memory."
+      - "Include communication templates: what to tell users, stakeholders, and support teams."
+      - "Review each rollback to find systemic causes and prevent future occurrences."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "No database rollback plan — the most common cause of failed rollbacks."
+  - "Relying on 'just re-deploy the old version' without a clean separation strategy."
+  - "Automated rollbacks that trigger on every small anomaly — noise fatigue."
+  - "Not testing rollbacks — untested rollbacks will fail when you need them most."
+best_practices:
+  - "A good rollback is invisible to users — they should never know anything went wrong."
+  - "Feature flags are safer than deployment rollbacks — toggle off vs. re-deploy."
+  - "Practice rollbacks regularly — it should be a boring, routine procedure."
+  - "Every failed deployment is a learning opportunity — improve the system, not blame people."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

@@ -1,0 +1,156 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "mcp-server-orchestrator"
+display_name: "MCP Server Orchestrator"
+description: >
+  Discovers, evaluates, installs, and configures Model Context Protocol 
+  (MCP) servers to extend AI coding agents (Claude Code, Cursor, 
+  Windsurf, VS Code/Copilot, Goose, OpenCode) with real tool 
+  capabilities. Maps MCP servers to project types so the AI gets the 
+  right tools — database connectors, browser automation, filesystem 
+  access, web search, version control — without over-provisioning.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "utility"
+phase: "all"
+applicable_startups:
+  - all
+priority: "high"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Set up MCP servers for this project."
+  - "Install database MCP server."
+  - "Configure MCP for the AI agent."
+  - "Find the right MCP server for this task."
+  - "Connect the AI to external tools via MCP."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Install and configure MCP servers."
+  - "Search MCP marketplace for tool."
+  - "Generate MCP configuration file."
+  - "Test MCP server connection."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "project_type"
+      type: "string"
+      description: "Type of project (web-app, data-pipeline, mobile-app, CLI-tool, ML-model, API-service)."
+  optional:
+    - name: "specific_servers"
+      type: "array"
+      description: "Specific MCP servers to install (e.g., ['filesystem', 'github', 'postgres'])."
+      default: "Recommended set based on project type"
+    - name: "agent_platform"
+      type: "string"
+      description: "The AI agent platform (claude-desktop, cursor, vscode, goose, opencode)."
+      default: "goose"
+
+outputs:
+  files:
+    - path: "mcp-config.json"
+      description: "MCP server configuration file for the agent platform."
+    - path: "docs/mcp-setup-guide.md"
+      description: "Documentation of installed MCP servers and their capabilities."
+  artifacts:
+    - "A verified working MCP connection between the AI agent and each installed server."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "All configured MCP servers respond to a health-check request."
+    - "The AI agent can successfully call a tool from each server."
+  manual:
+    - "The configuration file is saved in the correct location for the agent platform."
+    - "Server permissions are scoped to the project (not the entire filesystem)."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+  - "network"
+
+safety_notes:
+  - "NEVER install MCP servers that request broad filesystem access unless absolutely necessary. Prefer scoped servers (e.g., restrict to the project directory)."
+  - "MCP servers execute with the same privileges as the AI agent. A malicious server could delete files or exfiltrate data."
+  - "Always review the server's source code or community reputation before adding it to your config."
+  - "Some MCP servers (like `shell` or `execute`) allow arbitrary command execution — use extreme caution."
+  - "Pin MCP server versions to prevent unexpected behavior from auto-updates."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "MCP.so (Marketplace)"
+      install: "N/A (Web tool)"
+      url: "https://mcp.so/"
+  alternatives:
+    - name: "MCPServers.org"
+      install: "N/A (Web tool)"
+      url: "https://mcpservers.org/"
+    - name: "Agent Skills Hub"
+      install: "N/A (Web tool)"
+      url: "https://agentskillshub.dev/skills/"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Determine Project-Type Server Requirements"
+    tasks:
+      - "Web app project → filesystem + github + postgres + brave-search + playwright."
+      - "Data pipeline project → filesystem + sqlite + duckdb + fetch + filesystem."
+      - "Mobile app project → filesystem + github + supabase + playwright + postgres."
+      - "CLI tool project → filesystem + github + sqlite + fetch."
+      - "ML model project → filesystem + huggingface + kaggle + python-repl + filesystem."
+      - "API service project → filesystem + postgres + github + fetch + exa."
+  - step: "Discover MCP Servers"
+    tasks:
+      - "Search mcp.so for the required servers — read the description and check stars/forks."
+      - "Cross-reference on MCPServers.org for categorization and community reviews."
+      - "Check the official MCP repository: github.com/modelcontextprotocol/servers."
+      - "Search GitHub for 'MCP Market' — a community marketplace with thousands of agent skills."
+      - "For niche needs, search GitHub for 'awesome-mcp-servers' lists."
+  - step: "Evaluate Server Quality"
+    tasks:
+      - "Check recent commits (within 3 months) — dead repos accumulate security issues."
+      - "Review the permissions the server requests — does it need full filesystem or just one directory?"
+      - "Check for open issues about security or breaking changes."
+      - "Prefer servers with explicit documentation and examples."
+  - step: "Install in Virtual Environment"
+    tasks:
+      - "Create a project venv: `python -m venv .venv && source .venv/bin/activate`."
+      - "Install MCP servers via pip in the venv: `pip install mcp-server-{name}`."
+      - "For Node.js MCP servers, use npx: `npx @modelcontextprotocol/server-{name}`."
+      - "Never install MCP servers globally."
+  - step: "Configure for the Agent Platform"
+    tasks:
+      - "Generate the MCP configuration JSON for the target platform."
+      - "Test each server: send a test request and verify the response."
+      - "Document the configuration in the project README so new contributors know what's available."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Installing every MCP server you find — each one adds context overhead and potential security risk."
+  - "Using MCP servers for what a 1-line CLI command can do (e.g., MCP server for file listing when `ls` works)."
+  - "Blindly trusting MCP server authors. The MCP ecosystem is young and not all servers are vetted."
+  - "Configuring MCP with full filesystem access when read-only to a single directory suffices."
+
+best_practices:
+  - "Prefer native CLI tools (jq, rg, gh, curl) over MCP servers where possible — they're faster, more reliable, and don't bloat the context window with schema definitions."
+  - "Use MCP servers only for capabilities that can't be done with a simple shell command (database queries, browser automation, API integrations)."
+  - "Version-control your MCP configuration so the entire team uses the same server setup."
+  - "Add a `.mcpignore` file to prevent MCP servers from accessing sensitive paths."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "MCP.so — Community MCP Server Directory"
+    url: "https://mcp.so/"
+  - title: "MCPServers.org — Categorized Server Portal"
+    url: "https://mcpservers.org/"
+  - title: "Agent Skills Hub — Professional Directory with Security Screening"
+    url: "https://agentskillshub.dev/skills/"
+  - title: "Official MCP Servers (modelcontextprotocol/servers)"
+    url: "https://github.com/modelcontextprotocol/servers"
+  - title: "best-of-mcp-servers (Community Ranking)"
+    url: "https://github.com/tolkonepiu/best-of-mcp-servers"
+  - title: "GitHub MCP Configuration Guide"
+    url: "https://docs.github.com/en/copilot/how-tos/copilot-on-github/customize-copilot/configure-mcp-servers"

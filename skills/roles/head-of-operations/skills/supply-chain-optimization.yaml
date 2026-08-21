@@ -1,0 +1,120 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "supply-chain-optimization"
+display_name: "Supply Chain & Operations Optimization"
+description: >
+  Maximizes the startup's Gross Margins. Shaves pennies and seconds off 
+  every operational process—from manufacturing to shipping—resulting in 
+  massive bottom-line profitability at scale. Covers key patterns to avoid common pitfalls like training on the full dataset without a holdout test set -- m, and provides actionable best practices for production-ready results.
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "head-of-operations"
+phase: "growth"
+applicable_startups:
+  - D2C, Hardware, Logistics
+priority: "high"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Our shipping costs are too high."
+  - "The factory keeps missing deadlines."
+  - "Optimize the fulfillment process."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Generate 3PL cost analysis."
+  - "Draft vendor negotiation playbook."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "current_cogs"
+      type: "string"
+      description: "Cost of Goods Sold (including shipping)."
+    - name: "operational_bottleneck"
+      type: "string"
+      description: "Factory lead times, 3PL costs, Return rates."
+  optional:
+    - name: "monthly_volume"
+      type: "string"
+      description: "How many units per month?"
+      default: "10,000 units"
+
+outputs:
+  files:
+    - path: "ops/supply_chain/margin_optimization_plan.md"
+      description: "The playbook for shaving 10% off operational costs."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "N/A"
+manual:
+  - "Gross Margins improve by 5% through renegotiated vendor contracts, optimized packaging, and reduced error rates."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "The Single-Source Dependency: Never rely on a single factory or a single shipping partner. If a pandemic hits, or a strike occurs, or a ship gets stuck in a canal, your startup will go to zero revenue instantly. Always have a fully vetted backup supplier."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Excel / ShipBob / Flexport"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Dimensional Weight Optimization"
+    tasks:
+      - "FedEx charges based on volume, not just weight. If you ship a small bottle in a massive box filled with air, you are paying to ship air. Redesign your packaging to be 1 inch smaller; it can save $100,000 a year."
+  - step: "3PL Service Level Agreements (SLAs)"
+    tasks:
+      - "If your 3PL takes 48 hours to put a product in a box, customers will complain. Enforce a strict SLA: 'All orders placed before 2 PM must be scanned by the carrier the same day.' Add financial penalties to the contract if they fail."
+  - step: "Reverse Logistics (Returns)"
+    tasks:
+      - "Returns kill D2C companies. Make returns easy for the customer, but optimize the backend. If it costs $15 to ship a $20 returned item back to the warehouse, tell the customer to 'Keep it' or donate it. It's mathematically cheaper."
+      - "Set up alert fatigue prevention -- only alert on symptoms, not causes."
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Training on the full dataset without a holdout test set -- model performance metrics will be unrealistically optimistic."
+  - "Serving an ML model without input validation -- adversarial inputs can cause silent incorrect predictions."
+  - "Not monitoring for data drift in production -- a model that was 95% accurate at launch can degrade to 60% as real-world data shifts."
+  - "Using default hyperparameters without any tuning -- can leave 10-30% performance on the table."
+  - "Deploying a model to production without a rollback plan -- a bad model can degrade user experience until manually caught."
+  - "Quarterly RFP (Request for Proposal). Even if you love your current logistics provider, run an RFP every 6 months to get quotes from 3 competitors. Use those quotes to force your current provider to lower their prices."
+
+  - "Maintain at least two qualified suppliers for every critical component or service — single points of failure in supply chain are existential risks."
+  - "Implement cycle counting (count a subset of inventory daily) instead of annual physical inventory — continuous accuracy without disruption."
+  - "Negotiate SLAs with every vendor that include service credits for downtime — without financial consequence, uptime promises are empty."
+  - "Build a business continuity plan and test it annually — untested plans are just wishful thinking."
+  - "Track total cost of ownership (TCO), not just purchase price — cheaper options with higher failure rates cost more long-term."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Not defining clear success criteria before starting a task -- leads to ambiguous outcomes, endless revisions, and wasted effort."
+
+best_practices:
+  - "Document all configuration decisions in an Architecture Decision Record (ADR) so future team members understand why choices were made."
+  - "Implement comprehensive error handling with structured logging at every integration boundary to simplify debugging."
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Flexport: E-commerce Logistics"
+    url: "https://www.flexport.com/"

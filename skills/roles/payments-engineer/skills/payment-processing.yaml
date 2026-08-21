@@ -1,0 +1,80 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "payment-processing"
+display_name: "Payment Processing & Subscriptions"
+description: >
+  Integrate Stripe or Braintree to securely handle recurring SaaS subscriptions, 
+  usage-based billing, and webhooks without storing raw credit card data.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "payments-engineer"
+phase: "build"
+applicable_startups: 
+  - saas
+  - ecommerce
+priority: "critical"
+difficulty: "expert"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "PCI Compliance Offloading"
+    tasks:
+      - "Use Stripe Elements or Checkout. Never allow raw credit card numbers to hit the backend server. Only store the opaque `cus_` and `pm_` tokens."
+  - step: "Webhook Idempotency"
+    tasks:
+      - "Stripe webhooks can arrive out of order or duplicate. Check the `stripe_event_id` against the database before processing `invoice.payment_succeeded`."
+  - step: "Dunning Management"
+    tasks:
+      - "Configure automatic retries for failed payments (e.g., Day 1, Day 3, Day 7) and automatically revoke app access via webhook if the final retry fails."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Writing a cron job that manually charges users every month instead of using Stripe Billing, inevitably double-charging half the user base when the cron script crashes."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Payment Processing process"
+  - "How do I handle payment processing?"
+  - "Implement payment processing"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the payment processing process"
+  optional:
+    - name: "data_source"
+      type: "string"
+      description: "Source of data to analyze"
+      default: "Internal data"
+
+outputs:
+  files:
+    - path: "outputs/payment-processing.md"
+      description: "Results of the payment processing process"
+  artifacts:
+    - "Completed payment processing deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

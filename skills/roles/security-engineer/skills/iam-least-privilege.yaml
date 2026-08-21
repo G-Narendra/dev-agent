@@ -1,0 +1,114 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "iam-least-privilege"
+display_name: "IAM & Principle of Least Privilege"
+description: >
+  Secure the startup's cloud infrastructure (AWS/GCP) and SaaS tools 
+  by enforcing strict Identity and Access Management (IAM). Ensures employees 
+  and services only have the exact permissions necessary to perform their job, 
+  limiting the blast radius of compromised credentials.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "security-engineer"
+phase: "operations"
+applicable_startups:
+  - all
+priority: "critical"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Lock down AWS."
+  - "Audit user access."
+  - "Implement IAM policies."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Create an AWS IAM policy JSON."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "cloud_provider"
+      type: "string"
+      description: "AWS, GCP, or Azure."
+    - name: "target_role"
+      type: "string"
+      description: "Who/What needs access? (e.g., 'Backend CI Pipeline', 'Junior Developer')."
+  optional:
+    - name: "sso_provider"
+      type: "string"
+      description: "Okta, Google Workspace."
+      default: "Google Workspace"
+
+outputs:
+  files:
+    - path: "infrastructure/iam/least-privilege-policy.json"
+      description: "The strict IAM policy."
+  artifacts:
+    - "A quarterly Access Review checklist."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "AWS IAM Access Analyzer reports zero overly permissive roles (e.g., AdministratorAccess)."
+  manual:
+    - "If a developer's laptop is stolen, the attacker cannot delete the production database."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+
+safety_notes:
+  - "NEVER use the AWS Root Account for daily operations. Secure the root account with a physical hardware token (YubiKey), lock it in a safe, and create IAM Admin users for daily use."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "AWS IAM Identity Center (SSO)"
+      install: "N/A"
+  alternatives:
+    - name: "Okta / JumpCloud"
+      when: "Managing access across 50+ different SaaS applications, not just cloud infrastructure."
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "MFA Enforcement"
+    tasks:
+      - "Multi-Factor Authentication (MFA) must be strictly enforced for ALL accounts, including service accounts if possible. No exceptions for executives."
+  - step: "Role-Based Access Control (RBAC)"
+    tasks:
+      - "Developers should not have write access to Production. They should only have 'Read-Only' access to view logs and metrics. Deployments must happen via the CI/CD pipeline (which has a dedicated, scoped IAM role)."
+  - step: "The 'Wildcard' Ban"
+    tasks:
+      - "Never use `\"Action\": \"s3:*\"` or `\"Resource\": \"*\"` in a policy unless absolutely necessary. Specify exactly which actions (`s3:GetObject`) on exactly which bucket."
+  - step: "Quarterly Access Reviews"
+    tasks:
+      - "Every 90 days, export a list of all users and their permissions. The manager must formally sign off that the user still requires that access (Mandatory for SOC2)."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Giving a developer `AdministratorAccess` because 'the strict policy was breaking their code and we needed to ship fast'. You have just created a massive security hole."
+  - "Using long-lived IAM Access Keys for developers. Keys leak on GitHub constantly. Use AWS SSO (Identity Center) so developers use short-lived, temporary STS tokens that expire in 8 hours."
+
+best_practices:
+  - "Implement 'Just-In-Time' (JIT) access. If a developer actually needs production DB access to fix a Sev1 incident, they request it via Slack, a manager approves it, and the access automatically expires after 1 hour."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "AWS: Security Best Practices in IAM"
+    url: "https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html"

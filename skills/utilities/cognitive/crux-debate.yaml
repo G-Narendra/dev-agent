@@ -1,0 +1,93 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "crux-debate"
+display_name: "Crux Debating & Truth Convergence"
+description: >
+  Resolves complex architectural, strategic, or hiring disagreements by finding
+  the "Crux" — the single factual premise that, if flipped, would change the 
+  minds of the debating parties. Avoids strawman arguments by forcing the AI 
+  to steel-man the opposition first.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "utility"
+phase: "all"
+applicable_startups:
+  - all
+priority: "high"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Should we use Monorepo or Polyrepo?"
+  - "Let's debate the pricing model."
+  - "Find the crux of this argument."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Generate steel-man argument."
+  - "Identify factual crux."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "dilemma"
+      type: "string"
+      description: "The core disagreement (e.g., 'MongoDB vs Postgres for our initial MVP')."
+  optional:
+    - name: "stakeholders"
+      type: "string"
+      description: "Who is arguing? (e.g., 'CTO vs Lead Engineer')."
+      default: "Neutral Analysis"
+
+outputs:
+  files:
+    - path: "decisions/debates/{topic}.md"
+      description: "The output of the crux identification process."
+  artifacts:
+    - "A clear statement of the crux and a testable hypothesis to resolve it."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "N/A"
+  manual:
+    - "The output identifies a specific, testable fact that would resolve the disagreement, rather than just summarizing both sides."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+
+safety_notes:
+  - "Do not compromise in the middle. The goal is truth, not a watered-down compromise that pleases nobody."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Markdown"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Steel-Man the Opposition"
+    tasks:
+      - "Articulate the strongest possible version of Side A's argument."
+      - "Articulate the strongest possible version of Side B's argument."
+      - "Ensure neither side relies on logical fallacies."
+  - step: "Identify the Crux"
+    tasks:
+      - "Locate the exact point of divergence. (e.g., 'The crux is whether our read/write ratio will exceed 10:1 in the first 6 months')."
+  - step: "Design a Resolution Test"
+    tasks:
+      - "Define a cheap, fast way to test the crux in reality (e.g., 'Run a load test simulating 10k concurrent users')."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Strawmanning: Weakening one side of the argument to make the other side look obviously correct."
+  - "Argument to Moderation (False Compromise): Concluding that the truth must lie exactly halfway between two extremes."
+
+best_practices:
+  - "State beliefs as probabilities (e.g., 'I am 80% confident that X is true')."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "LessWrong: Double Crux"
+    url: "https://www.lesswrong.com/posts/Bc2q5D6FDRw7xL7L3/double-crux-a-strategy-for-resolving-disagreement"

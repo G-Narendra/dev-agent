@@ -1,0 +1,115 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "gpu-cost-optimization"
+display_name: "GPU & Inference Cost Optimization"
+description: >
+  Dramatically reduce cloud computing costs for AI/ML workloads. Focuses on 
+  model quantization, batching, Spot Instances, and right-sizing hardware 
+  to prevent massive AWS/GCP bills.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "mlops-engineer"
+phase: "operations"
+applicable_startups:
+  - ai-startups
+priority: "critical"
+difficulty: "expert"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Our AWS bill is too high."
+  - "Optimize the GPU usage."
+  - "Reduce inference costs."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Create a cost optimization plan."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "model_size"
+      type: "string"
+      description: "Size of the model in VRAM (e.g., '14GB')."
+    - name: "current_infrastructure"
+      type: "string"
+      description: "e.g., 'AWS p4d instances running 24/7'."
+  optional:
+    - name: "latency_sla"
+      type: "string"
+      description: "Strict real-time vs relaxed asynchronous."
+      default: "Real-time"
+
+outputs:
+  files:
+    - path: "mlops/infrastructure/cost-optimization-plan.md"
+      description: "The strategy for reducing the cloud bill."
+  artifacts:
+    - "A Quantized version of the model (e.g., INT8/FP16)."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "GPU memory utilization is consistently above 80% rather than sitting idle."
+  manual:
+    - "Monthly inference costs are reduced by 40-60% without violating latency SLAs."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+
+safety_notes:
+  - "Do not aggressively quantize a model without testing the output quality. Moving an LLM from FP16 to 4-bit integer quantization will save massive amounts of RAM, but it might cause the model to output gibberish or hallucinate frequently."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "vLLM / TensorRT"
+      install: "pip install vllm"
+  alternatives:
+    - name: "AWS Inferentia"
+      when: "Migrating away from NVIDIA GPUs entirely for massive cost savings on AWS."
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Model Quantization & Pruning"
+    tasks:
+      - "Convert FP32 (32-bit float) models to FP16 or INT8. This halves (or quarters) the VRAM requirement, allowing you to use cheaper GPUs (e.g., an L4 instead of an A100)."
+      - "Use optimized inference engines. Do not serve LLMs using standard HuggingFace `transformers`. Use `vLLM` or `TGI` which implement PagedAttention to dramatically increase throughput."
+  - step: "Dynamic Batching"
+    tasks:
+      - "If the API receives 10 separate requests in 50ms, do not process them sequentially. Batch them into a single tensor, send it to the GPU once, and split the response. This increases GPU utilization and throughput."
+  - step: "Infrastructure Right-Sizing (Spot Instances)"
+    tasks:
+      - "For asynchronous background processing (e.g., generating daily embeddings), use AWS Spot Instances / GCP Preemptible VMs. They are 70% cheaper, though they can be interrupted."
+      - "Do NOT use Spot instances for the real-time, user-facing `/chat` API."
+  - step: "Serverless GPUs"
+    tasks:
+      - "If you only get 5 requests per hour, do not pay $1,500/month to run a dedicated GPU 24/7. Use Serverless GPU providers (Modal, RunPod, Baseten) that scale to zero, paying only for the seconds you compute."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Requesting an NVIDIA A100 (80GB) for a model that only requires 4GB of VRAM. You are paying $3,000/month for an engine you are running at 5% capacity. Right-size the hardware to the model."
+  - "Using GPUs for CPU tasks. Move all image resizing, tokenization, and JSON parsing to the CPU *before* sending data to the GPU."
+
+best_practices:
+  - "Set up strict billing alerts in the cloud provider. A rogue script stuck in an infinite loop calling a heavy GPU inference endpoint can bankrupt a startup over a single weekend."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "vLLM: High-throughput LLM Serving"
+    url: "https://vllm.ai/"

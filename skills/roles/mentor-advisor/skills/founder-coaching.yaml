@@ -1,0 +1,78 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "founder-coaching"
+display_name: "Founder Coaching & Socratic Guidance"
+description: >
+  Hold regular 1-on-1 sessions with founders to navigate burnout, resolve co-founder disputes,
+  and provide unbiased feedback on strategic pivots.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "mentor-advisor"
+phase: "ideation"
+applicable_startups: 
+  - all
+priority: "mvp"
+difficulty: "advanced"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Active Listening"
+    tasks:
+      - "Allow the founder to vent about operational stress before jumping into problem-solving mode."
+  - step: "Co-Founder Mediation"
+    tasks:
+      - "Identify passive-aggressive friction between founders and force a transparent conversation."
+  - step: "Strategic Challenge"
+    tasks:
+      - "Challenge the founder's assumptions regarding their Customer Acquisition Cost (CAC) and true market size."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Telling the founder exactly how to run their company based on a playbook from 1995, ignoring the context of the current market."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Founder Coaching process"
+  - "How do I handle founder coaching?"
+  - "Implement founder coaching"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the founder coaching process"
+  optional:
+    - name: "N/A"
+      type: "string"
+      description: "No optional inputs needed."
+
+outputs:
+  files:
+    - path: "outputs/founder-coaching.md"
+      description: "Results of the founder coaching process"
+  artifacts:
+    - "Completed founder coaching deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

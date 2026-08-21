@@ -1,0 +1,105 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "sourcing-strategy"
+display_name: "Outbound Talent Sourcing"
+description: >
+  Hunts for top-tier talent who are not actively looking for a job (passive 
+  candidates). Builds Boolean search strings, scrapes GitHub/LinkedIn, and 
+  crafts hyper-personalized outreach to secure interviews with 10x engineers.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "talent-acquisition"
+phase: "growth"
+applicable_startups:
+  - all
+priority: "high"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "We need a Senior React Developer."
+  - "No one is applying to the job board."
+  - "Find me a VP of Sales."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Generate Boolean search string."
+  - "Draft recruiter outreach email."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "job_title"
+      type: "string"
+      description: "e.g., Staff Machine Learning Engineer."
+    - name: "must_have_skills"
+      type: "string"
+      description: "e.g., PyTorch, CUDA, 5+ YOE."
+  optional:
+    - name: "target_companies"
+      type: "string"
+      description: "Poach from Meta, OpenAI, Stripe."
+      default: "Tier 1 Tech"
+
+outputs:
+  files:
+    - path: "hr/recruiting/outreach_campaign_ml.md"
+      description: "The cold outreach templates for candidates."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "N/A"
+manual:
+  - "Achieve a 20%+ response rate on outbound cold recruiting emails to senior engineers."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "Bait and Switch: Never promise a candidate they will be 'leading the AI team' in the outreach email, only to reveal in the interview they will be fixing legacy CSS bugs. It destroys employer brand."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "LinkedIn Recruiter / Gem"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "X-Ray Searching (Boolean)"
+    tasks:
+      - "Don't just rely on LinkedIn Search. Use Google X-Ray searching to find developers on GitHub or StackOverflow. E.g., `site:github.com 'location: San Francisco' 'Python' 'contributions'`."
+  - step: "Hyper-Personalization"
+    tasks:
+      - "Top engineers get 10 recruiter spam emails a day ('I have an exciting opportunity!'). To stand out, reference a specific open-source repo they contributed to or a blog post they wrote."
+  - step: "Founder Outreach"
+    tasks:
+      - "For critical senior hires (VP level), the cold email must come directly from the CEO or CTO's email address, not from the Junior HR Associate. The response rate is 5x higher."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Using vague, buzzword-filled job titles like 'Data Ninja' or 'Growth Rockstar'. Senior professionals ignore these. Use standard industry titles (e.g., 'Senior Data Engineer')."
+best_practices:
+  - "Sell the problem, not just the perks. Senior talent cares more about the technical complexity of the problem they are solving than the free ping-pong table in the office."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Boolean Black Belt: Sourcing Tips"
+    url: "https://booleanblackbelt.com/"

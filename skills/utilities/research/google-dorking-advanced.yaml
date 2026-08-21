@@ -1,0 +1,96 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "google-dorking-advanced"
+display_name: "Advanced Google Dorking & OSINT"
+description: >
+  Utilizes advanced Google search operators to find hidden, indexed information 
+  that normal searches miss. Perfect for finding leaked pitch decks, 
+  competitor pricing sheets, and vulnerable endpoints.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "utility"
+phase: "all"
+applicable_startups:
+  - all
+priority: "high"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Find their pitch deck."
+  - "Do a deep dive on this competitor."
+  - "Use Google Dorks."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Execute advanced dork query."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "target_entity"
+      type: "string"
+      description: "Company name, domain, or individual."
+    - name: "information_goal"
+      type: "string"
+      description: "What are we looking for? (e.g., 'Financials', 'Internal Docs')."
+  optional:
+    - name: "file_types"
+      type: "string"
+      description: "pdf, xlsx, docx."
+      default: "all"
+
+outputs:
+  files:
+    - path: "research/osint-{target}.md"
+      description: "A summary of the exposed information discovered."
+  artifacts:
+    - "Direct links to the discovered files."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "N/A"
+  manual:
+    - "Discovers documents that the target entity likely did not intend to be publicly easily accessible (but are indexed by Google)."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "network"
+
+safety_notes:
+  - "Ethical Boundary: This is OSINT (Open Source Intelligence). You are searching publicly indexed Google results. DO NOT attempt to hack, brute force, or exploit vulnerabilities discovered through these searches."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Google Search"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Filetype and Title Searches"
+    tasks:
+      - "To find internal docs: `site:competitor.com filetype:pdf intitle:\"confidential\" OR intitle:\"internal use only\"`."
+      - "To find pitch decks: `\"Competitor Name\" filetype:pdf intitle:\"Series A\" OR \"Deck\"`."
+  - step: "Subdomain Enumeration"
+    tasks:
+      - "Use `site:competitor.com -www` to find forgotten staging servers, admin panels, or API endpoints (e.g., `staging.competitor.com`)."
+  - step: "Exposed Directories"
+    tasks:
+      - "Search for open directories: `site:competitor.com intitle:\"index of\"`."
+  - step: "Wayback Machine Validation"
+    tasks:
+      - "If a page returns a 404 but is still cached in Google, or if they recently deleted their pricing page, check `archive.org`."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Running simple keyword searches and assuming there is no information available. You must use `intext:`, `inurl:`, and `filetype:`."
+  - "Triggering Google CAPTCHAs by running automated dorks too rapidly. Emulate human search timing."
+
+best_practices:
+  - "Combine `site:` with `ext:pdf` to find investor reports that competitors host but don't link to from their main navigation."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Exploit Database: Google Hacking Database (GHDB)"
+    url: "https://www.exploit-db.com/google-hacking-database"

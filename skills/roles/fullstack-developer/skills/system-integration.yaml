@@ -1,0 +1,105 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "system-integration"
+display_name: "Third-Party System Integration"
+description: >
+  Integrates complex third-party APIs (Stripe, Twilio, Salesforce) into the 
+  application safely. Handles webhooks, API rate limits, and network failures 
+  gracefully.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "fullstack-developer"
+phase: "build"
+applicable_startups:
+  - all
+priority: "high"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Add Stripe subscriptions."
+  - "Integrate the SendGrid API."
+  - "Handle webhooks securely."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Generate webhook endpoint handler."
+  - "Draft API integration service class."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "service_name"
+      type: "string"
+      description: "E.g., Stripe, Twilio."
+    - name: "integration_type"
+      type: "string"
+      description: "Polling vs Webhooks."
+  optional:
+    - name: "retry_policy"
+      type: "string"
+      description: "Exponential backoff settings."
+      default: "3 retries"
+
+outputs:
+  files:
+    - path: "src/services/stripe.service.ts"
+      description: "The wrapper class for the third-party API."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "Tests successfully simulate receiving a webhook and updating the local database state."
+manual:
+  - "If the third-party API goes down, the application gracefully alerts the user instead of crashing."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "Webhook Forgery: Never process a webhook without verifying its cryptographic signature. Otherwise, anyone can send a POST request to your `/webhook` endpoint pretending to be Stripe and grant themselves a paid subscription."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "ngrok"
+      install: "npm i -g ngrok"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "API Wrapping"
+    tasks:
+      - "Never call `axios.post('https://api.stripe.com')` directly from your controllers. Wrap all third-party calls in a dedicated Service Class (e.g., `PaymentService`)."
+  - step: "Webhook Signature Verification"
+    tasks:
+      - "Extract the signature header from the incoming webhook request. Use the vendor's SDK to verify the signature using your secret webhook signing key before executing any business logic."
+  - step: "Idempotency Implementation"
+    tasks:
+      - "Webhooks can be delivered multiple times. Ensure your webhook handler is idempotent. Check if `event_id` already exists in your database before processing it."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Leaking third-party API errors directly to the frontend. E.g., showing 'Twilio Error 400: Invalid format' to a user instead of 'Please enter a valid phone number'."
+best_practices:
+  - "Use a tool like `ngrok` to tunnel webhooks to your `localhost` environment during development."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Stripe: Best Practices for Webhooks"
+    url: "https://stripe.com/docs/webhooks/best-practices"

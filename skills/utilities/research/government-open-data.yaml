@@ -1,0 +1,125 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "datagov-open-data"
+display_name: "Government & Open Data Portal Search"
+description: >
+  Searches government open data portals (Data.gov, data.gov.uk, EU Open Data 
+  Portal, World Bank, UN, etc.) for free, high-quality datasets. Government 
+  data is often the most reliable source for economic indicators, demographic 
+  trends, industry statistics, and regulatory information — all essential for 
+  market sizing, investor pitches, and business planning.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "utility"
+phase: "ideation"
+applicable_startups:
+  - all
+priority: "medium"
+difficulty: "beginner"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Find government data for market sizing."
+  - "Search open data portals for this industry."
+  - "What does Data.gov have on this topic?"
+  - "Find economic indicators for this market."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Search Data.gov API."
+  - "Extract World Bank indicators."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "research_domain"
+      type: "string"
+      description: "The industry or domain (e.g., 'healthcare spending in US', 'renewable energy adoption Europe')."
+  optional:
+    - name: "data_portal"
+      type: "string"
+      description: "'us' (Data.gov), 'uk' (data.gov.uk), 'eu' (EU Open Data), 'worldbank' (World Bank), 'all'."
+      default: "all"
+
+outputs:
+  files:
+    - path: "research/open-data-{domain}.md"
+      description: "A report of available government datasets and key statistics."
+  artifacts:
+    - "Market sizing data (e.g., total addressable market in dollars)."
+    - "Growth trends and year-over-year statistics."
+    - "Demographic or geographic breakdowns for targeting."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "N/A"
+  manual:
+    - "Found authoritative data to support market sizing claims in investor pitch decks."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "network"
+
+safety_notes:
+  - "Government data is often delayed by 1-2 years. Use it for trends and market size, not real-time decisions."
+  - "Different countries have different data standards. US data (Data.gov) cannot always be directly compared to EU data."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Google Search (site:data.gov OR site:data.gov.uk)"
+      install: "N/A"
+  alternatives:
+    - name: "Data.gov API"
+      when: "Programmatic search across all US federal datasets."
+    - name: "World Bank API"
+      when: "International economic indicators."
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Search US Government Data (Data.gov)"
+    tasks:
+      - "Use Google: `site:data.gov {domain} dataset`"
+      - "Look for datasets with CSV or JSON downloads (easier to use than XML)."
+      - "Check the last updated date — government data can be years old."
+  - step: "Search International Data"
+    tasks:
+      - "UK: `site:data.gov.uk {domain}`"
+      - "EU: `site:data.europa.eu {domain}`"
+      - "World Bank: `site:data.worldbank.org {domain}`"
+      - "UN: `site:data.un.org {domain}`"
+  - step: "Extract Market Sizing Data"
+    tasks:
+      - "Find: industry revenue, number of businesses in the sector, growth rate, employment numbers."
+      - "Use these for: TAM/SAM/SOM calculations in the business plan."
+      - "Document the source URL for each statistic (investors will verify this)."
+  - step: "Find Demographic Data for Targeting"
+    tasks:
+      - "Census data: population demographics, income levels, geographic distribution."
+      - "Labor statistics: wage data by industry and region."
+      - "Consumer spending data by category."
+  - step: "Compile Report"
+    tasks:
+      - "Create a structured report with: Statistic | Value | Source URL | Date"
+      - "Include methodology notes (e.g., 'This data is from 2023, adjust for inflation')."
+      - "Flag any data caveats the team should be aware of."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Using outdated data without noting it. Government data from 2019 is not representative of 2024."
+  - "Comparing data across countries without accounting for methodological differences (e.g., US healthcare spending includes private insurance; UK includes only NHS)."
+
+best_practices:
+  - "Combine multiple data sources: Use World Bank for international comparison, Data.gov for US-specific depth."
+  - "Government APIs usually return JSON. If the UI is hard to navigate, try the API directly — it's often faster."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Data.gov (US Federal Open Data)"
+    url: "https://data.gov/"
+  - title: "data.gov.uk (UK Open Data)"
+    url: "https://data.gov.uk/"
+  - title: "EU Open Data Portal"
+    url: "https://data.europa.eu/"
+  - title: "World Bank Open Data"
+    url: "https://data.worldbank.org/"

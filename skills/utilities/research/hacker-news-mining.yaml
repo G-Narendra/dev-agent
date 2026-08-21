@@ -1,0 +1,90 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "hacker-news-mining"
+display_name: "Hacker News Wisdom Extraction"
+description: >
+  Extracts collective technical wisdom from Hacker News (news.ycombinator.com). 
+  Because HN comments from experienced engineers are often more valuable, 
+  cynical, and brutally honest than official vendor documentation.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "utility"
+phase: "all"
+applicable_startups:
+  - developer-tools
+  - saas
+priority: "medium"
+difficulty: "intermediate"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "What does Hacker News think about X?"
+  - "Search HN for alternatives to Y."
+  - "Did anyone on HN solve this?"
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Query HN Algolia API."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "technology_or_company"
+      type: "string"
+      description: "e.g., 'Supabase', 'Next.js App Router'."
+  optional:
+    - name: "search_type"
+      type: "string"
+      description: "'Show HN', 'Ask HN', or 'General'."
+      default: "General"
+
+outputs:
+  files:
+    - path: "research/hn-consensus-{topic}.md"
+      description: "A summary of the prevailing technical opinion on HN."
+  artifacts:
+    - "A list of the strongest technical critiques against the technology."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "N/A"
+  manual:
+    - "Identifies critical flaws, edge-case bugs, or pricing traps in a technology that the official docs hide."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "network"
+
+safety_notes:
+  - "Cynicism Bias: Hacker News is famously cynical ('I could build Dropbox in a weekend with rsync'). Do not let HN talk you out of building a product just because they claim it's 'trivial'."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "HN Algolia API"
+      install: "N/A (Web API: hn.algolia.com)"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Search Launch Threads"
+    tasks:
+      - "Find the original 'Show HN' thread for the technology. This is where the creators answer the hardest architectural questions."
+  - step: "Search 'Ask HN' Threads"
+    tasks:
+      - "Search for 'Ask HN: Who is using [Tech] in production?' to find battle-tested reviews, not just tutorial hype."
+  - step: "Synthesize the Critiques"
+    tasks:
+      - "Extract the top 3 most upvoted criticisms. (e.g., 'Everyone on HN agrees that AWS Amplify's GraphQL implementation falls apart when you need custom resolvers')."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Only reading the post title and the linked article. The article is marketing; the comments section is the truth."
+  - "Assuming HN consensus equals market reality. HN hates marketing, but marketing makes startups successful. Balance the technical feedback with business reality."
+
+best_practices:
+  - "Sort HN Algolia searches by 'Date' to see if the sentiment has changed over the last 3 years as a framework matured."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "HN Search API"
+    url: "https://hn.algolia.com/api"

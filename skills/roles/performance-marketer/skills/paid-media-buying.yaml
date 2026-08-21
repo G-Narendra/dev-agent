@@ -1,0 +1,81 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "paid-media-buying"
+display_name: "Paid Media Buying & CPA Optimization"
+description: >
+  Manage massive ad budgets across Meta, Google Search, and TikTok, utilizing platform
+  algorithms to acquire users profitably at scale.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "performance-marketer"
+phase: "growth"
+applicable_startups: 
+  - d2c
+  - saas
+priority: "mvp"
+difficulty: "advanced"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Infrastructure Setup"
+    tasks:
+      - "Install the Meta Pixel and Google Tag Manager. Verify server-side conversion tracking (CAPI) is working."
+  - step: "Campaign Architecture"
+    tasks:
+      - "Set up broad-audience prospecting campaigns to feed the algorithm."
+      - "Set up high-intent retargeting campaigns (e.g., 'Added to Cart in last 7 days')."
+  - step: "Daily Optimization"
+    tasks:
+      - "Review campaigns daily. Kill any ad set that exceeds the target CPA by 20% for 3 consecutive days."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Scaling daily budget by 500% in one day because performance was good, causing the algorithm to panic and destroy the CPA."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Paid Media Buying process"
+  - "How do I handle paid media buying?"
+  - "Implement paid media buying"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the paid media buying process"
+  optional:
+    - name: "target_audience"
+      type: "string"
+      description: "Target user or customer segment"
+      default: "Primary user persona"
+
+outputs:
+  files:
+    - path: "outputs/paid-media-buying.md"
+      description: "Results of the paid media buying process"
+  artifacts:
+    - "Completed paid media buying deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

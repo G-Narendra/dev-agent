@@ -1,0 +1,115 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "cap-table-strategy"
+display_name: "Cap Table Management & Equity Strategy"
+description: >
+  Manages the company's capitalization table and designs equity structures
+  for founders, employees, advisors, and investors. Covers option pools,
+  vesting schedules, equity allocation, and dilution modeling.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "fundraising-lead"
+phase: "planning"
+applicable_startups:
+  - all
+priority: "growth"
+difficulty: "expert"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Design our cap table."
+  - "Plan employee equity pool."
+  - "Model dilution for future rounds."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Build cap table model."
+  - "Design equity incentive plan."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "founder_agreement"
+      type: "file"
+      description: "Founder equity split and vesting schedule."
+    - name: "funding_terms"
+      type: "string"
+      description: "Current or planned funding round terms."
+  optional:
+    - name: "option_pool_size"
+      type: "string"
+      description: "Percentage of company reserved for employee options."
+      default: "10-15%"
+
+outputs:
+  files:
+    - path: "finance/cap-table-model.md"
+      description: "Cap table model with dilution scenarios"
+  artifacts:
+    - "A fully modeled cap table with dilution projections across future rounds"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Founder Equity Structure"
+    tasks:
+      - "Determine founder equity split based on contribution, role, and time commitment."
+      - "Set up 4-year vesting with 1-year cliff for all founders."
+      - "Include repurchase rights for unvested equity if a founder leaves early."
+      - "Document co-founder agreement: IP assignment, roles, decision-making, vesting acceleration."
+  - step: "Employee Option Pool"
+    tasks:
+      - "Create employee stock option plan (ESOP) covering all employees."
+      - "Set option pool size: 10-15% at seed stage, top up to 15-20% at Series A."
+      - "Design option allocation formula: role, seniority, hire date (earlier = more equity)."
+      - "Standard terms: 4-year vesting, 1-year cliff, ISO for US employees, NSO for contractors."
+  - step: "Advisor & Contractor Equity"
+    tasks:
+      - "Use standard advisor equity: 0.25-1.0% for ongoing advisors."
+      - "Structure with vesting (2 years typically) tied to specific contributions."
+      - "Limit advisor equity to preserve cap table for investors and employees."
+      - "Document advisor agreement with clear deliverables and termination clause."
+  - step: "Dilution Modeling"
+    tasks:
+      - "Model current ownership: founders, employee pool, existing investors."
+      - "Project future rounds: seed, Series A, B, C with typical dilution amounts."
+      - "Show how each round dilutes each stakeholder group."
+      - "Ensure founders maintain sufficient ownership through exit to stay motivated."
+  - step: "Cap Table Tools & Legal"
+    tasks:
+      - "Use cap table management software (Carta, Pulley, Shareworks) for accuracy."
+      - "Keep cap table accurate from day one — mistakes compound across rounds."
+      - "Work with a startup lawyer to ensure SEC compliance and correct documentation."
+      - "Review cap table quarterly and before every fundraising event."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Not vesting founder shares — the #1 cause of dead startup equity disputes."
+  - "Giving away too much equity too early to advisors or early employees."
+  - "Not reserving enough option pool — forced dilution between rounds hurts everyone."
+  - "Managing the cap table on a spreadsheet after multiple rounds — one error can cost millions."
+best_practices:
+  - "Use cap table software from day one — it's cheap and prevents costly mistakes."
+  - "Founder vesting protects against co-founder departures — standard for a reason."
+  - "The best time to set up the option pool is before a fundraising round."
+  - "Dilution is not bad — 10% of a $1B company is worth more than 100% of nothing."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

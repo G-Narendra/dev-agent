@@ -1,0 +1,98 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "github-solution-finder"
+display_name: "GitHub Open Source Solution Finder"
+description: >
+  When faced with a complex technical challenge, this skill systematically 
+  searches GitHub to find repositories that have already solved the problem. 
+  Evaluates repo quality and license compatibility before recommending adoption.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "utility"
+phase: "all"
+applicable_startups:
+  - all
+priority: "high"
+difficulty: "intermediate"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Has someone already built this?"
+  - "Find a library for this on GitHub."
+  - "How do open source projects solve this?"
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Search GitHub repositories."
+  - "Clone and evaluate repository."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "technical_problem"
+      type: "string"
+      description: "What are we trying to build? (e.g., 'A cron job scheduler in Go')."
+  optional:
+    - name: "preferred_language"
+      type: "string"
+      description: "Python, Rust, TS."
+      default: "Any"
+
+outputs:
+  files:
+    - path: "research/github-solutions-{topic}.md"
+      description: "A comparative analysis of the top 3 open-source solutions."
+  artifacts:
+    - "A recommendation on whether to Adopt, Fork, or Build from scratch."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "N/A"
+  manual:
+    - "Saves the engineering team 2 weeks of work by finding a MIT-licensed library that exactly fits the requirement."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "network"
+  - "filesystem"
+
+safety_notes:
+  - "License Viral Risk: You MUST check the license. If a repo is GPLv3 and you integrate it into a proprietary SaaS, you may be legally forced to open-source your entire proprietary codebase. Prefer MIT or Apache 2.0 for commercial use."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "GitHub CLI (`gh`)"
+      install: "brew install gh"
+  alternatives:
+    - name: "GitHub Advanced Search (Web)"
+      when: "Exploring purely via browser."
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Decompose into Searchable Keywords"
+    tasks:
+      - "Don't search for 'How to make a chat app'. Search for 'websocket chat architecture redis pubsub'."
+  - step: "Filter for Quality"
+    tasks:
+      - "Filter by `stars:>100`, `pushed:>YYYY-MM-DD` (to ensure it's not dead), and `language:YourLang`."
+  - step: "Analyze the Codebase"
+    tasks:
+      - "Read the `README.md` first. Does it actually do what we need?"
+      - "Check the open Issues and Pull Requests. If there are 500 open issues and the maintainer hasn't responded in a year, DO NOT adopt it."
+  - step: "Extract the Pattern (Optional)"
+    tasks:
+      - "If the library is too bloated, read the source code to understand *how* they solved the core algorithm, and implement a lightweight version internally."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Blindly running `npm install` on a random repo without checking if it's actively maintained. You are importing technical debt."
+  - "Ignoring the license file entirely."
+
+best_practices:
+  - "Check the 'Network' tab in GitHub to see if someone else maintains a more active fork of a seemingly dead repository."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "GitHub Advanced Search syntax"
+    url: "https://docs.github.com/en/search-github/searching-on-github/searching-for-repositories"

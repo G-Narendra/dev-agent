@@ -1,0 +1,80 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "chargeback-prevention"
+display_name: "Chargeback & Fraud Prevention"
+description: >
+  Implement device fingerprinting, velocity checks, and dynamic 3D Secure routing 
+  to keep the chargeback rate strictly below the 0.9% Visa/Mastercard threshold.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "fraud-analyst"
+phase: "operations"
+applicable_startups: 
+  - ecommerce
+  - fintech
+priority: "critical"
+difficulty: "advanced"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Dynamic 3D Secure"
+    tasks:
+      - "Do not enforce 3D Secure (text message verification) on every single transaction. Only trigger it if the risk score is > 65 or if the IP address country does not match the card country."
+  - step: "Velocity Rules"
+    tasks:
+      - "Block any user/IP that attempts 5 different credit cards within a 10-minute window, as this is a guaranteed card-testing bot attack."
+  - step: "Dispute Evidence Automation"
+    tasks:
+      - "Automate the submission of IP logs, AVS matches, and shipping delivery confirmation directly into the Stripe API the moment a 'Fraudulent' dispute is opened."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Ignoring chargebacks because 'it's just a cost of doing business', until Visa hits the company with the MATCH list, permanently banning the startup from accepting credit cards."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Chargeback Prevention process"
+  - "How do I handle chargeback prevention?"
+  - "Implement chargeback prevention"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the chargeback prevention process"
+  optional:
+    - name: "code_repository"
+      type: "string"
+      description: "Path to the code repository"
+      default: "./"
+
+outputs:
+  files:
+    - path: "outputs/chargeback-prevention.md"
+      description: "Results of the chargeback prevention process"
+  artifacts:
+    - "Completed chargeback prevention deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

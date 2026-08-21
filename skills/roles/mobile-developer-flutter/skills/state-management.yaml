@@ -1,0 +1,102 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "state-management"
+display_name: "Flutter State Management (Riverpod / BLoC)"
+description: >
+  Architects the data flow in a Flutter application. Separates UI code 
+  from business logic using industry-standard patterns like Riverpod or BLoC. 
+  Ensures the app remains performant at 60 FPS without unnecessary widget rebuilds.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "mobile-developer-flutter"
+phase: "build"
+applicable_startups:
+  - all
+priority: "critical"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "The app freezes when loading data."
+  - "Implement the BLoC pattern."
+  - "Pass data between these two screens."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Generate Riverpod provider."
+  - "Draft BLoC event/state classes."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "feature_name"
+      type: "string"
+      description: "E.g., Authentication, Shopping Cart."
+  optional:
+    - name: "pattern"
+      type: "string"
+      description: "Riverpod, Provider, or BLoC."
+      default: "Riverpod"
+
+outputs:
+  files:
+    - path: "lib/features/auth/providers/auth_provider.dart"
+      description: "The state management logic."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "Widget tests verify that state transitions trigger exactly one rebuild of the target widget."
+manual:
+  - "The Flutter DevTools Timeline shows no UI jank during state updates."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "Memory Leaks: Always dispose of controllers (like `TextEditingController` or custom streams) in the `dispose()` method of a StatefulWidget, or use Riverpod's `autoDispose`."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Riverpod"
+      install: "flutter pub add flutter_riverpod"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Immutable State"
+    tasks:
+      - "Always use immutable state classes (via `freezed`). When state changes, create a completely new copy of the object rather than modifying properties directly."
+  - step: "Targeted Rebuilds"
+    tasks:
+      - "Do not wrap the entire `Scaffold` in a state listener if only one text widget needs to update. Use `ConsumerWidget` or `ref.watch` only at the lowest possible level in the widget tree."
+  - step: "Async State Handling"
+    tasks:
+      - "Use `AsyncValue` (in Riverpod) to elegantly handle the 3 states of any network request: Loading, Data, and Error, directly in the UI without manual `if/else` checks."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Using `setState` to manage global application data (like the logged-in user). `setState` is only for local UI state (like a checkbox toggle)."
+best_practices:
+  - "Extract all API calls and heavy computation out of the UI widgets and into a dedicated Repository class, which is then consumed by your state management provider."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Riverpod Documentation"
+    url: "https://riverpod.dev/"

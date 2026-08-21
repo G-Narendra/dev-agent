@@ -1,0 +1,113 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "m-and-a-evaluation"
+display_name: "M&A Evaluation & Due Diligence"
+description: >
+  Framework for evaluating potential acquisition targets (Mergers & Acquisitions). 
+  Covers scoring strategic fit, identifying red flags during financial and technical 
+  due diligence, and planning post-merger integration.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "ceo"
+phase: "growth"
+applicable_startups:
+  - all
+priority: "growth"
+difficulty: "expert"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Should we acquire this competitor?"
+  - "Evaluate an M&A target."
+  - "Create a due diligence checklist."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Create an M&A scoring matrix."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "target_company"
+      type: "string"
+      description: "Name of the company being evaluated."
+    - name: "strategic_rationale"
+      type: "string"
+      description: "Why acquire? (e.g., 'Acqui-hire for AI talent', 'Buy their customer base', 'Remove a competitor')."
+  optional:
+    - name: "estimated_price"
+      type: "string"
+      description: "Estimated acquisition cost."
+      default: "Unknown"
+
+outputs:
+  files:
+    - path: "operations/m-and-a/target-evaluation.md"
+      description: "The Go/No-Go evaluation memo."
+  artifacts:
+    - "A 100-point Due Diligence checklist for the data room."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "N/A"
+  manual:
+    - "The executive team makes a data-backed decision to proceed or walk away, avoiding emotional deal-making."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+
+safety_notes:
+  - "Extreme Confidentiality. Use code names (e.g., 'Project Apollo') for the target company internally until the deal is closed to prevent leaks that could inflate the price or panic employees."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Notion / Excel"
+      install: "N/A"
+  alternatives:
+    - name: "Midaxo / DealRoom"
+      when: "Managing multiple complex acquisitions simultaneously."
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Strategic Fit Scoring"
+    tasks:
+      - "Score the target 1-10 on three vectors: Product Synergy (does their tech fit ours?), Go-to-Market Synergy (can we sell their product to our customers?), and Cultural Fit."
+  - step: "The 'Acqui-hire' Test"
+    tasks:
+      - "If the goal is purely to acquire talent, calculate the cost per engineer. If you are paying $2M per engineer, it's cheaper to just use an aggressive recruiting agency."
+  - step: "Technical Due Diligence"
+    tasks:
+      - "Never skip this. Have your CTO audit their codebase. If their platform is built on outdated spaghetti code, integration will take years, destroying the deal value."
+  - step: "Integration Planning"
+    tasks:
+      - "Do not wait until after the deal closes to plan integration. Outline exactly who will report to who, which brand survives, and what systems will be deprecated *before* signing."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Falling in love with the deal. The CEO must maintain the discipline to walk away if red flags appear in due diligence, no matter how much time has been invested."
+  - "Ignoring cultural integration. 70% of acquisitions fail not because the tech was bad, but because the cultures clashed and the acquired team quit within 6 months."
+
+best_practices:
+  - "Use 'Earn-outs' to align incentives. Instead of paying $10M upfront, pay $5M upfront and $5M tied to the acquired team hitting specific revenue targets over the next 2 years."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "a16z: Mergers and Acquisitions"
+    url: "https://a16z.com/tag/mergers-and-acquisitions/"

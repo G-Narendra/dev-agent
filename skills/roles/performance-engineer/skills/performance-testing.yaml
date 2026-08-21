@@ -1,0 +1,79 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "performance-testing"
+display_name: "Load & Performance Testing"
+description: >
+  Execute high-concurrency load tests using k6 or JMeter to identify system 
+  bottlenecks and database locks before launching a viral marketing campaign.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "performance-engineer"
+phase: "growth"
+applicable_startups: 
+  - all
+priority: "high"
+difficulty: "expert"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Ramp-Up Testing"
+    tasks:
+      - "Write a k6 script that gradually ramps up to 5,000 Virtual Users (VUs) over 10 minutes to observe exactly at what concurrency level the database CPU hits 100%."
+  - step: "Production-Like Data"
+    tasks:
+      - "Never run load tests on an empty database. Fill the staging database with 10 million dummy records so that missing indexes are exposed under load."
+  - step: "N+1 Query Detection"
+    tasks:
+      - "During the load test, monitor APM tools (Datadog) specifically for N+1 query patterns that only become disastrous when concurrent traffic spikes."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Running a load test from your local Macbook against a production server, completely bottlenecking your local WiFi instead of actually testing the server capacity."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Performance Testing process"
+  - "How do I handle performance testing?"
+  - "Implement performance testing"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the performance testing process"
+  optional:
+    - name: "data_source"
+      type: "string"
+      description: "Source of data to analyze"
+      default: "Internal data"
+
+outputs:
+  files:
+    - path: "outputs/performance-testing.md"
+      description: "Results of the performance testing process"
+  artifacts:
+    - "Completed performance testing deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

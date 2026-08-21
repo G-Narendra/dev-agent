@@ -1,0 +1,79 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "vector-database-optimization"
+display_name: "Vector DB Optimization & Indexing"
+description: >
+  Architect and optimize vector databases (Pinecone, Qdrant, pgvector) for sub-100ms 
+  semantic search, managing dimensional indexing and hybrid search (BM25 + Dense).
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "rag-engineer"
+phase: "build"
+applicable_startups: 
+  - ai
+priority: "high"
+difficulty: "expert"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Hybrid Search Pipeline"
+    tasks:
+      - "Implement Hybrid Search combining dense vector embeddings with sparse keyword search (BM25) to handle precise noun lookups (e.g., 'Product X-99') alongside semantic queries."
+  - step: "Index Quantization"
+    tasks:
+      - "Apply Product Quantization (PQ) or Scalar Quantization to compress 1536-dimensional embeddings, reducing memory footprint and search latency by 4x without losing significant recall."
+  - step: "Metadata Filtering"
+    tasks:
+      - "Ensure all vectors are stored with robust metadata (e.g., `user_id`, `document_id`) and ALWAYS apply a metadata pre-filter before calculating cosine similarity."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Performing a brute-force K-Nearest Neighbor (KNN) scan across 10 million vectors without HNSW indexing, causing the API to take 5 seconds to answer a single query."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Vector Database Optimization process"
+  - "How do I handle vector database optimization?"
+  - "Implement vector database optimization"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the vector database optimization process"
+  optional:
+    - name: "data_source"
+      type: "string"
+      description: "Source of data to analyze"
+      default: "Internal data"
+
+outputs:
+  files:
+    - path: "outputs/vector-database-optimization.md"
+      description: "Results of the vector database optimization process"
+  artifacts:
+    - "Completed vector database optimization deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

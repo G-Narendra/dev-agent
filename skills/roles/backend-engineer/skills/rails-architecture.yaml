@@ -1,0 +1,78 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "rails-architecture"
+display_name: "Ruby on Rails Architecture"
+description: >
+  Build full-stack web applications quickly using the Rails 'Convention over Configuration' 
+  philosophy, leveraging ActiveRecord and Hotwire for modern reactivity.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "backend-engineer"
+phase: "build"
+applicable_startups: 
+  - saas
+priority: "high"
+difficulty: "advanced"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Fat Models, Skinny Controllers"
+    tasks:
+      - "Keep business logic in the Model or dedicated Service Objects. Controllers should only orchestrate params, call a service, and render the view."
+  - step: "ActiveRecord Callbacks"
+    tasks:
+      - "Avoid complex `after_save` or `after_commit` callbacks that trigger other models, as they make the system completely untestable and unpredictable."
+  - step: "Hotwire/Turbo"
+    tasks:
+      - "Use Turbo Frames and Turbo Streams to build reactive, SPA-like interfaces without writing custom React/Vue JavaScript."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Stuffing 500 lines of complex business logic into a single `before_save` callback on the User model, making it impossible to create a User in a test environment."
+
+best_practices:
+  - "Design APIs with idempotency in mind -- same request, same result."
+  - "Always validate inputs at the API boundary before processing."
+  - "Use database transactions for operations that modify multiple records."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Rails Architecture process"
+  - "How do I handle rails architecture?"
+  - "Implement rails architecture"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the rails architecture process"
+  optional:
+    - name: "N/A"
+      type: "string"
+      description: "No optional inputs needed."
+
+outputs:
+  files:
+    - path: "outputs/rails-architecture.md"
+      description: "Results of the rails architecture process"
+  artifacts:
+    - "Completed rails architecture deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "PostgreSQL Documentation"
+    url: "https://postgresql.org/docs"
+  - title: "Node.js Documentation"
+    url: "https://nodejs.org/en/docs/"

@@ -1,0 +1,110 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "ci-cd-pipeline-design"
+display_name: "CI/CD Pipeline Design & Automation"
+description: >
+  Designs and implements continuous integration and continuous deployment
+  pipelines that automate testing, building, and deployment. Ensures every
+  code change is safely and consistently delivered to production.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "release-engineer"
+phase: "ship"
+applicable_startups:
+  - all
+priority: "mvp"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Design our CI/CD pipeline."
+  - "Automate our deployment process."
+  - "Set up continuous delivery."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Design CI/CD pipeline."
+  - "Configure build and deploy automation."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "tech_stack"
+      type: "string"
+      description: "Languages, frameworks, and infrastructure used."
+    - name: "deployment_targets"
+      type: "string"
+      description: "Where to deploy (AWS, Vercel, Docker, etc.)."
+  optional:
+    - name: "ci_provider"
+      type: "string"
+      description: "GitHub Actions, GitLab CI, CircleCI, Jenkins."
+      default: "GitHub Actions"
+
+outputs:
+  files:
+    - path: "devops/ci-cd/pipeline-design.md"
+      description: "CI/CD pipeline architecture and configuration"
+  artifacts:
+    - "A fully functional CI/CD pipeline with automated testing and deployment"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Pipeline Architecture"
+    tasks:
+      - "Define pipeline stages: lint → test → build → stage → deploy → verify."
+      - "Decide on branching strategy: trunk-based (recommended) or GitFlow."
+      - "Map deployment environments: dev, staging, production (each with its own config)."
+      - "Define environment promotion rules: what gates must pass before moving to the next environment."
+  - step: "Build & Test Automation"
+    tasks:
+      - "Set up linting and formatting checks as the first gate."
+      - "Configure unit tests to run on every push."
+      - "Run integration tests on pull requests to catch breaking changes."
+      - "Implement parallel test execution for speed (split tests by file or folder)."
+      - "Set up test caching to avoid rebuilding node_modules/packages every time."
+  - step: "Deployment Automation"
+    tasks:
+      - "Automate build artifact creation with version tags."
+      - "Configure stage deployment on every PR merge for preview testing."
+      - "Automate production deployment with approval gates for manual review."
+      - "Implement deployment logging: who deployed what, where, and when."
+  - step: "Quality Gates & Monitoring"
+    tasks:
+      - "Enforce code coverage thresholds (minimum 80% before deploy)."
+      - "Run security scanning (SAST, dependency scanning, secret detection)."
+      - "Add post-deployment health checks: HTTP 200, DB connection, API response time."
+      - "Set up rollback automation — if health checks fail, revert automatically."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "One giant pipeline that takes 45 minutes — parallelize stages for speed."
+  - "Deploying from a developer's laptop instead of CI — non-reproducible builds."
+  - "Hardcoding secrets in pipeline config — use secret management."
+  - "Building everything from scratch on every run — use caching and layer techniques."
+best_practices:
+  - "Trunk-based development with short-lived feature branches enables CI/CD."
+  - "Every commit to main should be deployable — that's the definition of CI/CD."
+  - "Make the pipeline fast (<15 minutes total) — slow pipelines encourage skipping."
+  - "Anyone on the team should be able to trigger a deployment, not just DevOps."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

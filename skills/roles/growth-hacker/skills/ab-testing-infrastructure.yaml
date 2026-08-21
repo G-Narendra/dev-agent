@@ -1,0 +1,108 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "ab-testing-infrastructure"
+display_name: "A/B Testing Infrastructure & Statistics"
+description: >
+  Sets up the technical framework to run controlled experiments (A/B or 
+  Multivariate tests) on landing pages or in-app flows. Ensures results 
+  reach statistical significance before deploying changes to 100% of users.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "growth-hacker"
+phase: "build"
+applicable_startups:
+  - all
+priority: "high"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run an A/B test on the pricing page."
+  - "Which headline converts better?"
+  - "Set up Optimizely."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Calculate sample size."
+  - "Generate test variations."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "hypothesis"
+      type: "string"
+      description: "E.g., Changing the button to red will increase clicks."
+  optional:
+    - name: "current_conversion_rate"
+      type: "string"
+      description: "The baseline metric."
+      default: "2%"
+
+outputs:
+  files:
+    - path: "growth/experiments/experiment-001.md"
+      description: "The experiment brief and results."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "N/A"
+manual:
+  - "The winning variant is deployed only after achieving 95% statistical significance, resulting in a verifiable lift in conversion."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "Flicker Effect: Ensure the A/B testing snippet is loaded synchronously in the `<head>` to prevent the user from seeing the original page for a split second before it swaps to the variant."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "VWO / Optimizely"
+      install: "N/A"
+  alternatives:
+    - name: "PostHog Feature Flags"
+      when: "Running in-app product experiments, not just marketing pages."
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Sample Size Calculation"
+    tasks:
+      - "Before starting, calculate how much traffic you need. If you only get 100 visitors a month, an A/B test looking for a 5% lift will take 4 years to complete. Do not run it."
+  - step: "Isolate the Variable"
+    tasks:
+      - "Test ONE thing at a time (e.g., just the headline, or just the pricing). If you change the headline, the image, and the button all at once, you won't know which change caused the lift."
+  - step: "The Hypothesis Format"
+    tasks:
+      - "Write: 'If we [change X], then [metric Y] will improve by [Z%], because [reasoning].'"
+  - step: "Run the Test"
+    tasks:
+      - "Split traffic 50/50. Do not stop the test early just because Variant B is winning on Day 2. Wait for the calculated sample size to avoid false positives."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Testing trivial things like 'Button Color' when the core value proposition on the page is fundamentally broken. Test massive changes first."
+best_practices:
+  - "Always test against a 'Control' (the original version). Never test 'New Version 1' against 'New Version 2' without a baseline."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Evan Miller A/B Test Size Calculator"
+    url: "https://www.evanmiller.org/ab-testing/sample-size.html"

@@ -1,0 +1,80 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "aml-kyc-program"
+display_name: "AML & KYC Verification Program"
+description: >
+  Design the Anti-Money Laundering (AML) and Know Your Customer (KYC) workflows 
+  to block bad actors without adding excessive friction to legitimate users.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "payments-compliance"
+phase: "operations"
+applicable_startups: 
+  - fintech
+  - web3
+priority: "critical"
+difficulty: "expert"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Progressive KYC"
+    tasks:
+      - "Do not require a passport scan to deposit $5. Implement tiered limits (e.g., Tier 1: SSN for $500 limit, Tier 2: ID Scan for $10,000 limit) to balance growth and compliance."
+  - step: "Sanctions Screening"
+    tasks:
+      - "Integrate an automated API (like ComplyAdvantage) to instantly screen every new user against the OFAC Specially Designated Nationals (SDN) list."
+  - step: "Suspicious Activity Reports (SARs)"
+    tasks:
+      - "Establish a protocol for the compliance team to file SARs with FinCEN within 30 days of detecting structured deposits or human trafficking typologies."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Allowing a user to transfer $50,000 to an offshore crypto exchange using only an email address and a fake name, turning the startup into a money laundering vector."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Aml Kyc Program process"
+  - "How do I handle aml kyc program?"
+  - "Implement aml kyc program"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the aml kyc program process"
+  optional:
+    - name: "target_audience"
+      type: "string"
+      description: "Target user or customer segment"
+      default: "Primary user persona"
+
+outputs:
+  files:
+    - path: "outputs/aml-kyc-program.md"
+      description: "Results of the aml kyc program process"
+  artifacts:
+    - "Completed aml kyc program deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

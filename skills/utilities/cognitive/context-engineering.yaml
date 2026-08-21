@@ -1,0 +1,164 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "context-engineering"
+display_name: "Context Engineering (The 2026 Meta-Skill)"
+description: >
+  Context Engineering is the discipline of providing structured, 
+  precise context to AI agents so they produce high-quality, 
+  maintainable output. As AI coding agents become more capable, 
+  the bottleneck has shifted from "can the AI write code" to 
+  "can the human communicate intent clearly enough." This skill 
+  creates CONTEXT.md files, system prompts, and architectural 
+  guardrails that guide AI agents toward correct, secure, and 
+  on-brand output — preventing "vibe-coded spaghetti."
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "utility"
+phase: "all"
+applicable_startups:
+  - all
+priority: "critical"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "The AI keeps generating code that doesn't match my style."
+  - "Write a context file for this project."
+  - "The AI doesn't understand the architecture."
+  - "Create a system prompt for the AI coder."
+  - "Context engineering this project."
+  - "The AI keeps making the same mistakes."
+  - "Define project conventions for the AI."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Generate CONTEXT.md file."
+  - "Create AI system prompt for project."
+  - "Define architectural guardrails."
+  - "Write coding convention guide for AI."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "project_type"
+      type: "string"
+      description: "Type of project (web-app, API, CLI-tool, library, mobile-app)."
+    - name: "tech_stack"
+      type: "string"
+      description: "Primary technologies (e.g., 'Next.js + TypeScript + PostgreSQL')."
+  optional:
+    - name: "existing_conventions"
+      type: "string"
+      description: "Any existing coding conventions, style guides, or preferences."
+      default: "Auto-generated based on tech stack best practices"
+    - name: "security_requirements"
+      type: "array"
+      description: "Specific security constraints (e.g., 'no SQLite in production', 'all inputs sanitized')."
+      default: "Standard security best practices"
+
+outputs:
+  files:
+    - path: "CONTEXT.md"
+      description: "The context engineering file that the AI reads first before writing any code."
+    - path: "docs/ai-conventions-guide.md"
+      description: "Detailed coding conventions document for AI agents."
+  artifacts:
+    - "A system prompt template for the AI coding agent."
+    - "Architectural decision records (ADRs) as guardrails."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "Code generated after context engineering has fewer lint errors than before."
+    - "The AI follows project conventions (naming, imports, file structure) without being reminded."
+  manual:
+    - "A developer can read the CONTEXT.md and immediately understand the project's conventions."
+    - "The AI stops making the same repeated mistakes after context engineering is applied."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+
+safety_notes:
+  - "Context engineering is NOT about writing longer prompts. It's about writing BETTER structured context."
+  - "Don't overwhelm the AI with too many rules — prioritize the top 10 conventions that matter most."
+  - "Security rules MUST be at the top of the context file. AI agents are more likely to follow rules they see first."
+  - "Review and update the CONTEXT.md every 2 weeks as the project evolves — stale context causes errors."
+  - "The quality of AI output is directly proportional to the quality of context provided."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "CONTEXT.md (Project File)"
+      install: "Create the file in the project root"
+      url: "https://docs.cursor.com/context/rules-for-ai"
+  alternatives:
+    - name: "Promptfoo — Evaluate & Test Prompts"
+      install: "npm install -g promptfoo (using npx)"
+      url: "https://github.com/promptfoo/promptfoo"
+    - name: "Cursor .cursorrules — AI Project Context"
+      install: "Create .cursorrules in project root (Cursor documentation)"
+      url: "https://docs.cursor.com/context/rules-for-ai"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Define the Security & Hard Constraints (MUST DO — Place First)"
+    tasks:
+      - "Never hardcode secrets: `API_KEY`, `PASSWORD`, `SECRET`, `TOKEN` must come from environment variables."
+      - "Always sanitize user input: ALL user-facing inputs must be validated and escaped."
+      - "Database queries MUST use parameterized queries or an ORM — never raw string interpolation."
+      - "Authentication routes must use HTTPS only."
+      - "Error messages must never expose stack traces or internal paths to users."
+  - step: "Define the Tech Stack & Architecture"
+    tasks:
+      - "Specify the exact framework versions: 'Next.js 15, TypeScript 5.5, React 19.'"
+      - "Define the component architecture: 'Use Server Components by default. Add 'use client' only when interactivity (onClick, useState, useEffect) is needed.'"
+      - "Define the state management approach: 'Use React Context for global state, local state for component state. No Redux.'"
+      - "Define the file/folder structure: 'Components in src/components/, pages in src/app/, utilities in src/lib/.'"
+      - "Define the database access layer: 'All database queries through Prisma, never raw SQL.'"
+  - step: "Define Coding Conventions & Patterns"
+    tasks:
+      - "Naming conventions: 'camelCase for variables/functions, PascalCase for components/types, UPPER_CASE for constants.'"
+      - "Import style: 'Use absolute imports with @/ alias. Group: React → External → Internal.'"
+      - "Error handling: 'Use try/catch with specific error types. Always log errors with context.'"
+      - "Testing: 'Every function must have a unit test. Every API endpoint must have an integration test.'"
+      - "Documentation: 'All exported functions must have JSDoc comments. Complex logic must have inline comments.'"
+  - step: "Provide Negative Examples (What NOT To Do)"
+    tasks:
+      - "Show examples of bad patterns the previous AI generated: 'DO NOT use `var`, DO NOT use `any` in TypeScript.'"
+      - "Show examples of correct patterns: 'Use `const` by default, `let` only when reassignment is needed.'"
+      - "Define deprecated approaches: 'Do not use pages router, use app router. Do not use CSS modules, use Tailwind.'"
+  - step: "Create the Master Context Engineering File"
+    tasks:
+      - "Write CONTEXT.md in the project root with the following sections (in order):"
+      - "Section 1: SECURITY CONSTRAINTS (bold, first — most important)"
+      - "Section 2: TECH STACK (versions, dependencies, architecture)"
+      - "Section 3: CONVENTIONS (naming, imports, file structure, error handling)"
+      - "Section 4: WHAT NOT TO DO (negative examples from past mistakes)"
+      - "Section 5: PROJECT STATUS (what's done, what's in progress, what's next)"
+      - "Tell the AI: 'Read CONTEXT.md before writing any code. These rules are not optional.'"
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Writing a 2000-word context file that the AI ignores because it's too long. Keep it to 1-2 pages max."
+  - "Telling the AI what to do without telling it what NOT to do. Negative examples are more effective."
+  - "Using vague terms like 'follow best practices' — be specific: 'Use `const` not `let`, `let` not `var`.'"
+  - "Never updating the context file. Stale context causes the AI to generate code for outdated architectures."
+  - "Putting security rules at the bottom of the context file. The AI may not reach them."
+
+best_practices:
+  - "Start with the top 10 rules that matter most. Add more only after the AI consistently follows the first 10."
+  - "Use the 'show don't tell' principle: include a code example for every rule (good example + bad example)."
+  - "After generating code with the context file, review if the AI followed the rules. Add missing rules."
+  - "Run `rg 'TODO|FIXME|HACK|XXX'` after each AI session — these comments indicate the AI took shortcuts."
+  - "Context Engineering is the 2026 meta-skill. The AI agent's output quality is DIRECTLY proportional to context quality."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Andrej Karpathy — Vibe Coding Origin"
+    url: "https://x.com/karpathy/status/1886192184808149383"
+  - title: "IBM — What is Vibe Coding?"
+    url: "https://www.ibm.com/think/topics/vibe-coding"
+  - title: "Best AI Coding Tools Reddit Recommends (2026)"
+    url: "https://diyai.io/ai-tools/reddit/best-ai-coding-tools-on-reddit/"
+  - title: "ByteByteGo — Top AI GitHub Repos in 2026"
+    url: "https://blog.bytebytego.com/p/top-ai-github-repositories-in-2026"

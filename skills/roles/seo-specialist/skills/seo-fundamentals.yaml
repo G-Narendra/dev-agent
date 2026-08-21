@@ -1,0 +1,78 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "seo-fundamentals"
+display_name: "SEO Fundamentals & Content Architecture"
+description: >
+  Design the site's URL structure, technical SEO elements, and programmatic page 
+  generation to capture high-intent, long-tail organic search traffic.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "seo-specialist"
+phase: "growth"
+applicable_startups: 
+  - all
+priority: "high"
+difficulty: "advanced"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Programmatic SEO"
+    tasks:
+      - "Identify a massive matrix of long-tail keywords (e.g., 'Integrate X with Y') and programmatically generate thousands of high-quality landing pages using template data."
+  - step: "Technical SEO Foundation"
+    tasks:
+      - "Ensure Next.js/Nuxt is rendering pages via SSR/SSG. Configure an automated `sitemap.xml`, `robots.txt`, and canonical tags to prevent duplicate content penalties."
+  - step: "Core Web Vitals"
+    tasks:
+      - "Optimize Largest Contentful Paint (LCP) by lazy-loading below-the-fold images and using next-gen formats (WebP/AVIF) to pass Google's ranking thresholds."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Building the entire marketing site as a Client-Side Rendered (CSR) Single Page Application, resulting in Google indexing a single blank white page."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Seo Fundamentals process"
+  - "How do I handle seo fundamentals?"
+  - "Implement seo fundamentals"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the seo fundamentals process"
+  optional:
+    - name: "N/A"
+      type: "string"
+      description: "No optional inputs needed."
+
+outputs:
+  files:
+    - path: "outputs/seo-fundamentals.md"
+      description: "Results of the seo fundamentals process"
+  artifacts:
+    - "Completed seo fundamentals deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Google Search Central"
+    url: "https://developers.google.com/search/docs"
+  - title: "Ahrefs Blog"
+    url: "https://ahrefs.com/blog"

@@ -1,0 +1,109 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "system-design"
+display_name: "Distributed Systems Architecture"
+description: >
+  Design resilient, highly-available backend architectures mapping microservices, 
+  databases, load balancers, and message queues to solve complex scaling problems.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "technical-architect"
+phase: "planning"
+applicable_startups: 
+  - all
+priority: "critical"
+difficulty: "expert"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Design the architecture for..."
+  - "How should we scale the system to handle..."
+  - "Draft a technical specification for..."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Create a mermaid diagram in a markdown artifact."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "prd"
+      type: "file"
+      description: "The Product Requirements Document detailing the feature constraints."
+  optional:
+    - name: "current_architecture"
+      type: "string"
+      description: "Description of the existing stack to ensure compatibility."
+      default: "null"
+
+outputs:
+  files:
+    - path: "docs/architecture.md"
+      description: "The high-level system design document."
+  artifacts:
+    - "A Mermaid.js diagram illustrating the component relationships."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "Mermaid diagram syntax compiles successfully without errors."
+  manual:
+    - "The architecture handles the projected traffic load without single points of failure (SPOF)."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+
+safety_notes:
+  - "Ensure data at rest and data in transit are explicitly encrypted in the design."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Mermaid.js"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Requirement Gathering (CAP Theorem)"
+    tasks:
+      - "Determine if the system requires strong consistency (e.g., banking) or eventual consistency (e.g., social media feeds)."
+  - step: "High-Level Diagramming"
+    tasks:
+      - "Map out the Load Balancer, API Gateway, application clusters, and database read/write replicas."
+  - step: "Database Selection"
+    tasks:
+      - "Select the right tool for the job: PostgreSQL for relational integrity, MongoDB for unstructured document scale, Redis for caching, Kafka for event streaming."
+  - step: "Failure Modes Analysis"
+    tasks:
+      - "Explicitly document 'What Could Go Wrong' (e.g., 'If the 3rd party email API goes down, our main thread blocks')."
+      - "Implement circuit breakers, retries, and dead-letter queues to mitigate these failures."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Introducing Kafka, Kubernetes, and Cassandra for a basic startup MVP with 50 users, completely crippling the team with operational complexity (Resume-Driven Development)."
+  - "Creating a Single Point of Failure (SPOF) by routing all traffic through a single, un-replicated EC2 instance."
+  - "Designing synchronous microservice communication where Service A waits for Service B to respond, causing cascading failures if Service B is slow."
+
+best_practices:
+  - "Use asynchronous event-driven communication (Pub/Sub) between microservices whenever possible."
+  - "Always separate database reads from writes (CQRS pattern) to scale read-heavy applications."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "ByteByteGo System Design"
+    url: "https://bytebytego.com/"

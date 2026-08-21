@@ -1,0 +1,115 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "cloud-cost-optimization"
+display_name: "Cloud Architecture & Cost Optimization"
+description: >
+  Designs highly scalable cloud infrastructure while ruthlessly eliminating 
+  wasted spend. Transitions startups from expensive managed services to 
+  optimized compute instances without sacrificing reliability. Covers key patterns to avoid common pitfalls like exposing cloud storage buckets (s3, gcs, blob) to the public, and provides actionable best practices for production-ready results.
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "cloud-engineer"
+phase: "operations"
+applicable_startups:
+  - all
+priority: "high"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Our AWS bill is out of control."
+  - "Design the high-availability VPC."
+  - "Move us off Heroku."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Generate FinOps audit report."
+  - "Draft AWS Auto-Scaling policy."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "cloud_provider"
+      type: "string"
+      description: "AWS, GCP, Azure."
+    - name: "current_monthly_spend"
+      type: "string"
+      description: "How much is being wasted?"
+  optional:
+    - name: "workload_type"
+      type: "string"
+      description: "Stateful (DBs) vs Stateless (Web APIs)."
+      default: "Stateless"
+
+outputs:
+  files:
+    - path: "infra/cost_optimization_plan.md"
+      description: "Step-by-step guide to cut the cloud bill in half."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "Monthly cloud infrastructure costs are reduced by >30% while maintaining 99.99% uptime."
+manual:
+  - "The engineering team is actively utilizing Reserved Instances and Spot Fleets for non-critical workloads."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "The Egress Fee Trap: Never architecture a system where massive amounts of data constantly move between AWS regions or out to the public internet. AWS Data Transfer Out (Egress) fees will literally bankrupt a data-heavy startup."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "AWS Cost Explorer / Vantage"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "S3 Lifecycle Policies"
+    tasks:
+      - "Do not keep 5 years of user logs in S3 Standard. Implement an automated rule: After 30 days, move to S3 Infrequent Access. After 90 days, move to Glacier Deep Archive. This saves 95% on storage."
+      - "Add environment variable validation that crashes fast on missing required values."
+  - step: "Reserved Instances (RIs) & Savings Plans"
+    tasks:
+      - "If you know your baseline database needs to run 24/7 for the next year, buy a 1-year No-Upfront Reserved Instance. It takes 5 clicks in the console and instantly reduces the hourly cost by 30-40%."
+      - "Document the trade-offs made in a decision log (ADR) so future team members understand why."
+  - step: "Spot Instances for CI/CD & Batch"
+    tasks:
+      - "Never run asynchronous background workers, ML training, or CI/CD pipelines on On-Demand instances. Use Spot Instances. They are 70% cheaper, and if AWS reclaims them, your worker queue just retries later."
+      - "Add environment variable validation that crashes fast on missing required values."
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Exposing cloud storage buckets (S3, GCS, Blob) to the public internet -- sensitive data leaks are the #1 cloud security incident."
+  - "Hardcoding cloud credentials (access keys, secrets) in source code or config files -- use IAM roles or secrets manager."
+  - "Using a single massive instance type instead of auto-scaling groups -- leads to unnecessary cost and single point of failure."
+  - "Opening all ports (0.0.0.0) for 'convenience' during development -- a single missed port close can become a backdoor."
+  - "Forgetting to set resource limits on serverless functions -- unbounded memory usage can cause 10x cost spikes."
+best_practices:
+  - "Implement strict resource tagging (e.g., `Environment: Prod`, `Team: Data`). You cannot optimize what you cannot measure. Every dollar on the bill must be traceable to a specific team."
+
+  - "Enable deletion protection and versioning on all cloud storage buckets — accidental deletion of production data is unrecoverable."
+  - "Use Infrastructure as Code (Terraform, Pulumi, CDK) for all cloud resources — manual console changes are invisible and unrepeatable."
+  - "Set up budget alerts at 50%, 80%, and 100% of projected cloud spend to prevent bill shock."
+  - "Implement auto-scaling with proper min/max limits to handle traffic spikes without runaway costs."
+  - "Tag every cloud resource with environment, owner, and cost-center — untagged resources are candidate for cleanup."
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "AWS Well-Architected Framework: Cost Optimization"
+    url: "https://docs.aws.amazon.com/wellarchitected/latest/cost-optimization-pillar/welcome.html"

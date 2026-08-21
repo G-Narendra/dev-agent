@@ -1,0 +1,111 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "design-systems"
+display_name: "UI Design Systems & Tokenization"
+description: >
+  Creates a single source of truth for the product's visual identity. Builds 
+  a scalable design system containing exact color palettes, typography scales, 
+  spacing tokens, and reusable UI components. Covers key patterns to avoid common pitfalls like designing for the ideal screen size first -- mobile-first fo, and provides actionable best practices for production-ready results.
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "ui-designer"
+phase: "growth"
+applicable_startups:
+  - all
+priority: "high"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "The UI looks inconsistent across pages."
+  - "Standardize the buttons."
+  - "Build the design tokens."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Generate Design Token JSON."
+  - "Draft CSS variable mapping."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "brand_identity"
+      type: "string"
+      description: "Primary colors, brand feel (Playful vs Corporate)."
+  optional:
+    - name: "base_framework"
+      type: "string"
+      description: "Are we wrapping Tailwind, MUI, or custom?"
+      default: "Tailwind"
+
+outputs:
+  files:
+    - path: "design/tokens/global.json"
+      description: "The JSON export of all design tokens."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "Color contrast checks pass WCAG AA standards automatically for all foreground/background token pairings."
+manual:
+  - "Engineers never hardcode a hex color in the CSS; they always reference a token (e.g., `var(--color-primary-500)`)."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "Accessibility Failures: Never design a light gray text on a white background just because it 'looks clean'. If it fails a contrast checker, legally blind users cannot use the app."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Figma (Tokens Studio)"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Semantic Token Naming"
+    tasks:
+      - "Do not name variables based on their color (e.g., `--blue-500`). Name them semantically based on their purpose (e.g., `--color-action-primary`). This makes Dark Mode trivial to implement."
+  - step: "The Spacing Scale"
+    tasks:
+      - "Define a strict 4pt or 8pt mathematical spacing scale. All margins, paddings, and heights must be a multiple of 4 (e.g., 4, 8, 12, 16, 24, 32). This guarantees visual harmony."
+      - "Add environment variable validation that crashes fast on missing required values."
+  - step: "Component States"
+    tasks:
+      - "Design every UI component across all 5 interaction states: Default, Hover, Active (Pressed), Focused (Keyboard), and Disabled. Engineers cannot guess what 'Hover' should look like."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Designing for the ideal screen size first -- mobile-first forces better prioritization and prevents content overflow disasters."
+  - "Using color as the only differentiator for states (error, success, disabled) -- inaccessible to colorblind users."
+  - "Shipping UI without loading, empty, and error states -- the user is left guessing what happened."
+  - "Creating components in isolation without real content -- 'lorem ipsum' hides layout problems that real text exposes."
+  - "Ignoring touch target sizes (minimum 44x44px) on mobile -- users fat-finger the wrong button and get frustrated."
+best_practices:
+  - "Sync your Figma design tokens directly into a GitHub repository using GitHub Actions so the engineering team's CSS automatically updates when the designer changes a color."
+
+  - "Design in vector format (SVG/EPS) — logos must scale from favicon (16px) to billboard (10m) without quality loss."
+  - "Test every logo in three formats: full color, single color (black), and inverted (white on dark background)."
+  - "Ensure the logo is recognizable at 16x16px before finalizing — if it doesn't work as a favicon, simplify."
+  - "Wait 48 hours between creating and finalizing a logo — fresh eyes catch symmetry and proportion issues."
+  - "Create a brand guidelines document that specifies clear space, minimum size, color palette, and incorrect usage examples."
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Brad Frost: Atomic Design"
+    url: "https://atomicdesign.bradfrost.com/"

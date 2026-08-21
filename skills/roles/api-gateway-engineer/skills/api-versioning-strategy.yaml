@@ -1,0 +1,108 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "api-versioning-strategy"
+display_name: "API Versioning & Lifecycle Strategy"
+description: >
+  Designs the versioning scheme (URI, Header, or Accept Param) for an API to 
+  ensure backward compatibility. Manages the lifecycle of endpoints from 
+  experimental, to stable, to deprecated.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "api-gateway-engineer"
+phase: "planning"
+applicable_startups:
+  - saas
+  - developer-tools
+priority: "critical"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "We need to make a breaking change to the API."
+  - "How should we version our endpoints?"
+  - "Implement API v2."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Configure gateway routing rules for /v1/ vs /v2/."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "versioning_type"
+      type: "string"
+      description: "URI path (/v1/users) vs Header (Accept: application/vnd.company.v1+json)."
+  optional:
+    - name: "deprecation_timeline"
+      type: "string"
+      description: "How long before v1 is fully shut off."
+      default: "6 months"
+
+outputs:
+  files:
+    - path: "gateway/routes.config.json"
+      description: "Gateway configuration routing different versions to different backend clusters."
+  artifacts:
+    - "API Deprecation Policy document."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "Integration tests for v1 endpoints continue to pass even after v2 is deployed."
+  manual:
+    - "Clients relying on v1 experience zero disruption when v2 is launched."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+
+safety_notes:
+  - "Never introduce a breaking change to a stable API without versioning. A breaking change is: removing a field, changing a field's data type, or adding a new REQUIRED field."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "NGINX / APISIX / AWS API Gateway"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Choose the Strategy"
+    tasks:
+      - "For 95% of startups, URI versioning (`/v1/users`) is the most practical and easiest to debug. Header versioning is theoretically purer but harder for clients to test in browser."
+  - step: "Route Configuration"
+    tasks:
+      - "Configure the gateway so that `/v1/*` routes to the legacy service cluster, and `/v2/*` routes to the new service cluster."
+  - step: "Deprecation Headers"
+    tasks:
+      - "When v2 is released, update the v1 endpoints to return `Deprecation: true` and `Link: <url-to-v2-docs>; rel=\"alternate\"` headers."
+  - step: "Traffic Monitoring"
+    tasks:
+      - "Monitor access logs for v1. You cannot turn off v1 until the traffic drops to an acceptable minimum."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Versioning at the granular endpoint level (e.g., `/users/v2/profile` and `/users/v1/settings`). Version the entire API globally (`/v2/users/profile`)."
+  - "Releasing a v1.1. Only use major versions in the URI. Minor additive changes do not require a new version number in REST."
+
+best_practices:
+  - "Treat API versioning as a last resort. Always try to make additive, backward-compatible changes first."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Stripe API Versioning"
+    url: "https://stripe.com/docs/api/versioning"

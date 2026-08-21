@@ -1,0 +1,94 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "ui-components-styling"
+display_name: "UI Components & Tailwind Styling"
+description: >
+  Implement pixel-perfect, accessible UI components using Tailwind CSS and Radix/Shadcn.
+  Ensures dark mode support, fluid typography, and semantic HTML structure.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "frontend-engineer"
+phase: "build"
+applicable_startups: 
+  - all
+priority: "mvp"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Style the application"
+  - "Build the UI components"
+  - "Set up Tailwind and Shadcn"
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "npx shadcn-ui@latest init"
+  - "Add Tailwind typography plugin"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "axe-core automated tests report zero accessibility violations."
+  manual:
+    - "UI renders correctly on 320px mobile screens without horizontal scrolling."
+    - "Dark mode toggles correctly without flash of unstyled content (FOUC)."
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Design System Setup"
+    tasks:
+      - "Configure `tailwind.config.ts` with brand colors, fonts, and border radii."
+      - "Initialize Shadcn UI and add base components (Button, Input, Dialog)."
+  - step: "Component Construction"
+    tasks:
+      - "Use semantic HTML elements (`<nav>`, `<main>`, `<article>`)."
+      - "Apply ARIA labels to icon-only buttons."
+      - "Ensure focus rings are visible for keyboard navigation."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Using `<div>` for buttons or links — destroys screen reader and keyboard accessibility."
+  - "Hardcoding arbitrary pixel values (e.g., `w-[317px]`) — always use fluid utility classes."
+
+best_practices:
+  - "Use TypeScript for type safety across the entire frontend codebase."
+  - "Keep components small -- one component, one responsibility."
+  - "Test components in isolation and in integration."
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the ui components styling process"
+  optional:
+    - name: "code_repository"
+      type: "string"
+      description: "Path to the code repository"
+      default: "./"
+
+outputs:
+  files:
+    - path: "outputs/ui-components-styling.md"
+      description: "Results of the ui components styling process"
+  artifacts:
+    - "Completed ui components styling deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "React / Next.js Documentation"
+    url: "https://react.dev"
+  - title: "MDN Web Docs"
+    url: "https://developer.mozilla.org"

@@ -1,0 +1,111 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "technical-demo-customization"
+display_name: "Technical Demo & 'Harbor' Customization"
+description: >
+  Builds tailored, highly relevant product demonstrations for enterprise 
+  prospects. Modifies the standard SaaS demo environment to use the prospect's 
+  logos, terminology, and simulated data to increase win rates.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "sales-engineer"
+phase: "build"
+applicable_startups:
+  - b2b-saas
+priority: "high"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "We have a demo with Nike tomorrow."
+  - "Make the demo environment look like their app."
+  - "Prep the technical presentation."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Inject mock data script."
+  - "Configure demo environment variables."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "prospect_name"
+      type: "string"
+      description: "The company being pitched."
+    - name: "use_case"
+      type: "string"
+      description: "What specific problem are they trying to solve?"
+  optional:
+    - name: "custom_assets"
+      type: "string"
+      description: "Path to prospect logos and color hex codes."
+      default: "None"
+
+outputs:
+  files:
+    - path: "business/sales/demo/nike-script.md"
+      description: "The click-path script for the AE/SE."
+  artifacts:
+    - "A configured sandbox environment."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "N/A"
+manual:
+  - "The prospect says, 'Wow, this looks exactly like what we need' because the demo reflects their specific reality."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "network (Access to staging/demo environment)"
+
+safety_notes:
+  - "Data Leakage: NEVER use real data from Customer A to demo the product to Prospect B. Always use generated synthetic data for demos."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Python / Faker (for data generation)"
+      install: "pip install faker"
+  alternatives:
+    - name: "Reprise / Navattic"
+      when: "Building interactive, click-through HTML demo clones."
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Discovery Review"
+    tasks:
+      - "Review the AE's discovery notes. If the prospect cares about 'Speed', design the demo to start on the performance dashboard. If they care about 'Security', start on the RBAC settings."
+  - step: "Data Injection"
+    tasks:
+      - "Run a script to populate the demo database with data that matches their industry. If they are a hospital, the demo should show 'Patients' and 'Doctors', not 'Users' and 'Admins'."
+  - step: "Visual Customization"
+    tasks:
+      - "Update the CSS/Theme in the demo environment to match the prospect's brand colors and logo."
+  - step: "The 'Tell-Show-Tell' Script"
+    tasks:
+      - "Write the script. Tell them what you are about to show. Show it to them (click the buttons). Tell them what business value they just saw."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "The 'Harbor Tour'. Clicking through every single tab and feature in the product sequentially. It is boring and kills deals. Only show what solves their specific pain."
+best_practices:
+  - "Pre-load heavy pages. If a complex report takes 10 seconds to generate in the staging environment, load it in a background tab before the Zoom call starts."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Great Demo! by Peter Cohan"
+    url: "https://greatdemo.com/"

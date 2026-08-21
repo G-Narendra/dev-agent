@@ -1,0 +1,78 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "product-positioning"
+display_name: "Positioning & Go-To-Market Launches"
+description: >
+  Define the core messaging framework, build sales enablement collateral, and orchestrate
+  the cross-functional launch of new products to the market.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "product-marketing-manager"
+phase: "growth"
+applicable_startups: 
+  - all
+priority: "mvp"
+difficulty: "advanced"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Messaging Framework"
+    tasks:
+      - "Develop a positioning document mapping every technical Feature to a specific Buyer Persona and a tangible Business Benefit."
+  - step: "Sales Enablement"
+    tasks:
+      - "Build 'Battlecards' for the sales team that explicitly state how to handle objections and how to kill competitors in a deal."
+  - step: "The Launch"
+    tasks:
+      - "Coordinate the Product Hunt launch, the press release, the webinar, and the customer email blast for a 'Tier 1' feature release."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Writing website copy that describes the product as a 'synergistic paradigm-shifting AI platform'—meaningless jargon that confuses the buyer."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Product Positioning process"
+  - "How do I handle product positioning?"
+  - "Implement product positioning"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the product positioning process"
+  optional:
+    - name: "N/A"
+      type: "string"
+      description: "No optional inputs needed."
+
+outputs:
+  files:
+    - path: "outputs/product-positioning.md"
+      description: "Results of the product positioning process"
+  artifacts:
+    - "Completed product positioning deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

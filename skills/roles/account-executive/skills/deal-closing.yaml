@@ -1,0 +1,141 @@
+# â”€â”€ IDENTITY â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+name: "deal-closing"
+display_name: "Deal Closing & Pipeline Management"
+description: >
+  Drives committed revenue by systematically moving prospects from Demo to 
+  Closed Won. Focuses on urgency creation, objection handling, and executive 
+  alignment.
+
+# â”€â”€ CLASSIFICATION â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+role: "account-executive"
+phase: "growth"
+applicable_startups:
+  - B2B, SaaS
+priority: "high"
+difficulty: "advanced"
+
+# â”€â”€ TRIGGER â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+trigger_phrases:
+  - "The prospect stopped replying."
+  - "How do I ask for the close?"
+  - "They said they will buy next year."
+
+# â”€â”€ ACTIONS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+example_cli_actions:
+  - "Draft closing sequence."
+  - "Generate urgency timeline."
+
+# â”€â”€ INPUTS / OUTPUTS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+inputs:
+  required:
+    - name: "deal_stage"
+      type: "string"
+      description: "e.g., Proposal Sent, Verbal Agreement."
+    - name: "blocker"
+      type: "string"
+      description: "Why hasn't the ink dried yet?"
+  optional:
+    - name: "champion_status"
+      type: "string"
+      description: "Do we have an internal advocate?"
+      default: "Yes"
+
+outputs:
+  files:
+    - path: "sales/deals/closing_playbook.md"
+      description: "The step-by-step action plan to win the deal."
+  artifacts:
+    - "N/A"
+
+# â”€â”€ SUCCESS CRITERIA â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+automated:
+  - "N/A"
+manual:
+  - "The prospect signs the order form and the deal is marked Closed Won in the CRM."
+
+# â”€â”€ PERMISSIONS & SAFETY â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "The Phantom Close: Do not mark a deal as 'Commit' in your forecast just because the prospect said 'this looks great'. Unless you have spoken to the Economic Buyer and Procurement has the contract, it is not a commit."
+
+# â”€â”€ TOOLING â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+recommended_tools:
+  primary:
+    - name: "Salesforce / Hubspot"
+      install: "N/A"
+
+# â”€â”€ IMPLEMENTATION CHECKLIST â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+implementation_checklist:
+  - step: "The Compelling Event"
+    tasks:
+      - "If a deal has no Compelling Event (a date by which they MUST solve the problem, e.g., a regulatory deadline or a major product launch), it will slip forever. Find or manufacture the compelling event."
+  - step: "The Direct Ask"
+    tasks:
+      - "Don't end a successful trial with 'So, what do you think?'. End it with 'We've proven the ROI we agreed upon. Can we get the paperwork started today to hit your launch deadline?'"
+  - step: "Managing Ghosting"
+    tasks:
+      - "If they ghost you for 2 weeks, don't send 'Just checking in'. Send a breakup email: 'Usually when I haven't heard back, it means priorities have shifted. Should I close this file?' This triggers loss aversion."
+
+# â”€â”€ QUALITY GATES â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+anti_patterns:
+  - "Offering end-of-month 'exploding discounts' to force a close. It trains the customer to always wait until the last day of the quarter to buy from you."
+best_practices:
+  - "Ensure you are mapped to power. If you are only talking to a Manager, and the budget requires VP approval, you have not actually sold the deal yet."
+
+# â”€â”€ REFERENCES â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+references:
+  - title: "Challenger Sale Methodology"
+    url: "https://www.challengerinc.com/"
+
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Deal Closing process"
+  - "How do I handle deal closing?"
+  - "Implement deal closing"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the deal closing process"
+  optional:
+    - name: "N/A"
+      type: "string"
+      description: "No optional inputs needed."
+
+outputs:
+  files:
+    - path: "outputs/deal-closing.md"
+      description: "Results of the deal closing process"
+  artifacts:
+    - "Completed deal closing deliverable"
+
+# ── QUALITY GATES ────────────────────────────────────────────
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start — retrofitting is expensive."
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

@@ -1,0 +1,125 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "paperswithcode-research"
+display_name: "PapersWithCode & ArXiv State-of-the-Art Research"
+description: >
+  Searches PapersWithCode and ArXiv for the latest research papers, 
+  state-of-the-art (SOTA) benchmarks, and open-source implementations. 
+  For AI startups, this is essential to understand what's technically possible, 
+  what the current best approaches are, and what gaps academia is working on.
+  Every paper with code gives the startup a potential starting point.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "utility"
+phase: "all"
+applicable_startups:
+  - ai
+  - developer-tools
+priority: "high"
+difficulty: "intermediate"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "What's the SOTA for this problem?"
+  - "Find papers and implementations for X."
+  - "Search ArXiv for recent research."
+  - "Is there an open-source implementation of this paper?"
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Search PapersWithCode for benchmarks."
+  - "Find ArXiv papers with GitHub repos."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "research_topic"
+      type: "string"
+      description: "The ML task or domain (e.g., 'text-to-speech', 'few-shot image classification', 'code generation')."
+  optional:
+    - name: "search_focus"
+      type: "string"
+      description: "'sota' (benchmarks and state-of-the-art), 'papers' (recent papers), 'code' (implementations), 'all'."
+      default: "all"
+
+outputs:
+  files:
+    - path: "research/paperswithcode-sota-{topic}.md"
+      description: "A survey of the state-of-the-art, best papers, and available implementations."
+  artifacts:
+    - "Current SOTA benchmark numbers with model names and scores."
+    - "Top 3 papers with open-source code repos."
+    - "Gap analysis: what problems have papers but no production-ready implementations."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "N/A"
+  manual:
+    - "Found a SOTA model or technique that saves the team weeks of R&D."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "network"
+
+safety_notes:
+  - "SOTA research benchmarks are often on specific, clean datasets. Real-world performance may be significantly lower."
+  - "Not all papers with code have permissive licenses. Check the GitHub repo license before using in a commercial product."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "PapersWithCode Web UI"
+      install: "N/A (paperswithcode.com)"
+  alternatives:
+    - name: "ArXiv API"
+      when: "Searching for very recent papers not yet indexed by PapersWithCode."
+    - name: "Google Scholar"
+      when: "Finding citation counts and influential papers."
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Search SOTA Benchmarks"
+    tasks:
+      - "Go to: `paperswithcode.com/sota`"
+      - "Search for the task (e.g., 'Image Classification on ImageNet')."
+      - "Document: Top 3 models, their scores, and year published."
+      - "Check if the top model is practical for production (model size, inference speed)."
+  - step: "Search Recent Papers"
+    tasks:
+      - "Use: `site:paperswithcode.com {topic}` OR `site:arxiv.org {topic}`"
+      - "Filter by date (last 1-2 years) to ensure relevance."
+      - "For each promising paper: read the abstract, check if code is available, note the license."
+  - step: "Find Implementations"
+    tasks:
+      - "For each relevant paper, check if it has a 'GitHub' link on PapersWithCode."
+      - "Evaluate the repo: stars, last commit date, open issues count."
+      - "A repo with no commits in 2 years is a risk — it may not work with current library versions."
+  - step: "Analyze the Gap"
+    tasks:
+      - "What problems have academic solutions but no production-ready tools?"
+      - "What SOTA models are too slow/large for real-world use? (Opportunity: optimize for production)."
+      - "What topics have MANY papers but FEW implementations? (Opportunity: build the first production tool)."
+  - step: "Compile Technical Survey"
+    tasks:
+      - "Create a report: Task | SOTA Model | Score | Code Available? | License | Production-Ready?"
+      - "Include recommendations on which approaches to adopt, adapt, or skip."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Chasing the absolute SOTA number. A model that's 0.5% more accurate but 10x slower is usually not practical for real products."
+  - "Ignoring papers without code. But also: a paper with code is infinitely more valuable than one without."
+  - "Assuming academic implementations work out-of-the-box. They almost never do — budget time for adaptation."
+
+best_practices:
+  - "Check the 'Reproducibility' badge on PapersWithCode. Papers with verified reproducibility are much safer to adopt."
+  - "For production, prefer papers that have multiple implementations across different frameworks — it means the approach is robust."
+  - "Check if there's a HuggingFace model that implements the paper — that's usually the most production-ready version."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "PapersWithCode"
+    url: "https://paperswithcode.com/"
+  - title: "ArXiv API Documentation"
+    url: "https://info.arxiv.org/help/api/index.html"
+  - title: "Google Scholar"
+    url: "https://scholar.google.com/"

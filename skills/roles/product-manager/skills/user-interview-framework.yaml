@@ -1,0 +1,109 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "user-interview-framework"
+display_name: "User Interviews & Pain Point Discovery"
+description: >
+  Conduct structured, bias-free interviews with users to discover what they 
+  actually need, rather than what they say they want. Heavily relies on 
+  'The Mom Test' methodology to prevent false positives.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "product-manager"
+phase: "ideation"
+applicable_startups:
+  - all
+priority: "critical"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Talk to customers."
+  - "Find out why they churned."
+  - "Do users actually want this feature?"
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Create a user interview script."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "target_segment"
+      type: "string"
+      description: "Who are we interviewing? (e.g., 'Users who cancelled in the last 7 days')."
+    - name: "research_goal"
+      type: "string"
+      description: "What are we trying to learn? (e.g., 'Why is our onboarding flow failing?')."
+  optional:
+    - name: "interview_length"
+      type: "string"
+      description: "15 mins vs 45 mins."
+      default: "30 mins"
+
+outputs:
+  files:
+    - path: "product/research/interview-synthesis.md"
+      description: "The aggregated findings and direct quotes."
+  artifacts:
+    - "A list of actionable product iterations based on the feedback."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "N/A"
+  manual:
+    - "The startup completely pivots away from building a feature that users said they 'liked', but data showed they would never actually pay for."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+
+safety_notes:
+  - "Do not ask users to predict the future ('Would you pay $10/month for this?'). Humans are terrible at predicting their future behavior, and they will lie to you to be polite."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Zoom / Dovetail"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Scripting (The Mom Test)"
+    tasks:
+      - "Rule 1: Talk about their life, not your idea."
+      - "Rule 2: Ask about specifics in the past, not generics or opinions about the future. (Instead of 'Do you usually struggle with X?', ask 'Tell me about the last time you did X. Walk me through exactly what you clicked')."
+  - step: "Conducting the Interview"
+    tasks:
+      - "Talk 20% of the time, listen 80% of the time."
+      - "When they suggest a feature ('You should add a calendar view'), do not just say 'Great idea!'. Ask 'Why? What is the underlying problem you are trying to solve with a calendar?'"
+  - step: "Synthesis & Action"
+    tasks:
+      - "After 5-10 interviews, synthesize the notes. Look for recurring patterns. If 1 person asks for it, it's a customization. If 7 people complain about it, it's a product mandate."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Pitching instead of interviewing. If you spend 20 minutes showing them a prototype and asking 'Isn't this cool?', you are doing sales, not product discovery. You will learn nothing."
+  - "Taking feature requests literally. Users are experts in their own pain, but terrible at designing solutions. Listen to their pain, but design the solution yourself."
+
+best_practices:
+  - "Always ask for 'Commitment'. If a B2B user says they love the idea, say 'Great, we are building it right now. Can I get a $500 deposit to secure your early access?'. If they say no, they were lying about loving the idea."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Rob Fitzpatrick: The Mom Test"
+    url: "https://www.momtestbook.com/"

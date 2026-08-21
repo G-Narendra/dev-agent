@@ -1,0 +1,111 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "streaming-data-architecture"
+display_name: "Real-Time Streaming Architecture (Kafka)"
+description: >
+  Architects event-driven, real-time data streaming pipelines using Apache Kafka 
+  or AWS Kinesis. Allows the system to process massive amounts of logs, clicks, 
+  or IoT telemetry with sub-second latency.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "data-engineer"
+phase: "growth"
+applicable_startups:
+  - fintech
+  - iot
+  - adtech
+priority: "medium"
+difficulty: "expert"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "We need real-time analytics."
+  - "Set up a Kafka cluster."
+  - "Process these events as they happen."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Configure Kafka topics."
+  - "Write Flink streaming job."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "event_source"
+      type: "string"
+      description: "Where the events are generated (e.g., Web Clients, IoT devices)."
+  optional:
+    - name: "throughput"
+      type: "string"
+      description: "Expected events per second."
+      default: "10,000 EPS"
+
+outputs:
+  files:
+    - path: "infrastructure/streaming/kafka-topics.yml"
+      description: "Topic and partition configuration."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "Events are successfully produced to the topic and consumed by the target database within 500ms."
+manual:
+  - "The system can handle a sudden 10x spike in traffic by buffering events in the stream without dropping data."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "network"
+
+safety_notes:
+  - "Data Retention: Kafka is not a permanent database. Ensure retention policies (e.g., 7 days) are set, and data is ultimately sunk to cheap cold storage (S3) for historical backup."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Apache Kafka / Confluent Cloud"
+      install: "N/A"
+  alternatives:
+    - name: "AWS Kinesis"
+      when: "Fully embedded in the AWS ecosystem and want zero-ops management."
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Topic & Partition Design"
+    tasks:
+      - "Create topics based on event types (e.g., `user-clicks`, `payment-events`)."
+      - "Configure partitions based on expected throughput and consumer scaling needs. (More partitions = higher parallelism)."
+  - step: "Schema Registry"
+    tasks:
+      - "Enforce strict schemas (Avro or Protobuf) on events before they enter the stream. A malformed JSON event can crash downstream consumers."
+  - step: "Producer Optimization"
+    tasks:
+      - "Configure producers to batch events (`linger.ms` and `batch.size`) to massively improve throughput and reduce network overhead."
+  - step: "Stream Processing"
+    tasks:
+      - "Use a tool like ksqlDB, Apache Flink, or Spark Streaming to aggregate metrics over tumbling time windows (e.g., 'Total sales in the last 60 seconds')."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Building a real-time streaming architecture just to power an executive dashboard that is only looked at once a week. Use simple daily batch jobs (ELT) unless sub-second latency is a hard business requirement."
+best_practices:
+  - "Idempotent Consumers: Ensure your downstream consumers can handle reading the exact same event twice without corrupting the database (at-least-once delivery semantics)."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Confluent: Kafka Architecture"
+    url: "https://developer.confluent.io/learn-kafka/architecture/get-started/"

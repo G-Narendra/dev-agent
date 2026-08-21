@@ -1,0 +1,114 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "brand-identity-guidelines"
+display_name: "Strategic Brand Positioning"
+description: >
+  Determines exactly where the startup sits in the market landscape. 
+  Crafts the definitive 'Positioning Statement' that answers 'Why should 
+  I care?' and prevents the startup from becoming a commodity. Covers key patterns to avoid common pitfalls like designing for the ideal screen size first -- mobile-first fo, and provides actionable best practices for production-ready results.
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "brand-strategist"
+phase: "ideation"
+applicable_startups:
+  - all
+priority: "critical"
+difficulty: "expert"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "How are we different from our competitors?"
+  - "Rewrite our homepage headline."
+  - "We need a positioning statement."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Generate April Dunford positioning matrix."
+  - "Draft hero section copy."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "product_features"
+      type: "string"
+      description: "What does the product actually do?"
+    - name: "competitor_alternatives"
+      type: "string"
+      description: "What would the user do if we didn't exist? (e.g., use Excel)."
+  optional:
+    - name: "target_buyer"
+      type: "string"
+      description: "Who has the budget?"
+      default: "TBD"
+
+outputs:
+  files:
+    - path: "marketing/positioning_strategy.md"
+      description: "The core narrative for all future marketing."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "N/A"
+manual:
+  - "When asked 'What do you do?', every employee in the company gives the exact same 1-sentence answer."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "The Jargon Trap: Never position the company using meaningless words like 'Next-generation AI-powered synergistic platform'. If a 5th grader cannot understand what you sell, your positioning has failed."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Notion"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Identify True Alternatives"
+    tasks:
+      - "Your biggest competitor is usually not another startup. It is the status quo (Microsoft Excel, an intern, or doing nothing). Position yourself against the status quo."
+  - step: "Map Features to Value"
+    tasks:
+      - "Feature: 'We have an open API.' Value: 'You can automate your workflows.' Positioning: 'The only CRM that bends entirely to your specific business logic.' Always sell the outcome, not the feature."
+      - "Add feature flags so the new code can be deployed dark and enabled via toggle."
+  - step: "The Positioning Mad-Lib"
+    tasks:
+      - "Complete this: 'For [Target Audience] who need [Pain Resolved], [Startup Name] is a [Category] that [Unique Benefit]. Unlike [Competitor], we [Key Differentiator].'"
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Designing for the ideal screen size first -- mobile-first forces better prioritization and prevents content overflow disasters."
+  - "Using color as the only differentiator for states (error, success, disabled) -- inaccessible to colorblind users."
+  - "Shipping UI without loading, empty, and error states -- the user is left guessing what happened."
+  - "Creating components in isolation without real content -- 'lorem ipsum' hides layout problems that real text exposes."
+  - "Ignoring touch target sizes (minimum 44x44px) on mobile -- users fat-finger the wrong button and get frustrated."
+best_practices:
+  - "Category Creation. If you cannot win your current category (e.g., Email Marketing), invent a new one (e.g., 'Lifecycle Engagement Platform') and declare yourself the leader."
+
+  - "Design in vector format (SVG/EPS) — logos must scale from favicon (16px) to billboard (10m) without quality loss."
+  - "Test every logo in three formats: full color, single color (black), and inverted (white on dark background)."
+  - "Ensure the logo is recognizable at 16x16px before finalizing — if it doesn't work as a favicon, simplify."
+  - "Wait 48 hours between creating and finalizing a logo — fresh eyes catch symmetry and proportion issues."
+  - "Create a brand guidelines document that specifies clear space, minimum size, color palette, and incorrect usage examples."
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "April Dunford: Obviously Awesome"
+    url: "https://www.aprildunford.com/obviously-awesome"

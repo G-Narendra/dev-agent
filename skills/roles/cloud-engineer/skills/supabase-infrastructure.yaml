@@ -1,0 +1,78 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "supabase-infrastructure"
+display_name: "Supabase Backend-as-a-Service"
+description: >
+  Build massively scalable backends fast by leveraging Supabase's managed Postgres, 
+  real-time subscriptions, Row Level Security (RLS), and Edge Functions.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "cloud-engineer"
+phase: "build"
+applicable_startups: 
+  - all
+priority: "high"
+difficulty: "advanced"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Row Level Security (RLS)"
+    tasks:
+      - "Enable RLS on EVERY public table immediately. Write strict policies ensuring `auth.uid() = user_id` before the frontend can select or update rows."
+  - step: "Database Functions"
+    tasks:
+      - "Move heavy transactional logic into Postgres Functions/Stored Procedures rather than making 10 sequential API calls from the client."
+  - step: "Realtime Channels"
+    tasks:
+      - "Subscribe to database inserts/updates using Supabase Realtime for chat apps or live dashboards, but ensure RLS policies strictly filter broadcasted data."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Exposing the Supabase `anon` key to the frontend but failing to enable RLS on the `users` table, allowing anyone to download the entire customer database via the REST API."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Supabase Infrastructure process"
+  - "How do I handle supabase infrastructure?"
+  - "Implement supabase infrastructure"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the supabase infrastructure process"
+  optional:
+    - name: "N/A"
+      type: "string"
+      description: "No optional inputs needed."
+
+outputs:
+  files:
+    - path: "outputs/supabase-infrastructure.md"
+      description: "Results of the supabase infrastructure process"
+  artifacts:
+    - "Completed supabase infrastructure deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "AWS Documentation"
+    url: "https://docs.aws.amazon.com"
+  - title: "Terraform Documentation"
+    url: "https://developer.hashicorp.com/terraform/docs"

@@ -1,0 +1,110 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "leadership-principles"
+display_name: "Leadership Principles & Operating Cadence"
+description: >
+  Establishes the behavioral expectations and operating rhythms for the 
+  management layer of the startup. Ensures that decisions are made quickly, 
+  meetings have strict agendas, and accountability is tracked transparently.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "ceo"
+phase: "growth"
+applicable_startups:
+  - all
+priority: "high"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Managers aren't holding their teams accountable."
+  - "Meetings are a waste of time."
+  - "Establish an operating cadence."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Draft meeting cadence structure."
+  - "Generate decision-making matrix (DACI)."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "current_bottlenecks"
+      type: "string"
+      description: "Where is the company currently slowing down?"
+  optional:
+    - name: "framework_choice"
+      type: "string"
+      description: "EOS, OKRs, or V2MOM."
+      default: "OKRs"
+
+outputs:
+  files:
+    - path: "business/leadership/operating-cadence.md"
+      description: "The official calendar of recurring leadership syncs."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "N/A"
+manual:
+  - "Cross-functional blockers are resolved within 24 hours rather than languishing for 2 weeks until the next all-hands."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "Meeting Bloat: Every recurring meeting added to the calendar costs the company thousands of dollars in lost productivity. Audit and aggressively prune them quarterly."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Notion / Google Docs"
+      install: "N/A"
+  alternatives:
+    - name: "Coda"
+      when: "Building automated OKR trackers."
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "The Decision Framework"
+    tasks:
+      - "Implement DACI (Driver, Approver, Contributors, Informed) for every major initiative. There can only be ONE Driver. If two people own a task, nobody owns it."
+  - step: "The Weekly Leadership Sync"
+    tasks:
+      - "Mandate a strict agenda for the Executive Weekly Sync: 15 mins metrics review, 45 mins deep-dive into exactly ONE strategic blocker. No status updates allowed (read those async)."
+  - step: "Written Memos over Presentations"
+    tasks:
+      - "Ban PowerPoint for internal decisions. Require 2-page written memos. Force attendees to read the memo silently for the first 10 minutes of the meeting. It forces clearer thinking."
+  - step: "Skip-Level 1-on-1s"
+    tasks:
+      - "The CEO must hold 1-on-1s with employees two levels down once a quarter. This bypasses the management filtering layer and uncovers ground-truth operational realities."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "The 'Update' Meeting. Holding a 10-person meeting where 9 people sit silently while 1 person reads a Jira board out loud. This should have been a Slack message."
+  - "Consensus-driven decision making. If everyone has veto power, the company will only build mediocre, safe products. The Driver must be allowed to make the call."
+
+best_practices:
+  - "Default to Transparency. Make all team OKRs and project metrics visible to the entire company. Sunlight is the best disinfectant for underperformance."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Amazon's Leadership Principles"
+    url: "https://www.aboutamazon.com/about-us/leadership-principles"

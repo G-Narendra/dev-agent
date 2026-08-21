@@ -1,0 +1,80 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "native-android-dev"
+display_name: "Native Android UI & Architecture (Kotlin)"
+description: >
+  Build native Android applications using modern architecture (MVVM), Jetpack Compose for UI,
+  and Kotlin Coroutines for asynchronous operations.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "mobile-developer-kotlin"
+phase: "build"
+applicable_startups: 
+  - all
+priority: "mvp"
+difficulty: "advanced"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Architecture (MVVM)"
+    tasks:
+      - "Implement the Model-View-ViewModel architecture using Android Architecture Components."
+      - "Use Hilt or Dagger for Dependency Injection."
+  - step: "UI & Async"
+    tasks:
+      - "Build the entire UI declaratively using Jetpack Compose."
+      - "Use Retrofit for network calls, wrapped in Kotlin Coroutines to ensure the Main thread is never blocked."
+  - step: "Offline Support"
+    tasks:
+      - "Use Room Database as a single source of truth for offline-first capabilities."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Executing a heavy database query or network request on the Main UI thread, triggering an Application Not Responding (ANR) crash."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Native Android Dev process"
+  - "How do I handle native android dev?"
+  - "Implement native android dev"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the native android dev process"
+  optional:
+    - name: "N/A"
+      type: "string"
+      description: "No optional inputs needed."
+
+outputs:
+  files:
+    - path: "outputs/native-android-dev.md"
+      description: "Results of the native android dev process"
+  artifacts:
+    - "Completed native android dev deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

@@ -1,0 +1,109 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "trade-show-booth-design"
+display_name: "Trade Show Logistics & Booth Design"
+description: >
+  Manages the chaotic logistics of physical conferences. Handles booth design, 
+  union labor regulations, SWAG logistics, and on-site lead scanning to ensure 
+  a $50,000 sponsorship doesn't go to waste.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "event-coordinator"
+phase: "growth"
+applicable_startups:
+  - b2b-saas
+  - hardware
+priority: "high"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "We are sponsoring AWS re:Invent."
+  - "Design the booth."
+  - "Order the SWAG."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Generate shipping manifest."
+  - "Draft booth duty roster."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "conference_name"
+      type: "string"
+      description: "E.g., SaaStr Annual."
+    - name: "booth_size"
+      type: "string"
+      description: "10x10, 10x20, Island."
+  optional:
+    - name: "budget"
+      type: "string"
+      description: "Total spend allocated."
+      default: "$25k"
+
+outputs:
+  files:
+    - path: "marketing/events/saastr-logistics-plan.md"
+      description: "The complete checklist for the physical event."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "N/A"
+manual:
+  - "All materials arrive at the convention center on time, the booth looks premium, and the team scans 500+ qualified badges."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "Union Rules: Never attempt to carry heavy boxes or set up electrical wiring yourself at major US convention centers (like Moscone or Javits). Union labor rules strictly forbid it and you will be fined."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Monday.com / Smartsheet"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Booth Design"
+    tasks:
+      - "Design the backwall. Keep it simple. Passersby have 3 seconds to read it. Use a massive logo and a 5-word value proposition. Do NOT put paragraphs of text on a physical booth."
+  - step: "Shipping & Drayage"
+    tasks:
+      - "Coordinate shipping to the 'Advance Warehouse'. Do not ship directly to the show site on day one, as packages frequently get lost on the loading dock."
+  - step: "SWAG Strategy"
+    tasks:
+      - "Stop buying cheap pens. Buy high-quality items (e.g., Yeti mugs, nice socks). Create a 'Tiered SWAG' system: cheap stickers for everyone, premium mugs only for people who sit through a demo."
+  - step: "Booth Roster"
+    tasks:
+      - "Create a strict shift schedule. Do not let AEs stand in the booth for 8 hours straight; they will lose energy. Enforce a 'No sitting, no eating, no looking at phones in the booth' rule."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Hiding behind the counter waiting for people to walk up. The team must stand in the aisle and actively pull people in with an engaging opening question."
+best_practices:
+  - "Host an exclusive VIP dinner on the second night of the conference. The real ROI of trade shows happens at dinners, not on the noisy show floor."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Exhibitor Online: Trade Show Best Practices"
+    url: "https://www.exhibitoronline.com/"

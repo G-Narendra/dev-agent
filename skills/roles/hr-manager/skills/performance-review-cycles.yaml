@@ -1,0 +1,108 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "performance-review-cycles"
+display_name: "360 Performance Review Architecture"
+description: >
+  Designs and executes the bi-annual performance review cycle. Standardizes 
+  the feedback process so it is objective, data-driven, and focused on growth, 
+  rather than being a subjective popularity contest.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "hr-manager"
+phase: "growth"
+applicable_startups:
+  - all
+priority: "high"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "We need to do performance reviews."
+  - "How do we evaluate our engineers?"
+  - "Set up the 360 feedback."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Generate review templates."
+  - "Draft performance improvement plan (PIP)."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "company_size"
+      type: "string"
+      description: "Number of employees."
+  optional:
+    - name: "review_cadence"
+      type: "string"
+      description: "Quarterly or Bi-annually."
+      default: "Bi-annually"
+
+outputs:
+  files:
+    - path: "hr/performance/review-template.md"
+      description: "The questionnaire for managers and peers."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "N/A"
+manual:
+  - "100% of employees receive their review within the 2-week cycle window, with clear, documented goals for the next 6 months."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "Legal Compliance: Ensure all reviews are documented in writing. If you need to terminate an employee for poor performance later, these documents are your legal defense."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Lattice / Culture Amp"
+      install: "N/A"
+  alternatives:
+    - name: "Google Forms"
+      when: "Startup is under 30 people and cannot afford HR software."
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "The Questionnaire Design"
+    tasks:
+      - "Keep it simple. Ask 3 questions: 1. What should they Start doing? 2. What should they Stop doing? 3. What should they Continue doing?"
+  - step: "Manager Calibration"
+    tasks:
+      - "Before managers deliver the reviews to employees, hold a 'Calibration Meeting' where all managers review the scores together to ensure one manager isn't an 'easy grader' while another is brutal."
+  - step: "The Feedback Delivery"
+    tasks:
+      - "Train managers to separate 'Performance' from 'Compensation'. Have the review meeting first. Have the raise/bonus conversation a week later so the employee actually listens to the feedback."
+  - step: "Performance Improvement Plans (PIP)"
+    tasks:
+      - "Create a strict 30-day PIP template for underperformers. It must contain specific, measurable goals. If they fail to hit them, they are terminated immediately."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "The 'Surprise' Review. An employee should never hear about a major performance issue for the first time at their 6-month review. Managers must give continuous feedback weekly."
+best_practices:
+  - "Include 'Upward Feedback' (where employees rate their manager). A manager with a high-performing team but terrible upward feedback is a retention risk."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Radical Candor by Kim Scott"
+    url: "https://www.radicalcandor.com/"

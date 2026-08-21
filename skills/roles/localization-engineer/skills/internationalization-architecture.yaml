@@ -1,0 +1,79 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "internationalization-architecture"
+display_name: "i18n Architecture & Pluralization"
+description: >
+  Extract hardcoded strings into translation files and implement ICU Message Format 
+  to handle complex pluralization and gendered languages.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "localization-engineer"
+phase: "growth"
+applicable_startups: 
+  - all
+priority: "high"
+difficulty: "advanced"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "String Extraction"
+    tasks:
+      - "Implement a linter rule that fails the build if a developer hardcodes a string like `<h1>Welcome</h1>`. It must be `<h1>{t('home.welcome_title')}</h1>`."
+  - step: "Complex Pluralization"
+    tasks:
+      - "Do not concatenate strings like `count + ' items'`. Use ICU format: `{count, plural, =0 {No items} one {1 item} other {# items}}` because Russian and Arabic have up to 6 plural forms."
+  - step: "RTL Layouts"
+    tasks:
+      - "Replace CSS properties like `margin-left` with logical properties like `margin-inline-start` so the layout automatically mirrors when the user switches to Arabic."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Assuming that a translated German button will be the exact same width as the English version, causing the layout to shatter completely in the EU."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Internationalization Architecture process"
+  - "How do I handle internationalization architecture?"
+  - "Implement internationalization architecture"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the internationalization architecture process"
+  optional:
+    - name: "code_repository"
+      type: "string"
+      description: "Path to the code repository"
+      default: "./"
+
+outputs:
+  files:
+    - path: "outputs/internationalization-architecture.md"
+      description: "Results of the internationalization architecture process"
+  artifacts:
+    - "Completed internationalization architecture deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

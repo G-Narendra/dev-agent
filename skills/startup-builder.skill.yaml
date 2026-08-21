@@ -1,0 +1,212 @@
+# ============================================================
+# startup-builder.skill.yaml — Dev Skill Entry Point
+# ============================================================
+# This skill is the entry point for Dev's skill system.
+# Install it with: npx skills add <repo> --skill startup-builder --yes
+#
+# Once installed, load it in Dev by saying:
+# "Load the startup-builder skill. I have a startup idea..."
+# ============================================================
+
+name: "startup-builder"
+display_name: "🚀 Startup Builder — AI-Powered Full-Stack Startup Creation"
+description: >
+  Takes a single-sentence startup idea "glimpse" and autonomously executes
+  the entire startup lifecycle using 250+ expert role playbooks. Handles
+  market research, customer discovery, product planning, code development,
+  deployment, growth marketing, and legal/operations — all driven by
+  structured skill YAML files in the skills/ directory.
+
+  The system matches the idea to a startup archetype (SaaS, AI, FinTech, etc.),
+  then progresses through 6 phases (Ideation → Planning → Build → Ship →
+  Growth → Operations), loading the right expert role at each step.
+
+role: "startup-builder"
+phase: "all"
+applicable_startups:
+  - all
+priority: "critical"
+difficulty: "expert"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "I have a startup idea."
+  - "I want to build a startup."
+  - "Help me build my startup."
+  - "Turn this idea into a company."
+  - "Build my MVP."
+  - "I have this idea for..."
+  - "Launch my startup."
+  - "Startup builder"
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Read STARTUP-BUILDER.md and follow the workflow"
+  - "Analyze idea against manifests/startup-types.yaml"
+  - "Load roles and skills phase-by-phase"
+  - "Execute full startup lifecycle from ideation to operations"
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "startup_idea_glimpse"
+      type: "string"
+      description: "A one-sentence description of the user's startup idea (e.g., 'An AI tool that helps freelancers track their finances.')"
+  optional:
+    - name: "target_archetype"
+      type: "string"
+      description: "Optional override for the startup archetype (saas, ai, fintech, ecommerce, marketplace, healthtech, edtech, web3, gaming, iot-hardware, devtools, media-creator, agritech, proptech, cleantech)"
+    - name: "start_phase"
+      type: "string"
+      description: "Phase to start from if resuming (0-ideation, 1-planning, 2-build, 3-ship, 4-growth, 5-operations)"
+      default: "0-ideation"
+
+outputs:
+  files:
+    - path: "outputs/phase-0-ideation/"
+      description: "Market research, competitor analysis, customer discovery, business model, brand"
+    - path: "outputs/phase-1-planning/"
+      description: "PRD, wireframes, system architecture, database schema, roadmap"
+    - path: "outputs/phase-2-build/"
+      description: "Full MVP codebase, infrastructure config, tests"
+    - path: "outputs/phase-3-ship/"
+      description: "Deployment config, API docs, monitoring setup, support workflows"
+    - path: "outputs/phase-4-growth/"
+      description: "SEO audit, content calendar, ad strategy, growth experiments"
+    - path: "outputs/phase-5-operations/"
+      description: "Legal docs, compliance checklist, hiring plan, financial model"
+  artifacts:
+    - "A working, deployed MVP"
+    - "Comprehensive market research with real customer evidence"
+    - "Complete system architecture and database design"
+    - "Growth and marketing playbook"
+    - "Legal and operational foundation"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "MVP deploys successfully to production"
+    - "All tests pass"
+    - "API endpoints respond correctly"
+  manual:
+    - "User can say: 'I gave you a vague idea, and you gave me a validated concept, working product, and a real company foundation.'"
+    - "Every phase has documented outputs in the outputs/ directory"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Load the Master Instructions"
+    tasks:
+      - "Read STARTUP-BUILDER.md — this is the master playbook"
+      - "Read skills/manifests/startup-types.yaml — this is the archetype registry"
+      - "Understand the full workflow before starting"
+
+  - step: "Archetype Matching"
+    tasks:
+      - "Analyze the user's idea against the keywords in startup-types.yaml"
+      - "Determine the best-matching archetype"
+      - "Identify universal roles AND archetype-specific additional_roles"
+      - "Announce the matched archetype to the user"
+
+  - step: "Execute Phase 0 — Ideation"
+    tasks:
+      - "Load roles: founder-ceo, market-researcher, customer-discovery-specialist, competitive-analyst, business-model-strategist, idea-critic, startup-namer, brand-strategist, logo-designer"
+      - "For each role, read ALL skill files in skills/roles/<role>/skills/"
+      - "Follow each skill's implementation_checklist"
+      - "Use research utilities (competitive-teardown, reddit-deep-research, twitter-x-pulse)"
+      - "Save all outputs to outputs/phase-0-ideation/"
+
+  - step: "Execute Phase 1 — Planning"
+    tasks:
+      - "Load roles: product-manager, product-designer-ux, product-designer-ui, technical-architect, data-architect, project-manager"
+      - "Read and follow each role's skill files"
+      - "Produce: PRD, wireframes, system design, database schema, roadmap"
+      - "Save to outputs/phase-1-planning/"
+
+  - step: "Execute Phase 2 — Build"
+    tasks:
+      - "Load roles: frontend-engineer, backend-engineer, fullstack-engineer, database-engineer, devops-engineer, cloud-engineer, qa-engineer, security-engineer"
+      - "Scaffold the project based on the recommended_stack from startup-types.yaml"
+      - "Implement all features from the PRD"
+      - "Set up CI/CD, database, auth, tests"
+      - "Save to outputs/phase-2-build/"
+
+  - step: "Execute Phase 3 — Ship"
+    tasks:
+      - "Load roles: release-engineer, sre-engineer, incident-commander, performance-engineer, technical-writer, support-engineer"
+      - "Deploy to production"
+      - "Write API docs and user manuals"
+      - "Set up monitoring and alerting"
+      - "Save to outputs/phase-3-ship/"
+
+  - step: "Execute Phase 4 — Growth"
+    tasks:
+      - "Load roles from the manifest (universal + archetype-specific). Likely: growth-hacker, seo-specialist, content-strategist, copywriter, social-media-manager, email-marketing-manager, performance-marketer, sales-engineer"
+      - "For each role, try to read skills/roles/<role>/skills/ — if folder doesn't exist, skip gracefully"
+      - "Optimize landing page, set up SEO, plan content calendar"
+      - "Identify and document growth channels"
+      - "Save to outputs/phase-4-growth/"
+
+  - step: "Execute Phase 5 — Operations"
+    tasks:
+      - "Load roles from the manifest (universal + archetype-specific). Likely: legal-counsel, compliance-officer, cfo, hr-manager, recruiter, operations-manager, founder-ceo"
+      - "For each role, try to read skills/roles/<role>/skills/ — if folder doesn't exist, skip gracefully"
+      - "Draft legal documents (ToS, Privacy Policy)"
+      - "Build financial model"
+      - "Create hiring plan"
+      - "Save to outputs/phase-5-operations/"
+
+  - step: "Final Delivery"
+    tasks:
+      - "Compile a comprehensive summary of everything built"
+      - "Provide URLs to live deployment"
+      - "List all output files and their locations"
+      - "Give the user a prioritized list of next steps"
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem — to read skills/ directory and write outputs/"
+  - "network — for web research, API calls"
+  - "browser — for research tools"
+  - "environment_variable — for API keys if needed"
+
+safety_notes:
+  - "Phase 0 (Ideation) is CRITICAL. Do NOT skip it. Building the wrong product is the #1 startup killer."
+  - "When building code, follow the recommended_stack from startup-types.yaml unless the user specifies otherwise."
+  - "Do not deploy to production without the user's explicit approval for the hosting provider and domain."
+  - "Respect all safety_notes within each individual skill YAML."
+  - "Do not commit real API keys or secrets to the codebase."
+  - "Legal outputs (ToS, Privacy Policy) are templates — recommend the user have a real lawyer review them."
+  - "If a referenced role folder doesn't exist under skills/roles/, skip it gracefully and note it to the user. Don't let missing folders stop execution."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Dev / Dev (AI Agent)"
+      install: "https://dev.com"
+  utilities:
+    - name: "skills/utilities/research/*"
+      description: "Market research tools (competitive teardown, Reddit, Twitter, Hacker News)"
+    - name: "skills/utilities/cognitive/*"
+      description: "Thinking tools (first-principles, decision journal, debate)"
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Skipping directly to writing code (Phase 2) without doing customer discovery and planning (Phases 0-1)"
+  - "Building features the user didn't ask for"
+  - "Ignoring the skill YAMLs and relying purely on general AI knowledge"
+  - "Jumping between phases — complete one before starting the next"
+
+best_practices:
+  - "Always announce which phase and role is currently active"
+  - "Save ALL outputs — if the AI session ends, the user should have all the documents"
+  - "Use utilities/cognitive/first-principles-decomposition when facing hard problems"
+  - "Use utilities/research/competitive-teardown as soon as the archetype is identified"
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "STARTUP-BUILDER.md — Master Instruction File"
+    path: "./STARTUP-BUILDER.md"
+  - title: "Manifest — Startup Archetype Registry"
+    path: "./skills/manifests/startup-types.yaml"
+  - title: "Skill Template"
+    path: "./skills/templates/skill-template.yaml"

@@ -1,0 +1,115 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "pipeline-forecasting"
+display_name: "Weighted Pipeline Forecasting"
+description: >
+  Build a predictable revenue forecast model by applying historical win rates 
+  to the current open sales pipeline. Shifts sales leadership away from 'gut feel' 
+  commitments to mathematically sound probability models.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "revenue-operations-analyst"
+phase: "growth"
+applicable_startups:
+  - all
+priority: "critical"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Forecast this quarter's revenue."
+  - "Build a pipeline model."
+  - "Are we going to hit our sales target?"
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Create a pipeline forecast spreadsheet artifact."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "open_pipeline"
+      type: "file"
+      description: "CSV of all currently open deals with their Stage and Deal Size."
+    - name: "historical_win_rates"
+      type: "config"
+      description: "The true historical % of deals won at each stage (e.g., Discovery: 15%, Demo: 35%)."
+  optional:
+    - name: "sales_velocity"
+      type: "string"
+      description: "Average days to close a deal."
+      default: "45 days"
+
+outputs:
+  files:
+    - path: "sales/weighted-forecast.csv"
+      description: "The calculated expected revenue for the quarter."
+  artifacts:
+    - "A waterfall chart showing Pipeline vs Quota Target."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "Model accurately calculates: `Expected Revenue = SUM(Deal Size * Stage Probability)`."
+  manual:
+    - "The end-of-quarter actual revenue lands within 10% of the Day-1 forecasted revenue."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+
+safety_notes:
+  - "Never share un-scrubbed raw deal data (containing prospect names and values) in public Slack channels. Restrict to Sales Leadership."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Salesforce / HubSpot Reports"
+      install: "N/A"
+  alternatives:
+    - name: "Clari / Gong"
+      when: "Using advanced AI-driven revenue intelligence platforms to flag deals at risk."
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Stage Probability Auditing"
+    tasks:
+      - "Do not trust the default CRM probabilities (e.g., 'Demo = 50%'). Analyze the last 12 months of closed-won data to find the *true* conversion rate from each stage to Closed Won."
+  - step: "The Weighted Calculation"
+    tasks:
+      - "Multiply every open deal's monetary value by its stage's true historical win rate."
+      - "Sum these values to get the 'Weighted Pipeline'."
+  - step: "Pipeline Coverage Ratio"
+    tasks:
+      - "Calculate Pipeline Coverage: Total Unweighted Pipeline / Remaining Quota to Hit."
+      - "Ensure the coverage ratio is at least 3x (or 4x for Enterprise). If it's less than 3x, Marketing needs to generate more leads immediately."
+  - step: "Slipped Deal Analysis"
+    tasks:
+      - "Exclude any deal from the forecast if its 'Close Date' has been pushed back more than 3 times (Happy Ears syndrome)."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Relying on a sales rep's 'Commit' (gut feeling) instead of mathematical probabilities. Sales reps are chronically optimistic."
+  - "Including 'Stale' deals in the forecast. If a deal has been in the 'Contract Out' stage for 90 days on a 30-day sales cycle, its probability is 0%, not 90%."
+
+best_practices:
+  - "Implement 'Stage Exit Criteria'. A deal cannot move to the next stage unless a specific action occurred (e.g., 'Pricing approved by economic buyer'). This prevents reps from artificially inflating their pipeline."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "HubSpot: How to Forecast Sales"
+    url: "https://blog.hubspot.com/sales/sales-forecasting"

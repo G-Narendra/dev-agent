@@ -1,0 +1,109 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "llm-evaluation"
+display_name: "LLM Evaluation & Benchmarking"
+description: >
+  Designs and implements evaluation frameworks for LLM outputs. Covers 
+  automated metrics, human evaluation, benchmark suites, regression testing,
+  and production monitoring to ensure LLM quality, consistency, and safety.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "llm-engineer"
+phase: "build"
+applicable_startups:
+  - ai
+priority: "critical"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "How do we measure LLM quality?"
+  - "We need an evaluation framework for our LLM."
+  - "Set up LLM regression tests."
+  - "Benchmark our model against standards."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Create evaluation suite."
+  - "Run benchmark against baseline."
+  - "Set up production LLM monitoring."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "llm_endpoint"
+      type: "string"
+      description: "The LLM API endpoint or model to evaluate."
+    - name: "eval_criteria"
+      type: "string"
+      description: "Dimensions to evaluate (accuracy, safety, tone, format, etc.)."
+  optional:
+    - name: "baseline_model"
+      type: "string"
+      description: "Model to compare against."
+      default: "gpt-4o"
+
+outputs:
+  files:
+    - path: "ai/llm/evaluation-report.md"
+      description: "Comprehensive evaluation report with metrics and recommendations"
+  artifacts:
+    - "An automated evaluation pipeline integrated into CI/CD"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Define Evaluation Dimensions"
+    tasks:
+      - "Identify quality dimensions: factual accuracy, relevance, tone, format compliance, safety."
+      - "Define acceptable thresholds for each dimension based on use case."
+      - "Create a rubric with concrete examples for human raters."
+  - step: "Build Test Dataset"
+    tasks:
+      - "Create golden test set of 100-500 examples with ground truth answers."
+      - "Include edge cases: ambiguous queries, adversarial inputs, multi-turn scenarios."
+      - "Cover all major use cases the LLM will handle in production."
+  - step: "Implement Automated Metrics"
+    tasks:
+      - "Set up semantic similarity metrics (BERTScore, BLEURT, cosine similarity)."
+      - "Implement task-specific metrics (exact match for extraction, ROUGE for summarization)."
+      - "Use LLM-as-a-judge to evaluate output quality at scale."
+      - "Build a comparison dashboard showing results vs. baseline."
+  - step: "Production Monitoring"
+    tasks:
+      - "Implement real-time monitoring for output quality in production."
+      - "Set up alerting when quality metrics drop below thresholds."
+      - "Create a feedback loop to collect user ratings on LLM outputs."
+      - "Regularly regress against the golden test set after every model update."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Relying on any single metric — no metric captures all dimensions."
+  - "Using LLM-as-a-judge without validating the judge's own biases."
+  - "Not testing for regressions — a model can improve on one metric while degrading others."
+  - "Only evaluating on happy-path examples and ignoring edge cases."
+best_practices:
+  - "Combine automated metrics with periodic human evaluation."
+  - "Track evaluation results over time to spot regressions early."
+  - "Evaluate both on aggregate metrics and per-example qualitative review."
+  - "Make the evaluation suite part of CI/CD so every prompt change is tested."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "LMSYS Chatbot Arena — Leaderboard for LLMs"
+    url: "https://chat.lmsys.org/"
+  - title: "Hugging Face Open LLM Leaderboard"
+    url: "https://huggingface.co/spaces/open-llm-leaderboard/open_llm_leaderboard"

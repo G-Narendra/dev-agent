@@ -1,0 +1,111 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "cloud-migration-strategy"
+display_name: "Cloud Migration Strategy & Execution"
+description: >
+  Plans and executes large-scale migrations from on-premise data centers to
+  cloud infrastructure. Covers the 6 R's of migration, phased approaches,
+  and risk mitigation strategies.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "enterprise-architect"
+phase: "planning"
+applicable_startups:
+  - all
+priority: "mvp"
+difficulty: "expert"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Migrate our on-premise infrastructure to the cloud."
+  - "Plan cloud migration strategy."
+  - "Lift and shift vs. re-architect?"
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Assess migration readiness."
+  - "Design phased migration plan."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "current_infrastructure"
+      type: "string"
+      description: "On-premise data center, co-location, or another cloud."
+    - name: "target_cloud"
+      type: "string"
+      description: "AWS, Azure, GCP, or multi-cloud."
+  optional:
+    - name: "migration_timeline"
+      type: "string"
+      description: "Phased over months or big-bang."
+      default: "Phased (6-18 months)"
+
+outputs:
+  files:
+    - path: "architecture/migration/cloud-migration-plan.md"
+      description: "Cloud migration strategy with phased execution plan"
+  artifacts:
+    - "A phased cloud migration plan with risk assessment and rollback strategy"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Assessment & Discovery"
+    tasks:
+      - "Inventory all servers, databases, applications, and dependencies (use AWS MGN or Azure Migrate)."
+      - "Map application dependencies: what talks to what? What's the network flow?"
+      - "Classify applications by migration complexity: simple lift-and-shift, re-platform, or re-architect."
+      - "Identify compliance and data residency requirements that affect migration planning."
+  - step: "The 6 R's of Migration"
+    tasks:
+      - "Rehost (Lift & Shift): migrate as-is, fastest but least cloud-native — good for quick wins."
+      - "Replatform (Lift & Reshape): move to managed services (RDS instead of self-managed DB)."
+      - "Refactor (Re-architect): redesign for cloud-native (microservices, serverless)."
+      - "Repurchase: replace with SaaS alternatives (e.g., Salesforce instead of custom CRM)."
+      - "Retire: decommission applications that are no longer needed."
+      - "Retain: keep some applications on-premise if they can't be moved."
+  - step: "Phased Migration Execution"
+    tasks:
+      - "Migrate non-critical applications first to build confidence."
+      - "Use the Strangler Fig pattern for gradual migration of monolithic applications."
+      - "Keep old and new systems running in parallel during the transition."
+      - "Document rollback procedures for each migration wave."
+  - step: "Post-Migration Optimization"
+    tasks:
+      - "Rightsize migrated resources — lift-and-shift often over-provisions."
+      - "Implement auto-scaling, load balancing, and health checks for cloud-native operations."
+      - "Decommission old infrastructure after successful migration and verification."
+      - "Measure cost savings and performance improvements to validate migration success."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Big-bang migration — trying to migrate everything at once is the most common cause of failure."
+  - "Lift-and-shift without optimization — you'll end up with expensive, poorly performing cloud infrastructure."
+  - "No rollback plan — if the migration fails, you need to be able to go back."
+  - "Underestimating network latency — cloud != on-premise, design for different performance characteristics."
+best_practices:
+  - "Start with a 'paved road' approach: define a standard migration path and tooling before starting."
+  - "Use automation for migration — manual migrations are error-prone and slow."
+  - "Invest in cloud training for the operations team before the migration."
+  - "Celebrate each migration wave — keeping morale high through a multi-month migration is critical."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

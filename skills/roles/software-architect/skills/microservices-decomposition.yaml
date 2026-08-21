@@ -1,0 +1,111 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "microservices-decomposition"
+display_name: "Staff Software Architect: Microservices & Domain-Driven Design"
+description: >
+  Operates at the Principal/Staff Engineer level (10+ years FAANG). Engineers 
+  complex system decomposition using strict Domain-Driven Design (DDD). 
+  Determines the exact mathematical tipping point where a monolith should 
+  be split, preventing the catastrophic "distributed monolith" anti-pattern.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "software-architect"
+phase: "design"
+applicable_startups:
+  - all
+priority: "high"
+difficulty: "expert"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "We need to break up the monolith."
+  - "Design the microservices architecture."
+  - "How should we isolate the billing service?"
+  - "Define the bounded contexts."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Generate Domain-Driven Design (DDD) Context Map."
+  - "Draft Microservice Network Topology."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "current_architecture"
+      type: "string"
+      description: "Description of the current monolith or system."
+    - name: "scaling_pain_point"
+      type: "string"
+      description: "Why split it? (e.g., Deploy speed, Team size, CPU scaling)."
+  optional:
+    - name: "database_strategy"
+      type: "string"
+      description: "Shared DB vs Database-per-service."
+      default: "Database-per-service"
+
+outputs:
+  files:
+    - path: "docs/architecture/microservices-decomposition-plan.md"
+      description: "The strict Strangler-Fig migration and context boundary plan."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "N/A"
+manual:
+  - "The resulting microservices are 100% independently deployable. If Service A goes down, Service B continues to function in a degraded but stable state."
+  - "The decomposition strictly adheres to the 'Database per Service' pattern; no two microservices share a database table."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+safety_notes:
+  - "The Distributed Monolith Catastrophe: If Service A must make a synchronous HTTP call to Service B to complete a transaction, and Service B must call Service C, you do not have microservices. You have a distributed monolith with compounding network latency and cascading failure risks. You must decouple via asynchronous events."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Event Storming / Miro"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Define Bounded Contexts (DDD)"
+    tasks:
+      - "Identify the linguistic boundaries of the business. An 'Order' in the Shipping Domain is fundamentally a different object than an 'Order' in the Billing Domain. Do not force them into a single global data model. Create separate bounded contexts."
+  - step: "The Database-Per-Service Mandate"
+    tasks:
+      - "Enforce strict data encapsulation. A microservice's database is its private internal state. Other services can ONLY access that data via the service's API or via published asynchronous events (Kafka/SQS). No backdoor SQL queries."
+  - step: "The Strangler Fig Migration Pattern"
+    tasks:
+      - "Never execute a 'Big Bang' rewrite where you pause feature development for 6 months to build microservices. Use an API Gateway to route traffic to the legacy monolith, then carve out ONE bounded context (e.g., Billing), route Billing traffic to the new microservice, and leave the rest in the monolith. Repeat."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Microservices for Teams of 5: Microservices are a solution for organizational scaling, not just technical scaling. If your engineering team is under 20 people, building microservices will obliterate your velocity due to DevOps and orchestration overhead. Stick to a Modular Monolith."
+  - "Two-Phase Commits (2PC) in distributed systems: Trying to maintain ACID transactions across multiple microservices via synchronous locks will cause catastrophic deadlocks. Use the Saga Pattern and compensating transactions instead."
+
+best_practices:
+  - "Design for Failure. Assume every network call will eventually time out, fail, or drop packets. Implement Circuit Breakers, Retries with Exponential Backoff, and Jitter on all inter-service communications."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Martin Fowler: Microservices"
+    url: "https://martinfowler.com/articles/microservices.html"
+  - title: "Sam Newman: Monolith to Microservices"
+    url: "https://samnewman.io/books/monolith-to-microservices/"

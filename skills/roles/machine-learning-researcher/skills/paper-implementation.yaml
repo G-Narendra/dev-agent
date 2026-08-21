@@ -1,0 +1,82 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "paper-implementation"
+display_name: "ArXiv Paper Implementation & Replication"
+description: >
+  Read state-of-the-art (SOTA) machine learning research papers and implement the novel 
+  architectures or loss functions from scratch using PyTorch or JAX.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "machine-learning-researcher"
+phase: "build"
+applicable_startups: 
+  - ai
+priority: "mvp"
+difficulty: "expert"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Literature Review"
+    tasks:
+      - "Analyze the math and architecture diagrams of the target paper."
+      - "Identify the required datasets and evaluation benchmarks used by the authors."
+  - step: "Implementation"
+    tasks:
+      - "Write the PyTorch `nn.Module` classes representing the novel layers/attention mechanisms."
+      - "Implement the specific custom loss function described in the paper."
+  - step: "Verification"
+    tasks:
+      - "Train the model on a small subset of data to verify the loss curve decreases."
+      - "Compare the final benchmark scores against the published paper results."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Blindly copying poorly-written Github repositories attached to papers without verifying the math against the actual manuscript."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Paper Implementation process"
+  - "How do I handle paper implementation?"
+  - "Implement paper implementation"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the paper implementation process"
+  optional:
+    - name: "code_repository"
+      type: "string"
+      description: "Path to the code repository"
+      default: "./"
+
+outputs:
+  files:
+    - path: "outputs/paper-implementation.md"
+      description: "Results of the paper implementation process"
+  artifacts:
+    - "Completed paper implementation deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

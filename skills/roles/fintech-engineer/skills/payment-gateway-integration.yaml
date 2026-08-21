@@ -1,0 +1,117 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "payment-gateway-integration"
+display_name: "Payment Gateway & Stripe Integration"
+description: >
+  Architect secure, idempotent payment flows for SaaS subscriptions or 
+  e-commerce checkouts. Handles webhooks, card failures, and multi-currency 
+  processing without losing transactions.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "fintech-engineer"
+phase: "build"
+applicable_startups:
+  - fintech
+  - e-commerce
+  - b2b-saas
+priority: "critical"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Integrate Stripe."
+  - "Set up the billing system."
+  - "Handle payment webhooks."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "npm install stripe"
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "payment_model"
+      type: "string"
+      description: "One-time purchases vs Recurring Subscriptions vs Usage-based."
+    - name: "gateway_provider"
+      type: "string"
+      description: "Stripe, Braintree, Adyen."
+  optional:
+    - name: "currency_handling"
+      type: "string"
+      description: "Single currency vs Multi-currency."
+      default: "Single currency (USD)"
+
+outputs:
+  files:
+    - path: "api/billing/webhook_handler.ts"
+      description: "The secure endpoint for processing Stripe events."
+  artifacts:
+    - "A state-machine diagram of the checkout flow."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "100% of successful Stripe `invoice.paid` webhooks correctly update the user's status in the local database."
+  manual:
+    - "The company has zero 'ghost' subscriptions (users who cancelled in the app but are still being billed in Stripe)."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+  - "network"
+
+safety_notes:
+  - "Idempotency: Webhooks can and WILL be delivered multiple times by Stripe due to network retries. If your webhook handler is not idempotent, a user's account will be credited twice for a single payment. Always check if the `stripe_event_id` has already been processed."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Stripe API / Stripe CLI"
+      install: "stripe listen --forward-to localhost:3000/webhook"
+  alternatives:
+    - name: "Paddle"
+      when: "You want a Merchant of Record (MoR) to handle global sales tax and VAT compliance automatically."
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Client-Side Tokenization"
+    tasks:
+      - "NEVER let raw credit card numbers touch your server. Use Stripe Elements or Checkout. The client sends the card directly to Stripe, Stripe returns a Token (`tok_xxx`), and your server only ever sees the Token."
+  - step: "The Webhook Handler"
+    tasks:
+      - "Verify the Webhook Signature (`Stripe-Signature` header) using your Webhook Secret to ensure the payload actually came from Stripe and not a malicious actor."
+      - "Listen for critical events: `checkout.session.completed` (for one-time purchases) and `invoice.paid` / `invoice.payment_failed` (for subscriptions)."
+  - step: "State Synchronization"
+    tasks:
+      - "The Source of Truth for billing is Stripe, not your database. If a user downgrades their plan, update the Stripe Subscription object first. Let the resulting webhook update your local database."
+  - step: "Handling Card Failures (Dunning)"
+    tasks:
+      - "Set up a Dunning process. If `invoice.payment_failed` triggers, do not instantly delete the user's account. Give them a 7-day grace period and trigger an automated email to update their card."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Storing `stripe_customer_id` in the local frontend state (e.g., LocalStorage). A malicious user can edit LocalStorage, change their ID to the ID of an Admin, and bypass the paywall."
+  - "Using synchronous API calls to provision access. Do not wait for the Stripe API to confirm payment before rendering the 'Success' page. Use asynchronous webhooks to provision access."
+
+best_practices:
+  - "Always store monetary amounts as integers representing the smallest currency unit (e.g., Cents). Store $10.00 as `1000`. This prevents floating-point math errors (`0.1 + 0.2 = 0.30000000000000004`) from destroying your financial data."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Stripe: Webhook Best Practices"
+    url: "https://stripe.com/docs/webhooks/best-practices"

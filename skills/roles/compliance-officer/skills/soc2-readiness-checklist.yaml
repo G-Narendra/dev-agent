@@ -1,0 +1,112 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "soc2-readiness-checklist"
+display_name: "SOC 2 Readiness & Policy Generation"
+description: >
+  Prepares a startup for a SOC 2 Type I or Type II audit. Drafts the required 
+  Information Security policies (Access Control, Incident Response) and enforces 
+  technical controls (MFA, encryption at rest).
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "compliance-officer"
+phase: "growth"
+applicable_startups:
+  - b2b-saas
+  - fintech
+priority: "critical"
+difficulty: "expert"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "An enterprise customer asked for our SOC 2."
+  - "We need to get SOC 2 compliant."
+  - "Draft the InfoSec policy."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Generate Access Control Policy."
+  - "Run AWS security audit."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "cloud_provider"
+      type: "string"
+      description: "AWS, GCP, Azure."
+  optional:
+    - name: "automation_tool"
+      type: "string"
+      description: "Vanta, Drata, Secureframe."
+      default: "Vanta"
+
+outputs:
+  files:
+    - path: "compliance/policies/information-security-policy.md"
+      description: "The core SOC 2 policy document."
+  artifacts:
+    - "A readiness gap analysis."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "Vanta/Drata dashboard reports 100% passing tests for the Trust Services Criteria."
+manual:
+  - "The startup passes the formal auditor's review and receives a clean SOC 2 report."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "Do not draft policies you cannot actually enforce. If you write 'Passwords change every 30 days', the auditor will ask for proof. If you can't prove it, you fail the audit. Write policies that reflect reality."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Vanta / Drata"
+      install: "N/A"
+  alternatives:
+    - name: "Tugboat Logic"
+      when: "Need heavy customization of controls."
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Policy Generation"
+    tasks:
+      - "Draft the Big 3: Information Security Policy, Access Control Policy, and Incident Response Plan."
+      - "Have the CEO formally approve and sign them."
+  - step: "Technical Controls (Infrastructure)"
+    tasks:
+      - "Ensure all databases have Encryption at Rest enabled (e.g., AWS KMS)."
+      - "Ensure all production infrastructure changes go through a Pull Request with at least 1 approval (Change Management)."
+  - step: "HR Controls (People)"
+    tasks:
+      - "Enforce background checks for all new hires."
+      - "Enforce Mandatory Security Training during onboarding."
+  - step: "Endpoint Controls (Laptops)"
+    tasks:
+      - "Install an MDM (Mobile Device Management) profile (e.g., Jamf or Kandji) to enforce screen locks and hard drive encryption on employee laptops."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Treating SOC 2 as a pure engineering problem. Half of SOC 2 is HR and Operations (onboarding checklists, background checks, policy signatures)."
+best_practices:
+  - "Use a compliance automation platform (Vanta/Drata). Doing SOC 2 manually with spreadsheets is a massive waste of engineering time."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Vanta: The Ultimate Guide to SOC 2"
+    url: "https://www.vanta.com/resources/the-ultimate-guide-to-soc-2"

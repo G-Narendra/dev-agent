@@ -1,0 +1,166 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "mcp-market-integration"
+display_name: "MCP Market — AI Agent Tool Integration Hub"
+description: >
+  Leverages MCP Market (mcpmarket.com) — a directory of thousands of MCP 
+  (Model Context Protocol) servers and agent skills — to extend AI agent 
+  capabilities. Instead of building integrations from scratch, find, install, 
+  and configure ready-made MCP servers for databases, APIs, file systems, 
+  cloud services, and more.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "utility"
+phase: "all"
+applicable_startups:
+  - all
+priority: "high"
+difficulty: "intermediate"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Find an MCP server for [service]."
+  - "I need an AI agent tool to connect to [database/API/service]."
+  - "Search MCP Market for useful integrations."
+  - "Extend the AI agent's capabilities with MCP."
+  - "Install an MCP server for GitHub/PostgreSQL/Slack."
+  - "What MCP servers are available for my tech stack?"
+  - "Configure MCP for the AI agent to access [tool]."
+  - "Set up a Model Context Protocol server."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Search MCP Market for a specific service integration."
+  - "Add an MCP server configuration to the AI agent's config file."
+  - "Install and verify an MCP server works correctly."
+  - "Document the available MCP tools in the project."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "target_service"
+      type: "string"
+      description: "The service, database, API, or platform to integrate (e.g., 'PostgreSQL', 'GitHub', 'Slack', 'Figma', 'Stripe')."
+  optional:
+    - name: "ai_platform"
+      type: "string"
+      description: "The AI agent platform being used (e.g., 'Claude Desktop', 'Cursor', 'VS Code', 'Cline')."
+      default: "Claude Desktop"
+    - name: "mcp_config_path"
+      type: "string"
+      description: "Path to the MCP configuration file (e.g., cline_mcp_settings.json, claude_desktop_config.json)."
+      default: "auto-detect"
+
+outputs:
+  files:
+    - path: "mcp/integration-{service}.md"
+      description: "Step-by-step integration guide for the specific MCP server."
+  artifacts:
+    - "MCP configuration JSON snippet ready to paste into the AI agent config."
+    - "A list of available tools/functions exposed by the installed MCP server."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "The MCP server responds to a ping/test request successfully."
+    - "The AI agent can discover and list the server's available tools."
+  manual:
+    - "The AI agent can successfully use the MCP server to interact with the target service."
+    - "The integration is documented so team members can reproduce it."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "network"
+  - "filesystem"
+
+safety_notes:
+  - "MCP servers have access to your local system and data — only install servers from trusted sources. Verify the publisher/source before adding to configuration."
+  - "Some MCP servers may require API keys or credentials. Store these in environment variables, not in the config file directly."
+  - "MCP Market is a third-party aggregator — not all listed servers are official or maintained. Check GitHub stars, last commit date, and review the source code for servers handling sensitive data."
+  - "Only use the Model Context Protocol's official open standard. MCP Market is a discovery platform, not the protocol specification itself."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "MCP Market Website"
+      url: "https://mcpmarket.com/"
+      description: "Searchable directory of thousands of MCP servers and agent skills."
+  secondary:
+    - name: "MCP Configuration Files"
+      description: "AI agent config files (e.g., claude_desktop_config.json, cline_mcp_settings.json) where MCP servers are registered."
+  alternatives:
+    - name: "Smithery.ai"
+      url: "https://smithery.ai/"
+      description: "Alternative MCP server registry and directory."
+    - name: "GitHub MCP Collection"
+      url: "https://github.com/modelcontextprotocol/servers"
+      description: "Official MCP servers maintained by Anthropic and the community."
+    - name: "PulseMCP"
+      description: "Another MCP discovery platform for finding AI agent tools."
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Search MCP Market for the Required Integration"
+    tasks:
+      - "Go to https://mcpmarket.com/ and search for the target service (e.g., 'PostgreSQL', 'GitHub', 'Figma')."
+      - "Filter by relevance, popularity, and last update."
+      - "For each candidate, check: GitHub stars, last commit date, open issues, and license."
+      - "If no exact match is found, look for generic alternatives (e.g., 'database-mcp' for any SQL DB, 'rest-api-mcp' for any REST API)."
+  - step: "Install the MCP Server"
+    tasks:
+      - "Follow the MCP Market listing's install instructions (usually npm/pip install or Docker pull)."
+      - "Most MCP servers are installed as local processes — ensure they don't conflict with existing dependencies."
+      - "Use the project's virtual environment (venv) for Python-based MCP servers, or a local `node_modules` for npm-based ones. NEVER install MCP servers globally."
+  - step: "Configure the AI Agent"
+    tasks:
+      - "Locate the AI platform's MCP config file (e.g., `claude_desktop_config.json` for Claude Desktop, `cline_mcp_settings.json` for Cline/VS Code)."
+      - "Add the MCP server entry with: name, command (npx/node/python), args, and any env vars."
+      - "Example JSON snippet: "
+      - '  {'
+      - '    "mcpServers": {'
+      - '      "github": {'
+      - '        "command": "npx",'
+      - '        "args": ["-y", "@modelcontextprotocol/server-github"],'
+      - '        "env": { "GITHUB_TOKEN": "$GITHUB_TOKEN" }'
+      - '      }'
+      - '    }'
+      - '  }'
+      - "Store sensitive env vars in .env.example (never .env) and document them in the physical-guide."
+  - step: "Verify the Integration"
+    tasks:
+      - "Restart the AI agent platform."
+      - "Ask the agent to list available tools — it should show the new MCP server's tools."
+      - "Run a simple test: e.g., 'List my GitHub repositories' or 'Check the database connection'."
+      - "Document the working integration in `mcp/integration-{service}.md`."
+  - step: "Document and Scale"
+    tasks:
+      - "Create a master `mcp/README.md` listing all installed MCP servers with their purpose."
+      - "For each server, document: what it does, what credentials it needs, and example prompts to trigger it."
+      - "Add MCP server config to the project's .env.example (without real values)."
+      - "Add a note in the physical-guide about setting up MCP credentials."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Installing MCP servers globally. Always use `npx`, `pip` in venv, or Docker — never `npm install -g`."
+  - "Hardcoding API keys or tokens in the MCP config JSON. Always use environment variable references (`$VARIABLE` syntax) and manage values via .env (which the AI should never touch)."
+  - "Installing every MCP server that looks interesting. Each integration adds complexity, startup time, and potential security surface. Only add what you need."
+  - "Assuming MCP Market listings are production-grade. Many are experimental or personal projects. Verify before relying on them in production."
+
+best_practices:
+  - "Create a separate `mcp/` folder in your project to store integration docs, config backups, and install scripts."
+  - "Use Docker-based MCP servers when possible for clean isolation and easy teardown."
+  - "Tag MCP servers by category in your docs: 'database', 'cloud', 'communication', 'code', 'design', 'data'."
+  - "Periodically check MCP Market for updates to your installed servers."
+  - "For team projects, commit the MCP config file to a shared location (without secrets) so everyone uses the same tools."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "MCP Market — Browse MCP Servers"
+    url: "https://mcpmarket.com/"
+  - title: "Model Context Protocol (Official)"
+    url: "https://modelcontextprotocol.io/"
+  - title: "Official MCP Servers (GitHub)"
+    url: "https://github.com/modelcontextprotocol/servers"
+  - title: "Smithery.ai — Alternative MCP Registry"
+    url: "https://smithery.ai/"
+  - title: "Claude Desktop MCP Setup Guide"
+    url: "https://modelcontextprotocol.io/quickstart/user"

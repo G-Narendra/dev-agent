@@ -1,0 +1,125 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "google-trends-research"
+display_name: "Google Trends Market Validation Research"
+description: >
+  Uses Google Trends (free, no API key needed) to analyze real search interest 
+  over time for any topic. Reveals whether a market is growing, shrinking, or 
+  seasonal. Compares multiple keywords to see which problems people actually 
+  search for. This is the single best free tool for quantitative market validation.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "utility"
+phase: "ideation"
+applicable_startups:
+  - all
+priority: "medium"
+difficulty: "beginner"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Is this market growing or shrinking?"
+  - "Check Google Trends for this keyword."
+  - "Compare search interest for X vs Y."
+  - "Validate market demand with Trends data."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Query Google Trends via web."
+  - "Compare keyword search volumes."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "keywords"
+      type: "string"
+      description: "Comma-separated keywords to compare (e.g., 'AI copywriting, Jasper AI, Copy.ai')."
+  optional:
+    - name: "time_range"
+      type: "string"
+      description: "'5y' (5 years), '12m' (12 months), '90d' (90 days), '30d'."
+      default: "5y"
+    - name: "geo"
+      type: "string"
+      description: "Geographic region (e.g., 'US', 'GB', 'WW' for worldwide)."
+      default: "WW"
+
+outputs:
+  files:
+    - path: "research/google-trends-{keywords}.md"
+      description: "Search interest analysis with trend direction and seasonal patterns."
+  artifacts:
+    - "Trend direction: growing, stable, or declining market."
+    - "Keyword comparison: which terms have the highest search volume."
+    - "Seasonal patterns: when does interest peak? (Important for launch timing)."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "N/A"
+  manual:
+    - "Confirmed whether the market is growing (rising trend) or saturated (flat/declining)."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "network"
+
+safety_notes:
+  - "Google Trends shows relative search interest (0-100), NOT absolute search volume. A score of 100 = peak popularity for that term, not a specific number of searches."
+  - "Trends data is sampled and may vary by region. Always check both 'Worldwide' and your target market."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Google Trends Web UI"
+      install: "N/A (trends.google.com)"
+  alternatives:
+    - name: "Pytrends (Python library)"
+      when: "Automated data extraction."
+      install: "pip install pytrends"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Run Keyword Comparison"
+    tasks:
+      - "Go to: `trends.google.com`"
+      - "Enter all relevant keywords separated by commas."
+      - "Set time range to 'Past 5 years' — this shows the long-term trend."
+  - step: "Analyze the Trend Direction"
+    tasks:
+      - "Is the line going up (growing market), flat (mature market), or down (declining market)?"
+      - "A steady upward trend over 5 years = strong market validation."
+      - "A sudden spike that fades = temporary hype (e.g., 'NFT' in 2021)."
+  - step: "Check Related Queries"
+    tasks:
+      - "Scroll down to 'Related queries' — these show what people are ACTUALLY searching for."
+      - "'Rising' related queries are the emerging sub-trends to pay attention to."
+  - step: "Check Regional Interest"
+    tasks:
+      - "Check 'Interest by region' — which countries/cities have the highest demand?"
+      - "Use this to prioritize launch markets."
+  - step: "Seasonality Check"
+    tasks:
+      - "Zoom into 12-month view. Does interest peak at specific times of year?"
+      - "If the startup is seasonal (e.g., tax software), plan launch around the uptick."
+  - step: "Compile Report"
+    tasks:
+      - "Screenshot the trend chart and embed in the report."
+      - "Document: Trend direction | Peak periods | Regional hotspots | Related rising queries."
+      - "Answer: 'Is this market worth entering based on search interest?'"
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Using only one keyword. Always compare 3-5 related keywords to get the full picture."
+  - "Checking only 'Worldwide'. A declining global trend may still be rising in a specific country."
+  - "Confusing a Google Trends spike with a real market. A viral product may spike searches but have no sustainable business model."
+
+best_practices:
+  - "Compare your startup's keywords against an established competitor. If the competitor's trend is flat but yours is rising, you're taking market share."
+  - "Check Google Trends for the problem (e.g., 'how to track freelance income') NOT just the solution name."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Google Trends"
+    url: "https://trends.google.com/"
+  - title: "Pytrends (Python library for automated access)"
+    url: "https://github.com/GeneralMills/pytrends"

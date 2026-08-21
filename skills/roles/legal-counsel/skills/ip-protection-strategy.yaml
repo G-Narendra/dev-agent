@@ -1,0 +1,109 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "ip-protection-strategy"
+display_name: "Intellectual Property (IP) & Trademark Protection"
+description: >
+  Secure the core assets of the startup: its brand, its code, and its inventions. 
+  Manages trademark filings, open-source license compliance, and patent strategy 
+  to prevent competitors from stealing the startup's moat.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "legal-counsel"
+phase: "build"
+applicable_startups:
+  - all
+priority: "high"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "We need to trademark our name."
+  - "Can we patent this algorithm?"
+  - "Are we violating open-source licenses?"
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Draft a trademark filing plan."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "core_asset"
+      type: "string"
+      description: "What are we protecting? (e.g., 'The brand name', 'A new AI routing algorithm')."
+  optional:
+    - name: "target_jurisdiction"
+      type: "string"
+      description: "US (USPTO) vs EU vs Global."
+      default: "US (USPTO)"
+
+outputs:
+  files:
+    - path: "legal/ip/trademark-strategy.md"
+      description: "The plan for registering the core brand marks."
+  artifacts:
+    - "An Open Source Software (OSS) compliance policy for the engineering team."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "N/A"
+  manual:
+    - "The startup successfully secures the trademark for its core brand name in its primary operating classes."
+    - "The company passes Due Diligence during Series A fundraising without any 'chain of title' issues regarding who owns the codebase."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+
+safety_notes:
+  - "The Public Disclosure Trap: If you publish a blog post explaining exactly how your revolutionary new algorithm works *before* filing a provisional patent, you have legally forfeited the right to patent it in many jurisdictions (including Europe)."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "USPTO TESS / FOSSA"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Trademark Clearance & Filing"
+    tasks:
+      - "Before the CEO falls in love with a startup name, run a 'Knockout Search' on the USPTO database. If a competitor in the same industry already owns the mark, change the name immediately."
+      - "File for the Word Mark first (the actual text). File for the Design Mark (the logo) later."
+  - step: "Employee IP Assignment (PIIA)"
+    tasks:
+      - "Ensure EVERY employee and contractor signs a Proprietary Information and Inventions Assignment (PIIA) agreement on Day 1. This legally transfers the copyright of the code they write from them to the company."
+  - step: "Open Source Compliance (GPL Avoidance)"
+    tasks:
+      - "Audit the engineering team's dependencies. If they use software licensed under GPLv3 (a 'viral' copyleft license), you may be legally forced to open-source your entire proprietary codebase. Enforce the use of permissive licenses (MIT, Apache 2.0)."
+  - step: "Trade Secrets vs Patents"
+    tasks:
+      - "Patents cost $20k and take 3 years, and you have to publicly reveal how it works. Often, it is better to just keep the algorithm a highly guarded 'Trade Secret' (like the Coca-Cola recipe)."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Filing a patent for a generic UI feature (e.g., 'A button that adds items to a cart'). Software patents are incredibly difficult to defend unless they involve deep, novel, non-obvious technical breakthroughs."
+  - "Ignoring 'Work for Hire' agreements with external design agencies. If the agency creates your logo but the contract doesn't explicitly transfer the IP, they still own your logo."
+
+best_practices:
+  - "Set up Google Alerts for your brand name to proactively monitor for trademark infringement. If a competitor uses your name, send a Cease & Desist immediately. You must aggressively defend a trademark or you lose it."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "USPTO: Trademark Basics"
+    url: "https://www.uspto.gov/trademarks"

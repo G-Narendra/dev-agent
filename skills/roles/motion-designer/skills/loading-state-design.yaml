@@ -1,0 +1,111 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "loading-state-design"
+display_name: "Perceived Performance & Loading States"
+description: >
+  Design skeleton screens, optimistic UI updates, and staged loading sequences 
+  that mask network latency. Focuses on 'perceived performance'—making the app 
+  feel instant even when the backend API takes 2 seconds to respond.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "motion-designer"
+phase: "build"
+applicable_startups:
+  - all
+priority: "critical"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Design the loading state."
+  - "The app feels slow while fetching data."
+  - "Implement skeleton loaders."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Create a Skeleton component in React."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "target_ui"
+      type: "string"
+      description: "The specific screen/component (e.g., 'User Profile Page')."
+  optional:
+    - name: "expected_latency"
+      type: "string"
+      description: "How long the API typically takes to respond."
+      default: "1000ms"
+
+outputs:
+  files:
+    - path: "components/ProfileSkeleton.tsx"
+      description: "A skeleton loader that structurally matches the final UI."
+  artifacts:
+    - "A design document explaining the optimistic UI logic."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "Skeleton components render instantly on page load before any JS data fetching begins."
+  manual:
+    - "The transition from 'Loading Skeleton' to 'Real Data' happens without any jarring layout shifts (Cumulative Layout Shift = 0)."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+
+safety_notes:
+  - "Never use optimistic UI for destructive actions (e.g., deleting an account, sending a payment). Only use it for safe, reversible actions like 'liking' a post."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "React Suspense + CSS Animation"
+      install: "N/A"
+  alternatives:
+    - name: "SWR / TanStack Query (Optimistic Updates)"
+      when: "Implementing optimistic mutations."
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Skeleton Match"
+    tasks:
+      - "Design the skeleton blocks to match the exact dimensions (width/height) of the final text and images to prevent layout shift."
+  - step: "The 'Shimmer' Effect"
+    tasks:
+      - "Apply a subtle CSS linear-gradient animation sweeping left-to-right across the skeleton blocks to indicate activity. A static gray box looks broken."
+  - step: "Optimistic Mutations"
+    tasks:
+      - "When a user clicks 'Like' or 'Save', instantly update the UI to the 'Saved' state before the network request finishes."
+      - "If the network request fails, silently revert the UI to the previous state and show a toast error."
+  - step: "Staggered Loading"
+    tasks:
+      - "Load the structural shell first, then text, then heavy images. Do not wait for images to load before rendering the text."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Using a generic, full-screen spinning wheel that blocks the entire UI. This maximizes the user's perception of waiting."
+  - "Flashing a loading skeleton for 50ms on a fast connection. If the API is fast, use a delay (e.g., 200ms) before showing the skeleton to prevent 'flicker'."
+
+best_practices:
+  - "For tasks that legitimately take >3 seconds (e.g., AI generation), provide progressive feedback (e.g., 'Analyzing data...', 'Writing report...'). Humans tolerate long waits if they understand *why*."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Apple HIG: Loading Indicators"
+    url: "https://developer.apple.com/design/human-interface-guidelines/loading"

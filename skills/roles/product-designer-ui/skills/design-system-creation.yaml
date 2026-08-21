@@ -1,0 +1,109 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "design-system-creation"
+display_name: "Design System & Component Library Creation"
+description: >
+  Builds a scalable design system with reusable components, design tokens,
+  and documentation. Ensures visual consistency across the product and
+  accelerates the development process.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "product-designer-ui"
+phase: "planning"
+applicable_startups:
+  - all
+priority: "mvp"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Create a design system."
+  - "We need consistent UI components."
+  - "Build our component library."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Define design tokens."
+  - "Build component library."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "brand_guidelines"
+      type: "file"
+      description: "Brand colors, typography, and logo assets."
+    - name: "component_list"
+      type: "string"
+      description: "Core components needed for the product."
+  optional:
+    - name: "framework"
+      type: "string"
+      description: "React, Vue, or design tool (Figma, Sketch)."
+      default: "Figma + React"
+
+outputs:
+  files:
+    - path: "design/design-system/component-library.md"
+      description: "Design system documentation with component specs"
+  artifacts:
+    - "A functional design system with reusable components and documentation"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Design Token Definition"
+    tasks:
+      - "Define color tokens: primary, secondary, neutral, success, warning, error (with light/dark variants)."
+      - "Define typography tokens: font families, sizes (h1-h6, body, caption), line heights, font weights."
+      - "Define spacing tokens: 4px base grid, scale (4, 8, 12, 16, 24, 32, 48, 64, 96)."
+      - "Define shadow, radius, and animation tokens."
+  - step: "Core Component Design"
+    tasks:
+      - "Design atomic components: buttons, inputs, selects, checkboxes, radio buttons, toggles."
+      - "Design molecular components: form fields, cards, lists, navigation items, modals."
+      - "Design organism components: headers, sidebars, data tables, forms, dialogs."
+      - "Document every state: default, hover, active, focus, disabled, loading, error."
+  - step: "Component Documentation"
+    tasks:
+      - "Write usage guidelines: do's and don'ts for each component."
+      - "Document component props and API for developers."
+      - "Include accessibility notes: ARIA labels, keyboard interactions, focus management."
+      - "Create code snippets for each component in the target framework."
+  - step: "Governance & Maintenance"
+    tasks:
+      - "Establish a versioning system for design system changes."
+      - "Create a contribution process for new components."
+      - "Set up regular review cycles to catch component drift."
+      - "Document the migration path for deprecating old components."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Building a massive design system before knowing what components you actually need."
+  - "Over-engineering components with too many props and configuration options."
+  - "Letting the design system become outdated — teams start using one-off components."
+  - "Making the design system a bottleneck — every design change requires updating the system."
+best_practices:
+  - "Start with the 20% of components that cover 80% of your screens."
+  - "Keep design tokens and components in sync between Figma and code."
+  - "Name things consistently — button, not 'btn', 'cta-button', and 'action-button'."
+  - "The design system is a product itself — treat it with the same rigor."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

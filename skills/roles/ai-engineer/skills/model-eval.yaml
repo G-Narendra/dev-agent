@@ -1,0 +1,142 @@
+# â”€â”€ IDENTITY â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+name: "model-eval"
+display_name: "LLM Evaluation & Benchmarking"
+description: >
+  Builds rigorous evaluation pipelines for Large Language Models. 
+  Measures accuracy, hallucination rates, and latency to definitively prove 
+  whether a new prompt or fine-tune actually improved the system.
+
+# â”€â”€ CLASSIFICATION â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+role: "ai-engineer"
+phase: "build"
+applicable_startups:
+  - AI, SaaS
+priority: "critical"
+difficulty: "expert"
+
+# â”€â”€ TRIGGER â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+trigger_phrases:
+  - "Did the new prompt make it better?"
+  - "Evaluate the hallucination rate."
+  - "Benchmark GPT-4 vs Claude 3."
+
+# â”€â”€ ACTIONS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+example_cli_actions:
+  - "Run LLM-as-a-judge evaluation."
+  - "Generate accuracy report."
+
+# â”€â”€ INPUTS / OUTPUTS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+inputs:
+  required:
+    - name: "golden_dataset"
+      type: "string"
+      description: "JSONL file of perfect inputs and expected outputs."
+    - name: "model_endpoint"
+      type: "string"
+      description: "The API endpoint being tested."
+  optional:
+    - name: "eval_metric"
+      type: "string"
+      description: "Exact match, semantic similarity, or LLM-judge."
+      default: "LLM-judge"
+
+outputs:
+  files:
+    - path: "ai/evals/benchmark_v2.md"
+      description: "The statistical results of the model run."
+  artifacts:
+    - "N/A"
+
+# â”€â”€ SUCCESS CRITERIA â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+automated:
+  - "The eval pipeline processes 1,000 requests and outputs a deterministic score."
+manual:
+  - "The team makes a data-driven decision to deploy the new model based on a >5% improvement in the eval score."
+
+# â”€â”€ PERMISSIONS & SAFETY â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "Vibe Checks: Never deploy an AI feature to production based solely on a 'vibe check' (testing 3 prompts manually and deciding it looks good). You must have a deterministic golden dataset."
+
+# â”€â”€ TOOLING â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+recommended_tools:
+  primary:
+    - name: "LangSmith / Braintrust"
+      install: "pip install langsmith"
+
+# â”€â”€ IMPLEMENTATION CHECKLIST â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+implementation_checklist:
+  - step: "The Golden Dataset"
+    tasks:
+      - "Curate 100 highly diverse, edge-case heavy examples of user inputs and the mathematically perfect response. This is your ground truth."
+  - step: "LLM-as-a-Judge"
+    tasks:
+      - "Use GPT-4 to grade the outputs of your cheaper production model (e.g., Llama 3). Prompt the judge: 'Score the following output from 1-5 based on accuracy compared to this ground truth.'"
+  - step: "Regression Testing"
+    tasks:
+      - "Run the eval suite on every single Pull Request that touches the prompt template. If the new prompt increases hallucination by >2%, the CI/CD pipeline fails the build."
+
+# â”€â”€ QUALITY GATES â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+anti_patterns:
+  - "Testing your model on the exact same data it was fine-tuned on (Data Leakage). The model will score 99% but completely fail in production on novel inputs."
+best_practices:
+  - "Log every single prompt, response, latency, and token cost to an observability platform. You cannot improve what you cannot measure."
+
+# â”€â”€ REFERENCES â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+references:
+  - title: "Anthropic: Evaluating LLMs"
+    url: "https://www.anthropic.com/research/evaluating-llms"
+
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Model Eval process"
+  - "How do I handle model eval?"
+  - "Implement model eval"
+  - "Builds rigorous evaluation pipelines for Large Language Models"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the model eval process"
+  optional:
+    - name: "N/A"
+      type: "string"
+      description: "No optional inputs needed."
+
+outputs:
+  files:
+    - path: "outputs/model-eval.md"
+      description: "Results of the model eval process"
+  artifacts:
+    - "Completed model eval deliverable"
+
+# ── QUALITY GATES ────────────────────────────────────────────
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start — retrofitting is expensive."
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

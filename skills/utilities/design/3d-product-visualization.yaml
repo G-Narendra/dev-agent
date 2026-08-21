@@ -1,0 +1,97 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "3d-product-visualization"
+display_name: "Interactive 3D Product Visualization"
+description: >
+  Creates interactive 3D product renders and animations for web deployment. 
+  Translates physical products or complex digital architectures into 
+  lightweight, manipulatable WebGL experiences.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "utility"
+phase: "all"
+applicable_startups:
+  - e-commerce
+  - hardware
+  - saas
+priority: "medium"
+difficulty: "expert"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "We need a 3D model on the landing page."
+  - "Render our hardware product."
+  - "Make this design interactive."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Optimize GLTF model."
+  - "Generate Three.js scene."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "product_reference"
+      type: "string"
+      description: "CAD files, reference photos, or detailed descriptions."
+  optional:
+    - name: "target_framework"
+      type: "string"
+      description: "Three.js vs React Three Fiber vs Spline."
+      default: "React Three Fiber"
+
+outputs:
+  files:
+    - path: "public/models/product_optimized.glb"
+      description: "The compressed 3D asset."
+  artifacts:
+    - "A React component (`<ProductScene />`) ready to be embedded."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "The 3D model file size is under 2MB."
+    - "The scene renders at 60FPS on a standard mobile device."
+  manual:
+    - "Users can smoothly rotate and zoom the model without causing layout shift or scroll hijacking."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+
+safety_notes:
+  - "Scroll Hijacking: Never let a 3D canvas trap a mobile user's scroll. Ensure touch events outside the core model area allow the user to scroll past the 3D element."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Spline / React Three Fiber"
+      install: "npm install @react-three/fiber @react-three/drei"
+  alternatives:
+    - name: "Blender"
+      when: "Doing complex mesh optimization before web deployment."
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Model Optimization (Decimation)"
+    tasks:
+      - "A CAD file from an engineer has 5 million polygons. A web model needs < 50,000. Decimate the mesh and bake the high-res details into a normal map."
+      - "Compress textures using Draco compression or WebP."
+  - step: "Lighting and Materials"
+    tasks:
+      - "Do not use expensive real-time shadows if possible. Bake ambient occlusion and shadows directly into the texture map for maximum performance."
+  - step: "Web Integration"
+    tasks:
+      - "Implement a Suspense fallback (a loading spinner or static image) so the user isn't staring at a blank canvas while the 2MB model downloads."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Loading 20MB uncompressed OBJ files on a landing page. This will destroy your Core Web Vitals and SEO."
+  - "Adding 3D just for the sake of 3D. If a 2D image explains the product better and faster, use 2D."
+
+best_practices:
+  - "Tie the 3D animation to the user's scroll position (Scrollytelling). As they scroll down, the product breaks apart to show the internal components."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "React Three Fiber Documentation"
+    url: "https://docs.pmnd.rs/react-three-fiber/getting-started/introduction"

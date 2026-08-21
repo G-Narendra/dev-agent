@@ -1,0 +1,83 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "go-to-market-alignment"
+display_name: "GTM Funnel Alignment & Tech Consolidation"
+description: >
+  Unify the data, processes, and technology stack across Marketing, Sales, and Customer Success
+  to create a single source of truth for revenue forecasting.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "revops-manager"
+phase: "growth"
+applicable_startups: 
+  - b2b
+priority: "mvp"
+difficulty: "expert"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "SLA Definition"
+    tasks:
+      - "Write the Service Level Agreement (SLA) between Marketing and Sales (e.g., Sales MUST call an MQL within 15 minutes of receipt)."
+  - step: "Data Unification"
+    tasks:
+      - "Audit the tech stack. Ensure that when CS marks a customer at 'High Risk of Churn' in Gainsight, Marketing automatically stops sending them upsell emails via HubSpot."
+  - step: "Forecasting"
+    tasks:
+      - "Build a cohort analysis model that tracks how leads generated in Q1 translate into revenue in Q3."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Allowing Marketing to claim they 'hit their goal' because they generated 10,000 leads, even though Sales closed zero of them because they were all junk data."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Go To Market Alignment process"
+  - "How do I handle go to market alignment?"
+  - "Implement go to market alignment"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the go to market alignment process"
+  optional:
+    - name: "data_source"
+      type: "string"
+      description: "Source of data to analyze"
+      default: "Internal data"
+    - name: "target_audience"
+      type: "string"
+      description: "Target user or customer segment"
+      default: "Primary user persona"
+
+outputs:
+  files:
+    - path: "outputs/go-to-market-alignment.md"
+      description: "Results of the go to market alignment process"
+  artifacts:
+    - "Completed go to market alignment deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

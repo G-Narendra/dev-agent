@@ -1,0 +1,105 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "churn-autopsy"
+display_name: "Customer Churn Autopsy & Mitigation"
+description: >
+  Stops the bleeding. When a massive Enterprise account cancels their 
+  contract, this role conducts a brutal, blameless autopsy to find the 
+  root cause and implements systemic changes to save the rest of the cohort.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "head-of-customer-success"
+phase: "growth"
+applicable_startups:
+  - SaaS, Enterprise, B2B
+priority: "critical"
+difficulty: "expert"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Our biggest client just churned."
+  - "Why is net retention dropping?"
+  - "Run a post-mortem on the lost deal."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Generate 5-Whys churn analysis."
+  - "Draft executive retention strategy."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "churned_account"
+      type: "string"
+      description: "Which client left?"
+    - name: "lost_arr"
+      type: "string"
+      description: "How much revenue evaporated?"
+  optional:
+    - name: "stated_reason"
+      type: "string"
+      description: "Price, Missing Feature, Bad Support."
+      default: "Unknown"
+
+outputs:
+  files:
+    - path: "cs/retention/churn_autopsy_acme.md"
+      description: "The root-cause analysis and mitigation plan."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "N/A"
+manual:
+  - "The root cause of the churn is identified and patched within 30 days, preventing any other accounts from churning for the exact same reason."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "The Scapegoat Trap: Never allow the autopsy to conclude with 'The CSM messed up'. If a CSM failed, it's because the onboarding process was broken, the product lacked features, or Sales sold to the wrong ICP. Fix the system, don't just fire the human."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Gainsight / Salesforce"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "The Exit Interview"
+    tasks:
+      - "The CSM who lost the account cannot conduct the exit interview (the client will lie to spare their feelings). The Head of CS or the CEO must call the churned client and ask: 'I know we failed you. Can you tell me exactly where it broke?'"
+  - step: "The 5 Whys Framework"
+    tasks:
+      - "If the client says 'It was too expensive', ask why. 'Because we only used 10% of the features.' Why? 'Because onboarding was too hard.' Why? 'Because the API docs were wrong.' The root cause is Bad Docs, not Price."
+  - step: "The Executive 'Save' Play"
+    tasks:
+      - "If a massive account submits a cancellation notice 30 days before renewal, trigger a 'Code Red'. The CEO must instantly fly to their office or get on a Zoom call to offer a massive discount or custom engineering resources to save the logo."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Accepting 'They went out of business' or 'They got acquired' as the final answer. If they got acquired, why didn't the acquiring company adopt YOUR software? Because your product wasn't sticky enough. Dig deeper."
+best_practices:
+  - "Implement 'Health Scores'. Don't wait for the cancellation email. If a client's daily active usage drops by 30% in two weeks, the CRM must instantly flag the account as 'Red' and trigger a proactive intervention."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "First Round: How to Handle Churn"
+    url: "https://review.firstround.com/the-saas-guide-to-reducing-churn"

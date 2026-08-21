@@ -1,0 +1,564 @@
+# ============================================================
+# startup-types.yaml — Master Startup Archetype Registry
+# ============================================================
+# This manifest maps every startup archetype to:
+#   1. The universal roles ALL startups need
+#   2. The industry-specific roles unique to that archetype
+#   3. The recommended build phases and priority order
+#
+# Usage: The CLI agent reads this file FIRST, matches the user's
+# idea to an archetype (or hybrid), then loads only the
+# relevant role README.md + skill YAMLs.
+# ============================================================
+
+schema_version: "1.0"
+
+# ──────────────────────────────────────────────────────────────
+# UNIVERSAL ROLES — Required by EVERY startup archetype
+# ──────────────────────────────────────────────────────────────
+universal_roles:
+  phase_0_ideation:
+    - founder-ceo
+    - market-researcher
+    - customer-discovery-specialist
+    - competitive-analyst
+    - business-model-strategist
+    - idea-critic
+    - startup-namer
+    - brand-strategist
+    - logo-designer
+    - deep-researcher
+    - ideation-facilitator
+    - problem-researcher
+    - industry-expert
+    - mentor-advisor
+    - executive-coach
+    - cultural-consultant
+    - solution-debater
+    - solution-entrepreneur
+    - domain-strategist
+    - innovation-consultant
+    - innovation-manager
+    - ground-reality-researcher
+    - co-founder
+    - founder-entrepreneur
+    - customer-interview-specialist
+    - research-scientist
+
+  phase_1_planning:
+    - product-manager
+    - product-designer-ux
+    - product-designer-ui
+    - technical-architect
+    - data-architect
+    - project-manager
+    - information-architect
+    - interaction-designer
+    - prototyping-specialist
+    - design-system-engineer
+    - product-analyst
+    - product-evangelist
+    - product-marketing-manager
+    - pricing-strategist
+    - pricing-analyst
+    - unit-economics-analyst
+    - business-analyst
+    - technical-lead
+    - technical-program-manager
+    - program-manager
+    - scrum-master
+    - agile-coach
+    - onboarding-designer
+    - product-designer
+    - system-designer
+    - software-architect
+    - enterprise-architect
+    - solution-architect
+    - solutions-architect
+
+  phase_2_build:
+    - frontend-engineer
+    - backend-engineer
+    - fullstack-engineer
+    - database-engineer
+    - devops-engineer
+    - cloud-engineer-vercel       # DEFAULT for SaaS; archetypes override with their preferred provider
+    - cloud-engineer              # Generic fallback for custom or multi-cloud setups
+    - cloud-engineer-aws          # AWS-specific — used by AI archetype; available for any AWS-based startup
+    - qa-engineer
+    - security-engineer
+    - mvp-developer
+    - frontend-developer
+    - backend-developer-nodejs
+    - fullstack-developer
+    - web-developer
+    - android-engineer
+    - ios-engineer
+    - mobile-developer-flutter
+    - mobile-developer-react-native
+    - mobile-developer-kotlin
+    - mobile-developer-swift
+    - database-administrator
+    - database-migration-engineer
+    - database-reliability-engineer
+    - test-automation-engineer
+    - test-automation-architect
+    - qa-automation-engineer
+    - monitoring-engineer
+    - platform-engineer
+    - search-engineer
+    - network-engineer
+    - devsecops-engineer
+    - automation-engineer
+    - systems-administrator
+    - it-administrator
+    - api-gateway-engineer
+    - site-reliability-engineering
+    - chaos-engineer
+    - ethical-hacker
+    - r-d-scientist
+    - accessibility-engineer
+    - legaltech-engineer
+    - govtech-engineer
+    - defense-tech-engineer
+    - backend-engineer-python
+    - backend-engineer-go
+    - backend-engineer-rust
+    - backend-engineer-ruby
+    - api-engineer
+    - infrastructure-engineer
+    - kubernetes-engineer
+
+  phase_3_ship:
+    - release-engineer
+    - sre-engineer
+    - incident-commander
+    - performance-engineer
+    - technical-writer
+    - support-engineer
+    - release-manager
+    - documentation-engineer
+    - support-specialist
+    - customer-support-agent
+    - technical-account-manager
+    - web-performance-engineer
+
+  phase_4_growth:
+    - growth-hacker
+    - seo-specialist
+    - content-strategist
+    - copywriter
+    - social-media-manager
+    - email-marketing-manager
+    - data-analyst
+    - performance-marketer
+    - payments-engineer
+    - sales-engineer
+    - cmo
+    - brand-manager
+    - demand-generation-manager
+    - marketing-manager
+    - marketing-operations-manager
+    - marketing-ops-manager
+    - field-marketing-manager
+    - event-marketing-manager
+    - affiliate-marketing-manager
+    - influencer-marketing-manager
+    - influencer-manager
+    - sales-manager
+    - sales-operations-manager
+    - sales-ops-manager
+    - sales-development-rep
+    - inside-sales-rep
+    - enterprise-account-executive
+    - enterprise-sdr
+    - b2b-sales-engineer
+    - account-executive
+    - sales-representative
+    - user-acquisition-manager
+    - retention-marketer
+    - retention-marketing-manager
+    - referral-program-manager
+    - conversion-rate-optimizer
+    - go-to-market-strategist
+    - landing-page-specialist
+    - lead-generation-specialist
+    - customer-marketing-manager
+    - partnership-development-lead
+    - partnership-manager
+    - partner-marketing-manager
+    - community-manager
+    - content-creator
+    - content-writer
+    - copy-editor
+    - pr-specialist
+    - public-relations-manager
+    - event-coordinator
+    - graphic-designer
+    - motion-designer
+    - motion-graphics-designer
+    - video-producer
+    - videographer
+    - animator
+    - animator-3d
+    - visual-designer
+    - ui-designer
+    - ux-designer
+    - ux-writer
+    - ux-researcher
+    - ui-researcher
+    - merchandiser
+    - crm-specialist
+    - customer-onboarding-specialist
+    - customer-success
+    - head-of-customer-success
+    - global-marketing-manager
+    - performance-marketing-manager
+    - business-development-manager
+    - growth-product-manager
+    - churn-analyst
+    - channel-sales-manager
+    - enterprise-architect
+    - director-of-marketing
+    - director-of-sales
+    - analytics-engineer
+    - data-visualization-engineer
+
+  phase_5_operations:
+    - legal-counsel
+    - compliance-officer
+    - cfo
+    - tax-advisor
+    - hr-manager
+    - recruiter
+    - operations-manager
+    - fundraising-lead
+    - ceo
+    - coo
+    - cto
+    - cpo
+    - vp-engineering
+    - head-of-engineering
+    - director-of-engineering
+    - head-of-product
+    - head-of-data
+    - head-of-marketing
+    - head-of-sales
+    - head-of-operations
+    - head-of-people
+    - head-of-partnerships
+    - head-of-growth
+    - head-of-customer-success
+    - hr-generalist
+    - financial-analyst
+    - finance-manager
+    - accountant
+    - revenue-accountant
+    - payroll-specialist
+    - procurement-manager
+    - procurement-specialist
+    - facilities-manager
+    - office-manager
+    - executive-assistant
+    - company-secretary
+    - corporate-lawyer
+    - ip-lawyer
+    - early-stage-legal-advisor
+    - gdpr-dpo
+    - data-privacy-officer
+    - data-governance-officer
+    - contract-manager
+    - regulatory-affairs
+    - trade-compliance-officer
+    - board-member
+    - advisory-board-member
+    - angel-investor
+    - vc-investor
+    - venture-capitalist
+    - investor-relations-manager
+    - ipo-specialist
+    - succession-planner
+    - grant-writer
+    - crowdfunding-manager
+    - treasurer
+    - diversity-equity-inclusion-manager
+    - csr-manager
+    - banking-liaison
+    - export-manager
+    - foreign-market-analyst
+    - international-business-manager
+    - global-hr-specialist
+    - international-tax-advisor
+    - supply-chain-analyst
+    - supply-chain-logistics
+    - logistics-coordinator
+    - operations-analyst
+    - revenue-operations-analyst
+    - revenue-operations-manager
+    - revops-manager
+    - chief-security-officer
+    - infosec-manager
+    - talent-acquisition
+    - technical-recruiter
+    - recruiting-coordinator
+    - localization-engineer
+    - localization-specialist
+    - market-research-analyst
+    - exit-strategy-consultant
+    - fractional-cfo
+    - fractional-cmo
+    - fractional-coo
+    - fractional-cto
+    - chief-strategy-officer
+    - business-strategist
+    - e-commerce-manager
+
+# ──────────────────────────────────────────────────────────────
+# STARTUP ARCHETYPES — Industry-specific role extensions
+# ──────────────────────────────────────────────────────────────
+archetypes:
+
+  saas:
+    display_name: "SaaS / Micro-SaaS"
+    description: "Subscription software delivered via cloud"
+    examples: ["Notion", "Slack", "Linear", "Calendly"]
+    keywords: ["subscription", "saas", "cloud software", "b2b tool", "productivity"]
+    additional_roles: []   # Pure SaaS uses only universal roles
+    cloud_override: cloud-engineer-vercel
+    recommended_stack: "Next.js + TypeScript + PostgreSQL + Stripe"
+
+  ai:
+    display_name: "AI / Agentic Startup"
+    description: "LLM, ML, or agent-powered products"
+    examples: ["OpenAI", "Jasper", "Cursor", "Perplexity"]
+    keywords: ["ai", "llm", "machine learning", "agent", "rag", "gpt", "chatbot", "generative"]
+    additional_roles:
+      - ai-engineer
+      - llm-engineer
+      - prompt-engineer
+      - ai-ml-engineer
+      - mlops-engineer
+      - data-engineer
+      - ai-safety-engineer
+      - data-labeling-ops
+      - rag-engineer
+      - llm-evaluator
+      - machine-learning-researcher
+      - ml-ops-engineer
+      - dataset-engineer
+      - ai-architect
+      - ai-product-manager
+      - ai-ethics-officer
+      - ai-integration-engineer
+      - machine-learning-engineer
+      - ai-agents-engineer
+      - vector-database-engineer
+      - nlp-engineer
+      - computer-vision-engineer
+    cloud_override: cloud-engineer-aws    # GPU instances — AWS-focused cloud engineer
+    recommended_stack: "Next.js + Python/FastAPI + PostgreSQL + Pinecone"
+
+  ecommerce:
+    display_name: "E-Commerce / D2C"
+    description: "Selling physical or digital goods directly to consumers"
+    examples: ["Shopify stores", "Warby Parker", "Glossier"]
+    keywords: ["ecommerce", "shop", "store", "d2c", "product", "sell", "buy", "cart", "checkout"]
+    additional_roles:
+      - ecommerce-engineer
+      - inventory-manager
+      - fulfillment-engineer
+      - ecommerce-manager
+      - customer-experience-designer
+      - marketplace-ops
+      - shopify-developer
+      - merchandiser
+      - dtc-brand-manager
+      - dtc-e-commerce-manager
+      - dtc-retention-manager
+      - dtc-supply-chain-manager
+      - email-deliverability-specialist
+      - email-marketing-specialist
+    cloud_override: cloud-engineer-vercel
+    recommended_stack: "Next.js + Shopify API + PostgreSQL + Stripe"
+
+  marketplace:
+    display_name: "Marketplace"
+    description: "Platform connecting buyers and sellers"
+    examples: ["Airbnb", "Uber", "Fiverr", "Etsy"]
+    keywords: ["marketplace", "buyers", "sellers", "platform", "matching", "two-sided"]
+    additional_roles:
+      - trust-safety-engineer
+      - matching-algorithm-engineer
+      - customer-success-manager
+      - customer-experience-designer
+      - dispute-resolution-specialist
+      - marketplace-engineer
+    cloud_override: cloud-engineer-aws
+    recommended_stack: "Next.js + Node.js + PostgreSQL + Algolia"
+
+  fintech:
+    display_name: "FinTech"
+    description: "Financial services via technology"
+    examples: ["Stripe", "Razorpay", "Plaid", "Robinhood"]
+    keywords: ["fintech", "payments", "banking", "lending", "insurance", "wallet", "crypto", "neobank"]
+    additional_roles:
+      - payments-engineer
+      - payments-compliance
+      - fraud-analyst
+      - compliance-engineer-fintech
+      - ledger-engineer
+      - risk-manager
+      - blockchain-developer
+      - fintech-engineer
+      - banking-liaison
+      - treasurer
+    cloud_override: cloud-engineer-aws
+    recommended_stack: "Node.js + PostgreSQL + Redis + Stripe Connect"
+
+  healthtech:
+    display_name: "HealthTech / MedTech"
+    description: "Healthcare delivery and medical technology"
+    examples: ["Teladoc", "1mg", "Practo"]
+    keywords: ["health", "medical", "telemedicine", "patient", "doctor", "clinic", "pharma", "hipaa"]
+    additional_roles:
+      - healthcare-compliance-officer
+      - telemedicine-developer
+      - clinical-operations
+      - biomedical-engineer
+      - healthtech-engineer
+    cloud_override: cloud-engineer-aws
+    recommended_stack: "React + Node.js + PostgreSQL + AWS (HIPAA-eligible)"
+
+  edtech:
+    display_name: "EdTech"
+    description: "Learning platforms and educational tools"
+    examples: ["Coursera", "Duolingo", "BYJU'S", "Khan Academy"]
+    keywords: ["education", "learning", "course", "student", "teacher", "tutoring", "lms", "quiz"]
+    additional_roles:
+      - instructional-designer
+      - edtech-engineer
+      - curriculum-designer
+      - assessment-engineer
+    cloud_override: cloud-engineer-vercel
+    recommended_stack: "Next.js + Node.js + PostgreSQL + Mux (video)"
+
+  web3:
+    display_name: "Web3 / Crypto / DeFi"
+    description: "Decentralized applications and blockchain protocols"
+    examples: ["Uniswap", "Aave", "OpenSea", "MetaMask"]
+    keywords: ["web3", "crypto", "blockchain", "defi", "nft", "token", "smart contract", "dao", "wallet"]
+    additional_roles:
+      - smart-contract-engineer
+      - protocol-engineer
+      - tokenomics-expert
+      - defi-strategist
+      - web3-frontend-engineer
+      - blockchain-architect
+      - web3-engineer
+    cloud_override: cloud-engineer-aws
+    recommended_stack: "Next.js + Solidity + Foundry + Alchemy"
+
+  gaming:
+    display_name: "Gaming"
+    description: "Video games and interactive entertainment"
+    examples: ["Supercell", "InnerSloth", "indie studios"]
+    keywords: ["game", "gaming", "play", "multiplayer", "mobile game", "steam", "unity", "unreal"]
+    additional_roles:
+      - game-designer
+      - game-developer
+      - level-designer
+      - narrative-designer
+      - technical-artist
+      - monetization-designer
+      - qa-engineer
+      - animator
+      - animator-3d
+      - motion-designer
+      - motion-graphics-designer
+      - quality-assurance-manager
+    cloud_override: cloud-engineer-aws
+    recommended_stack: "Unity/Unreal + C#/C++ + PlayFab"
+
+  iot-hardware:
+    display_name: "IoT / Hardware"
+    description: "Physical devices with embedded software"
+    examples: ["Ring", "Fitbit", "Raspberry Pi products"]
+    keywords: ["iot", "hardware", "device", "sensor", "wearable", "embedded", "firmware", "smart home"]
+    additional_roles:
+      - firmware-engineer
+      - hardware-engineer
+      - industrial-designer
+      - manufacturing-engineer
+      - embedded-systems-engineer
+      - electrical-engineer
+      - mechanical-engineer
+    cloud_override: cloud-engineer-aws
+    recommended_stack: "C/C++ + FreeRTOS + AWS IoT Core + React (dashboard)"
+
+  devtools:
+    display_name: "Developer Tools / DevTech"
+    description: "Tools built for developers"
+    examples: ["Vercel", "Supabase", "Railway", "Linear"]
+    keywords: ["developer tool", "cli", "sdk", "api platform", "devtools", "dx", "open source"]
+    additional_roles:
+      - cli-ux-designer
+      - sdk-engineer
+      - developer-advocate
+      - developer-relations-manager
+      - devtools-engineer
+    cloud_override: cloud-engineer-vercel
+    recommended_stack: "TypeScript + Go + PostgreSQL + Vercel"
+
+  media-creator:
+    display_name: "Media / Content / Creator Economy"
+    description: "Content creation and distribution platforms"
+    examples: ["Substack", "Patreon", "Spotify", "YouTube"]
+    keywords: ["content", "creator", "media", "video", "podcast", "newsletter", "streaming"]
+    additional_roles:
+      - content-platform-engineer
+      - recommendation-engineer
+      - creator-economy-engineer
+      - video-audio-engineer
+      - animator
+      - video-producer
+      - videographer
+      - motion-designer
+      - motion-graphics-designer
+    cloud_override: cloud-engineer-aws
+    recommended_stack: "Next.js + Node.js + PostgreSQL + Mux + S3"
+
+  agritech:
+    display_name: "AgriTech"
+    description: "Technology for agriculture and farming"
+    examples: ["CropIn", "DeHaat", "Ninjacart"]
+    keywords: ["agriculture", "farming", "crop", "soil", "harvest", "agri", "farm-to-table"]
+    additional_roles:
+      - data-scientist
+      - supply-chain-manager
+      - field-operations-tech
+    cloud_override: cloud-engineer-aws
+    recommended_stack: "React Native + Python + PostgreSQL + GCP Maps"
+
+  proptech:
+    display_name: "PropTech / Real Estate"
+    description: "Technology for property and real estate"
+    examples: ["Zillow", "NoBroker", "Opendoor"]
+    keywords: ["real estate", "property", "rent", "lease", "housing", "broker", "listing"]
+    additional_roles:
+      - proptech-engineer
+      - valuation-model-engineer
+      - tenant-management-engineer
+    cloud_override: cloud-engineer-vercel
+    recommended_stack: "Next.js + Node.js + PostgreSQL + Mapbox"
+
+  cleantech:
+    display_name: "CleanTech / Climate"
+    description: "Sustainability, clean energy, and climate solutions"
+    examples: ["Tesla Energy", "Arcadia", "Pachama"]
+    keywords: ["climate", "sustainability", "clean energy", "solar", "carbon", "green", "esg"]
+    additional_roles:
+      - energy-systems-engineer
+      - esg-analyst
+      - sustainability-officer
+    cloud_override: cloud-engineer-aws
+    recommended_stack: "Python + React + PostgreSQL + AWS"

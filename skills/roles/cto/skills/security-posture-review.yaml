@@ -1,0 +1,114 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "security-posture-review"
+display_name: "Technical Security Posture Review"
+description: >
+  A high-level strategic review of the startup's security defenses. Assesses 
+  readiness for SOC2 compliance, manages external penetration testing, and 
+  identifies critical vulnerabilities (OWASP Top 10) before they are exploited.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "cto"
+phase: "growth"
+applicable_startups:
+  - b2b-saas
+  - fintech
+  - healthtech
+priority: "critical"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Are we secure?"
+  - "Conduct a security review."
+  - "We need to prepare for SOC2."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Create a security audit checklist."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "infrastructure_map"
+      type: "string"
+      description: "Diagram or list of all cloud assets, databases, and third-party integrations."
+  optional:
+    - name: "compliance_target"
+      type: "string"
+      description: "SOC2, HIPAA, GDPR, or general best practices."
+      default: "SOC2"
+
+outputs:
+  files:
+    - path: "engineering/security/posture-review-Q3.md"
+      description: "The findings and prioritized remediation plan."
+  artifacts:
+    - "A budget request for specialized security tooling or external auditors."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "Dependabot/Snyk reports 0 critical vulnerabilities in production."
+  manual:
+    - "The startup passes a third-party penetration test with no easily exploitable flaws."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+
+safety_notes:
+  - "Do not store the results of a security review in a public Slack channel or easily accessible wiki. A list of known vulnerabilities is a roadmap for an attacker."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Vanta / Drata"
+      install: "N/A"
+  alternatives:
+    - name: "AWS Security Hub / Snyk"
+      when: "Need deep infrastructure and code-level scanning before formal compliance."
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Identity and Access Management (IAM) Audit"
+    tasks:
+      - "Enforce MFA on absolutely everything (AWS, GitHub, Google Workspace, Slack)."
+      - "Implement the Principle of Least Privilege: Developers should not have write access to the production database by default."
+  - step: "Data at Rest and in Transit"
+    tasks:
+      - "Verify all databases (RDS, S3) have encryption at rest enabled (KMS)."
+      - "Verify all web traffic is forced to HTTPS (TLS 1.2+)."
+  - step: "Dependency Scanning"
+    tasks:
+      - "Ensure automated tools (Dependabot, Snyk) are blocking PRs that introduce known CVEs in NPM/PyPI packages."
+  - step: "Incident Response Readiness"
+    tasks:
+      - "Verify that a formal Incident Response Plan exists, defining exactly who is paged and what the communication steps are if a breach occurs."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Treating security as a one-time project ('We passed SOC2, we are done'). Security is a continuous process of posture management."
+  - "Relying purely on compliance frameworks for actual security. Compliance means you have policies; it does not mean your code is free of SQL injection vulnerabilities."
+
+best_practices:
+  - "Schedule an annual 'Grey Box' penetration test by a reputable third-party firm. It is expensive ($10k-$30k) but mandatory for enterprise sales."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "OWASP Top 10"
+    url: "https://owasp.org/www-project-top-ten/"

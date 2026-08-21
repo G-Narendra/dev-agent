@@ -1,0 +1,80 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "patent-filing"
+display_name: "Patent Drafting & Filing"
+description: >
+  Draft complex technical claims and file provisional and non-provisional utility patents
+  with the USPTO to secure the startup's intellectual property moat.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "ip-lawyer"
+phase: "ideation"
+applicable_startups: 
+  - deeptech
+  - biotech
+priority: "mvp"
+difficulty: "expert"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Invention Disclosure"
+    tasks:
+      - "Interview the core engineering team to map out the exact novel mechanism of the invention."
+      - "Conduct a 'prior art' search to ensure the invention hasn't already been patented globally."
+  - step: "Provisional Filing"
+    tasks:
+      - "File a rapid provisional patent application to secure the filing date before a public product launch."
+  - step: "Utility Patent Claims"
+    tasks:
+      - "Draft broad independent claims and highly specific dependent claims to maximize defensive coverage."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Publishing an academic paper or open-sourcing the core algorithm *before* filing a provisional patent, legally forfeiting the IP rights."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Patent Filing process"
+  - "How do I handle patent filing?"
+  - "Implement patent filing"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the patent filing process"
+  optional:
+    - name: "N/A"
+      type: "string"
+      description: "No optional inputs needed."
+
+outputs:
+  files:
+    - path: "outputs/patent-filing.md"
+      description: "Results of the patent filing process"
+  artifacts:
+    - "Completed patent filing deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

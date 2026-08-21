@@ -1,0 +1,114 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "nextjs-app-scaffolding"
+display_name: "Next.js App Router Scaffolding & Architecture"
+description: >
+  Initializes a production-ready Next.js (App Router) project with strict 
+  TypeScript, ESLint, Tailwind CSS, and a scalable folder structure that 
+  supports feature-driven development.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "frontend-developer"
+phase: "build"
+applicable_startups:
+  - all
+priority: "critical"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Initialize the frontend project."
+  - "Set up the Next.js app."
+  - "Create the React boilerplate."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "npx create-next-app@latest"
+  - "mkdir -p src/{components,features,hooks,lib,types}"
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "project_name"
+      type: "string"
+      description: "The name of the frontend repository."
+  optional:
+    - name: "ui_library"
+      type: "string"
+      description: "shadcn/ui, MUI, or Chakra."
+      default: "shadcn/ui"
+
+outputs:
+  files:
+    - path: "src/app/layout.tsx"
+      description: "The root server layout."
+    - path: "tailwind.config.ts"
+      description: "The styling configuration."
+  artifacts:
+    - "A running localhost frontend."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "`npm run lint` passes with 0 warnings."
+  - "`npm run build` generates static and dynamic routes successfully."
+manual:
+  - "The directory structure separates global UI components from feature-specific logic."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+  - "network"
+
+safety_notes:
+  - "Dependency bloat: Do not install libraries (like Redux or Moment.js) until they are actually needed. Start lean."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Next.js (App Router)"
+      install: "npx create-next-app@latest ./ --typescript --tailwind --eslint --app --src-dir"
+  alternatives:
+    - name: "Vite + React"
+      when: "Building a purely client-side SPA (Single Page App) with no SEO requirements."
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Initialization"
+    tasks:
+      - "Run `npx create-next-app`. ALWAYS choose `--src-dir` to keep configuration files separated from application code."
+  - step: "Feature-Driven Architecture"
+    tasks:
+      - "Create `src/features/`. Do not dump everything into `src/components`. A `UserProfile` component belongs in `src/features/users/components/UserProfile.tsx`."
+  - step: "Path Aliasing"
+    tasks:
+      - "Configure `tsconfig.json` to use `@/*` aliases mapping to `./src/*` to avoid `../../../../` import hell."
+  - step: "Root Layout Configuration"
+    tasks:
+      - "Set up `src/app/layout.tsx` to include global font optimization (next/font), a global Toast provider, and SEO metadata."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Adding 'use client' to the root `layout.tsx`. This forces your entire application to render client-side, destroying the performance benefits of Next.js Server Components."
+  - "Storing API keys in `next.config.js` without the `NEXT_PUBLIC_` prefix. This leaks them to the browser."
+
+best_practices:
+  - "Keep Client Components pushed as far down the component tree as possible. Pass Server Components as `children` into Client Components."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Next.js App Router Architecture"
+    url: "https://nextjs.org/docs/app/building-your-application/routing"

@@ -1,0 +1,105 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "query-optimization"
+display_name: "SQL Query Optimization & Indexing"
+description: >
+  Diagnoses and resolves slow database queries that are bottlenecking the 
+  application. Implements B-Tree indexes, analyzes query execution plans, 
+  and rewrites complex joins to ensure the database scales to millions of rows.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "database-administrator"
+phase: "operations"
+applicable_startups:
+  - all
+priority: "critical"
+difficulty: "expert"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "The API is timing out."
+  - "The database CPU is at 100%."
+  - "Optimize this slow query."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Run EXPLAIN ANALYZE."
+  - "Generate indexing migration."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "slow_query"
+      type: "string"
+      description: "The exact SQL string that is taking too long."
+    - name: "database_engine"
+      type: "string"
+      description: "PostgreSQL, MySQL, SQL Server."
+  optional:
+    - name: "table_size"
+      type: "string"
+      description: "Estimated number of rows in the table."
+      default: "Unknown"
+
+outputs:
+  files:
+    - path: "db/migrations/20240315_add_composite_index.sql"
+      description: "The migration to fix the performance."
+  artifacts:
+    - "A breakdown of the query execution plan."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "N/A"
+manual:
+  - "The query execution time drops from 4.5 seconds down to under 50 milliseconds."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "db_read, db_write"
+
+safety_notes:
+  - "Table Locking: In PostgreSQL, running `CREATE INDEX` on a live production table will lock out all writes until the index is built (which could take hours). ALWAYS use `CREATE INDEX CONCURRENTLY`."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "PostgreSQL EXPLAIN"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "The EXPLAIN Plan"
+    tasks:
+      - "Never guess why a query is slow. Always run `EXPLAIN (ANALYZE, BUFFERS) SELECT...`. Look specifically for 'Seq Scan' (Sequential Scans) on massive tables, which indicates a missing index."
+  - step: "Composite Indexing"
+    tasks:
+      - "If a query filters by `status` AND sorts by `created_at` (e.g., `WHERE status='active' ORDER BY created_at DESC`), a single index on `status` is not enough. Create a composite index: `(status, created_at DESC)`."
+  - step: "The N+1 Problem"
+    tasks:
+      - "If the ORM is executing 500 individual `SELECT` queries to fetch the authors for a list of 500 books, rewrite the application code to use an `IN` clause (or an explicit SQL JOIN) to fetch them all in 1 query."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Adding an index to every single column in the database 'just in case'. Indexes speed up reads but significantly slow down writes (Inserts/Updates). Only index columns that are actively queried."
+best_practices:
+  - "Use Partial Indexes. If 99% of queries only look for 'Active' users, don't index the entire table. Use `CREATE INDEX ... WHERE status = 'active'`. It saves massive amounts of RAM."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Use The Index, Luke!"
+    url: "https://use-the-index-luke.com/"

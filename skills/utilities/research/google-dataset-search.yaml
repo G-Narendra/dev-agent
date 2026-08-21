@@ -1,0 +1,116 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "google-dataset-search"
+display_name: "Google Dataset Search Engine"
+description: >
+  Uses Google Dataset Search (datasetsearch.research.google.com) to find 
+  real datasets across the entire web. Unlike searching individual portals, 
+  Google Dataset Search indexes datasets from thousands of repositories 
+  including government portals, universities, research institutions, and 
+  open data communities. It's the single best starting point for finding 
+  any type of dataset.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "utility"
+phase: "all"
+applicable_startups:
+  - all
+priority: "medium"
+difficulty: "beginner"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Find any dataset about this topic."
+  - "Search Google Dataset Search."
+  - "Is there a public dataset for X?"
+  - "Find training data for this domain."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Search Google Dataset Search via web."
+  - "Extract dataset metadata and licenses."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "topic"
+      type: "string"
+      description: "The domain or subject (e.g., 'air quality New York 2023', 'patient satisfaction surveys')."
+  optional:
+    - name: "file_format"
+      type: "string"
+      description: "Preferred format: 'CSV', 'JSON', 'Parquet', 'any'."
+      default: "any"
+
+outputs:
+  files:
+    - path: "research/datasets-{topic}.md"
+      description: "A curated list of publicly available datasets on this topic."
+  artifacts:
+    - "Top 5 datasets with descriptions, formats, and license info."
+    - "Assessment: which dataset is best suited for the startup's needs."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "N/A"
+  manual:
+    - "Found at least 3 usable datasets that can power the startup's product or research."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "network"
+
+safety_notes:
+  - "Google Dataset Search indexes metadata, not the actual data. Click through to the source site."
+  - "License information is provided by the data publisher and may not always be accurate. Double-check the actual license on the source site."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Google Dataset Search"
+      install: "N/A (datasetsearch.research.google.com)"
+  alternatives:
+    - name: "Kaggle Datasets"
+      when: "Looking for ML-ready datasets with community validation."
+    - name: "Google Search (filetype:csv OR filetype:json)"
+      when: "Finding raw data files directly."
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Search on Google Dataset Search"
+    tasks:
+      - "Go to: `datasetsearch.research.google.com`"
+      - "Search for the topic with specific keywords."
+      - "Filter by: 'Free' (not all datasets on the web are free), 'Last Updated' (recency)."
+      - "Click through to source sites to verify the data actually exists."
+  - step: "Fallback: Direct File Search"
+    tasks:
+      - "If Dataset Search returns few results, use Google: `{topic} filetype:csv`"
+      - "This finds CSV files directly hosted on the web."
+      - "Try: `{topic} intitle:\"data\" filetype:json` for JSON data."
+  - step: "License and Quality Check"
+    tasks:
+      - "For each dataset found: check the actual license on the source website."
+      - "Check: is the data updated regularly? When was the last update?"
+      - "Check: is there documentation or a data dictionary?"
+  - step: "Compile Report"
+    tasks:
+      - "Table: Dataset Name | Source | Format | License | Last Updated | Row Count"
+      - "Recommend the top 1-2 datasets for the startup to use."
+      - "Note any data quality concerns or gaps."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Stopping at the first search result. Scroll through multiple pages."
+  - "Trusting license info without verification. Some sites claim 'CC-BY' but the actual data has restrictions."
+
+best_practices:
+  - "Combine Google Dataset Search with HuggingFace and Kaggle for comprehensive coverage."
+  - "If you find a great dataset but it's in an inconvenient format, check if someone on GitHub already converted it."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Google Dataset Search"
+    url: "https://datasetsearch.research.google.com/"
+  - title: "Google Advanced Search Operators"
+    url: "https://support.google.com/websearch/answer/2466433"

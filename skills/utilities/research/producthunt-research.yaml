@@ -1,0 +1,118 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "producthunt-research"
+display_name: "Product Hunt Launch & Validation Research"
+description: >
+  Mines Product Hunt for real product launches, user feedback, and market 
+  validation data. Product Hunt is where thousands of startups launch their 
+  MVP. By analyzing what works (and what gets criticized), teams can validate 
+  their own product direction before building. Every product's comments section 
+  is pure gold — real users telling you exactly what they'd pay for.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "utility"
+phase: "ideation"
+applicable_startups:
+  - all
+priority: "high"
+difficulty: "beginner"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "What similar products launched recently?"
+  - "Analyze Product Hunt launches for this category."
+  - "See what users said about X on Product Hunt."
+  - "Validate our idea against successful PH launches."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Search Product Hunt via Google."
+  - "Analyze launch patterns and user feedback."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "category_or_topic"
+      type: "string"
+      description: "The product category (e.g., 'AI writing', 'project management', 'design tools')."
+  optional:
+    - name: "analysis_type"
+      type: "string"
+      description: "'launches' (successful launches), 'feedback' (user comments), 'pricing' (pricing models used)."
+      default: "launches"
+
+outputs:
+  files:
+    - path: "research/producthunt-analysis-{topic}.md"
+      description: "Analysis of Product Hunt launches in this space."
+  artifacts:
+    - "Top 5 successful launches with their upvote counts and common patterns."
+    - "Common criticisms from comment sections (the startup's opportunity)."
+    - "Pricing models used by successful products in this space."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "N/A"
+  manual:
+    - "Provided actionable insights on what makes a successful launch in this category."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "network"
+
+safety_notes:
+  - "Product Hunt upvotes are not a perfect validation signal. Some products with 100 upvotes become unicorns; others with 5000 upvotes fail. Treat as directional data, not gospel."
+  - "PH audience skews toward early adopters and tech enthusiasts. Feedback from PH may not represent the broader market."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Google Search (site:producthunt.com)"
+      install: "N/A"
+  alternatives:
+    - name: "Product Hunt Web UI"
+      when: "Browsing the 'Topics' section for a category overview."
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Find Successful Launches in the Category"
+    tasks:
+      - "Use Google: `site:producthunt.com/posts {category}`"
+      - "Click 'Top' or filter by 'Most Upvotes' for the category."
+      - "Document the top 5 most-upvoted products: name, tagline, upvotes, comment count."
+  - step: "Analyze the Comment Sections"
+    tasks:
+      - "Read ALL comments on the top products. Don't just skim the first few."
+      - "Extract: What did users love? What did users hate? What features were requested?"
+      - "Document exact user quotes — these are real market signals."
+      - "Look for comments like 'I wish it also did X' or 'If only this worked with Y'."
+  - step: "Analyze Pricing Pages"
+    tasks:
+      - "For each product, check their actual pricing page (not Product Hunt)."
+      - "Document: Free tier limits? Paid tiers? Per-seat or usage-based?"
+      - "A product with a 'Free' tag on PH but $50/mo minimum on their site reveals pricing strategy."
+  - step: "Analyze Launch Timing & Strategy"
+    tasks:
+      - "When did they launch? (Day of week, time of year)"
+      - "Who 'hunted' them? (Popular hunters get more visibility)"
+      - "Did they have a 'Golden Kitty' award? What strategy won?"
+  - step: "Identify the Gap"
+    tasks:
+      - "What are users STILL asking for that no product has fully solved?"
+      - "Cross-reference with your startup idea. Is there a clear gap no one is filling?"
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Obsessing over upvote counts. A product with 200 targeted upvotes is often more validated than one with 2000 random ones."
+  - "Assuming a successful PH launch predicts business success. Many #1 Products of the Day are now dead."
+
+best_practices:
+  - "Pay special attention to products that launched with a 'coming soon' or 'waitlist' model — it shows demand before building."
+  - "The comments section is worth 10x more than the upvote count. Read every comment."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Product Hunt"
+    url: "https://www.producthunt.com/"
+  - title: "First Round Review: Product Hunt Launch Strategy"
+    url: "https://review.firstround.com/"

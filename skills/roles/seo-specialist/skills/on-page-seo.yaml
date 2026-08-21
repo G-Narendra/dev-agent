@@ -1,0 +1,120 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "on-page-seo"
+display_name: "On-Page SEO & Technical Optimization"
+description: >
+  Optimizes the structure and content of a website so search engines can easily 
+  crawl, index, and rank it. Focuses on meta tags, site speed, semantic HTML, 
+  and keyword density. Covers key patterns to avoid common pitfalls like launching a campaign without utm parameters -- you won't kno, and provides actionable best practices for production-ready results.
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "seo-specialist"
+phase: "growth"
+applicable_startups:
+  - all
+priority: "high"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Our site isn't showing up on Google."
+  - "Optimize the homepage for SEO."
+  - "Fix the Lighthouse SEO score."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Generate meta tags."
+  - "Draft structured data (JSON-LD)."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "target_url"
+      type: "string"
+      description: "The page to be optimized."
+    - name: "primary_keyword"
+      type: "string"
+      description: "What should this page rank for?"
+  optional:
+    - name: "cms_platform"
+      type: "string"
+      description: "WordPress, Webflow, Next.js."
+      default: "Next.js"
+
+outputs:
+  files:
+    - path: "marketing/seo/homepage_audit.md"
+      description: "The technical optimization checklist."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "The Lighthouse SEO score is 100/100."
+manual:
+  - "The page passes the Google Search Console 'Mobile Usability' test without errors."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "Indexation Blocking: Never accidentally leave a `noindex` tag or a `Disallow: /` in the `robots.txt` file when pushing a site from staging to production. It will erase the site from Google."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Google Search Console"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Title and Meta Description"
+    tasks:
+      - "Ensure the Title Tag is < 60 characters and the Meta Description is < 155 characters. The primary keyword must be at the very front of the Title Tag."
+  - step: "Semantic HTML"
+    tasks:
+      - "Use exactly one `<h1>` per page. Follow a strict hierarchical order (`<h2>`, then `<h3>`). Do not use header tags just to make text larger; use CSS for that."
+  - step: "Structured Data (Schema Markup)"
+    tasks:
+      - "Inject JSON-LD structured data into the `<head>` of the page (e.g., FAQ schema, Product schema, Article schema) to win rich snippets in the search results."
+      - "Add database migration testing -- test both up and down migrations in CI."
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Launching a campaign without UTM parameters -- you won't know which channel drove the conversions."
+  - "A/B testing with a sample size too small to reach statistical significance -- making decisions on noise rather than signal."
+  - "Optimizing for vanity metrics (impressions, page views) instead of actionable KPIs (conversion rate, revenue, retention)."
+  - "Running ads without conversion tracking pixel installed -- you're paying for clicks but can't measure ROI."
+  - "Ignoring mobile page speed for SEO -- Google's mobile-first indexing means a slow mobile site kills rankings."
+  - "Compress and convert all images to WebP format, and ensure every single `<img>` tag has a descriptive `alt` attribute for accessibility and image search ranking."
+
+  - "Set up end-to-end conversion tracking before launching any campaign — measure from impression to purchase."
+  - "Run A/B tests until they reach 95% statistical significance before making decisions — premature conclusions are worse than no test."
+  - "Build audience segments based on behavior, not just demographics — what users do is more predictive than who they are."
+  - "Test email deliverability (SPF, DKIM, DMARC) before sending any campaign — authentication failures land in spam folders."
+  - "Create a content calendar 30 days ahead and batch-create content — consistency beats intensity in content marketing."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Not defining clear success criteria before starting a task -- leads to ambiguous outcomes, endless revisions, and wasted effort."
+
+best_practices:
+  - "Document all configuration decisions in an Architecture Decision Record (ADR) so future team members understand why choices were made."
+  - "Implement comprehensive error handling with structured logging at every integration boundary to simplify debugging."
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Google Search Central: SEO Starter Guide"
+    url: "https://developers.google.com/search/docs/fundamentals/seo-starter-guide"

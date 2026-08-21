@@ -1,0 +1,117 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "database-optimization"
+display_name: "Database Optimization & Query Tuning"
+description: >
+  Prevents database meltdowns by optimizing slow queries, implementing 
+  efficient B-Tree indexing, managing connection pools, and utilizing 
+  Redis caching to protect the primary datastore from read-heavy traffic. Covers key patterns to avoid common pitfalls like exposing internal stack traces or debug output in production, and provides actionable best practices for production-ready results.
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "backend-engineer"
+phase: "growth"
+applicable_startups:
+  - all
+priority: "high"
+difficulty: "expert"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "The database CPU is at 100%."
+  - "This query takes 5 seconds to run."
+  - "Add an index to the users table."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Run EXPLAIN ANALYZE on slow query."
+  - "Draft database migration for new indexes."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "slow_query"
+      type: "string"
+      description: "The raw SQL query causing issues."
+  optional:
+    - name: "table_size"
+      type: "string"
+      description: "Number of rows in the table."
+      default: "1M+"
+
+outputs:
+  files:
+    - path: "db/migrations/add_composite_index.sql"
+      description: "The migration script to speed up the query."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "Query execution time drops from >1000ms to <50ms."
+manual:
+  - "Database CPU utilization drops below 30% during peak load."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "db_read"
+
+safety_notes:
+  - "Table Locking: Adding an index to a massive table in Postgres using a standard `CREATE INDEX` will lock the table and cause an outage. Always use `CREATE INDEX CONCURRENTLY` in production."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "pg_stat_statements"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Query Analysis"
+    tasks:
+      - "Run `EXPLAIN ANALYZE` on the query. Look for 'Sequential Scans' (Seq Scan). This means the DB is reading every row because an index is missing."
+  - step: "N+1 Query Resolution"
+    tasks:
+      - "Identify N+1 query bugs in the ORM where fetching 100 users executes 101 database queries. Use `.include()` or DataLoader to fetch relationships in a single joined query."
+  - step: "Connection Pooling"
+    tasks:
+      - "Use a connection pooler (like PgBouncer). Opening a new database connection for every incoming HTTP request will quickly exhaust the database's connection limit."
+      - "Add integration tests that verify the contract between services, not just unit tests."
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Exposing internal stack traces or debug output in production error responses -- leak sensitive infrastructure details."
+  - "Using synchronous database queries inside a high-throughput API handler -- blocks the event loop and tanks throughput."
+  - "Ignoring database connection pool limits -- starving the pool causes cascading failures across all endpoints."
+  - "Hardcoding pagination limits or skipping pagination entirely -- unbounded result sets crash the API server."
+  - "Omitting request timeout middleware -- slow clients can hold connections open indefinitely, exhausting server resources."
+  - "For heavy analytics queries (e.g., 'Total revenue this month'), don't run them against the primary transactional database. Replicate the data to a Read Replica or a Data Warehouse."
+
+  - "Implement comprehensive input validation at the API boundary using a schema validator (Zod, Pydantic, Joi)."
+  - "Use structured logging with correlation IDs across all services to trace a single request end-to-end."
+  - "Design for graceful degradation — when a downstream dependency fails, return degraded data rather than a 500 error."
+  - "Implement health check endpoints (/health, /ready) for every service so orchestrators know when to restart or drain traffic."
+  - "Use database connection pooling with proper min/max bounds to handle traffic spikes without overwhelming the database."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Not defining clear success criteria before starting a task -- leads to ambiguous outcomes, endless revisions, and wasted effort."
+
+best_practices:
+  - "Document all configuration decisions in an Architecture Decision Record (ADR) so future team members understand why choices were made."
+  - "Implement comprehensive error handling with structured logging at every integration boundary to simplify debugging."
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "PostgreSQL: Using EXPLAIN"
+    url: "https://www.postgresql.org/docs/current/using-explain.html"

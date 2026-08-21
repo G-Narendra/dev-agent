@@ -1,0 +1,95 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "state-management-data-fetching"
+display_name: "State Management & Data Fetching"
+description: >
+  Implement robust, resilient async data fetching and state management using React Query (or SWR)
+  and Zustand. Covers caching, invalidation, optimistic updates, and avoiding prop drilling.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "frontend-engineer"
+phase: "build"
+applicable_startups: 
+  - all
+priority: "mvp"
+difficulty: "advanced"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "Unit tests pass for custom React Query hooks."
+  manual:
+    - "UI updates instantly on mutation (optimistic update) and handles rollback on network failure."
+    - "Network tab shows requests are cached and deduplicated."
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Global State"
+    tasks:
+      - "Set up Zustand store for UI-only state (e.g., sidebar open, theme)."
+      - "For offline-first or local-first apps, evaluate RxDB (reactive client-side NoSQL database with sync protocols like CouchDB replication) to decouple from the server."
+  - step: "Server State"
+    tasks:
+      - "Set up React Query Provider at the root level."
+      - "Create custom hooks for data fetching (e.g., `useUser()`)."
+  - step: "Mutations & Optimistic UI"
+    tasks:
+      - "Implement `useMutation` for POST/PUT requests."
+      - "Implement optimistic updates by modifying the query cache on mutation start, and invalidating on success/error."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Using `useEffect` for data fetching — causes race conditions, waterfall requests, and lacks caching. Use React Query."
+  - "Storing server state in Redux/Zustand — creates a stale copy of the database. Let React Query manage server state."
+
+best_practices:
+  - "Use TypeScript for type safety across the entire frontend codebase."
+  - "Keep components small -- one component, one responsibility."
+  - "Test components in isolation and in integration."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the State Management Data Fetching process"
+  - "How do I handle state management data fetching?"
+  - "Implement state management data fetching"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the state management data fetching process"
+  optional:
+    - name: "data_source"
+      type: "string"
+      description: "Source of data to analyze"
+      default: "Internal data"
+    - name: "code_repository"
+      type: "string"
+      description: "Path to the code repository"
+      default: "./"
+
+outputs:
+  files:
+    - path: "outputs/state-management-data-fetching.md"
+      description: "Results of the state management data fetching process"
+  artifacts:
+    - "Completed state management data fetching deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "React / Next.js Documentation"
+    url: "https://react.dev"
+  - title: "MDN Web Docs"
+    url: "https://developer.mozilla.org"

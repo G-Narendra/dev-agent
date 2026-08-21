@@ -1,0 +1,95 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "go-concurrency"
+display_name: "Go Concurrency & Goroutine Patterns"
+description: >
+  Leverage Go's concurrency primitives goroutines, channels, and select
+  statements to build efficient concurrent systems. Covers worker pools,
+  fan-out/fan-in, and graceful shutdown patterns.
+role: "backend-engineer-go"
+phase: "build"
+applicable_startups:
+  - all
+priority: "high"
+difficulty: "advanced"
+trigger_phrases:
+  - "Design concurrent processing in Go for..."
+  - "Implement a worker pool to handle..."
+  - "Set up fan-out/fan-in pattern for..."
+example_cli_actions:
+  - "go test -bench=. -benchmem ./internal/worker/"
+  - "go vet ./..."
+inputs:
+  required:
+    - name: "task_type"
+      type: "string"
+      description: "Type of concurrent work (batch processing, streaming, event handling)."
+    - name: "concurrency_requirement"
+      type: "string"
+      description: "Max goroutines or throughput target."
+  optional:
+    - name: "error_handling"
+      type: "string"
+      description: "Fail-fast, circuit break, or retry."
+      default: "Retry with exponential backoff"
+outputs:
+  files:
+    - path: "internal/worker/pool.go"
+      description: "Worker pool implementation."
+    - path: "internal/worker/job.go"
+      description: "Job type definitions."
+  artifacts:
+    - "Benchmark results showing throughput improvements."
+success_criteria:
+  automated:
+    - "Race detector (-race) finds zero violations."
+    - "Throughput scales linearly with goroutine count up to GOMAXPROCS."
+  manual:
+    - "Graceful shutdown completes all in-flight jobs before exiting."
+permissions_needed:
+  - "filesystem"
+safety_notes:
+  - "Never spawn unbounded goroutines always use a bounded worker pool pattern."
+  - "Always handle ctx.Done() in select statements to respect cancellation."
+recommended_tools:
+  primary:
+    - name: "Go standard library (sync, context, channels)"
+      install: "N/A (stdlib)"
+  alternatives:
+    - name: "errgroup"
+      when: "Need to propagate errors from multiple goroutines."
+implementation_checklist:
+  - step: "Worker Pool"
+    tasks:
+      - "Implement a bounded worker pool with configurable size."
+      - "Use sync.WaitGroup for coordination and error propagation."
+  - step: "Fan-out/Fan-in"
+    tasks:
+      - "Split input across multiple goroutines for parallel processing."
+      - "Merge results back into a single output channel."
+  - step: "Graceful Shutdown"
+    tasks:
+      - "Listen for SIGTERM/SIGINT and initiate graceful shutdown."
+      - "Wait for all worker goroutines to complete with configurable timeout."
+anti_patterns:
+  - "Using time.Sleep for synchronization instead of channels or sync primitives."
+  - "Starting goroutines in init() functions where they cannot be controlled."
+best_practices:
+  - "Never leak goroutines ensure every goroutine has a clear exit path."
+references:
+  - title: "Go Concurrency Patterns (Rob Pike)"
+    url: "https://go.dev/blog/pipelines"
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."

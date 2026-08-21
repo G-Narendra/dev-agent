@@ -1,0 +1,110 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "feature-store-architecture"
+display_name: "Feature Store Implementation"
+description: >
+  Architect a centralized system for storing, managing, and serving machine learning 
+  features. Solves the problem of 'Training-Serving Skew' by ensuring the exact 
+  same feature definitions are used for offline training and real-time inference.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "mlops-engineer"
+phase: "growth"
+applicable_startups:
+  - all
+priority: "medium"
+difficulty: "expert"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Implement a feature store."
+  - "Stop training-serving skew."
+  - "Serve features in real-time."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "pip install feast"
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "offline_store"
+      type: "string"
+      description: "Where training data lives (e.g., Snowflake, BigQuery)."
+    - name: "online_store"
+      type: "string"
+      description: "Where real-time inference data lives (e.g., Redis, DynamoDB)."
+  optional:
+    - name: "feature_framework"
+      type: "string"
+      description: "Feast, Hopsworks, or Tecton."
+      default: "Feast"
+
+outputs:
+  files:
+    - path: "mlops/features/feature_definitions.py"
+      description: "The declarative definitions of the ML features."
+  artifacts:
+    - "A script to materialize features from the offline store to the online store."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "The online store can serve a feature vector to the inference API in under 10ms."
+  manual:
+    - "Data Scientists no longer have to rewrite their Python Pandas code into Java/Go for the backend engineering team."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+
+safety_notes:
+  - "Stale Features: If the automated job that syncs data from the Offline store to the Online store fails, the API will serve predictions using 3-day-old features, resulting in disastrous predictions. Monitor the 'Feature Age' aggressively."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Feast (Open Source)"
+      install: "pip install feast"
+  alternatives:
+    - name: "Tecton"
+      when: "You have massive budget and need fully managed, real-time streaming feature transformations."
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Define the Offline Store (Training)"
+    tasks:
+      - "Point the Feature Store at your Data Warehouse (e.g., Snowflake). When a Data Scientist needs to train a model, they request `get_historical_features()`, which executes a massive SQL JOIN across the warehouse to build the training dataset perfectly, avoiding 'Point-in-Time' leakage."
+  - step: "Define the Online Store (Inference)"
+    tasks:
+      - "Configure a fast key-value store (e.g., Redis). The production API cannot wait 5 seconds for Snowflake to run a `GROUP BY` query. It needs to look up `user:123` in Redis and instantly get the pre-computed features."
+  - step: "The Materialization Engine"
+    tasks:
+      - "Set up an Airflow job or Cron task that runs every hour. It calculates the latest features in the Data Warehouse (Offline) and pushes the final numbers into Redis (Online)."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "The 'Training-Serving Skew' disaster. The Data Scientist calculates `average_spend` in Python pandas by ignoring NULLs, but the Backend Engineer re-implements it in SQL for the API and treats NULLs as 0. The model will fail in production. A Feature Store ensures the logic is defined exactly once."
+  - "Implementing a Feature Store for your very first model. Feature Stores are complex infrastructure. Build your first 2-3 models manually. Only implement a Feature Store when the pain of managing features across multiple teams becomes unbearable."
+
+best_practices:
+  - "Use 'Point-in-Time' (Time-Travel) correctness. When training on historical data from July, the Feature Store must provide the user's features exactly as they existed in July, not what they are today."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Feast: Feature Store Architecture"
+    url: "https://docs.feast.dev/"

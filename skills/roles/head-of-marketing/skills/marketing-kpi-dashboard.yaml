@@ -1,0 +1,120 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "marketing-kpi-dashboard"
+display_name: "Marketing Leadership & KPI Orchestration"
+description: >
+  Transitions marketing from a 'cost center' (buying swag) into a 
+  'revenue center' (generating pipeline). Aligns the entire marketing 
+  team around hard metrics like CAC, LTV, and Pipeline Coverage. Covers key patterns to avoid common pitfalls like launching a campaign without utm parameters -- you won't kno, and provides actionable best practices for production-ready results.
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "head-of-marketing"
+phase: "growth"
+applicable_startups:
+  - all
+priority: "high"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "What is the ROI of our marketing?"
+  - "Sales is complaining about lead quality."
+  - "Build the marketing dashboard."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Generate CMO dashboard metrics."
+  - "Draft Sales-Marketing SLA."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "marketing_budget"
+      type: "string"
+      description: "Monthly spend across all channels."
+    - name: "sales_quota"
+      type: "string"
+      description: "How much pipeline does Sales need?"
+  optional:
+    - name: "primary_channel"
+      type: "string"
+      description: "Inbound vs Outbound."
+      default: "Inbound"
+
+outputs:
+  files:
+    - path: "marketing/ops/leadership_kpi_dashboard.md"
+      description: "The mathematical alignment of marketing to revenue."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "N/A"
+manual:
+  - "Marketing sources >40% of all closed-won revenue, and the Sales-Marketing SLA is met for 3 consecutive quarters."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "The Vanity Metric Trap: Never present 'Website Traffic' or 'Social Media Impressions' to the CEO or Board as a sign of success. If traffic goes up 200% but revenue is flat, Marketing failed. Only report on Pipeline and Revenue."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "HubSpot / Salesforce / Looker"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "The Sales-Marketing SLA"
+    tasks:
+      - "Create a binding contract. Marketing agrees to deliver 50 Sales Qualified Leads (SQLs) per month. Sales agrees to contact those leads within 5 minutes and follow up 6 times. Hold both teams mathematically accountable."
+  - step: "Reverse-Funnel Math"
+    tasks:
+      - "If the company needs $1M in revenue, and average deal size is $10k, you need 100 deals. If win rate is 20%, you need 500 SQLs. If lead-to-SQL rate is 10%, you need 5,000 Leads. Manage the team to the 5,000 lead target."
+  - step: "Attribution Modeling"
+    tasks:
+      - "Implement First-Touch (what brought them in) and Last-Touch (what made them buy) attribution. If you only look at Last-Touch, you will cut the budget for the podcast that actually introduced them to the brand 6 months ago."
+      - "Add database migration testing -- test both up and down migrations in CI."
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Launching a campaign without UTM parameters -- you won't know which channel drove the conversions."
+  - "A/B testing with a sample size too small to reach statistical significance -- making decisions on noise rather than signal."
+  - "Optimizing for vanity metrics (impressions, page views) instead of actionable KPIs (conversion rate, revenue, retention)."
+  - "Running ads without conversion tracking pixel installed -- you're paying for clicks but can't measure ROI."
+  - "Ignoring mobile page speed for SEO -- Google's mobile-first indexing means a slow mobile site kills rankings."
+  - "The Weekly Pipeline Meeting. The Head of Marketing and Head of Sales must sit in a room every Monday and review every single SQL generated last week. If the leads are garbage, Marketing must adjust campaigns instantly."
+
+  - "Set up end-to-end conversion tracking before launching any campaign — measure from impression to purchase."
+  - "Run A/B tests until they reach 95% statistical significance before making decisions — premature conclusions are worse than no test."
+  - "Build audience segments based on behavior, not just demographics — what users do is more predictive than who they are."
+  - "Test email deliverability (SPF, DKIM, DMARC) before sending any campaign — authentication failures land in spam folders."
+  - "Create a content calendar 30 days ahead and batch-create content — consistency beats intensity in content marketing."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Not defining clear success criteria before starting a task -- leads to ambiguous outcomes, endless revisions, and wasted effort."
+
+best_practices:
+  - "Document all configuration decisions in an Architecture Decision Record (ADR) so future team members understand why choices were made."
+  - "Implement comprehensive error handling with structured logging at every integration boundary to simplify debugging."
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "HubSpot: The Sales and Marketing SLA"
+    url: "https://blog.hubspot.com/sales/sales-marketing-sla"

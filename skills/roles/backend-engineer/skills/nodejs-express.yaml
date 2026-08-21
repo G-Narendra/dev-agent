@@ -1,0 +1,144 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "nodejs-express"
+display_name: "Node.js + Express Backend Development"
+description: >
+  Build production-ready, stateless Node.js server applications using Express (or Fastify) with TypeScript.
+  Implements layered architecture (Controller/Service/Repository), dependency injection, robust error handling,
+  and graceful shutdown patterns.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "backend-engineer"
+phase: "build"
+applicable_startups: 
+  - all
+priority: "mvp"
+difficulty: "expert"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Set up an Express server"
+  - "Create a Node.js backend"
+  - "Write the controller and service for..."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Initialize a Node.js TypeScript project with Express, Zod, and Pino"
+  - "Create a centralized error handling middleware"
+  - "Write a GracefulShutdown manager for SIGTERM signals"
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "openapi_spec_or_requirements"
+      type: "string"
+      description: "The API endpoints to implement, preferably as an OpenAPI spec or detailed list."
+  optional:
+    - name: "database_type"
+      type: "string"
+      description: "e.g., PostgreSQL, MongoDB. Defaults to mock/in-memory if none provided."
+      default: "none"
+
+outputs:
+  files:
+    - path: "src/app.ts"
+      description: "Main application setup and middleware pipeline."
+    - path: "src/controllers/*.ts"
+      description: "Route handlers implementing the API endpoints."
+    - path: "src/services/*.ts"
+      description: "Core business logic decoupled from HTTP."
+  artifacts:
+    - "A running Node.js server listening on a specified port."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "Server starts successfully (`npm run dev` or `npm start`)."
+    - "TypeScript compiles with strictly zero errors (`tsc --noEmit`)."
+    - "Unit tests for service layer pass."
+  manual:
+    - "Sending an invalid payload returns a 400 Bad Request with formatted Zod error details, NOT a 500."
+    - "Server logs incoming requests using structured JSON (Pino), including request IDs."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+  - "network: listen on port"
+  - "environment_variable: read process.env"
+
+safety_notes:
+  - "Never hardcode secrets (DB URLs, API keys) in source code; use `dotenv` and `process.env` with validation (e.g., Zod env schema)."
+  - "Ensure `helmet` is configured to set secure HTTP headers."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "express"
+      install: "npm install express cors helmet pino"
+    - name: "zod"
+      install: "npm install zod"
+    - name: "typescript"
+      install: "npm install -D typescript tsx @types/node @types/express @types/cors"
+  alternatives:
+    - name: "fastify"
+      when: "Extreme throughput/low-latency is required over ecosystem plugins."
+    - name: "hono"
+      when: "Edge computing or multi-runtime support (Cloudflare Workers, Deno, Bun) needed. Minimal overhead."
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Project Setup"
+    tasks:
+      - "Initialize `package.json` and install dependencies."
+      - "Generate `tsconfig.json` with strict mode enabled."
+      - "Create environment variable validator using Zod."
+  - step: "Server Scaffolding"
+    tasks:
+      - "Create `src/server.ts` for initialization and port binding."
+      - "Create `src/app.ts` to configure Express, Helmet, CORS, and request parsing (JSON)."
+      - "Integrate a structured logger (Pino) with correlation IDs."
+  - step: "Architecture & Routing"
+    tasks:
+      - "Implement a 3-layer architecture: Router -> Controller -> Service."
+      - "Create a Zod validation middleware for req.body, req.query, and req.params."
+      - "Implement business logic in the Service layer, throwing custom domain errors (e.g., `NotFoundError`)."
+  - step: "Error Handling & Resilience"
+    tasks:
+      - "Implement a global `errorHandler` middleware that catches all unhandled next(err)."
+      - "Map domain errors to correct HTTP status codes (e.g., NotFoundError -> 404)."
+      - "Ensure 500 errors do not leak stack traces to the client in production."
+      - "Implement graceful shutdown: listen for SIGTERM/SIGINT, stop accepting new requests, close DB connections, then process.exit(0)."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Fat Controllers — placing business logic and DB queries directly inside the Express route handler. This makes code untestable without mocking HTTP."
+  - "Unhandled Promise Rejections — failing to wrap async route handlers in a `catch` block or using `express-async-errors`. Causes the server to hang or crash."
+  - "Using `console.log` in production — it blocks the event loop and lacks structure. Use Pino."
+  - "Trusting client input — reading `req.body` directly without validation. Leads to NoSQL injection or prototype pollution."
+  - "Abrupt termination — killing the process immediately on SIGTERM drops active user requests and corrupts in-flight DB transactions."
+
+best_practices:
+  - "Use `async/await` exclusively; avoid `.then()` chains."
+  - "Implement a DI (Dependency Injection) pattern (even manual constructor injection) for the Service layer to allow easy unit testing."
+  - "Validate configuration (`process.env`) on startup and crash immediately if required keys are missing, rather than failing later at runtime."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Node.js Best Practices"
+    url: "https://github.com/goldbergyoni/nodebestpractices"
+  - title: "Express Production Best Practices"
+    url: "https://expressjs.com/en/advanced/best-practice-performance.html"

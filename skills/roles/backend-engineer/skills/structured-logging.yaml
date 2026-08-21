@@ -1,0 +1,83 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "structured-logging"
+display_name: "Structured JSON Logging"
+description: >
+  Implement standardized, structured JSON logging across all microservices to allow 
+  for rapid querying and alerting in Log Management systems (e.g., Datadog, ELK).
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "backend-engineer"
+phase: "operations"
+applicable_startups: 
+  - all
+priority: "high"
+difficulty: "advanced"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "JSON Format"
+    tasks:
+      - "Configure Pino (Node.js) or Logrus (Go) to output logs exclusively in JSON format. Never output unstructured plaintext strings."
+  - step: "Context Enrichment"
+    tasks:
+      - "Automatically attach a `request_id`, `user_id`, and `service_name` to every log line to trace a user's journey across the entire system."
+  - step: "PII Scrubbing"
+    tasks:
+      - "Configure the logger to automatically redact sensitive fields (e.g., `password`, `credit_card`) before they are written to standard out."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Writing `console.log('User logged in: ' + user.email)` which outputs raw text, making it impossible to search for all logins via a structured query."
+
+best_practices:
+  - "Design APIs with idempotency in mind -- same request, same result."
+  - "Always validate inputs at the API boundary before processing."
+  - "Use database transactions for operations that modify multiple records."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Structured Logging process"
+  - "How do I handle structured logging?"
+  - "Implement structured logging"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the structured logging process"
+  optional:
+    - name: "data_source"
+      type: "string"
+      description: "Source of data to analyze"
+      default: "Internal data"
+    - name: "code_repository"
+      type: "string"
+      description: "Path to the code repository"
+      default: "./"
+
+outputs:
+  files:
+    - path: "outputs/structured-logging.md"
+      description: "Results of the structured logging process"
+  artifacts:
+    - "Completed structured logging deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "PostgreSQL Documentation"
+    url: "https://postgresql.org/docs"
+  - title: "Node.js Documentation"
+    url: "https://nodejs.org/en/docs/"

@@ -1,0 +1,80 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "burn-rate-analysis"
+display_name: "Burn Rate & Runway Modeling"
+description: >
+  Calculate the startup's monthly gross and net burn rate, project the cash runway,
+  and model the financial impact of hiring decisions or server scaling.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "finance-manager"
+phase: "operations"
+applicable_startups: 
+  - all
+priority: "mvp"
+difficulty: "expert"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Burn Calculation"
+    tasks:
+      - "Calculate Gross Burn (Total monthly expenses)."
+      - "Calculate Net Burn (Gross Burn - Monthly Revenue)."
+  - step: "Runway Projection"
+    tasks:
+      - "Divide Cash in Bank by Net Burn to determine Runway (in months)."
+  - step: "Scenario Modeling"
+    tasks:
+      - "Create a 'Worst Case' model where revenue growth is flat for 12 months."
+      - "Determine the exact date hiring must freeze to maintain 6 months of runway."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Ignoring annual/one-time expenses (e.g., legal fees, software annual renewals) in the monthly burn average."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Burn Rate Analysis process"
+  - "How do I handle burn rate analysis?"
+  - "Implement burn rate analysis"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the burn rate analysis process"
+  optional:
+    - name: "N/A"
+      type: "string"
+      description: "No optional inputs needed."
+
+outputs:
+  files:
+    - path: "outputs/burn-rate-analysis.md"
+      description: "Results of the burn rate analysis process"
+  artifacts:
+    - "Completed burn rate analysis deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

@@ -1,0 +1,78 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "demand-forecasting"
+display_name: "Inventory Demand Forecasting"
+description: >
+  Calculate Reorder Points (ROP) and Economic Order Quantity (EOQ) to prevent 
+  stockouts of best-sellers without tying up cash in dead inventory.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "merchandiser"
+phase: "operations"
+applicable_startups: 
+  - ecommerce
+priority: "critical"
+difficulty: "advanced"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Lead Time Calculation"
+    tasks:
+      - "Map the exact number of days it takes from issuing a PO to the inventory being sellable in the warehouse. Add a 14-day safety buffer for customs/port delays."
+  - step: "Reorder Point Formula"
+    tasks:
+      - "Calculate the ROP: (Average Daily Sales × Lead Time in Days) + Safety Stock. Trigger the PO the exact day inventory hits this number."
+  - step: "Dead Stock Liquidation"
+    tasks:
+      - "Identify any SKU with less than 1 sale per week. Bundle it heavily with a best-seller or liquidate it at cost to free up warehouse space and working capital."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Guessing how much inventory to buy based on 'gut feeling', resulting in $100k of cash tied up in XXL sizes that no one is buying while the Mediums sell out in 3 days."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Demand Forecasting process"
+  - "How do I handle demand forecasting?"
+  - "Implement demand forecasting"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the demand forecasting process"
+  optional:
+    - name: "N/A"
+      type: "string"
+      description: "No optional inputs needed."
+
+outputs:
+  files:
+    - path: "outputs/demand-forecasting.md"
+      description: "Results of the demand forecasting process"
+  artifacts:
+    - "Completed demand forecasting deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

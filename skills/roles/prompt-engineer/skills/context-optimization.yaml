@@ -1,0 +1,105 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "context-optimization"
+display_name: "Context Window Optimization"
+description: >
+  Maximizes the efficiency of LLM context windows. Implements techniques to 
+  compress data, manage conversation history, and prevent exceeding token 
+  limits, saving API costs and reducing hallucination rates.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "prompt-engineer"
+phase: "growth"
+applicable_startups:
+  - all
+priority: "high"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "We hit the token limit."
+  - "The AI API is costing too much."
+  - "The LLM forgot the beginning of the chat."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Generate conversation trimming script."
+  - "Draft prompt compression technique."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "current_prompt_size"
+      type: "string"
+      description: "Tokens currently being sent."
+    - name: "target_model"
+      type: "string"
+      description: "Model constraints (e.g., 8k, 128k context)."
+  optional:
+    - name: "compression_technique"
+      type: "string"
+      description: "Summarization, Truncation, or Dense Mapping."
+      default: "Summarization"
+
+outputs:
+  files:
+    - path: "ai/utils/context_manager.py"
+      description: "The token management utility."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "Unit tests verify that `tiktoken` count never exceeds the target model's hard maximum limit before sending the API request."
+manual:
+  - "API costs are reduced by 40% without a noticeable degradation in response quality."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "System Prompt Purging: Never truncate or trim the System Prompt (the instructions). Only trim the user conversation history or the retrieved RAG documents. If the system prompt is lost, the bot breaks character."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Tiktoken"
+      install: "pip install tiktoken"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Exact Token Counting"
+    tasks:
+      - "Do not estimate tokens using `length / 4`. Use OpenAI's `tiktoken` library to calculate the exact token count of the payload before making the HTTP request to prevent 400 Errors."
+  - step: "Rolling Memory Window"
+    tasks:
+      - "In a chatbot, do not send the entire 50-message history on every request. Keep the System Prompt, keep the First User Message (context), and keep the last 5 interactions. Discard the middle."
+  - step: "Background Summarization"
+    tasks:
+      - "If long-term memory is required, run a background async task that asks a cheaper model (like GPT-3.5) to summarize the discarded middle messages into a dense paragraph, and inject that summary into the context window."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Relying on massive 1M token context windows (like Gemini Pro 1.5) as a crutch for bad architecture. While possible, searching 1M tokens is expensive and slow. Pre-filter your data."
+best_practices:
+  - "Strip unnecessary whitespace, HTML tags, and massive JSON structures down to flat Markdown before sending them to the LLM. It saves tokens and models read Markdown better anyway."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "OpenAI: Managing Tokens"
+    url: "https://platform.openai.com/docs/guides/text-generation/managing-tokens"

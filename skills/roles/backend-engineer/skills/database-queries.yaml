@@ -1,0 +1,125 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "database-queries"
+display_name: "Database Access & Optimization"
+description: >
+  Implement robust, performant database access layers using ORMs/Query Builders (Prisma, Drizzle, Kysely).
+  Covers connection pooling, transaction management, indexing strategies, and preventing N+1 query problems.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "backend-engineer"
+phase: "build"
+applicable_startups: 
+  - all
+priority: "mvp"
+difficulty: "expert"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Connect to the database"
+  - "Write the DB queries for..."
+  - "Set up Prisma/Drizzle"
+  - "Optimize the slow query"
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Initialize Prisma schema and run migrations."
+  - "Implement a repository layer that encapsulates complex joins."
+  - "Wrap a multi-step mutation in a database transaction."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "database_url"
+      type: "string"
+      description: "Connection string to the database."
+    - name: "data_models"
+      type: "string"
+      description: "Description of the tables and relations to query."
+
+outputs:
+  files:
+    - path: "prisma/schema.prisma"
+      description: "Database schema definition (if using Prisma)."
+    - path: "src/repositories/*.ts"
+      description: "Data access layer containing the actual queries."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "Integration tests can successfully read/write to a test database."
+    - "Migrations apply cleanly to an empty database."
+  manual:
+    - "Fetch operations fetching relations use joins/includes, avoiding the N+1 problem."
+    - "Connection pool is correctly sized for the server instance."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+  - "network: access to DB port"
+
+safety_notes:
+  - "NEVER use string concatenation for SQL queries. Always use parameterized queries or an ORM to prevent SQL Injection."
+  - "Ensure destructive migrations (dropping tables/columns) are manually reviewed before executing in production."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "prisma"
+      install: "npm install @prisma/client && npm install -D prisma"
+  alternatives:
+    - name: "drizzle-orm"
+      when: "Extreme edge compatibility or raw SQL-like control is required without heavy runtime engines."
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Connection Management"
+    tasks:
+      - "Initialize the ORM client as a singleton to prevent connection pool exhaustion."
+      - "Configure connection pool limits (e.g., max 10 connections per server instance)."
+  - step: "Repository Layer"
+    tasks:
+      - "Create repository classes/functions that abstract away the ORM from the Service layer."
+      - "Implement paginated `findAll` methods using cursor-based pagination (keyset)."
+      - "Implement `findById` with error handling if record is not found."
+  - step: "Transaction Management"
+    tasks:
+      - "Identify operations that mutate multiple tables (e.g., creating an Order and deducting Inventory)."
+      - "Wrap these operations in an ACID transaction using the ORM's transaction API."
+  - step: "Optimization (N+1 Prevention)"
+    tasks:
+      - "Identify nested data requirements (e.g., fetching a list of Users and their Posts)."
+      - "Use `include` (Prisma) or `JOIN` (Drizzle) to fetch data in a single round trip."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "N+1 Query Problem — executing a query in a loop (e.g., fetching comments for each post individually). Always use joins or data loaders."
+  - "SQL Injection — using raw string interpolation for queries. (e.g., `SELECT * FROM users WHERE name = ${req.body.name}`)."
+  - "Connection Pool Exhaustion — creating a new DB client instance on every request. Must be a singleton."
+  - "Fetching `SELECT *` for large tables — explicitly select only the columns needed, especially excluding large TEXT blobs or sensitive hashes."
+
+best_practices:
+  - "Apply database-level constraints (UNIQUE, FOREIGN KEY, CHECK) in the schema, do not rely solely on application-level validation."
+  - "Add indexes to foreign keys and columns frequently used in WHERE, ORDER BY, or GROUP BY clauses."
+  - "Use soft deletes (e.g., `deleted_at` timestamp) instead of hard deletes for critical business data (users, orders)."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Prisma Best Practices"
+    url: "https://www.prisma.io/docs/guides/performance-and-optimization/query-optimization-performance"
+  - title: "Use The Index, Luke! (SQL Indexing Guide)"
+    url: "https://use-the-index-luke.com/"

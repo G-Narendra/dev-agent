@@ -1,0 +1,78 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "systematic-debugging"
+display_name: "Systematic Debugging & Isolation"
+description: >
+  Apply the scientific method to isolate and destroy complex, intermittent bugs 
+  in distributed systems rather than guessing randomly.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "backend-engineer"
+phase: "operations"
+applicable_startups: 
+  - all
+priority: "high"
+difficulty: "advanced"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Deterministic Reproduction"
+    tasks:
+      - "Do not touch the code until you can reliably reproduce the bug in a local or staging environment using an automated test."
+  - step: "Binary Search (Git Bisect)"
+    tasks:
+      - "If the bug is a regression, use `git bisect` to instantly isolate the exact commit that introduced the failure across thousands of recent changes."
+  - step: "Variable Isolation"
+    tasks:
+      - "Change exactly one variable at a time when testing a hypothesis. If you change 3 things and it works, you have no idea what actually fixed it."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Changing 5 random lines of code, restarting the server, seeing if it works, and repeating this loop for 8 hours without actually understanding the problem."
+
+best_practices:
+  - "Design APIs with idempotency in mind -- same request, same result."
+  - "Always validate inputs at the API boundary before processing."
+  - "Use database transactions for operations that modify multiple records."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Systematic Debugging process"
+  - "How do I handle systematic debugging?"
+  - "Implement systematic debugging"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the systematic debugging process"
+  optional:
+    - name: "N/A"
+      type: "string"
+      description: "No optional inputs needed."
+
+outputs:
+  files:
+    - path: "outputs/systematic-debugging.md"
+      description: "Results of the systematic debugging process"
+  artifacts:
+    - "Completed systematic debugging deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "PostgreSQL Documentation"
+    url: "https://postgresql.org/docs"
+  - title: "Node.js Documentation"
+    url: "https://nodejs.org/en/docs/"

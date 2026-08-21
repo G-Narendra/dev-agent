@@ -1,0 +1,79 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "tax-optimization-strategy"
+display_name: "Startup Tax Optimization & Compliance"
+description: >
+  Manage the startup's corporate tax strategy, ensuring founders file 83(b) elections, 
+  and maximizing cash flow via R&D tax credits.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "tax-advisor"
+phase: "operations"
+applicable_startups: 
+  - all
+priority: "mvp"
+difficulty: "advanced"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Founder Taxation (Day 1)"
+    tasks:
+      - "Force all founders and early employees to file their Section 83(b) election with the IRS via certified mail within 30 days of equity issuance."
+  - step: "R&D Tax Credits"
+    tasks:
+      - "Conduct an R&D study to quantify engineering salaries spent on 'new innovation'."
+      - "File form 6765 to offset the startup's payroll taxes using the credit."
+  - step: "Corporate Returns"
+    tasks:
+      - "File the annual 1120 (C-Corp) return, managing the treatment of Net Operating Losses (NOLs)."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "The founder forgetting to file their 83(b) election, resulting in them owing $500,000 in personal income tax on 'phantom stock gains' when the company raises a Series A."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Tax Optimization Strategy process"
+  - "How do I handle tax optimization strategy?"
+  - "Implement tax optimization strategy"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the tax optimization strategy process"
+  optional:
+    - name: "N/A"
+      type: "string"
+      description: "No optional inputs needed."
+
+outputs:
+  files:
+    - path: "outputs/tax-optimization-strategy.md"
+      description: "Results of the tax optimization strategy process"
+  artifacts:
+    - "Completed tax optimization strategy deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

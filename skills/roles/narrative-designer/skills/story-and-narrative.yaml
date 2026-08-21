@@ -1,0 +1,83 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "story-and-narrative"
+display_name: "Narrative & Story Design"
+description: >
+  Crafts compelling stories, characters, dialogue, and worldbuilding for games 
+  and interactive experiences. Designs branching narratives, quest systems, 
+  and dialogue trees that respond to player choices.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "narrative-designer"
+phase: "planning"
+applicable_startups:
+  - gaming
+priority: "high"
+difficulty: "advanced"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Story Framework"
+    tasks:
+      - "Design the high-level story arc with key plot points."
+      - "Create character profiles with motivations and arcs."
+  - step: "Branching Dialog"
+    tasks:
+      - "Design dialogue trees with branching based on player choices."
+      - "Implement choice tracking and consequence systems."
+  - step: "Worldbuilding"
+    tasks:
+      - "Create a worldbuilding bible with setting rules and lore."
+      - "Write environmental narrative elements (notes, logs, flavor text)."
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Story And Narrative process"
+  - "How do I handle story and narrative?"
+  - "Implement story and narrative"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the story and narrative process"
+  optional:
+    - name: "N/A"
+      type: "string"
+      description: "No optional inputs needed."
+
+outputs:
+  files:
+    - path: "outputs/story-and-narrative.md"
+      description: "Results of the story and narrative process"
+  artifacts:
+    - "Completed story and narrative deliverable"
+# ── QUALITY GATES ────────────────────────────────────────────
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start — retrofitting is expensive."
+anti_patterns:
+  - "Writing a linear story that ignores player agency in a game promising choices."
+  - "Building dialogue trees so complex that the cost of recording voiceover becomes prohibitive."
+  - "Focusing on worldbuilding at the expense of character-driven emotional stakes."
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

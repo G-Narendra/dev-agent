@@ -1,0 +1,115 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "data-mapping-record"
+display_name: "Record of Processing Activities (RoPA)"
+description: >
+  Create and maintain the legally required Record of Processing Activities (RoPA) under GDPR Article 30. 
+  Maps exactly what Personal Identifiable Information (PII) is collected, where it is stored, 
+  how long it is kept, and the legal basis for processing it.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "gdpr-dpo"
+phase: "growth"
+applicable_startups:
+  - all
+priority: "critical"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Where do we store user data?"
+  - "Create a data map."
+  - "We need a RoPA for compliance."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Create a RoPA spreadsheet artifact."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "database_schema"
+      type: "file"
+      description: "Schema definition showing all user tables."
+    - name: "third_party_vendors"
+      type: "string"
+      description: "List of all external SaaS tools that touch user data (Stripe, HubSpot, AWS)."
+  optional:
+    - name: "retention_policy"
+      type: "string"
+      description: "How long data is kept after an account is closed."
+      default: "30 days"
+
+outputs:
+  files:
+    - path: "compliance/gdpr-ropa.csv"
+      description: "The official Data Mapping document."
+  artifacts:
+    - "A data flow diagram showing PII moving between services."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "The RoPA lists a valid 'Legal Basis' (e.g., Consent, Legitimate Interest, Contract) for every single data point collected."
+  manual:
+    - "During an audit, the DPO can instantly produce the document to prove compliance."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+
+safety_notes:
+  - "The RoPA itself should not contain actual PII. It describes the *categories* of data, not the data itself."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Spreadsheet / Notion"
+      install: "N/A"
+  alternatives:
+    - name: "OneTrust / DataGrail"
+      when: "Scaling to enterprise level and needing automated data discovery across hundreds of databases."
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Inventory Collection"
+    tasks:
+      - "Audit all databases, S3 buckets, and third-party SaaS tools."
+      - "List the categories of data (e.g., Contact Info, Financial Info, Behavioral Data)."
+  - step: "Define the 'Why'"
+    tasks:
+      - "For each category, define the 'Purpose of Processing' (e.g., 'To process subscription payments')."
+      - "Define the 'Legal Basis' (e.g., 'Performance of a Contract'). You cannot collect data 'just in case we need it later'."
+  - step: "Retention Rules"
+    tasks:
+      - "Define exactly when the data will be deleted (e.g., '7 years for tax records, 30 days for marketing logs')."
+  - step: "Cross-Border Transfers"
+    tasks:
+      - "Document if data is transferred outside the EU (e.g., 'Stored in AWS us-east-1'). If yes, ensure Standard Contractual Clauses (SCCs) are in place."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Claiming 'Consent' as the legal basis for processing a credit card to fulfill an order. Consent can be withdrawn at any time. The legal basis is 'Contract'."
+  - "Storing a user's IP address and browsing history indefinitely. Under GDPR, this is PII and must have a strict deletion schedule."
+
+best_practices:
+  - "Data Minimization: If you don't need a user's date of birth or phone number to run the core product, delete that field from the signup form entirely. The safest data is data you never collected."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "ICO: Record of Processing Activities"
+    url: "https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/accountability-and-governance/documentation/how-do-we-document-our-processing-activities/"

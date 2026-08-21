@@ -1,0 +1,113 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "model-deployment-strategies"
+display_name: "ML Model Deployment & Serving"
+description: >
+  Architect the pipeline for deploying machine learning models to production. 
+  Covers wrapping models in API microservices (FastAPI), containerizing them (Docker), 
+  and choosing between real-time inference vs batch inference.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "mlops-engineer"
+phase: "operations"
+applicable_startups:
+  - all
+priority: "critical"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Deploy the model."
+  - "Create an inference API."
+  - "Serve the predictions."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "pip install fastapi uvicorn"
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "model_artifact"
+      type: "string"
+      description: "The trained model file (e.g., `.pkl`, `.onnx`, `.pt`)."
+    - name: "inference_type"
+      type: "string"
+      description: "Real-time (API) vs Batch (Offline processing)."
+  optional:
+    - name: "serving_framework"
+      type: "string"
+      description: "FastAPI, BentoML, or TorchServe."
+      default: "FastAPI"
+
+outputs:
+  files:
+    - path: "mlops/serving/app.py"
+      description: "The FastAPI inference endpoint."
+  artifacts:
+    - "A Dockerfile optimized for ML dependencies."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "The `/predict` endpoint returns a response in under 200ms."
+  manual:
+    - "The software engineering team can call the ML model via a standard REST API without needing to know anything about Python or PyTorch."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+
+safety_notes:
+  - "Memory Leaks: Loading a massive 5GB model into memory on every single API request will instantly crash the server. The model MUST be loaded once into global memory during application startup (`@app.on_event(\"startup\")`), not inside the route handler."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "FastAPI + Docker"
+      install: "pip install fastapi"
+  alternatives:
+    - name: "BentoML / Seldon Core"
+      when: "Deploying complex pipelines (e.g., an ensemble of 3 models) at massive Kubernetes scale."
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Model Serialization"
+    tasks:
+      - "Save the trained model. Use ONNX (`.onnx`) if you need extreme performance and cross-language compatibility, or `joblib`/`pickle` for simple Scikit-Learn models."
+  - step: "API Wrapping (FastAPI)"
+    tasks:
+      - "Define a strict Pydantic schema for the input data. The API must reject invalid inputs (e.g., passing a string for `Age`) before they hit the model."
+  - step: "Containerization (Docker)"
+    tasks:
+      - "Write a Dockerfile. ML dependencies (TensorFlow, PyTorch) are massive. Use slim base images (e.g., `python:3.9-slim`) to keep the image under 1GB."
+  - step: "Batch vs Real-Time"
+    tasks:
+      - "If the predictions aren't needed instantly (e.g., 'Generate daily recommendations for 1M users'), DO NOT build a real-time API. Use Airflow to run a nightly batch script that saves predictions to a database."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Handing a Jupyter Notebook to the backend team and telling them to 'put it in production'. MLOps Engineers must deliver production-ready APIs, not research scripts."
+  - "Using `Flask` with the default synchronous development server for production inference. It will handle exactly 1 request at a time. Use `FastAPI` with `Uvicorn` for async concurrency."
+
+best_practices:
+  - "Implement Shadow Mode (Dark Launch) for new models. Deploy the new model alongside the old one. The API returns the old model's prediction to the user, but silently logs the new model's prediction to a database for comparison."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "FastAPI Documentation"
+    url: "https://fastapi.tiangolo.com/"

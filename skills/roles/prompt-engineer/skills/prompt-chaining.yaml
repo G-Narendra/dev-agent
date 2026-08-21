@@ -1,0 +1,108 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "prompt-chaining"
+display_name: "Prompt Chaining & Multi-Step Reasoning"
+description: >
+  Break down complex LLM tasks into a sequence of smaller, focused prompts. 
+  Improves reliability, reduces hallucinations, and allows for intermediate 
+  validation steps in AI workflows.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "prompt-engineer"
+phase: "ideation"
+applicable_startups:
+  - ai-startups
+priority: "high"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "The LLM is confused by this massive prompt."
+  - "Break this task into steps."
+  - "Implement prompt chaining."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Create a prompt chain architecture."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "complex_task"
+      type: "string"
+      description: "The overarching goal (e.g., 'Write a fully researched blog post from a single keyword')."
+  optional:
+    - name: "llm_provider"
+      type: "string"
+      description: "OpenAI vs Anthropic vs Local."
+      default: "OpenAI"
+
+outputs:
+  files:
+    - path: "ai/prompts/chain_architecture.md"
+      description: "The sequential diagram of prompts."
+  artifacts:
+    - "A repository of individual, modular prompt templates."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "N/A"
+  manual:
+    - "The final output quality improves significantly compared to a single 'Zero-Shot' mega-prompt."
+    - "The system can recover gracefully if one step in the chain fails, rather than failing the entire task."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+
+safety_notes:
+  - "Cost Management: Chaining 10 prompts together means you are paying for 10 API calls, and the context window grows with each step. Ensure the intermediate outputs are heavily summarized before being passed to the next step to avoid massive token costs."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "LangChain / LlamaIndex"
+      install: "pip install langchain"
+  alternatives:
+    - name: "DSPy"
+      when: "Moving from manual prompt engineering to automated, algorithmic prompt optimization."
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Decomposition"
+    tasks:
+      - "Take the mega-prompt and split it. Example (Blog Post): Step 1: Generate Outline. Step 2: Critique Outline. Step 3: Write Introduction based on Outline. Step 4: Write Body Paragraphs. Step 5: Final Polish."
+  - step: "The 'Critique and Revise' Pattern"
+    tasks:
+      - "Incorporate a step where an LLM acts as an adversarial reviewer. Pass the output of Step 1 to a new prompt that says: 'Review this output for factual errors and missing context. Provide a critique.' Then pass that critique back to Step 1 to generate a better version."
+  - step: "State Management"
+    tasks:
+      - "Use a system to track the intermediate variables. If Step 2 fails (e.g., API timeout or safety filter triggered), the system should retry Step 2, not restart the entire chain from Step 1."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "The 'God Prompt'. Stuffing 5 pages of instructions, 10 examples, and 3 different output formats into a single prompt. The LLM will experience 'Lost in the Middle' syndrome and ignore half your instructions."
+  - "Chaining without validation. If Step 1 hallucinates a fake fact, and you pass it to Step 2, Step 2 will confidently expand on that fake fact. You must validate the intermediate outputs."
+
+best_practices:
+  - "Enforce JSON output schemas (using function calling or structured outputs) for the intermediate steps so the programmatic pipeline can parse the data reliably between prompts."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Anthropic: Prompt Chaining"
+    url: "https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/chain-prompts"

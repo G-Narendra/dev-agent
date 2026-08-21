@@ -1,0 +1,105 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "strategic-alliances"
+display_name: "Strategic Partnerships & Channel Sales"
+description: >
+  Generates revenue through indirect channels. Builds integrations, 
+  co-marketing campaigns, and reseller agreements with massive tech giants 
+  (e.g., Salesforce, AWS) to draft off their audience and credibility.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "head-of-partnerships"
+phase: "growth"
+applicable_startups:
+  - B2B, SaaS, API-First
+priority: "high"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "We need to get on the Salesforce AppExchange."
+  - "How do we partner with AWS?"
+  - "Set up a reseller program."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Generate joint value proposition."
+  - "Draft channel partner SLA."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "target_partner"
+      type: "string"
+      description: "e.g., AWS, HubSpot, Deloitte."
+    - name: "partnership_type"
+      type: "string"
+      description: "Tech Integration vs Reseller/Agency."
+  optional:
+    - name: "revenue_share"
+      type: "string"
+      description: "What cut does the partner take?"
+      default: "20%"
+
+outputs:
+  files:
+    - path: "sales/partnerships/aws_alliance_strategy.md"
+      description: "The playbook for extracting value from the Goliath."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "N/A"
+manual:
+  - "Channel partnerships generate >15% of total company ARR, with a Customer Acquisition Cost (CAC) significantly lower than direct sales."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "The PR-Only Partnership Trap: Never sign a partnership if the only deliverable is 'We will put out a joint press release.' PR generates zero revenue. A real partnership has mutual revenue targets and a shared Slack channel."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Crossbeam / PartnerStack"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "The 'Better Together' Story"
+    tasks:
+      - "Before pitching HubSpot on an integration, you must prove why HubSpot's product is weak without you. 'HubSpot is great at email, but terrible at SMS. If we integrate, your customers won't churn to Competitor X.' Solve their pain."
+  - step: "Account Mapping"
+    tasks:
+      - "Use Crossbeam to securely compare your CRM data with your partner's CRM data. Find the 50 accounts that are using both tools, and co-sell to them immediately to prove the partnership works."
+  - step: "Enabling the Partner's Sales Team"
+    tasks:
+      - "A partnership is useless if the partner's Account Executives don't know you exist. You must bribe/incentivize them. Offer a $500 Amazon gift card (Spiff) to any AWS rep who brings you a qualified lead."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Wasting 6 months trying to partner with Google/Apple as a Seed-stage startup. Elephants do not dance with mice. Partner with companies that are only slightly larger than you until you have the leverage to negotiate with the giants."
+best_practices:
+  - "Build a 'Partner Portal'. Make it incredibly easy for agencies to register a deal, track their commission, and download sales collateral. If it's hard to sell your software, they will sell someone else's."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "PartnerStack: How to Build a Partner Program"
+    url: "https://partnerstack.com/"

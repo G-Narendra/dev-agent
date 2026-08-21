@@ -1,0 +1,114 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "retention-modeling"
+display_name: "Predictive Retention & At-Risk Modeling"
+description: >
+  Build behavioral models to identify 'at-risk' customers before they cancel. 
+  By tracking usage metrics (e.g., days since last login, drop in core action frequency), 
+  the analyst triggers automated or manual interventions to save the account.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "churn-analyst"
+phase: "growth"
+applicable_startups:
+  - all
+priority: "growth"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Identify users likely to churn."
+  - "Build an at-risk user model."
+  - "Who should customer success call today?"
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Create a SQL query to flag inactive accounts."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "usage_events"
+      type: "file"
+      description: "Log of user actions (e.g., logins, reports generated)."
+    - name: "historical_churn"
+      type: "file"
+      description: "Data on past churned users to establish the baseline behavior pattern."
+  optional:
+    - name: "core_value_action"
+      type: "string"
+      description: "The specific action that proves a user is getting value (e.g., 'sent_message')."
+      default: "login"
+
+outputs:
+  files:
+    - path: "analysis/at-risk-users.csv"
+      description: "List of user IDs with high probability of churning."
+  artifacts:
+    - "A rule-set defining exactly what constitutes an 'at-risk' user."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "The model successfully flags >70% of churned users as 'at-risk' at least 14 days before they cancel."
+  manual:
+    - "Customer Success managers trust the list and can successfully intervene with flagged accounts."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+
+safety_notes:
+  - "Do not send aggressive 'Why haven't you logged in?' emails to at-risk users. This often reminds them they are paying for a service they don't use, accelerating the cancellation."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "SQL + BI Tool (Metabase/Looker)"
+      install: "N/A"
+  alternatives:
+    - name: "Scikit-Learn (Python)"
+      when: "Volume is high enough (>100k users) to warrant a machine learning classification model (Random Forest / XGBoost) rather than simple SQL heuristics."
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Define the Red Flags"
+    tasks:
+      - "Analyze historical data to find the correlation between usage drops and churn (e.g., 'If a user doesn't log in for 14 days, they have an 80% chance of churning this month')."
+  - step: "Identify Core Actions"
+    tasks:
+      - "Do not just track 'logins'. Track the Core Value Action. If they log in but don't perform the core action, they are still at risk."
+  - step: "Create the Warning System"
+    tasks:
+      - "Write a daily SQL script or DBT model that flags users meeting the Red Flag criteria."
+  - step: "Intervention Routing"
+    tasks:
+      - "Route Enterprise accounts to Customer Success for a personal phone call."
+      - "Route SMB/Pro accounts to a specialized automated email sequence offering help or a training webinar."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Flagging users as 'at risk' 2 days before their renewal date. It is too late to intervene. The intervention must happen weeks earlier."
+  - "Building a complex ML model when a simple SQL rule (`WHERE days_since_last_login > 14`) is 90% as effective."
+
+best_practices:
+  - "The best intervention for an at-risk user is often proactive education ('Here is a new template you can use') rather than asking 'Are you going to churn?'"
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "HubSpot: Customer Health Scoring"
+    url: "https://blog.hubspot.com/service/customer-health-score"

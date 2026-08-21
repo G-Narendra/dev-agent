@@ -1,0 +1,102 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "technical-debt-management"
+display_name: "Technical Debt & Refactoring Strategy"
+description: >
+  Manages the intentional accumulation and paying down of technical debt. 
+  Ensures that the codebase does not degrade to the point where feature 
+  development grinds to a halt. Balances shipping speed with code quality.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "cto"
+phase: "operations"
+applicable_startups:
+  - all
+priority: "high"
+difficulty: "expert"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "The codebase is a mess."
+  - "Every time we add a feature, something breaks."
+  - "We need to refactor the monolith."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Audit code complexity."
+  - "Generate tech debt roadmap."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "pain_points"
+      type: "string"
+      description: "Which parts of the codebase are the slowest to work in?"
+  optional:
+    - name: "budget_allocation"
+      type: "string"
+      description: "Percentage of sprint allocated to tech debt."
+      default: "20%"
+
+outputs:
+  files:
+    - path: "engineering/architecture/tech-debt-log.md"
+      description: "Prioritized list of refactoring tasks."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "Cyclomatic complexity metrics decrease in the target refactored modules."
+manual:
+  - "Feature velocity (story points delivered per sprint) increases by 20% after the refactor."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "The 'Big Rewrite' Trap: Never pause feature development for 6 months to rewrite the entire application from scratch. You will lose your market share and the rewrite will likely fail."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "SonarQube / CodeClimate"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Identify High-Interest Debt"
+    tasks:
+      - "Not all ugly code needs to be fixed. If a module is ugly but hasn't been touched in 2 years and works perfectly, leave it alone. Only fix the ugly code that engineers have to modify every week (High-Interest Debt)."
+  - step: "The 20% Tax"
+    tasks:
+      - "Mandate that 20% of every sprint's capacity is dedicated purely to refactoring and paying down tech debt. Shield this 20% from the CEO and Product Managers."
+  - step: "The Boy Scout Rule"
+    tasks:
+      - "Enforce the rule: 'Always leave the campground cleaner than you found it.' When adding a feature to a file, refactor one small messy thing in that file before committing."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Refactoring without tests. If you change the internal structure of code without a robust test suite, you are not refactoring, you are just breaking things blindly."
+best_practices:
+  - "Strangler Fig Pattern: When replacing a legacy system, do not switch it out all at once. Build the new system alongside the old, and slowly route traffic over endpoint by endpoint."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Martin Fowler: Technical Debt Quadrant"
+    url: "https://martinfowler.com/bliki/TechnicalDebtQuadrant.html"

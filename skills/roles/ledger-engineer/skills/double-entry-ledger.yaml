@@ -1,0 +1,84 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "double-entry-ledger"
+display_name: "Double-Entry Ledger Systems"
+description: >
+  Builds and maintains financial ledger systems using double-entry accounting 
+  principles. Implements posting logic, balance computation, reconciliation 
+  engines, and audit trails. Critical for fintech and payment platforms.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "ledger-engineer"
+phase: "build"
+applicable_startups:
+  - fintech
+priority: "critical"
+difficulty: "expert"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Ledger Schema Design"
+    tasks:
+      - "Design journal entries table with debit/credit duality."
+      - "Implement account chart with proper hierarchy."
+  - step: "Balance Computation"
+    tasks:
+      - "Build real-time balance computation from journal entries."
+      - "Implement daily/weekly reconciliation snapshots."
+  - step: "Audit Trail"
+    tasks:
+      - "Make ledger entries immutable (append-only)."
+      - "Implement idempotency keys to prevent duplicate entries."
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Double Entry Ledger process"
+  - "How do I handle double entry ledger?"
+  - "Implement double entry ledger"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the double entry ledger process"
+  optional:
+    - name: "code_repository"
+      type: "string"
+      description: "Path to the code repository"
+      default: "./"
+
+outputs:
+  files:
+    - path: "outputs/double-entry-ledger.md"
+      description: "Results of the double entry ledger process"
+  artifacts:
+    - "Completed double entry ledger deliverable"
+# ── QUALITY GATES ────────────────────────────────────────────
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start — retrofitting is expensive."
+anti_patterns:
+  - "Allowing ledger entries to be mutated or deleted after posting — breaks audit trail integrity."
+  - "Computing balances from scratch on every read instead of maintaining running totals."
+  - "Skipping idempotency keys — duplicate transactions will cause reconciliation nightmares."
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

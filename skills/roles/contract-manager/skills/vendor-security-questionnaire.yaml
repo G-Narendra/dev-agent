@@ -1,0 +1,114 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "vendor-security-questionnaire"
+display_name: "Security Questionnaire Automation"
+description: >
+  Manage and automate the painful process of filling out 300-question Excel spreadsheets 
+  from Enterprise IT/Security teams. Translates the startup's actual security posture 
+  into standard compliance language (SOC2, ISO 27001).
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "contract-manager"
+phase: "growth"
+applicable_startups:
+  - b2b-saas
+  - enterprise
+priority: "critical"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "The client sent a security questionnaire."
+  - "How do we answer these IT questions?"
+  - "Fill out this vendor risk assessment."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Create a security knowledge base artifact."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "questionnaire_file"
+      type: "file"
+      description: "The Excel/CSV file from the client's IT department."
+    - name: "internal_security_policies"
+      type: "file"
+      description: "The startup's SOC2 report or internal infosec policies."
+  optional:
+    - name: "cloud_provider"
+      type: "string"
+      description: "AWS/GCP/Azure (many questions apply to the provider, not you)."
+      default: "AWS"
+
+outputs:
+  files:
+    - path: "sales/security/questionnaire-answers.md"
+      description: "The draft answers ready for review."
+  artifacts:
+    - "A mapped spreadsheet of standard security controls."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "N/A"
+  manual:
+    - "The client's InfoSec team approves the vendor without requiring custom engineering work."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+
+safety_notes:
+  - "Do not lie on a security questionnaire. It becomes a legally binding part of the contract. If you claim data is encrypted at rest and you are breached while it is plaintext, it is a breach of contract."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Vanta / Drata (Trust Centers)"
+      install: "N/A"
+  alternatives:
+    - name: "ConveyOR / Loopio"
+      when: "Need AI specifically trained to read spreadsheets and auto-fill answers from a knowledge base."
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Knowledge Base Construction"
+    tasks:
+      - "Create a central repository of the top 50 most common questions (e.g., 'Is data encrypted at rest?', 'Do you have a disaster recovery plan?', 'Is MFA enforced?')."
+  - step: "Cloud Provider Delegation"
+    tasks:
+      - "For physical security questions ('Are your server racks protected by biometric locks?'), point to your cloud provider's SOC2 report (e.g., 'We use AWS; physical security is managed by Amazon')."
+  - step: "Gap Analysis"
+    tasks:
+      - "If the client asks for a policy you don't have (e.g., 'Do you have a formal Incident Response Plan?'), flag this to engineering to create the policy rather than answering 'No'."
+  - step: "The 'Trust Center' Approach"
+    tasks:
+      - "Instead of answering custom spreadsheets, push clients to a public Trust Center (e.g., trust.yourstartup.com) where they can download your SOC2, Pen Test summaries, and standard policies under NDA."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Having the CTO manually fill out security questionnaires for every $10k deal. This is a massive waste of expensive engineering time. It must be delegated to Sales/RevOps using a knowledge base."
+  - "Answering 'N/A' without explanation. Always provide context (e.g., 'N/A - We process no PCI/credit card data, all payments are handled by Stripe')."
+
+best_practices:
+  - "Many enterprise security teams will accept a recent SOC 2 Type II report IN LIEU of a custom questionnaire. Always offer the SOC 2 report first before agreeing to do the spreadsheet."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Vanta: How to handle Security Questionnaires"
+    url: "https://www.vanta.com/resources/handling-security-questionnaires"

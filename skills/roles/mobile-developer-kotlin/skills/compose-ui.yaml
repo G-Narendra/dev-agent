@@ -1,0 +1,102 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "compose-ui"
+display_name: "Jetpack Compose UI Architecture"
+description: >
+  Builds modern, declarative Android UIs using Jetpack Compose. Leverages 
+  state hoisting, unidirectional data flow, and composable functions to create 
+  highly reactive and performant screens without the legacy XML view system.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "mobile-developer-kotlin"
+phase: "build"
+applicable_startups:
+  - all
+priority: "critical"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Build this screen in Compose."
+  - "Hoist the state out of this composable."
+  - "The UI is lagging when scrolling."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Generate Composable function."
+  - "Draft Compose preview."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "screen_name"
+      type: "string"
+      description: "E.g., DashboardScreen, LoginScreen."
+  optional:
+    - name: "ui_pattern"
+      type: "string"
+      description: "Material3 or Custom Design System."
+      default: "Material3"
+
+outputs:
+  files:
+    - path: "app/src/main/.../ui/DashboardScreen.kt"
+      description: "The declarative UI code."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "N/A"
+manual:
+  - "The Compose layout Inspector shows no unnecessary recompositions occurring during standard user interaction."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "Recomposition Hell: If you pass unstable objects (like standard Lists or classes with `var` properties) into a Composable, Compose will aggressively recompose the UI on every frame, destroying performance. Use Immutable data structures."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Jetpack Compose"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "State Hoisting"
+    tasks:
+      - "Make basic Composables 'Stateless'. Pass the state in as a parameter, and pass events out as lambda callbacks (e.g., `fun CustomButton(text: String, onClick: () -> Unit)`)."
+  - step: "ViewModel Integration"
+    tasks:
+      - "Connect Compose to your business logic using `collectAsState()` to observe flows emitted from the Android `ViewModel`."
+  - step: "LazyColumn Optimization"
+    tasks:
+      - "Never use a `Column` with a `forEach` loop to display 1,000 items. Always use a `LazyColumn` so items are only rendered when they enter the viewport."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Doing heavy computation (like sorting a list of 10,000 items) directly inside the Composable function. This blocks the UI thread during recomposition. Do it in the ViewModel."
+best_practices:
+  - "Provide multiple `@Preview` annotations on your Composables to test Dark Theme, Light Theme, and large font sizes instantly in the Android Studio preview pane."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Android: Thinking in Compose"
+    url: "https://developer.android.com/jetpack/compose/mental-model"

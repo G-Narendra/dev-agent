@@ -1,0 +1,79 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "executive-transition"
+display_name: "Executive Succession & Handoff Management"
+description: >
+  Identify high-potential internal candidates, manage the recruitment of external executives,
+  and orchestrate the transition of power without disrupting operations.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "succession-planner"
+phase: "growth"
+applicable_startups: 
+  - enterprise
+priority: "mvp"
+difficulty: "expert"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "The Bus Factor"
+    tasks:
+      - "Identify every 'Key Person' in the organization (the people who hold all the passwords and knowledge in their heads)."
+      - "Force them to document their processes immediately."
+  - step: "Successor Identification"
+    tasks:
+      - "Work with the Board to identify the exact profile required for the next CEO (e.g., transition from Product-visionary to Operations-expert)."
+  - step: "The Handoff"
+    tasks:
+      - "Structure a 6-month transition period where the outgoing executive acts as an advisor to the incoming executive."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Failing to prepare a successor, resulting in chaos and a massive drop in valuation when the founding CEO unexpectedly resigns due to burnout."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Executive Transition process"
+  - "How do I handle executive transition?"
+  - "Implement executive transition"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the executive transition process"
+  optional:
+    - name: "N/A"
+      type: "string"
+      description: "No optional inputs needed."
+
+outputs:
+  files:
+    - path: "outputs/executive-transition.md"
+      description: "Results of the executive transition process"
+  artifacts:
+    - "Completed executive transition deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

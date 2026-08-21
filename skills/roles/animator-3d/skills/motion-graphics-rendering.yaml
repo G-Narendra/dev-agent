@@ -1,0 +1,109 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "motion-graphics-rendering"
+display_name: "3D Motion Graphics & Product Renders"
+description: >
+  Designs and renders high-fidelity 3D motion graphics for product explainer 
+  videos, social media assets, and cinematic landing page hero sections. 
+  Focuses on lighting, materials, and camera work.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "animator-3d"
+phase: "growth"
+applicable_startups:
+  - hardware
+  - b2b-saas
+priority: "high"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Render the product video."
+  - "Create a 3D spinning logo."
+  - "Make an isometric 3D scene."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Set up render farm queue."
+  - "Compile image sequence to MP4."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "scene_file"
+      type: "file"
+      description: "The 3D project file (.blend, .c4d)."
+  optional:
+    - name: "resolution"
+      type: "string"
+      description: "Output resolution (e.g., 1080x1920 for TikTok, 4K for YouTube)."
+      default: "1920x1080"
+
+outputs:
+  files:
+    - path: "marketing/videos/product-explainer.mp4"
+      description: "The final rendered video."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "N/A"
+manual:
+  - "Lighting feels premium (e.g., Apple-style dramatic rim lighting) and materials look physically accurate."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+
+safety_notes:
+  - "Rendering 4K animations locally can lock up a machine for days. Use a cloud render farm or lower the sample count for preview drafts."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Blender (Cycles/Eevee)"
+      install: "N/A"
+  alternatives:
+    - name: "Cinema 4D + Octane"
+      when: "The industry standard for high-end abstract motion graphics."
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Scene Setup"
+    tasks:
+      - "Establish the 3-point lighting setup (Key, Fill, Rim). Use an HDRI for realistic environmental reflections on metal/glass surfaces."
+  - step: "Camera Animation"
+    tasks:
+      - "Animate the camera using smooth bezier curves. Apply depth of field (DoF) to draw the viewer's eye to the specific product feature."
+  - step: "Material Tuning"
+    tasks:
+      - "Ensure PBR (Physically Based Rendering) materials are used. Roughness maps are critical—nothing in the real world is perfectly smooth or perfectly reflective."
+  - step: "Compositing"
+    tasks:
+      - "Render out passes (Z-depth, Emission, Ambient Occlusion) and composite them together in After Effects or Blender Compositor to add glow, color grading, and motion blur."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Using harsh, un-softened point lights. It makes the render look like a 1990s video game. Use area lights or softboxes."
+best_practices:
+  - "Render animations as a PNG or EXR image sequence, NOT directly to MP4. If the render crashes at frame 500, you don't lose the first 499 frames."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Blender Cycles Render Engine"
+    url: "https://docs.blender.org/manual/en/latest/render/cycles/index.html"

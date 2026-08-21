@@ -1,0 +1,110 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "aws-compute-containers"
+display_name: "AWS Compute & Container Orchestration"
+description: >
+  Manages AWS compute resources including EC2, ECS, EKS, and Lambda. Designs
+  auto-scaling strategies, container orchestration with Fargate/EKS, and
+  chooses the right compute service for each workload.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "cloud-engineer-aws"
+phase: "build"
+applicable_startups:
+  - all
+priority: "mvp"
+difficulty: "expert"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Set up EC2 instances for our backend."
+  - "Deploy Docker containers on AWS."
+  - "Design auto-scaling strategy."
+  - "Should we use ECS or EKS?"
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Design EC2 auto-scaling group."
+  - "Configure ECS Fargate cluster."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "workload_type"
+      type: "string"
+      description: "Web servers, batch processing, background workers, or real-time."
+    - name: "expected_traffic"
+      type: "string"
+      description: "Requests per second and growth projections."
+  optional:
+    - name: "container_preference"
+      type: "string"
+      description: "ECS, EKS, or no preference."
+      default: "ECS Fargate (serverless containers)"
+
+outputs:
+  files:
+    - path: "infrastructure/aws/compute-architecture.md"
+      description: "Compute architecture with scaling strategy"
+  artifacts:
+    - "An auto-scaling compute cluster with cost projections"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Compute Service Selection"
+    tasks:
+      - "EC2: full control, reserved instances for predictable workloads, spot instances for batch."
+      - "ECS Fargate: serverless containers, no cluster management, good for microservices."
+      - "EKS: Kubernetes ecosystem, multi-cloud portability, higher operational overhead."
+      - "Lambda: event-driven, no infrastructure to manage, max 15 min execution, cost-effective for spiky workloads."
+  - step: "Auto-Scaling Configuration"
+    tasks:
+      - "Set up target tracking scaling policies based on CPU (70%) or memory (70%)."
+      - "Configure step scaling for predictable traffic patterns (e.g., scale up 2 instances at 9 AM)."
+      - "Set minimum (always available), maximum (cost cap), and desired capacity."
+      - "Use scheduled scaling for known events (product launches, marketing campaigns)."
+  - step: "Container Image Management"
+    tasks:
+      - "Store container images in Amazon ECR with lifecycle policies."
+      - "Tag images with Git commit hash for full traceability."
+      - "Scan images for vulnerabilities on push (ECR Enhanced Scanning)."
+      - "Use distroless or Alpine base images to minimize attack surface."
+  - step: "High Availability"
+    tasks:
+      - "Deploy compute across at least 3 Availability Zones."
+      - "Use ALB/NLB for traffic distribution with health checks."
+      - "Configure cross-zone load balancing for even traffic distribution."
+      - "Set up EC2 instance recovery (auto-replace failed instances)."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Using EC2 when Lambda or Fargate would be simpler and cheaper."
+  - "Running containers without health checks — they'll serve traffic while broken."
+  - "Over-provisioning 'just in case' — auto-scaling exists for a reason."
+  - "Manual instance management — everything should be auto-scaling."
+best_practices:
+  - "Start simple (Fargate/Lambda), migrate to EC2 or EKS only when you have a clear need."
+  - "Use EC2 Spot Instances for non-critical and batch workloads (up to 90% discount)."
+  - "Right-size EC2 instances using Compute Optimizer recommendations."
+  - "Use termination protection for stateful EC2 instances to prevent accidental deletion."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "AWS Documentation"
+    url: "https://docs.aws.amazon.com"
+  - title: "AWS Well-Architected Framework"
+    url: "https://aws.amazon.com/architecture/well-architected/"

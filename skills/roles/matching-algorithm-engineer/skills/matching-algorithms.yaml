@@ -1,0 +1,84 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "matching-algorithms"
+display_name: "Matching Algorithm Design & Optimization"
+description: >
+  Builds the algorithms that connect supply with demand in two-sided 
+  marketplaces. Specializes in recommendation systems, ranking models, 
+  personalization, and relevance scoring to maximize match quality.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "matching-algorithm-engineer"
+phase: "build"
+applicable_startups:
+  - marketplace
+  - ecommerce
+priority: "critical"
+difficulty: "expert"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Match Quality Definition"
+    tasks:
+      - "Define what constitutes a 'good match' for your marketplace."
+      - "Collect implicit and explicit feedback signals."
+  - step: "Ranking Model"
+    tasks:
+      - "Build a ranking model that personalizes results per user."
+      - "Consider price, distance, rating, availability, and user preferences."
+  - step: "A/B Testing"
+    tasks:
+      - "Set up A/B testing framework for match quality experiments."
+      - "Track conversion rate, engagement, and user satisfaction per variant."
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Matching Algorithms process"
+  - "How do I handle matching algorithms?"
+  - "Implement matching algorithms"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the matching algorithms process"
+  optional:
+    - name: "N/A"
+      type: "string"
+      description: "No optional inputs needed."
+
+outputs:
+  files:
+    - path: "outputs/matching-algorithms.md"
+      description: "Results of the matching algorithms process"
+  artifacts:
+    - "Completed matching algorithms deliverable"
+# ── QUALITY GATES ────────────────────────────────────────────
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start — retrofitting is expensive."
+anti_patterns:
+  - "Optimizing for engagement metrics that don't correlate with user satisfaction."
+  - "Using implicit signals alone without any explicit feedback mechanism."
+  - "Deploying a new ranking model without A/B testing against the current baseline."
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

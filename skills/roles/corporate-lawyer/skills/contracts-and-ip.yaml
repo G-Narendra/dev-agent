@@ -1,0 +1,78 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "contracts-and-ip"
+display_name: "Corporate Contracts & IP Management"
+description: >
+  Draft standard B2B SaaS contracts, protect trademarks/patents, and manage the 
+  legal risk exposure of the startup.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "corporate-lawyer"
+phase: "operations"
+applicable_startups: 
+  - all
+priority: "high"
+difficulty: "expert"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "MSA and SLA"
+    tasks:
+      - "Draft a standard Master Services Agreement (MSA) with a strict limitation of liability clause capped at the total fees paid in the last 12 months."
+  - step: "IP Protection"
+    tasks:
+      - "File trademarks for the company name and core product names with the USPTO to prevent competitor spoofing."
+  - step: "Employment Agreements"
+    tasks:
+      - "Ensure all global contractors sign PIIA (Proprietary Information and Inventions Assignment) agreements guaranteeing the startup owns the code they write."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Agreeing to an enterprise customer's custom MSA that includes an uncapped indemnification clause, putting the entire startup's existence at risk over a single data breach."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Contracts And Ip process"
+  - "How do I handle contracts and ip?"
+  - "Implement contracts and ip"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the contracts and ip process"
+  optional:
+    - name: "N/A"
+      type: "string"
+      description: "No optional inputs needed."
+
+outputs:
+  files:
+    - path: "outputs/contracts-and-ip.md"
+      description: "Results of the contracts and ip process"
+  artifacts:
+    - "Completed contracts and ip deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

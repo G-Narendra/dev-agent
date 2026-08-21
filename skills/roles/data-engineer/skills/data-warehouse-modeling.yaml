@@ -1,0 +1,105 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "data-warehouse-modeling"
+display_name: "Data Warehouse Schema Modeling (Kimball)"
+description: >
+  Designs the analytical schema for a Data Warehouse using Kimball Dimensional 
+  Modeling (Star Schema). Separates Fact tables (metrics) from Dimension tables 
+  (attributes) to optimize for fast, intuitive BI querying.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "data-engineer"
+phase: "planning"
+applicable_startups:
+  - all
+priority: "critical"
+difficulty: "expert"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Design the analytics database."
+  - "How should we structure Snowflake?"
+  - "Build a Star Schema."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Generate DDL statements."
+  - "Map ERD for data warehouse."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "business_process"
+      type: "string"
+      description: "E.g., E-commerce checkouts, SaaS subscriptions."
+  optional:
+    - name: "modeling_technique"
+      type: "string"
+      description: "Kimball, Inmon, Data Vault."
+      default: "Kimball (Star Schema)"
+
+outputs:
+  files:
+    - path: "data/schema/star-schema.md"
+      description: "The documentation of Facts and Dimensions."
+  artifacts:
+    - "Mermaid ERD Diagram."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "N/A"
+manual:
+  - "A Business Analyst can answer 'How much revenue did we make in Europe last month?' with a single, simple SQL JOIN."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "Do not directly replicate the production application database schema (3NF) into the BI tool. Application databases are optimized for fast writes; data warehouses must be optimized for fast reads."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Snowflake / BigQuery"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Identify the Business Process"
+    tasks:
+      - "Select the process to model first (e.g., Subscription Renewals). Declare the 'Grain' (the lowest level of detail, e.g., 'One row per line item per invoice')."
+  - step: "Identify the Dimensions (Context)"
+    tasks:
+      - "Create Dimension tables (`dim_user`, `dim_product`, `dim_date`). These contain descriptive, textual attributes that you want to filter or group by."
+  - step: "Identify the Facts (Metrics)"
+    tasks:
+      - "Create Fact tables (`fct_invoice_line_items`). These contain foreign keys to the dimensions, and measurable, additive numbers (e.g., `amount_paid`, `tax_amount`)."
+  - step: "Slowly Changing Dimensions (SCD)"
+    tasks:
+      - "Implement SCD Type 2 for dimensions where history matters. If a user changes their state from CA to NY, create a new row with `valid_from` and `valid_to` timestamps so historical reports remain accurate."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Putting descriptive text (like User's Full Name) directly into a Fact table. Fact tables should be extremely narrow (just IDs and numbers) to save space and scan time."
+best_practices:
+  - "Always use a surrogate key (an auto-incrementing integer or hash generated in the warehouse) as the primary key for dimension tables, rather than the natural ID from the source system."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Kimball Dimensional Modeling Techniques"
+    url: "https://www.kimballgroup.com/data-warehouse-business-intelligence-resources/kimball-techniques/dimensional-modeling-techniques/"

@@ -1,0 +1,115 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "monitoring-alerting"
+display_name: "Monitoring, Metrics & Alerting Systems"
+description: >
+  Designs and implements comprehensive monitoring and alerting for production
+  systems. Covers infrastructure metrics, application performance monitoring
+  (APM), log aggregation, distributed tracing, and intelligent alerting.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "sre-engineer"
+phase: "ship"
+applicable_startups:
+  - all
+priority: "mvp"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Set up monitoring for our services."
+  - "Design alerting strategy."
+  - "We need better observability."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Configure monitoring stack."
+  - "Design alerting thresholds."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "service_list"
+      type: "string"
+      description: "Services and infrastructure to monitor."
+    - name: "critical_metrics"
+      type: "string"
+      description: "Key performance and health indicators."
+  optional:
+    - name: "monitoring_stack"
+      type: "string"
+      description: "Datadog, Grafana/Prometheus, New Relic, or Sentry."
+      default: "Grafana + Prometheus"
+
+outputs:
+  files:
+    - path: "devops/monitoring/monitoring-architecture.md"
+      description: "Monitoring architecture and alerting rules"
+  artifacts:
+    - "A fully configured monitoring stack with actionable alerts"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Metrics Collection"
+    tasks:
+      - "Instrument the four golden signals: latency, traffic, errors, and saturation."
+      - "Collect infrastructure metrics: CPU, memory, disk, network across all nodes."
+      - "Collect application metrics: request rate, error rate, p50/p95/p99 latency, queue depth."
+      - "Collect business metrics: signups, orders, active users correlated with system health."
+  - step: "Log Aggregation"
+    tasks:
+      - "Set up centralized log collection from all services and infrastructure."
+      - "Use structured logging (JSON format) for machine-parsable logs."
+      - "Define log retention policies: 7 days for debug, 30 days for info, 1 year for audit."
+      - "Create log-based metrics and alerts for patterns that indicate problems."
+  - step: "Distributed Tracing"
+    tasks:
+      - "Instrument all services with distributed tracing (OpenTelemetry)."
+      - "Trace requests across service boundaries to identify bottlenecks."
+      - "Set up trace sampling: 100% for critical paths, 1-5% for others."
+      - "Create trace-to-log correlation for seamless debugging."
+  - step: "Alerting Strategy"
+    tasks:
+      - "Define alert rules aligned with SLOs — alert when you're about to burn your error budget."
+      - "Use alert severity: P0 (page), P1 (Slack), P2 (ticket), P3 (dashboard)."
+      - "Avoid alert fatigue — every alert should require human action or decision."
+      - "Set up alert routing based on severity and service ownership."
+  - step: "Dashboards & Visualization"
+    tasks:
+      - "Create service-level dashboards showing the four golden signals."
+      - "Create business impact dashboards correlating system health with user experience."
+      - "Set up 'wall of screens' dashboards for the team's daily standup."
+      - "Design dashboards for different audiences: engineering, management, support."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Alerting on every CPU spike — most metrics need no human action."
+  - "Dashboards with no context — a red number without knowing what 'good' looks like."
+  - "Not monitoring synthetic user journeys — the only thing that matters is user experience."
+  - "Ignoring cost of monitoring — over-instrumenting can increase latency and cost."
+best_practices:
+  - "Monitor symptoms (user-facing issues), not causes (infrastructure blips)."
+  - "Alerts should be actionable, urgent, and rare — if you ignore them, they're not useful."
+  - "Start with the user's perspective — if the user is happy, small infrastructure issues don't matter."
+  - "Design dashboards for decision-making, not data collection."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

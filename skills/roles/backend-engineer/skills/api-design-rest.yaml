@@ -1,0 +1,121 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "api-design-rest"
+display_name: "REST API Architecture & Design"
+description: >
+  Design robust, scalable, and versioned RESTful APIs using standard HTTP verbs, 
+  status codes, and JSON payloads. Ensures the API contract is secure, predictable, 
+  and developer-friendly for frontend and mobile clients.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "backend-engineer"
+phase: "build"
+applicable_startups: 
+  - all
+priority: "critical"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Design the REST API for..."
+  - "Create the OpenAPI spec for..."
+  - "How should we structure the backend endpoints?"
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "spectral lint openapi.yaml"
+  - "swagger-cli validate swagger.json"
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "database_schema"
+      type: "file"
+      description: "The ERD or Prisma schema defining the domain models."
+  optional:
+    - name: "openapi_version"
+      type: "string"
+      description: "The version of the OpenAPI spec to target."
+      default: "3.0.0"
+
+outputs:
+  files:
+    - path: "docs/openapi.yaml"
+      description: "The complete API contract defining all endpoints, payloads, and auth."
+  artifacts:
+    - "A Postman/Insomnia collection for testing the endpoints."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "OpenAPI linter passes with 0 errors (e.g., all endpoints have descriptions)."
+    - "All endpoints return proper HTTP 4xx/5xx status codes for failures, not 200 OK."
+  manual:
+    - "The frontend engineering team can successfully generate their TypeScript types from the spec."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+  - "read access to database schemas"
+
+safety_notes:
+  - "Never expose internal database IDs (auto-incrementing integers) in public APIs; use UUIDs or CUIDs to prevent Insecure Direct Object Reference (IDOR)."
+  - "Ensure all endpoints implicitly require authentication unless explicitly marked public."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Stoplight Spectral"
+      install: "npm install -g @stoplight/spectral-cli"
+  alternatives:
+    - name: "Swagger UI"
+      when: "Need a visual interface for non-technical stakeholders to review the API."
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Resource Naming"
+    tasks:
+      - "Use plural nouns for resource paths (e.g., `/users`, not `/user` or `/getUsers`)."
+      - "Nest resources only one level deep (e.g., `/users/123/orders`). Do not nest further (e.g., avoid `/users/123/orders/456/items`)."
+  - step: "Idempotency & Methods"
+    tasks:
+      - "Use `POST` strictly for resource creation (non-idempotent)."
+      - "Use `PUT` for full replacements and `PATCH` for partial updates (idempotent)."
+      - "Use `DELETE` for soft/hard deletions."
+  - step: "Pagination & Filtering"
+    tasks:
+      - "Implement cursor-based pagination (`?limit=50&cursor=abc`) for high-volume endpoints to prevent massive database offset queries."
+  - step: "Error Handling Structure"
+    tasks:
+      - "Standardize the error response format across the entire API: `{ error: { code: 'VALIDATION_FAILED', message: '...', details: [...] } }`."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Returning HTTP 200 OK for every single response, even when an error occurred, forcing the client to parse `{ status: 'error' }`."
+  - "Exposing sensitive fields like `password_hash` or `stripe_customer_id` in the JSON response of a `GET /users` endpoint."
+  - "Changing the JSON response structure of a live endpoint without bumping the API version (e.g., `/v1/` to `/v2/`), instantly breaking all mobile clients."
+
+best_practices:
+  - "Use API versioning in the URL path (`/api/v1/resource`) from Day 1."
+  - "Provide a unique `request_id` header in every response to trace errors in logs."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Zalando RESTful API Guidelines"
+    url: "https://opensource.zalando.com/restful-api-guidelines/"
+  - title: "Stripe API Design"
+    url: "https://stripe.com/docs/api"

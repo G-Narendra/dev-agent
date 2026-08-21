@@ -1,0 +1,114 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "llm-cost-optimization"
+display_name: "LLM Cost & Latency Optimization"
+description: >
+  Optimizes LLM API costs and response latency for production applications.
+  Covers caching strategies, token reduction, model routing, batch processing,
+  and infrastructure choices to minimize per-query costs while maintaining
+  quality.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "llm-engineer"
+phase: "build"
+applicable_startups:
+  - ai
+priority: "growth"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "LLM costs are too high."
+  - "We need to reduce API spending."
+  - "Optimize our LLM latency."
+  - "Reduce token usage in production."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Analyze token usage patterns."
+  - "Implement LLM caching."
+  - "Set up model routing."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "current_usage"
+      type: "file"
+      description: "Current LLM API usage logs or cost data."
+  optional:
+    - name: "monthly_budget"
+      type: "string"
+      description: "Target monthly LLM budget."
+      default: "10% reduction from current"
+
+outputs:
+  files:
+    - path: "ai/llm/cost-optimization-plan.md"
+      description: "Cost optimization strategy with projected savings"
+  artifacts:
+    - "A cost-optimized LLM pipeline with monitoring dashboards"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Usage Analysis"
+    tasks:
+      - "Analyze current token usage patterns: peak hours, most expensive queries, prompt vs. completion split."
+      - "Identify high-cost, low-value queries that can be optimized or eliminated."
+      - "Calculate cost per user and cost per query to identify outliers."
+  - step: "Caching Strategy"
+    tasks:
+      - "Implement semantic caching — cache responses for semantically similar queries."
+      - "Set up TTL-based caching for frequently asked questions."
+      - "Use hash-based exact-match caching for identical repeated queries."
+      - "Cache common prefix prompts to reduce prompt tokens."
+  - step: "Token Reduction"
+    tasks:
+      - "Optimize system prompts — shorter, more efficient prompts with same quality."
+      - "Implement dynamic context windowing — only include relevant context."
+      - "Use structured outputs (JSON mode) to reduce verbose completions."
+      - "Summarize and compress long conversation histories before re-injection."
+  - step: "Smart Model Routing"
+    tasks:
+      - "Route simple queries to cheaper/faster models (GPT-4o-mini, Claude Haiku)."
+      - "Only use expensive models (GPT-4o, Claude Opus) for complex reasoning tasks."
+      - "Implement fallback chains: try cheap model first, escalate if needed."
+      - "Use batch processing APIs for non-real-time workloads (50% cost reduction)."
+  - step: "Infrastructure Optimization"
+    tasks:
+      - "Evaluate self-hosting for high-volume use cases (vLLM, TGI, Ollama)."
+      - "Compare API providers and choose the most cost-effective for each use case."
+      - "Set up cost alerts and budgets to prevent bill shock."
+      - "Negotiate volume discounts for high-usage API accounts."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Aggressively cutting costs without measuring quality impact."
+  - "Using caching without invalidation strategy — serving stale responses."
+  - "Over-optimizing before reaching product-market fit."
+  - "Ignoring context caching features provided by the API provider."
+best_practices:
+  - "Track cost per unit of value (e.g., cost per resolved support ticket, not just cost per query)."
+  - "Implement gradual model downgrading — try cheaper model, verify quality, iterate."
+  - "Monitor both cost AND quality metrics — they trade off against each other."
+  - "Cache aggressively for deterministic use cases (classification, extraction)."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "OpenAI Cost Optimization Guide"
+    url: "https://platform.openai.com/docs/guides/optimizing-llm-accuracy"
+  - title: "Semantic Caching with GPTCache"
+    url: "https://github.com/zilliztech/GPTCache"

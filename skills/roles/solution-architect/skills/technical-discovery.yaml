@@ -1,0 +1,109 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "technical-discovery"
+display_name: "Technical Discovery & Requirements Gathering"
+description: >
+  Leads technical discovery sessions with enterprise prospects to understand
+  their infrastructure, integration requirements, security policies, and
+  success criteria.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "solution-architect"
+phase: "growth"
+applicable_startups:
+  - all
+priority: "mvp"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run a technical discovery session."
+  - "Understand the prospect's infrastructure."
+  - "Gather enterprise requirements."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Prepare discovery questionnaire."
+  - "Conduct technical discovery session."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "prospect_name"
+      type: "string"
+      description: "Company name of the prospect."
+    - name: "product_capabilities"
+      type: "string"
+      description: "What your product does and its technical requirements."
+  optional:
+    - name: "existing_contacts"
+      type: "string"
+      description: "Known contacts at the prospect."
+      default: "Unknown"
+
+outputs:
+  files:
+    - path: "sales/discovery/{prospect}-technical-discovery.md"
+      description: "Technical discovery summary and requirements document"
+  artifacts:
+    - "A complete technical requirements document for the prospect"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Pre-Discovery Preparation"
+    tasks:
+      - "Research the prospect: industry, size, tech stack (BuiltWith, Wappalyzer), recent funding/events."
+      - "Prepare a discovery questionnaire: infrastructure, security requirements, integration needs, team structure."
+      - "Identify the decision makers and their technical sophistication level."
+      - "Prepare a discovery agenda and share it with the prospect in advance."
+  - step: "Infrastructure & Security Assessment"
+    tasks:
+      - "Ask about their cloud provider, on-premise systems, database types, and middleware."
+      - "Understand their identity provider (Okta, Azure AD, OneLogin) for SSO requirements."
+      - "Assess their security requirements: SOC2, HIPAA, PCI, GDPR, data residency."
+      - "Map their network topology — how does data flow between systems?"
+  - step: "Integration Mapping"
+    tasks:
+      - "Identify all systems that need to integrate with your product."
+      - "Map data flow directions: which systems send data, receive data, or both?"
+      - "Determine integration frequency: real-time, batch daily, or event-driven?"
+      - "Identify data format requirements: JSON, XML, CSV, EDI, or custom?"
+  - step: "Requirements Documentation"
+    tasks:
+      - "Document technical requirements categorized by: must-have, nice-to-have, future."
+      - "Identify potential blockers: unsupported platforms, compliance gaps, performance concerns."
+      - "Create a technical requirements document shared with both teams."
+      - "Get sign-off on the requirements before starting any integration work."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Asking technical questions too early — build rapport before diving into details."
+  - "Not involving the prospect's InfoSec team early — they'll block the deal later."
+  - "Assuming their tech stack is modern — many enterprises run legacy systems."
+  - "Skipping discovery and going straight to demo — the demo won't address their specific needs."
+best_practices:
+  - "The best discovery sessions are 70% listening, 30% presenting."
+  - "Bring a technical notebook — writing things down shows you take them seriously."
+  - "Identify the 'blocker' early — the one technical requirement that could kill the deal."
+  - "Send a discovery summary within 24 hours while the conversation is fresh."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

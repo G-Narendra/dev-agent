@@ -1,0 +1,145 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "getdesign-library"
+display_name: "GetDesign.md — Iconic Design System Library"
+description: >
+  Leverages the curated collection of 300+ DESIGN.md files from getdesign.md 
+  (and its backing awesome-design-md GitHub repo) to instantly replicate the 
+  visual design language of iconic websites (Stripe, Linear, Airbnb, Superhuman, 
+  etc.). Instead of hand-prompting a design style, drop an existing DESIGN.md 
+  into your project for pixel-perfect, AI-compatible design tokens.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "utility"
+phase: "all"
+applicable_startups:
+  - all
+priority: "high"
+difficulty: "beginner"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Make it look like Stripe."
+  - "Give it a Linear-style UI."
+  - "I want Airbnb's design language."
+  - "Replicate Superhuman's typography."
+  - "Find a design system for a B2B SaaS."
+  - "Get me a DESIGN.md file for [website name]."
+  - "I need design inspiration from iconic apps."
+  - "Apply a professional design system to this project."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Browse getdesign.md for a relevant design system."
+  - "Download a DESIGN.md file and inject into project root."
+  - "Extract color palette, typography, spacing, and elevation tokens."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "target_style"
+      type: "string"
+      description: "The iconic website or app whose design you want to emulate (e.g., 'Linear', 'Stripe', 'Notion', 'Superhuman', 'Arc Browser')."
+  optional:
+    - name: "output_path"
+      type: "string"
+      description: "Where to save the DESIGN.md file in the project."
+      default: "./DESIGN.md"
+    - name: "custom_url"
+      type: "string"
+      description: "Direct URL to a specific DESIGN.md file from getdesign.md or the awesome-design-md GitHub repo."
+      default: ""
+
+outputs:
+  files:
+    - path: "DESIGN.md"
+      description: "A full design system specification file that AI agents can read to maintain visual consistency."
+  artifacts:
+    - "CSS custom properties (--color-primary, --font-sans, --space-md, etc.)"
+    - "Component-level design tokens (border-radius, shadow-elevation, etc.)"
+    - "Typography scale and hierarchy mapping"
+    - "Color palette with hex codes and usage guidelines"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "The DESIGN.md file is present at the project root."
+    - "The design tokens extracted from the file are usable as CSS variables."
+  manual:
+    - "The generated UI is visually reminiscent of the target website."
+    - "Developers not involved in the design process can produce visually consistent components using only the DESIGN.md."
+    - "The design system is coherent — colors, typography, and spacing work together harmoniously."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "network"
+  - "filesystem"
+
+safety_notes:
+  - "DESIGN.md files from getdesign.md are NOT official design systems. They are community-created analyses of publicly visible patterns. Never claim affiliation with the original brand."
+  - "These files are meant as a starting reference — always customize colors and tokens to fit your specific brand identity. Don't ship a carbon copy of Stripe's UI."
+  - "If the target website has no DESIGN.md available on getdesign.md, create your own by analyzing the site's publicly visible CSS and design patterns."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "GetDesign.md Website"
+      url: "https://getdesign.md/"
+      description: "Browse 300+ curated DESIGN.md files with search and filtering."
+  secondary:
+    - name: "awesome-design-md (GitHub)"
+      url: "https://github.com/voltagent/awesome-design-md"
+      description: "The open-source GitHub repo backing getdesign.md — browse files directly."
+  alternatives:
+    - name: "Custom DESIGN.md request"
+      url: "https://getdesign.md/"
+      description: "Pay to get a private, custom DESIGN.md analysis for any website."
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Find the Right Design System"
+    tasks:
+      - "Open https://getdesign.md/ and browse the collection."
+      - "Search for the target website name (e.g., 'Linear', 'Stripe', 'Notion', 'Airbnb')."
+      - "If available, use the direct download link. If not available on getdesign.md, check the GitHub repo at https://github.com/voltagent/awesome-design-md."
+      - "If still not found, offer to create a custom DESIGN.md by manually analyzing the target's publicly visible design patterns."
+  - step: "Inject the DESIGN.md into Your Project"
+    tasks:
+      - "Download or copy the DESIGN.md file."
+      - "Place it at the project root as `DESIGN.md`."
+      - "If the AI agent supports reading DESIGN.md automatically, the file is already active."
+  - step: "Extract Design Tokens"
+    tasks:
+      - "Read the DESIGN.md and extract the following token categories:"
+      - "  • Color palette (primary, secondary, accent, neutral, success, warning, error)"
+      - "  • Typography (font families, weights, sizes, line heights, letter-spacing)"
+      - "  • Spacing scale (4px/8px/12px/16px/24px/32px/48px/64px grid)"
+      - "  • Border radius values"
+      - "  • Shadow/elevation system"
+      - "  • Animation timing and easing curves"
+      - "Convert these into CSS custom properties or framework-specific tokens (Tailwind config, theme.json, etc.)."
+  - step: "Apply Across Components"
+    tasks:
+      - "Use the extracted design tokens in every component you build."
+      - "Refer back to the DESIGN.md whenever making layout, color, or typography decisions."
+      - "Ensure responsive breakpoints are consistent with the design system's intent."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Copying a DESIGN.md verbatim without customizing the brand name, logo, or identity to your own startup. The design should inspire, not impersonate."
+  - "Using only one design system for an entire product without adaptation. Different product surfaces (landing page, dashboard, mobile) may need different approaches."
+  - "Relying solely on DESIGN.md for complex interactions — these files describe visual design, not interaction patterns or user flows."
+
+best_practices:
+  - "Use DESIGN.md files as a 'design north star' — paste the file path into your AI agent prompt so it knows the exact design language to follow."
+  - "Combine elements from multiple DESIGN.md files if your product has a unique identity. E.g., Linear's typography + Stripe's color palette + Notion's spacing."
+  - "Always include the DESIGN.md in your git repo so all team members and AI agents reference the same design language."
+  - "For AI coding agents: add a comment at the top of your main CSS file: `/* Design System: See DESIGN.md at project root */`"
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "GetDesign.md — Browse DESIGN.md Files"
+    url: "https://getdesign.md/"
+  - title: "awesome-design-md GitHub Repository"
+    url: "https://github.com/voltagent/awesome-design-md"
+  - title: "GetDesign.md — About Page"
+    url: "https://getdesign.md/about"

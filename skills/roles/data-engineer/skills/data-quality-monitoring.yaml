@@ -1,0 +1,112 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "data-quality-monitoring"
+display_name: "Data Quality & Anomaly Detection"
+description: >
+  Ensure the data in the warehouse is accurate, fresh, and trustworthy. 
+  Implements automated testing on data pipelines (dbt tests, Great Expectations) 
+  to catch silent failures before they ruin financial reports.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "data-engineer"
+phase: "operations"
+applicable_startups:
+  - all
+priority: "high"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "The dashboard looks wrong."
+  - "Set up data quality tests."
+  - "Why is the revenue negative?"
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "dbt test --select source:stripe"
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "critical_tables"
+      type: "string"
+      description: "The Gold-tier tables that power executive dashboards."
+  optional:
+    - name: "testing_framework"
+      type: "string"
+      description: "dbt tests vs Great Expectations."
+      default: "dbt tests"
+
+outputs:
+  files:
+    - path: "data/dbt/models/schema.yml"
+      description: "The configured data tests."
+  artifacts:
+    - "An alert policy for failed data tests."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "Pipeline execution halts automatically if a primary key uniqueness test fails."
+  manual:
+    - "Data engineers are notified of a broken data pipeline *before* the CEO complains about a broken dashboard."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+
+safety_notes:
+  - "Do not alert the entire engineering team for every minor data anomaly. Alert fatigue will set in, and people will ignore the critical alerts (e.g., 'Total Daily Revenue = $0')."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "dbt tests"
+      install: "N/A"
+  alternatives:
+    - name: "Monte Carlo / Great Expectations"
+      when: "Need complex anomaly detection (e.g., 'Volume dropped by 30% compared to a 6-week moving average') without writing custom SQL."
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Fundamental Assertions (dbt tests)"
+    tasks:
+      - "Uniqueness: Test that Primary Keys (e.g., `user_id`) are actually unique."
+      - "Not Null: Test that critical fields (e.g., `revenue`, `email`) are never null."
+      - "Accepted Values: Test that status columns only contain expected values (e.g., `status IN ('pending', 'paid', 'failed')`)."
+  - step: "Freshness Tracking"
+    tasks:
+      - "Configure dbt source freshness tests. If the 'Stripe Payments' table hasn't received new rows in 24 hours, fire a Sev2 alert. The extraction pipeline is likely silently broken."
+  - step: "Referential Integrity"
+    tasks:
+      - "If the `orders` table references a `user_id`, run a test ensuring that `user_id` actually exists in the `users` table."
+  - step: "Circuit Breakers"
+    tasks:
+      - "If a critical data test fails, STOP the pipeline. Do not push bad data to the Gold tier and corrupt the BI dashboards. It is better to have stale data than mathematically incorrect data."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Silent failures. The extraction script fails on a Friday, no one notices, and on Monday the CFO reports terrible weekend sales because the data simply wasn't loaded."
+  - "Testing every single column. Focus tests on the columns that are actually used in BI dashboards or machine learning models."
+
+best_practices:
+  - "Treat Data like Code. Data pipelines must go through Pull Requests, CI/CD testing, and staging environments before running in production."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "dbt: Testing Data"
+    url: "https://docs.getdbt.com/docs/build/data-tests"

@@ -1,0 +1,82 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "experimental-design"
+display_name: "Scientific Experimental Design & Validation"
+description: >
+  Design statistically sound experiments, manage laboratory execution, and analyze 
+  complex datasets to validate the startup's core technological claims.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "r-d-scientist"
+phase: "ideation"
+applicable_startups: 
+  - biotech
+  - deeptech
+priority: "mvp"
+difficulty: "expert"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Hypothesis Formulation"
+    tasks:
+      - "Define a clear, falsifiable hypothesis."
+      - "Identify and control all confounding variables in the experimental setup."
+  - step: "Execution & Documentation"
+    tasks:
+      - "Execute the protocol adhering strictly to GLP (Good Laboratory Practice)."
+      - "Log all raw data immediately into the Electronic Lab Notebook (ELN)."
+  - step: "Analysis"
+    tasks:
+      - "Perform statistical significance testing (e.g., ANOVA, t-tests) to ensure the results aren't random noise."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Failing to run adequate negative controls, resulting in 'breakthrough' data that is actually just contamination."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Experimental Design process"
+  - "How do I handle experimental design?"
+  - "Implement experimental design"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the experimental design process"
+  optional:
+    - name: "data_source"
+      type: "string"
+      description: "Source of data to analyze"
+      default: "Internal data"
+
+outputs:
+  files:
+    - path: "outputs/experimental-design.md"
+      description: "Results of the experimental design process"
+  artifacts:
+    - "Completed experimental design deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

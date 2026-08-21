@@ -1,0 +1,78 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "design-system-principles"
+display_name: "Design System & UI Principles"
+description: >
+  Establish a strict, tokenized design system (colors, spacing, typography) to 
+  ensure absolute visual consistency across the entire application.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "interaction-designer"
+phase: "build"
+applicable_startups: 
+  - all
+priority: "high"
+difficulty: "advanced"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Design Tokens"
+    tasks:
+      - "Never hardcode HEX values. Define a strict semantic token system (e.g., `--color-primary-500`, `--spacing-md`) in Figma and export them directly to CSS/Tailwind variables."
+  - step: "The 8pt Grid"
+    tasks:
+      - "Enforce an 8pt spacing system. Every margin, padding, and height must be a multiple of 8 (8, 16, 24, 32, 40) to maintain vertical rhythm."
+  - step: "Accessibility Contrast"
+    tasks:
+      - "Ensure all text-to-background color combinations pass WCAG AA standards (minimum 4.5:1 contrast ratio) so visually impaired users can read the UI."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Allowing developers to use 15 different shades of 'blue' across the application because there is no centralized color palette token file."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Design System Principles process"
+  - "How do I handle design system principles?"
+  - "Implement design system principles"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the design system principles process"
+  optional:
+    - name: "N/A"
+      type: "string"
+      description: "No optional inputs needed."
+
+outputs:
+  files:
+    - path: "outputs/design-system-principles.md"
+      description: "Results of the design system principles process"
+  artifacts:
+    - "Completed design system principles deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

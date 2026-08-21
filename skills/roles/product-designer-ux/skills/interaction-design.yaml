@@ -1,0 +1,109 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "interaction-design"
+display_name: "Interaction Design & Micro-Interactions"
+description: >
+  Designs the behavior of interactive elements — how users interact with the
+  product and how the product responds. Covers micro-interactions, animations,
+  transitions, gestures, and feedback systems that make the product feel alive.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "product-designer-ux"
+phase: "planning"
+applicable_startups:
+  - all
+priority: "medium"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Design the interactions for this feature."
+  - "How should this animation work?"
+  - "Plan micro-interactions."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Design interaction flows."
+  - "Specify micro-interactions."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "feature_spec"
+      type: "string"
+      description: "Description of the feature and its user goals."
+    - name: "wireframes"
+      type: "file"
+      description: "Wireframes or mockups showing the screens involved."
+  optional:
+    - name: "interaction_pattern"
+      type: "string"
+      description: "Native, web, or hybrid interaction patterns."
+      default: "web"
+
+outputs:
+  files:
+    - path: "design/interactions/{feature}-interaction-spec.md"
+      description: "Interaction design specification"
+  artifacts:
+    - "An interaction specification ready for development handoff"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "User Flow Mapping"
+    tasks:
+      - "Map the complete user flow step-by-step, including all branches and edge cases."
+      - "Identify where users need feedback: loading, success, error, empty states."
+      - "Design for each state: default, hover, active, focus, disabled, loading, error, empty."
+      - "Account for gestures (mobile): tap, swipe, pinch, long-press, shake."
+  - step: "Feedback Design"
+    tasks:
+      - "Design instant feedback for every user action (within 100ms for tactile feel)."
+      - "Use micro-interactions: button press effects, toggle switches, checkmark animations."
+      - "Design progress indicators for actions taking >300ms (skeleton screens > spinners)."
+      - "Create error states that guide users to recovery, not just show a red message."
+  - step: "Motion & Animation"
+    tasks:
+      - "Use animation with purpose: spatial transitions (what goes where), attention (drawing focus), feedback (confirming action)."
+      - "Set appropriate timing: 200-300ms for UI transitions, 100-150ms for micro-interactions."
+      - "Use easing curves that feel natural (ease-in-out for entering, ease-out for exiting)."
+      - "Ensure animations are non-blocking — users should be able to interact during animations."
+  - step: "Accessibility in Interaction"
+    tasks:
+      - "Support reduced-motion preferences for users with vestibular disorders."
+      - "Ensure all interactions work with keyboard navigation."
+      - "Provide focus indicators for keyboard users navigating interactive elements."
+      - "Test interactions with screen readers to ensure announcements are clear."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Using animation purely for decoration without functional purpose."
+  - "Animations that slow down the user or block interaction."
+  - "Inconsistent interaction patterns — buttons that look the same but behave differently."
+  - "Forgetting the 'instant' feedback rule — delays >100ms feel sluggish to users."
+best_practices:
+  - "The best interaction is one the user doesn't notice — it just feels 'right.'"
+  - "Follow platform conventions (iOS HIG, Material Design) unless you have a strong reason not to."
+  - "Prototype interactions before coding — motion tells you if the design works."
+  - "Design for error prevention, not just error recovery."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

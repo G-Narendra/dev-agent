@@ -1,0 +1,79 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "operational-security"
+display_name: "Operational Security (OpSec) & Prudence"
+description: >
+  Enforce a culture of extreme caution ('careful mode') regarding data access, 
+  secrets management, and irreversible infrastructure changes.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "chief-security-officer"
+phase: "operations"
+applicable_startups: 
+  - all
+priority: "high"
+difficulty: "expert"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Secrets Management"
+    tasks:
+      - "Never hardcode secrets in the repository or share them over Slack. Use a dedicated secrets manager (AWS Secrets Manager, Doppler, 1Password)."
+  - step: "Irreversible Actions"
+    tasks:
+      - "Require manual, two-person verification before executing any command that drops a database, deletes an S3 bucket, or force-pushes over the `main` branch."
+  - step: "Least Privilege Access"
+    tasks:
+      - "By default, engineers have READ access to production logs but ZERO access to the production database unless temporarily granted via a break-glass role."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Running a random `curl | bash` script found on a StackOverflow post directly on the production database server without reviewing the shell script first."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Operational Security process"
+  - "How do I handle operational security?"
+  - "Implement operational security"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the operational security process"
+  optional:
+    - name: "data_source"
+      type: "string"
+      description: "Source of data to analyze"
+      default: "Internal data"
+
+outputs:
+  files:
+    - path: "outputs/operational-security.md"
+      description: "Results of the operational security process"
+  artifacts:
+    - "Completed operational security deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

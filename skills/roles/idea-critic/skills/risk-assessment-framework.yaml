@@ -1,0 +1,113 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "risk-assessment-framework"
+display_name: "Risk Assessment & Failure Mode Analysis"
+description: >
+  Systematically assesses business, technical, market, and execution risks
+  for a startup idea. Identifies failure modes, their likelihood, and
+  potential impact to prioritize risk mitigation efforts.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "idea-critic"
+phase: "ideation"
+applicable_startups:
+  - all
+priority: "mvp"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Assess the risks of this idea."
+  - "What could go wrong?"
+  - "Identify failure modes."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Run risk assessment."
+  - "Identify top failure modes."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "business_plan"
+      type: "file"
+      description: "Business plan, pitch deck, or business model canvas."
+    - name: "market_context"
+      type: "string"
+      description: "Market conditions, competition, and regulatory environment."
+  optional:
+    - name: "team_composition"
+      type: "string"
+      description: "Founder backgrounds and key hires."
+      default: "Unknown"
+
+outputs:
+  files:
+    - path: "strategy/risk/risk-assessment.md"
+      description: "Risk assessment with mitigation strategies"
+  artifacts:
+    - "A prioritized risk register with mitigation plans"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Risk Category Identification"
+    tasks:
+      - "Market risk: is the market big enough? Is it growing? Is the timing right?"
+      - "Customer risk: do customers have this problem? Will they pay? Can we reach them?"
+      - "Technology risk: can we build it? Is the technology mature? Are there alternatives?"
+      - "Team risk: do we have the right skills? Is there founder conflict? Burnout risk?"
+      - "Financial risk: do we have enough runway? Can we raise more? Unit economics work?"
+      - "Competitive risk: will competitors crush us? Is our moat defensible?"
+      - "Regulatory risk: are there compliance requirements? Legal liability?"
+  - step: "Failure Mode Analysis"
+    tasks:
+      - "For each risk, imagine the specific way it could kill the startup."
+      - "Score each failure mode by: likelihood (1-5), impact (1-5), and detectability (1-5)."
+      - "Calculate Risk Priority Number (RPN) = Likelihood × Impact ÷ Detectability."
+      - "Top 5 failure modes by RPN get immediate attention."
+  - step: "Mitigation Strategy"
+    tasks:
+      - "For each top failure mode, design a mitigation strategy."
+      - "Avoid: change the business model to eliminate the risk."
+      - "Reduce: take steps to lower the likelihood or impact."
+      - "Transfer: insurance, partnerships, or outsourcing."
+      - "Accept: acknowledge the risk and have a contingency plan."
+  - step: "Monitoring & Contingency"
+    tasks:
+      - "Define triggers: at what sign should we activate contingency plans?"
+      - "Set a review cadence: monthly risk review for top 5 risks, quarterly for all risks."
+      - "Document contingency plans: exactly what to do if a risk materializes."
+      - "Assign risk owners: who is responsible for monitoring each risk."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Only focusing on product risk while ignoring market, team, and financial risks."
+  - "Creating a risk assessment that's never reviewed or updated."
+  - "Discounting risks because 'we'll figure it out' — that's not a mitigation plan."
+  - "Being overly optimistic about likelihood scores — most startups fail, be realistic."
+best_practices:
+  - "The founder's job is to manage risk, not eliminate it — startups are inherently risky."
+  - "Focus on the top 5 risks that could kill the company; ignore the rest."
+  - "Share risk assessments with advisors and investors — it shows maturity."
+  - "Update risk assessments as you learn more and as conditions change."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

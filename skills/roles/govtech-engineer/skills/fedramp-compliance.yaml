@@ -1,0 +1,80 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "fedramp-compliance"
+display_name: "FedRAMP & NIST Compliance Architecture"
+description: >
+  Design the cloud architecture to meet the extreme security controls required by 
+  FedRAMP, NIST 800-53, or DoD Impact Levels, utilizing GovCloud infrastructure.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "govtech-engineer"
+phase: "build"
+applicable_startups: 
+  - govtech
+priority: "mvp"
+difficulty: "expert"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Infrastructure Setup"
+    tasks:
+      - "Provision environments strictly within AWS GovCloud or Azure Government."
+      - "Ensure FIPS 140-2 validated encryption algorithms are used universally (TLS 1.2+ only)."
+  - step: "Access Control"
+    tasks:
+      - "Implement strict Role-Based Access Control (RBAC) and Multi-Factor Authentication (MFA) using CAC/PIV cards where required."
+      - "Ensure administrative access is only possible via a secure Bastion host/jump box."
+  - step: "Audit & Monitoring"
+    tasks:
+      - "Enable AWS CloudTrail and VPC Flow Logs, routing them to a centralized, tamper-evident SIEM."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Using consumer-grade SaaS tools (e.g., standard Slack or GitHub) for storing GovTech code or data. Everything must be FedRAMP authorized."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Fedramp Compliance process"
+  - "How do I handle fedramp compliance?"
+  - "Implement fedramp compliance"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the fedramp compliance process"
+  optional:
+    - name: "N/A"
+      type: "string"
+      description: "No optional inputs needed."
+
+outputs:
+  files:
+    - path: "outputs/fedramp-compliance.md"
+      description: "Results of the fedramp compliance process"
+  artifacts:
+    - "Completed fedramp compliance deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

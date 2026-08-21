@@ -1,0 +1,111 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "headline-copywriting"
+display_name: "Value Proposition & Headline Copywriting"
+description: >
+  Write clear, compelling, and benefit-driven headlines. Replaces vague, clever 
+  marketing fluff with exact, easily understood value propositions that resonate 
+  with the target customer's pain points.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "landing-page-specialist"
+phase: "ideation"
+applicable_startups:
+  - all
+priority: "critical"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Write a headline for this page."
+  - "Make the copy punchier."
+  - "What is our value proposition?"
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Create a copy-deck artifact."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "product_features"
+      type: "string"
+      description: "List of what the product actually does."
+    - name: "customer_pain"
+      type: "string"
+      description: "The primary struggle the customer is trying to solve."
+  optional:
+    - name: "tone"
+      type: "string"
+      description: "Authoritative, conversational, aggressive."
+      default: "Clear and direct"
+
+outputs:
+  files:
+    - path: "marketing/copy-deck.md"
+      description: "A document containing H1, H2s, and CTA copy."
+  artifacts:
+    - "A matrix translating 'Features' into 'Benefits'."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "Headline contains fewer than 12 words."
+  manual:
+    - "A 10-year-old can read the headline and explain what the company does."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+
+safety_notes:
+  - "N/A"
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Markdown / Notion"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Feature to Benefit Translation"
+    tasks:
+      - "Feature: '128-bit Encryption.' Benefit: 'Your data is safe from hackers.' Translate every technical feature into a human benefit."
+  - step: "The 'XYZ' Formula"
+    tasks:
+      - "We help [Target Audience] do [Specific Action] so they can [Desired Outcome]."
+      - "Example: We help freelance designers automate invoicing so they can get paid faster."
+  - step: "Clarity over Cleverness"
+    tasks:
+      - "Do not use puns, metaphors, or abstract concepts in the main H1. Save cleverness for a blog post. The hero headline must be brutally clear."
+  - step: "The Subheadline (H2)"
+    tasks:
+      - "Use the H1 to hook attention with the big benefit. Use the H2 to explain *how* it works logically. (e.g., H1: 'Get Paid Faster'. H2: 'Our API connects your bank to your CRM in 3 clicks.')."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Using 'Synergy', 'Next-Generation', 'Empowering', or 'Revolutionary'. These words mean absolutely nothing to a buyer and signal that you don't know how to explain your own product."
+  - "Making the headline about the company instead of the customer (e.g., 'We are the leading provider of...'). The customer only cares about themselves."
+
+best_practices:
+  - "Steal from your customers. The best headlines are often verbatim quotes from customer interviews (e.g., 'I just want my weekends back')."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Julian Shapiro: Landing Page Guide"
+    url: "https://www.julian.com/guide/growth/landing-pages"

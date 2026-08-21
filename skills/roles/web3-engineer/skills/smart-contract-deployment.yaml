@@ -1,0 +1,113 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "smart-contract-deployment"
+display_name: "Web3 Engineering & Smart Contracts"
+description: >
+  Writes code where mistakes cost millions. Designs, audits, and deploys 
+  immutable smart contracts to EVM-compatible blockchains, ensuring 
+  absolute cryptographic security and optimized gas efficiency. Covers key patterns to avoid common pitfalls like running containers as root in production -- a compromised co, and provides actionable best practices for production-ready results.
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "web3-engineer"
+phase: "build"
+applicable_startups:
+  - Crypto, DeFi, Web3
+priority: "critical"
+difficulty: "expert"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Deploy the ERC-20 token."
+  - "Audit this staking contract."
+  - "We are running out of gas."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Generate Hardhat deployment script."
+  - "Draft Solidity reentrancy defense."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "contract_standard"
+      type: "string"
+      description: "ERC-20, ERC-721, Custom Defi."
+    - name: "target_network"
+      type: "string"
+      description: "Ethereum Mainnet, Arbitrum, Polygon."
+  optional:
+    - name: "gas_limit"
+      type: "string"
+      description: "Maximum acceptable deployment cost."
+      default: "Unknown"
+
+outputs:
+  files:
+    - path: "contracts/core/StakingVault_v1.sol"
+      description: "The secure, audited Solidity code."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "N/A"
+manual:
+  - "The smart contract is deployed to Mainnet, verified on Etherscan, and handles $1M+ in Total Value Locked (TVL) with zero security exploits."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+safety_notes:
+  - "The Reentrancy Vulnerability: Never update a user's balance AFTER sending them Ether. If the target is a malicious contract, it can recursively call the withdraw function (Reentrancy) and drain the entire vault before the balance is updated. ALWAYS use the 'Checks-Effects-Interactions' pattern."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Hardhat / Foundry / Slither"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Static Analysis (Slither)"
+    tasks:
+      - "Before sending code to a human auditor, run automated static analysis tools like Slither or Mythril. It will instantly flag common vulnerabilities (uninitialized state variables, reentrancy loops, unprotected suicide functions)."
+  - step: "Test Coverage & Fork Testing"
+    tasks:
+      - "A web3 protocol requires 100% test coverage. Furthermore, do not just test on a local blank network. Use Hardhat to 'fork' Ethereum Mainnet so you can test your contract's interaction with the *real* Uniswap router locally."
+      - "Create a test data factory/seeder so tests are deterministic and repeatable."
+  - step: "The Multi-Sig Ownership Transfer"
+    tasks:
+      - "Never leave the `owner` of a billion-dollar DeFi protocol as the lead developer's MetaMask wallet. Deploy the contract, and immediately transfer `ownership` to a Gnosis Safe Multi-Sig wallet requiring 3-of-5 executive signatures to upgrade."
+      - "Set up automated rollback mechanism that triggers if health checks fail after deployment."
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Running containers as root in production -- a compromised container gives the attacker full host access."
+  - "Applying infrastructure changes directly to production without reviewing the plan first -- 'terraform apply' without plan review is gambling."
+  - "Using :latest tag for container images -- makes rollbacks impossible and breaks reproducibility."
+  - "Not setting resource requests/limits on Kubernetes pods -- a single memory leak can OOM-kill every other pod on the node."
+  - "Storing Terraform state in a local file or Git -- use a remote backend (S3, GCS, Terraform Cloud) with state locking."
+best_practices:
+  - "Implement 'Pausability' and 'Upgradability' (Proxy Patterns). If a zero-day exploit is found on Mainnet, you cannot 'patch' a deployed contract. It is immutable. You must have a proxy architecture that allows the admin to point the logic to a new V2 contract."
+
+  - "Always run both static analysis (Slither) and formal verification before deploying any contract with real funds."
+  - "Use a proxy upgrade pattern (UUPS or transparent) with timelock and multi-sig for any contract holding >$100K."
+  - "Audit the order of operations in every function — check-effects-interactions pattern prevents reentrancy."
+  - "Write comprehensive fuzz tests using Echidna or Foundry for every public/external function."
+  - "Document the economic security assumptions — what would it cost an attacker to break the system?"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Consensys: Smart Contract Best Practices"
+    url: "https://consensys.github.io/smart-contract-best-practices/"

@@ -1,0 +1,108 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "scalability-resilience-patterns"
+display_name: "Staff Software Architect: Resilience Engineering"
+description: >
+  Operates at the Principal/Staff Engineer level (10+ years FAANG). Engineers 
+  systems designed to survive apocalyptic failures. Implements strict rate 
+  limiting, circuit breaking, load shedding, and cellular architecture to 
+  ensure 99.999% availability during severe traffic spikes or partial outages.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "software-architect"
+phase: "operate"
+applicable_startups:
+  - all
+priority: "high"
+difficulty: "expert"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "How do we prevent the system from crashing under load?"
+  - "Implement circuit breakers."
+  - "The database is locking up during traffic spikes."
+  - "Design the resilience strategy."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Generate Chaos Engineering experiment plan."
+  - "Draft strict Load Shedding ruleset."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "critical_path"
+      type: "string"
+      description: "The absolute most important user flow (e.g., Checkout)."
+    - name: "current_bottleneck"
+      type: "string"
+      description: "What part of the system breaks first under stress?"
+  optional:
+    - name: "acceptable_degradation"
+      type: "string"
+      description: "What features can we turn off during an outage?"
+      default: "Turn off recommendations, keep checkout active"
+
+outputs:
+  files:
+    - path: "docs/architecture/resilience-strategy.md"
+      description: "The tactical plan for surviving traffic spikes."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "Load testing (e.g., Artillery/k6) confirms the system successfully rejects excess traffic with HTTP 429 without degrading latency for accepted requests."
+manual:
+  - "During a simulated dependency failure (e.g., Payment Gateway goes down), the Circuit Breaker trips, preventing cascading thread exhaustion in the core application."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+safety_notes:
+  - "The Cascading Failure Threat: If a downstream dependency (like a third-party API) slows down from 100ms to 5000ms, your servers will keep opening threads waiting for a response until they completely run out of memory and crash. You MUST fail fast using timeouts and circuit breakers."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Resilience4j / Istio (Service Mesh)"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Load Shedding & Rate Limiting"
+    tasks:
+      - "A system must protect itself. If max capacity is 10k RPS, and 50k RPS hits the server, do not try to process all 50k and crash. Immediately reject 40k requests with HTTP 429 (Too Many Requests). Surviving for 20% of users is better than 0%."
+  - step: "Circuit Breakers (Fail Fast)"
+    tasks:
+      - "Implement the Circuit Breaker pattern. If a service fails 50% of the time over 10 seconds, 'Open' the circuit. Instantly return a fallback/cached response to the user for the next 30 seconds instead of attempting the doomed network call."
+  - step: "Cellular Architecture (Bulkheads)"
+    tasks:
+      - "Isolate blast radiuses. Do not put all tenants on one massive database. Split the infrastructure into 'Cells'. If Cell A goes down due to a poison pill request, Cells B, C, and D remain 100% unaffected."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Infinite Retries: If a database is struggling, and your application responds by instantly retrying the failed query in an infinite `while` loop, you have just created a self-inflicted Distributed Denial of Service (DDoS) attack against your own infrastructure."
+  - "Synchronous Fallbacks: If the cache is down, falling back to query the primary database for every single request will instantly melt the primary database."
+
+best_practices:
+  - "Exponential Backoff + Jitter: When retrying a failed network request, wait 1s, then 2s, then 4s, then 8s. Crucially, add 'Jitter' (randomized milliseconds) so all 500 failing clients don't retry at the exact same millisecond and cause a thundering herd."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Amazon Builders' Library: Timeouts, retries, and backoff with jitter"
+    url: "https://aws.amazon.com/builders-library/timeouts-retries-and-backoff-with-jitter/"

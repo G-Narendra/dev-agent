@@ -1,0 +1,113 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "sales-funnel-analysis"
+display_name: "Sales Funnel & Conversion Analysis"
+description: >
+  Analyze the end-to-end Go-To-Market funnel (Lead -> MQL -> SQL -> Opportunity -> Closed Won). 
+  Identifies the exact stage where the sales machine is leaking revenue, allowing 
+  leadership to deploy targeted training or process changes.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "revenue-operations-analyst"
+phase: "growth"
+applicable_startups:
+  - all
+priority: "growth"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Where are we losing deals?"
+  - "Analyze the sales funnel conversion rates."
+  - "What is our lead-to-close rate?"
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Create a funnel conversion matrix artifact."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "funnel_data"
+      type: "file"
+      description: "CSV containing counts of records at each lifecycle stage for the past 6 months."
+  optional:
+    - name: "segmentation"
+      type: "string"
+      description: "Split by Sales Rep, Lead Source, or Region."
+      default: "Lead Source"
+
+outputs:
+  files:
+    - path: "sales/funnel-analysis.md"
+      description: "Report detailing conversion rates between each stage."
+  artifacts:
+    - "Identification of the single biggest bottleneck in the funnel."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "Calculates Stage-to-Stage conversion rates and Overall (Top-to-Bottom) conversion rate."
+  manual:
+    - "Leadership can clearly identify if the problem is 'Not enough leads' (Marketing) or 'Unable to close' (Sales)."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+
+safety_notes:
+  - "Avoid analyzing funnels over a period shorter than the average sales cycle (e.g., looking at a 1-month funnel when the sales cycle is 90 days will artificially depress conversion rates)."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Excel / Google Sheets"
+      install: "N/A"
+  alternatives:
+    - name: "Tableau / Looker"
+      when: "Data is clean and lives entirely in a synced data warehouse."
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Standardize Definitions"
+    tasks:
+      - "Enforce strict definitions. What makes a Lead a Marketing Qualified Lead (MQL)? (e.g., 'Must have corporate email and downloaded a whitepaper')."
+      - "What makes an MQL a Sales Qualified Lead (SQL)? (e.g., 'Sales rep held a discovery call and confirmed BANT: Budget, Authority, Need, Timeline')."
+  - step: "Calculate Stage-to-Stage Conversions"
+    tasks:
+      - "Calculate the drop-off between every adjacent stage (Lead -> MQL, MQL -> SQL, SQL -> Opp, Opp -> Won)."
+  - step: "Identify the Bottleneck"
+    tasks:
+      - "Compare current conversion rates against industry benchmarks. (e.g., SaaS standard: MQL to SQL should be ~10-15%. SQL to Won should be ~20-30%)."
+      - "If SQL -> Won is 5%, the sales team needs closing training or the pricing is wrong."
+      - "If Lead -> MQL is 1%, marketing is driving junk traffic."
+  - step: "Time-in-Stage Analysis"
+    tasks:
+      - "Calculate how many days deals spend in each stage on average. Focus optimization efforts on the stage where deals get 'stuck' the longest."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Only looking at the top (Total Leads) and the bottom (Total Revenue) and ignoring the middle. 10,000 leads that result in 0 sales is worse than 100 leads that result in 10 sales."
+  - "Allowing Sales to reject MQLs without providing a structured 'Disqualification Reason'. If Marketing doesn't know *why* a lead was bad, they can't fix their targeting."
+
+best_practices:
+  - "Segment funnel analysis by Lead Source. You may find that 'Trade Shows' generate the most Leads, but 'Inbound Organic Search' generates the highest Win Rate."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "SiriusDecisions Demand Waterfall"
+    url: "https://www.forrester.com/blogs/demand-waterfall/"

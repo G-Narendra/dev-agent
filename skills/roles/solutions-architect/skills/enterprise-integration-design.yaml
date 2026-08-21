@@ -1,0 +1,114 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "enterprise-integration-design"
+display_name: "Solutions Architect & Enterprise Integration"
+description: >
+  Maps the enterprise maze. Parachutes into massive B2B deals to design 
+  exactly how the startup's API will integrate with a Fortune 500 company's 
+  archaic, on-premise legacy systems securely. Covers key patterns to avoid common pitfalls like designing for the ideal screen size first -- mobile-first fo, and provides actionable best practices for production-ready results.
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "solutions-architect"
+phase: "growth"
+applicable_startups:
+  - B2B, Enterprise SaaS, API-First
+priority: "high"
+difficulty: "expert"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "They use an on-prem Oracle DB."
+  - "How do we map our API to their schema?"
+  - "The client needs a custom integration."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Generate custom payload mapping."
+  - "Draft enterprise security architecture."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "client_system"
+      type: "string"
+      description: "e.g., Legacy SAP, Salesforce, Custom Mainframe."
+    - name: "data_flow"
+      type: "string"
+      description: "Bi-directional vs One-way sync."
+  optional:
+    - name: "compliance_needs"
+      type: "string"
+      description: "HIPAA, PCI, GDPR."
+      default: "Standard SOC2"
+
+outputs:
+  files:
+    - path: "sales/solutions/acme_corp_integration.md"
+      description: "The custom architectural bridge."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "N/A"
+manual:
+  - "The Fortune 500 client approves the integration architecture, passing their strict InfoSec review and unblocking a multi-million dollar contract."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+safety_notes:
+  - "The Custom Code Blackhole: Never agree to fork the startup's core codebase to build a custom version exclusively for one client. You will enter 'Dependency Hell' and ruin the product roadmap. Build standard APIs and use middleware/connectors for custom transformations."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "MuleSoft / Postman / AWS PrivateLink"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "The Data Transformation Layer (Middleware)"
+    tasks:
+      - "The client's system sends XML. Your API expects JSON. Do not write custom XML parsers in your core app. Use a middleware layer (like Workato or an AWS Lambda function) to catch the XML, transform it to JSON, and pass it to your standard API."
+      - "Add database migration testing -- test both up and down migrations in CI."
+  - step: "Secure Network Bridging (PrivateLink / VPN)"
+    tasks:
+      - "Enterprise clients will not send sensitive data over the public internet to your API. You must configure an AWS PrivateLink or a Site-to-Site IPSec VPN. Prove to their InfoSec team that the data never traverses the open web."
+      - "Add integration tests that verify the contract between services, not just unit tests."
+  - step: "Rate Limiting & Queueing"
+    tasks:
+      - "If the client decides to do a 'Historical Data Dump' and sends 5 million records at once, it will crash your API. Implement a queueing system (SQS) at the edge to ingest the massive payload, and process it at a speed your database can handle."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Designing for the ideal screen size first -- mobile-first forces better prioritization and prevents content overflow disasters."
+  - "Using color as the only differentiator for states (error, success, disabled) -- inaccessible to colorblind users."
+  - "Shipping UI without loading, empty, and error states -- the user is left guessing what happened."
+  - "Creating components in isolation without real content -- 'lorem ipsum' hides layout problems that real text exposes."
+  - "Ignoring touch target sizes (minimum 44x44px) on mobile -- users fat-finger the wrong button and get frustrated."
+best_practices:
+  - "Idempotency is mandatory. If the client's network flickers and they send the exact same 'Purchase Order' API request twice, your system must realize it's a duplicate and NOT charge their credit card twice. Always require an Idempotency-Key."
+
+  - "Design in vector format (SVG/EPS) — logos must scale from favicon (16px) to billboard (10m) without quality loss."
+  - "Test every logo in three formats: full color, single color (black), and inverted (white on dark background)."
+  - "Ensure the logo is recognizable at 16x16px before finalizing — if it doesn't work as a favicon, simplify."
+  - "Wait 48 hours between creating and finalizing a logo — fresh eyes catch symmetry and proportion issues."
+  - "Create a brand guidelines document that specifies clear space, minimum size, color palette, and incorrect usage examples."
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Stripe: Designing Idempotent APIs"
+    url: "https://stripe.com/blog/idempotency"

@@ -1,0 +1,78 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "azure-infrastructure"
+display_name: "Microsoft Azure Infrastructure"
+description: >
+  Architect enterprise-grade backend infrastructure using Microsoft Azure (App Services, 
+  CosmosDB, AKS) integrating natively with the Microsoft ecosystem.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "cloud-engineer"
+phase: "growth"
+applicable_startups: 
+  - enterprise
+priority: "high"
+difficulty: "expert"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Resource Groups"
+    tasks:
+      - "Strictly separate staging and production environments using distinct Resource Groups and Azure Active Directory (AAD) RBAC."
+  - step: "CosmosDB Configuration"
+    tasks:
+      - "Choose the correct partition key for CosmosDB to prevent hot partitions and massive Request Unit (RU) spikes during high load."
+  - step: "VNet Peering"
+    tasks:
+      - "Use Virtual Network Integration to ensure App Services communicate with Azure SQL securely over the private Azure backbone, not the public internet."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Provisioning a globally distributed CosmosDB instance for a local bakery's internal dashboard, resulting in a $2,000/month bill for 10 users."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Azure Infrastructure process"
+  - "How do I handle azure infrastructure?"
+  - "Implement azure infrastructure"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the azure infrastructure process"
+  optional:
+    - name: "N/A"
+      type: "string"
+      description: "No optional inputs needed."
+
+outputs:
+  files:
+    - path: "outputs/azure-infrastructure.md"
+      description: "Results of the azure infrastructure process"
+  artifacts:
+    - "Completed azure infrastructure deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "AWS Documentation"
+    url: "https://docs.aws.amazon.com"
+  - title: "Terraform Documentation"
+    url: "https://developer.hashicorp.com/terraform/docs"

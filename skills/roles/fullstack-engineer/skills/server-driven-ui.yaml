@@ -1,0 +1,108 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "server-driven-ui"
+display_name: "Server-Driven UI Architecture"
+description: >
+  Architect a system where the backend API dictates the layout and components 
+  rendered on the frontend. Allows product teams to change the app UI instantly 
+  without waiting for App Store approval or frontend deployments.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "fullstack-engineer"
+phase: "growth"
+applicable_startups:
+  - e-commerce
+  - media
+priority: "medium"
+difficulty: "expert"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "We need to change the homepage without an app store release."
+  - "Implement Server-Driven UI."
+  - "Make the layout dynamic."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Create a Server-Driven UI schema."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "target_pages"
+      type: "string"
+      description: "Which pages should be dynamic? (Usually 'Home' or 'Discovery')."
+  optional:
+    - name: "client_platforms"
+      type: "string"
+      description: "Web, iOS, Android."
+      default: "All"
+
+outputs:
+  files:
+    - path: "src/components/DynamicRenderer.tsx"
+      description: "The recursive UI rendering engine."
+  artifacts:
+    - "A JSON schema defining the allowed component types."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "N/A"
+  manual:
+    - "A non-technical PM can reorder the 'Featured Products' and 'Hero Banner' sections via a CMS, and the changes reflect instantly across Web and Mobile."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+
+safety_notes:
+  - "Security: Strictly validate the JSON payload from the server. Do not ever use `eval()` or `dangerouslySetInnerHTML` to parse structural instructions."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "TypeScript + JSON Schema"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Define the Contract (Schema)"
+    tasks:
+      - "Create a strict JSON structure. Example: `[{ type: 'HERO', props: { title: 'Sale' } }, { type: 'PRODUCT_CAROUSEL', props: { items: [...] } }]`."
+  - step: "The Backend Builder"
+    tasks:
+      - "Build an API endpoint (`/api/layout/home`) that returns the JSON array based on user segmentation (e.g., showing a different layout for returning vs new users)."
+  - step: "The Frontend Renderer"
+    tasks:
+      - "Create a Registry pattern on the frontend. A main `<DynamicRenderer />` takes the JSON, iterates through it, looks up `type` in the registry, and renders the mapped React/SwiftUI component."
+  - step: "Fallback Handling"
+    tasks:
+      - "If the backend sends a component `type` that the frontend doesn't recognize (e.g., an older version of the iOS app), the renderer MUST gracefully ignore it or render a blank space, rather than crashing the app."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Sending CSS or styling information in the JSON (e.g., `{ color: 'red', margin: 10 }`). This couples the backend to UI details. The backend should dictate *what* to show, the frontend decides *how* it looks."
+  - "Trying to build SDUI for highly interactive forms or editors. SDUI is meant for content consumption feeds (homepages, article lists). Don't use it to build a checkout flow."
+
+best_practices:
+  - "Versioning: Pass an `api_version` header from the client. The backend must know not to send a `NEW_CAROUSEL` component type to a v1.0 iOS app that cannot render it."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Airbnb: A Deep Dive into Server-Driven UI"
+    url: "https://medium.com/airbnb-engineering/a-deep-dive-into-airbnbs-server-driven-ui-system-842244c5f5"

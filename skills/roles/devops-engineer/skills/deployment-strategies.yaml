@@ -1,0 +1,81 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "deployment-strategies"
+display_name: "Advanced Deployment Strategies"
+description: >
+  Implement Blue-Green, Canary, and Shadow deployment pipelines to route live traffic 
+  to new versions of the application safely with zero downtime.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "devops-engineer"
+phase: "growth"
+applicable_startups: 
+  - enterprise
+priority: "high"
+difficulty: "expert"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Canary Releases"
+    tasks:
+      - "Deploy the new version of the API to exactly 1 pod. Route 5% of production traffic to it and monitor error rates for 15 minutes before rolling out to 100%."
+  - step: "Blue-Green Deployments"
+    tasks:
+      - "Spin up an entirely separate, isolated 'Green' environment running the new code. Test it fully, then instantly flip the load balancer traffic from Blue to Green."
+  - step: "Feature Toggles"
+    tasks:
+      - "Decouple 'Deployment' from 'Release'. Deploy the code to production continuously, but keep the feature hidden behind a toggle until marketing is ready."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Executing an 'in-place' rolling deployment that takes 20 minutes, during which half the users are talking to v1 and the other half are talking to v2, corrupting database state."
+
+best_practices:
+  - "Infrastructure as Code should be version-controlled alongside app code."
+  - "Implement health checks and readiness probes for all services."
+  - "Use immutable infrastructure -- never SSH into running containers."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Deployment Strategies process"
+  - "How do I handle deployment strategies?"
+  - "Implement deployment strategies"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the deployment strategies process"
+  optional:
+    - name: "code_repository"
+      type: "string"
+      description: "Path to the code repository"
+      default: "./"
+
+outputs:
+  files:
+    - path: "outputs/deployment-strategies.md"
+      description: "Results of the deployment strategies process"
+  artifacts:
+    - "Completed deployment strategies deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Docker Documentation"
+    url: "https://docs.docker.com"
+  - title: "Kubernetes Documentation"
+    url: "https://kubernetes.io/docs"
+  - title: "AWS Documentation"
+    url: "https://docs.aws.amazon.com"

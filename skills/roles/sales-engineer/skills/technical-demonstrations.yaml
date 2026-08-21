@@ -1,0 +1,80 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "technical-demonstrations"
+display_name: "Live Demos & Proof of Concept (PoC) Execution"
+description: >
+  Partner with Account Executives to deliver highly technical product demonstrations, 
+  manage 14-day Proof of Concepts, and complete grueling enterprise security questionnaires.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "sales-engineer"
+phase: "growth"
+applicable_startups: 
+  - enterprise
+  - devtools
+priority: "mvp"
+difficulty: "expert"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Pre-Demo Prep"
+    tasks:
+      - "Research the prospect's current tech stack (using tools like Wappalyzer/BuiltWith)."
+      - "Configure a custom demo instance populated with dummy data relevant to their specific industry."
+  - step: "The Demo"
+    tasks:
+      - "Map the technical features directly to the business ROI (e.g., 'This API reduces manual data entry, saving your team 40 hours a week')."
+  - step: "Security Review"
+    tasks:
+      - "Complete the 200-question vendor security assessment rapidly to unblock procurement."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Getting defensive and arguing with a prospect's lead engineer during a live demo when they point out a flaw in the product."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Technical Demonstrations process"
+  - "How do I handle technical demonstrations?"
+  - "Implement technical demonstrations"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the technical demonstrations process"
+  optional:
+    - name: "N/A"
+      type: "string"
+      description: "No optional inputs needed."
+
+outputs:
+  files:
+    - path: "outputs/technical-demonstrations.md"
+      description: "Results of the technical demonstrations process"
+  artifacts:
+    - "Completed technical demonstrations deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

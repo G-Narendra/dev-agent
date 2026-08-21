@@ -1,0 +1,111 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "ui-animations"
+display_name: "Flutter Custom UI & Animations"
+description: >
+  Creates pixel-perfect, highly responsive UIs in Flutter. Implements complex 
+  Hero animations, custom painters, and slivers to deliver a premium, native-feeling 
+  user experience at 60/120 FPS. Covers key patterns to avoid common pitfalls like storing sensitive tokens or credentials in plaintext in user, and provides actionable best practices for production-ready results.
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "mobile-developer-flutter"
+phase: "build"
+applicable_startups:
+  - all
+priority: "high"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Animate the page transition."
+  - "Build this custom charting widget."
+  - "The scrolling is janky."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Generate custom Implicit Animation."
+  - "Draft SliverAppBar layout."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "design_spec"
+      type: "string"
+      description: "Figma link or detailed UI description."
+  optional:
+    - name: "animation_type"
+      type: "string"
+      description: "Implicit, Explicit, or Hero."
+      default: "Implicit"
+
+outputs:
+  files:
+    - path: "lib/widgets/animated_button.dart"
+      description: "The custom animated widget."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "N/A"
+manual:
+  - "Animations run smoothly at 60 FPS in Profile mode on a physical low-end Android device."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "Debug Mode Warning: Never judge animation performance while running the Flutter app in Debug mode. Debug mode is slow. Always test animations in Profile or Release mode on a physical device."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Flutter Animation Library"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Implicit vs Explicit"
+    tasks:
+      - "If you just need to animate a color change or a size change, use Implicit animations (`AnimatedContainer`, `AnimatedOpacity`). They manage the animation controller for you."
+      - "Add environment variable validation that crashes fast on missing required values."
+  - step: "Hero Transitions"
+    tasks:
+      - "Use the `Hero` widget to seamlessly animate an image from a list view into a detail view across a navigation route. Ensure both Hero widgets share the exact same `tag`."
+  - step: "Sliver Scroll Effects"
+    tasks:
+      - "For complex scrolling effects (like a header that shrinks as you scroll down), use a `CustomScrollView` with `Slivers` instead of a standard `ListView`."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Storing sensitive tokens or credentials in plaintext in UserDefaults/SharedPreferences -- use the platform Keychain/Keystore."
+  - "Ignoring memory warnings on low-end devices -- mobile apps crash silently when the OS kills them for memory pressure."
+  - "Blocking the main thread with network calls or heavy computation -- the UI freezes and the OS shows an Application Not Responding dialog."
+  - "Forcing users to download large assets on cellular data -- check connectivity and defer to WiFi."
+  - "Not handling deep link fallbacks -- if your app isn't installed, the link should gracefully open the app store."
+best_practices:
+  - "Use the `const` keyword everywhere possible in your widget tree. It tells Flutter that the widget will never change, allowing it to skip rebuilding that portion of the UI entirely."
+
+  - "Test on the lowest-spec device you support, not just the latest flagship — that's what most of your users have."
+  - "Implement offline-first architecture using local storage and sync — mobile networks are unreliable."
+  - "Handle deep links and universal links properly — they're the primary way users return to your app from elsewhere."
+  - "Use ProGuard/R8 (Android) or app thinning (iOS) to reduce APK/IPA size — smaller apps have higher install conversion."
+  - "Add pull-to-refresh and retry mechanisms on all data screens — mobile users expect to manually refresh when data feels stale."
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Flutter: Introduction to animations"
+    url: "https://docs.flutter.dev/ui/animations"

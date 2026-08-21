@@ -1,0 +1,90 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "tam-sam-som-analysis"
+display_name: "TAM/SAM/SOM Market Sizing"
+description: >
+  Calculate the Total Addressable Market (TAM), Serviceable Available Market (SAM), 
+  and Serviceable Obtainable Market (SOM) using bottom-up heuristics and public data.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "market-researcher"
+phase: "ideation"
+applicable_startups: 
+  - all
+priority: "mvp"
+difficulty: "expert"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  manual:
+    - "Calculations are strictly bottom-up (Number of buyers × ACV), not top-down ('1% of a $10B market')."
+    - "Sources and assumptions for the number of buyers are explicitly cited."
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Pricing Assumption"
+    tasks:
+      - "Estimate the Average Contract Value (ACV) or Annual Revenue Per User (ARPU)."
+  - step: "TAM (Total Addressable Market)"
+    tasks:
+      - "Identify the absolute maximum global number of potential customers."
+      - "Multiply by ACV to get TAM."
+  - step: "SAM (Serviceable Available Market)"
+    tasks:
+      - "Restrict the TAM to the geographical or technological reach of your specific business model."
+  - step: "SOM (Serviceable Obtainable Market)"
+    tasks:
+      - "Calculate the realistic market share achievable in the first 3-5 years considering competition and go-to-market constraints."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "The '1% Fallacy': Assuming you can easily capture 1% of a massive top-down market (e.g., 'The shoe market is $100B, if we get 1% we are a $1B company.')."
+  - "Inflating ACV without validating willingness to pay, resulting in a disconnected TAM."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Tam Sam Som Analysis process"
+  - "How do I handle tam sam som analysis?"
+  - "Implement tam sam som analysis"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the tam sam som analysis process"
+  optional:
+    - name: "data_source"
+      type: "string"
+      description: "Source of data to analyze"
+      default: "Internal data"
+
+outputs:
+  files:
+    - path: "outputs/tam-sam-som-analysis.md"
+      description: "Results of the tam sam som analysis process"
+  artifacts:
+    - "Completed tam sam som analysis deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

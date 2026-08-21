@@ -1,0 +1,78 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "eval-driven-development"
+display_name: "Eval-Driven Development (EDD)"
+description: >
+  Build automated testing frameworks for LLM outputs using LLM-as-a-Judge and 
+  deterministic assertions to catch regressions when prompts or models change.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "llm-evaluator"
+phase: "build"
+applicable_startups: 
+  - ai
+priority: "high"
+difficulty: "expert"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "The Golden Dataset"
+    tasks:
+      - "Curate a static dataset of 100 diverse, highly complex user prompts and their expected, human-verified outputs."
+  - step: "LLM-as-a-Judge"
+    tasks:
+      - "Use a superior model (e.g., GPT-4o) to grade the output of a cheaper production model (e.g., Haiku) on a strict 1-5 rubric for helpfulness and safety."
+  - step: "Continuous Evaluation"
+    tasks:
+      - "Integrate the Eval script into GitHub Actions, failing the PR if a new system prompt drops the overall accuracy score below 90%."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Changing the core system prompt based on 'vibes' and manually testing exactly 3 inputs, accidentally breaking the AI for 50% of the customer base."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Eval Driven Development process"
+  - "How do I handle eval driven development?"
+  - "Implement eval driven development"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the eval driven development process"
+  optional:
+    - name: "N/A"
+      type: "string"
+      description: "No optional inputs needed."
+
+outputs:
+  files:
+    - path: "outputs/eval-driven-development.md"
+      description: "Results of the eval driven development process"
+  artifacts:
+    - "Completed eval driven development deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

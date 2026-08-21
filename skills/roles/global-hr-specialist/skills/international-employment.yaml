@@ -1,0 +1,79 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "international-employment"
+display_name: "Global Employment & EoR Management"
+description: >
+  Navigate international labor laws to hire, pay, and offboard employees globally using
+  Employers of Record (EoR) or localized contractor agreements.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "global-hr-specialist"
+phase: "growth"
+applicable_startups: 
+  - remote-first
+priority: "mvp"
+difficulty: "advanced"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Hiring Mechanics"
+    tasks:
+      - "Determine if a global hire should be a 1099 Contractor (high risk) or routed through an EoR like Deel (high cost but compliant)."
+  - step: "Global Compensation"
+    tasks:
+      - "Establish a compensation philosophy (e.g., 'San Francisco rates for everyone' vs. 'Localized cost of living rates')."
+      - "Ensure localized benefits (e.g., mandatory 13th-month pay in Latin America) are budgeted."
+  - step: "Equity"
+    tasks:
+      - "Work with legal to issue Phantom Stock or NSOs to international employees to avoid disastrous local tax events upon vesting."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Hiring a full-time engineer in France as an 'Independent Contractor' to avoid taxes, resulting in a massive misclassification lawsuit."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the International Employment process"
+  - "How do I handle international employment?"
+  - "Implement international employment"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the international employment process"
+  optional:
+    - name: "N/A"
+      type: "string"
+      description: "No optional inputs needed."
+
+outputs:
+  files:
+    - path: "outputs/international-employment.md"
+      description: "Results of the international employment process"
+  artifacts:
+    - "Completed international employment deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

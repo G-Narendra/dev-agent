@@ -1,0 +1,93 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "python-performance"
+display_name: "Python Backend Performance Optimization"
+description: >
+  Profile and optimize Python backend services for latency, memory, and throughput.
+  Covers async patterns, caching, connection pooling, and profiling tools.
+role: "backend-engineer-python"
+phase: "operations"
+applicable_startups:
+  - all
+priority: "high"
+difficulty: "advanced"
+trigger_phrases:
+  - "Profile the Python API for performance..."
+  - "Optimize slow endpoints in the Python service..."
+  - "Reduce memory usage of the Python backend..."
+example_cli_actions:
+  - "python -m cProfile -o profile.out app.py"
+  - "py-spy record -o profile.svg --pid 1234"
+inputs:
+  required:
+    - name: "service_type"
+      type: "string"
+      description: "Django or FastAPI service."
+    - name: "observed_issues"
+      type: "string"
+      description: "High latency, high memory, or low throughput."
+  optional:
+    - name: "traffic_profile"
+      type: "string"
+      description: "Current RPS and p95 latency."
+      default: "Needs measurement via profiling"
+outputs:
+  files:
+    - path: "performance/profile-report.md"
+      description: "Profiling analysis and recommendations."
+  artifacts:
+    - "Flame graph SVG for visualization."
+success_criteria:
+  automated:
+    - "p95 latency decreases by at least 40% after optimization."
+    - "Memory usage reduced by 30% or more."
+  manual:
+    - "The hottest code paths are identified and optimized."
+permissions_needed:
+  - "filesystem"
+  - "read access to application logs"
+safety_notes:
+  - "Never run profiling tools (py-spy, cProfile) on production without proper observability in place."
+  - "Always test cache integration (Redis) in staging before enabling in production."
+recommended_tools:
+  primary:
+    - name: "py-spy + cProfile + snakeviz"
+      install: "pip install py-spy snakeviz"
+  alternatives:
+    - name: "Scalene"
+      when: "Need line-by-line CPU, GPU, and memory profiling in one tool."
+implementation_checklist:
+  - step: "Profiling Setup"
+    tasks:
+      - "Install profiling tools and measure baseline p50/p95/p99 latency."
+      - "Generate a flame graph to identify bottlenecks."
+  - step: "Async Optimization"
+    tasks:
+      - "Replace sync database calls with async versions."
+      - "Add connection pooling with configurable min/max pool sizes."
+  - step: "Caching Strategy"
+    tasks:
+      - "Implement Redis caching for frequently accessed endpoints."
+      - "Set appropriate TTL values based on data freshness requirements."
+anti_patterns:
+  - "Adding async/await everywhere without profiling first blind optimization."
+  - "Caching everything with long TTLs leading to stale data issues."
+best_practices:
+  - "Profile first, optimize second. Measure before and after each change."
+references:
+  - title: "Python Performance Tips"
+    url: "https://docs.python.org/3/howto/perf_profiling.html"
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."

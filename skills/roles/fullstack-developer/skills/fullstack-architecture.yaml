@@ -1,0 +1,102 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "fullstack-architecture"
+display_name: "Fullstack Application Architecture"
+description: >
+  Designs the end-to-end architecture of a web application, selecting the right 
+  combination of frontend frameworks, backend APIs, and databases. Ensures 
+  seamless data flow and type safety from the database to the browser.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "fullstack-developer"
+phase: "planning"
+applicable_startups:
+  - all
+priority: "critical"
+difficulty: "expert"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "How should we structure this app?"
+  - "Set up the fullstack boilerplate."
+  - "Connect the frontend to the database."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Scaffold fullstack repository."
+  - "Draft architecture diagram."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "primary_use_case"
+      type: "string"
+      description: "E.g., SEO-heavy blog, dynamic dashboard."
+  optional:
+    - name: "rendering_strategy"
+      type: "string"
+      description: "SSR, SSG, SPA."
+      default: "SPA"
+
+outputs:
+  files:
+    - path: "docs/architecture.md"
+      description: "The architectural blueprint."
+  artifacts:
+    - "A scaffolded project structure."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "N/A"
+manual:
+  - "The application can be run locally by a new developer with a single `npm run dev` command."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "Over-Engineering: Do not adopt micro-frontends or 10 different microservices for an MVP. Build a majestic monolith first."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Next.js / tRPC"
+      install: "npx create-t3-app@latest"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Rendering Strategy Selection"
+    tasks:
+      - "If SEO is critical (e-commerce, blogs), use Server-Side Rendering (SSR) via Next.js. If it's a heavily interactive dashboard behind a login wall, use a Single Page App (SPA) via Vite."
+  - step: "End-to-End Type Safety"
+    tasks:
+      - "Implement a setup where a change to a database column name immediately throws a TypeScript error in the frontend React component. Use tools like tRPC or GraphQL Code Generator."
+  - step: "Environment Configuration"
+    tasks:
+      - "Strictly separate `NEXT_PUBLIC_` env vars (shipped to the browser) from secret API keys (kept securely on the server). Validate all env vars at startup using Zod."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Storing AWS secret keys in the frontend source code."
+best_practices:
+  - "Keep business logic on the server. The frontend should be as 'dumb' as possible, only responsible for presentation and collecting user input."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "T3 Stack Documentation"
+    url: "https://create.t3.gg/"

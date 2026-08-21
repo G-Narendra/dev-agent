@@ -1,0 +1,105 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "sales-playbook"
+display_name: "Sales Leadership & Playbook Architecture"
+description: >
+  Scales the revenue engine. Transitions the company from 'Founder-Led Sales' 
+  (where only the CEO can close deals) to a repeatable, scalable machine 
+  where any B-tier rep can close A-tier deals by following the playbook.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "head-of-sales"
+phase: "growth"
+applicable_startups:
+  - B2B, Enterprise, SaaS
+priority: "critical"
+difficulty: "expert"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "We need to hire 5 more reps."
+  - "Only the founder can close deals."
+  - "Why is our win rate dropping?"
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Generate MEDDPICC sales playbook."
+  - "Draft compensation plan model."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "average_contract_value"
+      type: "string"
+      description: "How much is a deal worth? ($10k vs $100k)."
+    - name: "sales_cycle_length"
+      type: "string"
+      description: "30 days vs 9 months."
+  optional:
+    - name: "target_quota"
+      type: "string"
+      description: "Annual quota per rep."
+      default: "$1M ARR"
+
+outputs:
+  files:
+    - path: "sales/strategy/master_sales_playbook.md"
+      description: "The bible that every rep must follow."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "N/A"
+manual:
+  - "80% of the sales team hits quota, and the ramp time for new hires drops from 6 months to 3 months."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "The Capped Commission Risk: Never cap a salesperson's commission. If a rep's quota is $1M and they hit $2M, they should get paid exponentially more. Capping commissions tells your best performers to stop working in October."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Salesforce / Gong / Outreach"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "The Qualification Framework (MEDDPICC)"
+    tasks:
+      - "Force reps to qualify deals out. If a rep cannot answer Metrics, Economic Buyer, Decision Criteria, Decision Process, Paper Process, Identify Pain, Champion, and Competition, the deal is not real. Move it back to stage 1."
+  - step: "The Compensation Plan (OTE)"
+    tasks:
+      - "Build a 50/50 plan. If On-Target Earnings (OTE) is $200k, $100k is base salary, $100k is variable commission. Tie the commission to Cash Collected, not just Signed Contracts, to prevent reps from selling to bankrupt companies."
+  - step: "Call Review & Coaching"
+    tasks:
+      - "The Head of Sales should not be closing deals. They are a coach. Use Gong to listen to 5 calls a week per rep. Provide exact, micro-feedback: 'At minute 14, they objected on price, and you immediately discounted. You must anchor the value first.'"
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Promoting the best Account Executive to Head of Sales. The skills required to close a deal (selfishness, aggression) are the exact opposite of the skills required to manage a team (empathy, coaching). Hire a true manager."
+best_practices:
+  - "Implement 'Mutual Action Plans' (MAPs) for any deal over $50k. It's a shared Google Doc between the Rep and the Prospect outlining exactly who needs to do what by when to go live by the target date."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Gong: Sales Playbook Template"
+    url: "https://www.gong.io/blog/sales-playbook/"

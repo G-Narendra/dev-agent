@@ -1,0 +1,87 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "product-analytics"
+display_name: "Product Analytics & Event Tracking"
+description: >
+  Implement robust product analytics (Mixpanel/Amplitude) to track user behavior, 
+  identify drop-off points in the funnel, and measure feature adoption.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "data-scientist"
+phase: "growth"
+applicable_startups: 
+  - all
+priority: "high"
+difficulty: "advanced"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Tracking Plan"
+    tasks:
+      - "Create a strict 'Tracking Plan' spreadsheet defining exact event names (e.g., `Button Clicked - Checkout`) to prevent messy, duplicated data."
+  - step: "Server-Side Tracking"
+    tasks:
+      - "Track critical conversion events (e.g., `Payment Successful`) on the backend, not the frontend, to avoid ad-blockers ruining the data."
+  - step: "Cohort Analysis"
+    tasks:
+      - "Build cohort retention charts to determine if users who activate a specific feature return to the app at a higher rate in Week 4."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Firing 'Page Viewed' events without any properties attached, making it impossible to segment users by subscription tier or acquisition channel."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Product Analytics process"
+  - "How do I handle product analytics?"
+  - "Implement product analytics"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the product analytics process"
+  optional:
+    - name: "data_source"
+      type: "string"
+      description: "Source of data to analyze"
+      default: "Internal data"
+    - name: "target_audience"
+      type: "string"
+      description: "Target user or customer segment"
+      default: "Primary user persona"
+    - name: "code_repository"
+      type: "string"
+      description: "Path to the code repository"
+      default: "./"
+
+outputs:
+  files:
+    - path: "outputs/product-analytics.md"
+      description: "Results of the product analytics process"
+  artifacts:
+    - "Completed product analytics deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

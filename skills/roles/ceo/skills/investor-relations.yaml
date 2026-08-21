@@ -1,0 +1,111 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "investor-relations"
+display_name: "Investor Relations & Board Management"
+description: >
+  Manages the flow of information to existing investors and board members. 
+  Writes compelling monthly updates, prepares board decks, and leverages 
+  investors' networks for hiring and business development rather than just 
+  treating them as bank accounts.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "ceo"
+phase: "operations"
+applicable_startups:
+  - venture-backed
+priority: "high"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Draft the monthly investor update."
+  - "We have a board meeting next week."
+  - "How do I ask investors for help?"
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Generate board meeting agenda."
+  - "Draft investor update email."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "monthly_metrics"
+      type: "string"
+      description: "Burn rate, runway, MRR, key hires."
+  optional:
+    - name: "current_challenges"
+      type: "string"
+      description: "What is currently blocking the company?"
+      default: "None"
+
+outputs:
+  files:
+    - path: "finance/investors/monthly-update.md"
+      description: "The formatted email to send to stakeholders."
+  artifacts:
+    - "A list of 'Asks' delegated to specific investors."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "N/A"
+manual:
+  - "Investors reply to updates offering concrete help (introductions, candidate referrals) because the 'Asks' were specific and actionable."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "Hiding Bad News: Never wait until a board meeting to surprise the board with terrible news (e.g., losing a massive customer). Call them immediately. Surprises destroy trust."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Email / Notion"
+      install: "N/A"
+  alternatives:
+    - name: "Visible.vc"
+      when: "Managing complex cap tables and automated metric reporting."
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "The Monthly Update Format"
+    tasks:
+      - "Structure: 1. Highlights (3 bullet points). 2. Lowlights (Be painfully honest). 3. KPIs (Cash in bank, Burn, Runway, Revenue). 4. Asks (What do you need?)."
+  - step: "Actionable Asks"
+    tasks:
+      - "Do NOT say: 'We are hiring engineers.' Say: 'We are hiring a Senior Rust Engineer. Please forward this specific job link to 2 people in your network.' Make it effortless for them to help."
+  - step: "Board Meeting Prep"
+    tasks:
+      - "Send the Board Deck 48 hours BEFORE the meeting. Require investors to read it in advance. Spend the actual meeting discussing strategic blockers, not reading slides aloud."
+  - step: "Investor CRM"
+    tasks:
+      - "Keep track of which investors actually help. When raising the next round, give pro-rata allocation priority to the investors who provided the most value outside of capital."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Writing a 5-page essay for the monthly update. Investors have 20 portfolio companies; they will not read it. Use bullet points and bold metrics."
+  - "Only contacting investors when you need money. It signals panic and damages the relationship."
+
+best_practices:
+  - "If you missed a target, explain WHY and what the corrective action plan is. Investors respect founders who diagnose failures quickly."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Y Combinator: How to Write an Investor Update"
+    url: "https://www.ycombinator.com/library/4w-how-to-write-an-investor-update"

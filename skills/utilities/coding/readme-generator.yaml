@@ -1,0 +1,162 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "readme-generator"
+display_name: "README Generator & Documentation Scaffold"
+description: >
+  Generate comprehensive, developer-friendly README files for any project
+  type. Covers project badges, installation instructions, API documentation,
+  contributing guidelines, license selection, and CI/CD status integration.
+  Produces READMEs that are informative, accessible, and follow open-source
+  best practices.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "utility"
+phase: "all"
+applicable_startups:
+  - all
+priority: "high"
+difficulty: "beginner"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Generate a README for this project"
+  - "Create documentation for the API..."
+  - "Write a README with installation instructions..."
+  - "Add badges and CI status to the README"
+  - "Create a CONTRIBUTING.md for the project"
+  - "Generate project documentation scaffold..."
+  - "Write a comprehensive README with examples..."
+  - "Add license section to the README..."
+  - "Document setup instructions for developers..."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "cat README.md -- check-categories"
+  - "npx @appnest/readme generate --input package.json"
+  - "python -c 'import readme_generator'"
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "project_name"
+      type: "string"
+      description: "Name of the project."
+    - name: "project_type"
+      type: "string"
+      description: "CLI tool, web app, library, API, or game."
+  optional:
+    - name: "language_framework"
+      type: "string"
+      description: "Primary language or framework."
+      default: "Auto-detected from project files"
+    - name: "license"
+      type: "string"
+      description: "MIT, Apache-2.0, GPL-3.0, or custom."
+      default: "MIT"
+    - name: "include_sections"
+      type: "list"
+      description: "Additional sections to include."
+      default: "Installation, Usage, API, Contributing, License"
+
+outputs:
+  files:
+    - path: "README.md"
+      description: "Project README file."
+    - path: "CONTRIBUTING.md"
+      description: "Contributing guidelines."
+    - path: "LICENSE"
+      description: "License file if selected."
+    - path: "CHANGELOG.md"
+      description: "Change log template with Keep a Changelog format."
+  artifacts:
+    - "Open Graph preview card for the repository."
+    - "CI/CD status badge URLs for the README header."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "README has all required sections: title, description, install, usage, contributing, license."
+    - "README links are valid (badge images load, documentation links resolve)."
+  manual:
+    - "A new developer can set up and run the project in under 5 minutes using only the README."
+    - "The README passes the 'bus factor test' — any team member can take over the project."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+
+safety_notes:
+  - "Never include real API keys, database connection strings, or secrets in the README — use environment variable placeholders."
+  - "Do not commit a README with placeholder content (TODOs, FIXMEs) — these confuse new contributors."
+  - "Keep the README in sync with the actual project state — stale documentation is worse than no documentation."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Manually crafted README following Best Practices"
+      install: "N/A (markdown editing)"
+      url: "https://www.makeareadme.com/"
+  alternatives:
+    - name: "readme-md-generator (CLI)"
+      install: "npx readme-md-generator"
+      url: "https://github.com/kefranabg/readme-md-generator"
+    - name: "Standard Readme (template linter)"
+      install: "npm install -g standard-readme"
+      url: "https://github.com/RichardLitt/standard-readme"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Structure the README"
+    tasks:
+      - "Create a clear header: project name (linked to repo), one-line description, and CI/coverage/version badges."
+      - "Add a Table of Contents for any README longer than 200 lines."
+      - "Write a 'What is this?' section that explains the problem and solution in 2-3 sentences."
+      - "Add a 'Features' section with bullet points of key capabilities — keep it scannable."
+  - step: "Setup Instructions"
+    tasks:
+      - "List prerequisites with exact version requirements (Node >=18, Python >=3.10, etc.)."
+      - "Provide copy-paste installation commands: `npm install`, `pip install -r requirements.txt`, etc."
+      - "Include a 'Quick Start' example that goes from zero to running in 4 steps or fewer."
+      - "Add environment variable setup instructions with a `.env.example` file reference."
+  - step: "Usage & Examples"
+    tasks:
+      - "Show basic usage with a code example that readers can copy-paste and run."
+      - "Add a GIF or screenshot demonstrating the project in action."
+      - "Document all CLI flags, API endpoints, or configuration options."
+  - step: "Contributing & Maintenance"
+    tasks:
+      - "Create a CONTRIBUTING.md with PR workflow, code style, and testing requirements."
+      - "Add a CHANGELOG.md following the Keep a Changelog format: Added, Changed, Deprecated, Removed, Fixed, Security."
+      - "Choose and apply a standard open-source license file (LICENSE)."
+      - "Add a 'Support' section with links to issues, discussions, or community channels."
+      - "Optional: Add an 'FAQ' section for common questions encountered during onboarding."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Writing a README that assumes deep domain knowledge the reader doesn't have — define all acronyms on first use."
+  - "Including a massive installation section when the project is a simple single-file script — one `pip install` is enough."
+  - "Using screenshots of code instead of actual code blocks — screenshots can't be copy-pasted or searched."
+  - "Leaving placeholder text like 'TODO: add description' in a committed README."
+  - "Documenting features that don't exist yet without a clear 'Coming Soon' label."
+  - "Writing a README that's longer than the code itself for a trivial utility."
+
+best_practices:
+  - "Start the README with the most important information: what the project does and why it exists."
+  - "Use badges to communicate project health visually (CI status, coverage, npm version, license)."
+  - "Keep installation instructions to 4 commands or fewer. If more are needed, create a SETUP.md."
+  - "Include a 'Prerequisites' section that mentions exact version requirements — nothing wastes time like a version mismatch."
+  - "Link to external documentation rather than duplicating it — the README is an entry point, not a wiki."
+  - "Update the README on every significant release — require it as part of the PR checklist."
+  - "Follow the 'Goldilocks principle': enough to get started, not so much that it's overwhelming."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Make a README — The art of README files"
+    url: "https://www.makeareadme.com/"
+  - title: "Standard Readme Specification"
+    url: "https://github.com/RichardLitt/standard-readme"
+  - title: "Keep a Changelog"
+    url: "https://keepachangelog.com/en/1.1.0/"
+  - title: "Choose an Open Source License"
+    url: "https://choosealicense.com/"
+  - title: "Awesome README — Curated list"
+    url: "https://github.com/matiassingers/awesome-readme"

@@ -1,0 +1,126 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "free-api-finder"
+display_name: "Free Public API Discovery & Evaluation"
+description: >
+  Searches for free and freemium third-party APIs that the startup can use 
+  to accelerate development without spending money. Covers the curated 
+  public-apis GitHub repo, RapidAPI free tier, and direct web searches. 
+  Every API found is evaluated for free tier limits, rate limits, and 
+  commercial usage terms.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "utility"
+phase: "all"
+applicable_startups:
+  - all
+priority: "high"
+difficulty: "beginner"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Is there a free API for this?"
+  - "Find free APIs for this feature."
+  - "What free services can we use instead of building?"
+  - "Search for free third-party integrations."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Search public-apis GitHub repo."
+  - "Search RapidAPI free tier."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "feature_needed"
+      type: "string"
+      description: "The feature or capability (e.g., 'SMS sending', 'currency conversion', 'email verification')."
+  optional:
+    - name: "preferred_auth"
+      type: "string"
+      description: "'api-key', 'oauth', 'no-auth'."
+      default: "api-key"
+
+outputs:
+  files:
+    - path: "research/free-apis-{feature}.md"
+      description: "A curated list of free APIs for the required feature."
+  artifacts:
+    - "Top 3 API recommendations with free tier limits and rate limits."
+    - "Links to documentation and signup pages."
+    - "Critical consideration: will free tier cover the MVP needs?"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "N/A"
+  manual:
+    - "Found at least 2 free APIs that can serve the feature without paying during MVP stage."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "network"
+
+safety_notes:
+  - "Free tiers have rate limits. An API that gives 1000 free calls/month may not be sufficient for a production app with real users."
+  - "Always check the Terms of Service for commercial use restrictions. Some 'free' APIs forbid commercial use."
+  - "API availability changes. A free API that works today may be deprecated or turned paid tomorrow."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "public-apis GitHub Repository"
+      install: "N/A (github.com/public-apis/public-apis)"
+  alternatives:
+    - name: "RapidAPI Free Tier"
+      when: "Needing a marketplace with standardized free tiers."
+      install: "N/A (rapidapi.com)"
+    - name: "Google Search (free {feature} API)"
+      when: "Finding APIs not listed in the central directories."
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Search public-apis Repository"
+    tasks:
+      - "Go to: `github.com/public-apis/public-apis`"
+      - "Browse by category or search the README for the feature keyword."
+      - "For each promising API, check: (1) Does it require an API key? (2) Is there a free tier? (3) Can it be used commercially?"
+      - "Use GitHub search: `site:github.com/public-apis/public-apis {feature}`"
+  - step: "Search RapidAPI Free Tier"
+    tasks:
+      - "Go to: `rapidapi.com` and search for the feature."
+      - "Use the 'Free' filter to find APIs with free plans."
+      - "Check: free tier limits (calls/month), rate limits (calls/second), and pricing after free tier."
+  - step: "Direct Web Search"
+    tasks:
+      - "Use Google: `free {feature} API for developers`"
+      - "Look for APIs from established companies (Twilio, Stripe, Google, etc.) — they're less likely to disappear."
+      - "Check recent blog posts or articles — they often list the current best free APIs."
+  - step: "Evaluate and Compare"
+    tasks:
+      - "Create a comparison table: API Name | Free Tier Limit | Rate Limit | Auth Method | Commercial Use? | Docs Quality"
+      - "Highlight the best option for MVP stage and the best option for scale."
+  - step: "Compile Report"
+    tasks:
+      - "Recommend the top 1-2 APIs with setup instructions and links."
+      - "Note any migration path (when the free tier runs out, what's the next step?)."
+      - "Add a caveat: what happens if this API shuts down? (Plan B)."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Only checking the first result. Always compare at least 3 options."
+  - "Assuming an API with a generous free tier now will keep it forever. Mock the API interface so you can switch providers easily."
+  - "Ignoring auth complexity. An API with OAuth is harder to integrate than one with a simple API key."
+
+best_practices:
+  - "Prefer APIs from established companies (Google, Microsoft, Twilio, Stripe) over random indie APIs — they're more likely to stay free and maintained."
+  - "Add API client abstraction layer from day 1. This makes switching providers a config change instead of a rewrite."
+  - "Check GitHub Issues for each API — they reveal real developer pain points and reliability issues."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "public-apis (Curated list of free APIs on GitHub)"
+    url: "https://github.com/public-apis/public-apis"
+  - title: "RapidAPI Hub"
+    url: "https://rapidapi.com/"
+  - title: "Free for Developers (List of free SaaS tiers)"
+    url: "https://free-for.dev/"

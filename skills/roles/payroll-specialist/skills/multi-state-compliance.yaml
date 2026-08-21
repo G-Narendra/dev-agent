@@ -1,0 +1,105 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "multi-state-compliance"
+display_name: "Payroll & Multi-State Compliance"
+description: >
+  Navigates the nightmare of remote work. Ensures that a startup with 
+  employees scattered across 15 different US states and 5 countries 
+  complies with every local tax law, overtime regulation, and benefits mandate.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "payroll-specialist"
+phase: "operations"
+applicable_startups:
+  - Remote-First, Global
+priority: "critical"
+difficulty: "expert"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "We just hired someone in California."
+  - "How do we pay contractors in India?"
+  - "Process the bi-weekly payroll."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Generate state tax registration checklist."
+  - "Draft independent contractor vs employee audit."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "employee_location"
+      type: "string"
+      description: "State or Country of residence."
+    - name: "employment_type"
+      type: "string"
+      description: "W2 Full-Time vs 1099 Contractor."
+  optional:
+    - name: "compensation_structure"
+      type: "string"
+      description: "Salary + Commission vs Hourly."
+      default: "Salary"
+
+outputs:
+  files:
+    - path: "hr/payroll/california_onboarding_compliance.md"
+      description: "The strict legal requirements for the new hire's state."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "N/A"
+manual:
+  - "100% of employees are paid accurately and on time, with zero state tax penalties or labor board violations."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "The Contractor Misclassification Felony: Never hire a full-time software engineer, dictate their hours, provide them a company laptop, and pay them as a '1099 Independent Contractor' to avoid taxes. The IRS will audit the startup, reclassify them, and charge the founders massive back-taxes and penalties."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Gusto / Rippling / Deel"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Foreign Qualification & State Tax IDs"
+    tasks:
+      - "If your startup is based in Delaware, but you hire someone in New York, you cannot just pay them. You must register the business with the NY Secretary of State (Foreign Qualification), open a NY Withholding Tax account, and a NY Unemployment account."
+  - step: "Employer of Record (EOR) for Global Hires"
+    tasks:
+      - "If you want to hire someone in Germany, do not try to figure out German labor law yourself. Use an EOR (like Deel or Remote). The EOR hires them legally in Germany, handles the taxes, and invoices your startup for a flat fee."
+  - step: "Overtime and 'Exempt' Status"
+    tasks:
+      - "Do not assume all salaried employees are 'Exempt' from overtime. In California, if a software engineer's salary falls below a specific high threshold, they must legally be paid time-and-a-half for any hours worked over 8 in a single day."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Running payroll manually in Excel. Startups try to save $40/month by not using Gusto, and end up making a $10,000 tax error. Never calculate payroll taxes manually. Software is infinitely cheaper than an IRS audit."
+best_practices:
+  - "Implement 'Shadow Payroll' checks. Before pressing 'Run Payroll', always download the preview CSV and compare the total cash outlay to the previous pay period. If it jumps by $50k, someone accidentally typed an extra zero in a commission check."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Rippling: Multi-State Employer Guide"
+    url: "https://www.rippling.com/blog/multi-state-payroll"

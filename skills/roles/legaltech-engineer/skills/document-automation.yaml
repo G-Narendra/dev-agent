@@ -1,0 +1,84 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "document-automation"
+display_name: "Legal Document Generation & Parsing"
+description: >
+  Implement robust pipelines to programmatically generate complex legal documents (PDF/Docx)
+  from structured data, and parse inbound legal texts with high fidelity.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "legaltech-engineer"
+phase: "build"
+applicable_startups: 
+  - legaltech
+priority: "mvp"
+difficulty: "advanced"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Template Engine"
+    tasks:
+      - "Set up a robust templating engine (e.g., Docassemble or Jinja to PDF) for contract generation."
+      - "Implement conditional clause logic (e.g., 'If state = CA, include non-compete waiver')."
+  - step: "Parsing"
+    tasks:
+      - "Implement precise OCR/PDF parsing (e.g., AWS Textract) to extract clauses from signed documents."
+  - step: "Versioning & Signatures"
+    tasks:
+      - "Integrate an e-Signature API (DocuSign, HelloSign) to manage the signing workflow and store the cryptographic hash."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Generating PDFs by manipulating raw HTML with CSS that breaks unpredictably across different headless browsers."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Document Automation process"
+  - "How do I handle document automation?"
+  - "Implement document automation"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the document automation process"
+  optional:
+    - name: "data_source"
+      type: "string"
+      description: "Source of data to analyze"
+      default: "Internal data"
+    - name: "code_repository"
+      type: "string"
+      description: "Path to the code repository"
+      default: "./"
+
+outputs:
+  files:
+    - path: "outputs/document-automation.md"
+      description: "Results of the document automation process"
+  artifacts:
+    - "Completed document automation deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

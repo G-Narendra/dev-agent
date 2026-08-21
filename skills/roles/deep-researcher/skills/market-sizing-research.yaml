@@ -1,0 +1,111 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "market-sizing-research"
+display_name: "Market Sizing & TAM/SAM/SOM Analysis"
+description: >
+  Estimates total addressable market (TAM), serviceable addressable market (SAM), 
+  and serviceable obtainable market (SOM) for new products and startups. Uses 
+  top-down, bottom-up, and value-theory approaches to produce defensible market 
+  size estimates for investors and strategic planning.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "deep-researcher"
+phase: "ideation"
+applicable_startups:
+  - all
+priority: "critical"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "What's the market size for this idea?"
+  - "Calculate TAM/SAM/SOM."
+  - "How big is this market?"
+  - "Investors want market size data."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Calculate market size."
+  - "Run bottom-up TAM analysis."
+  - "Find industry reports."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "product_description"
+      type: "string"
+      description: "What the product does and who it serves."
+    - name: "target_audience"
+      type: "string"
+      description: "Primary customer segments and geography."
+  optional:
+    - name: "pricing_assumption"
+      type: "string"
+      description: "Estimated price point or pricing model."
+      default: "To be determined from comparable analysis"
+
+outputs:
+  files:
+    - path: "research/market/{segment}-market-sizing.md"
+      description: "Market sizing report with TAM/SAM/SOM breakdown"
+  artifacts:
+    - "A defensible market size estimate ready for pitch decks"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Top-Down Analysis"
+    tasks:
+      - "Find industry analyst reports (Gartner, Forrester, IDC, Statista) for total market figures."
+      - "Apply relevant segments (geography, customer type, technology) to narrow to TAM."
+      - "Cross-reference multiple sources and note discrepancies."
+      - "Calculate year-over-year growth rate and 5-year projection."
+  - step: "Bottom-Up Analysis"
+    tasks:
+      - "Count the number of potential customers in your target segment."
+      - "Estimate average revenue per customer (ARPU) based on pricing assumptions."
+      - "Calculate bottom-up TAM = number of customers × ARPU."
+      - "Compare bottom-up vs. top-down — they should converge; if not, revisit assumptions."
+  - step: "Value Theory Validation"
+    tasks:
+      - "Calculate the value your product creates for each customer (time saved, revenue increased)."
+      - "Determine what % of that value you can capture (typically 10-30%)."
+      - "Cross-check: does the value-capture estimate match the top-down and bottom-up numbers?"
+  - step: "SAM & SOM Refinement"
+    tasks:
+      - "SAM: filter TAM by distribution channels, regulatory barriers, and go-to-market constraints."
+      - "SOM: estimate realistic market share in 1-3 years based on competition, funding, and team."
+      - "Provide a range (conservative, base case, optimistic) for each layer."
+      - "Document ALL assumptions so they can be challenged and updated."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Using only top-down TAM from a single analyst report — often wildly inflated."
+  - "Ignoring the bottom-up approach — investors love unit economics."
+  - "Presenting a single number instead of a range with assumptions."
+  - "Confusing TAM with SAM — just because the market is $50B doesn't mean you can reach it."
+best_practices:
+  - "The best market sizing uses all three approaches and reconciles them."
+  - "Document every assumption — your numbers will be challenged."
+  - "For early-stage startups, focus more on SOM than TAM (TAM is aspirational)."
+  - "Update market sizing as you learn more about pricing and customer segments."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "How to Calculate TAM, SAM, SOM for Your Startup"
+    url: "https://www.forbes.com/sites/allbusiness/2023/01/12/how-to-calculate-tam-sam-som/"
+  - title: "Market Sizing: The Startup's Guide"
+    url: "https://www.ycombinator.com/library/6e-market-sizing"

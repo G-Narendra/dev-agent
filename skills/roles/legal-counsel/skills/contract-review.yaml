@@ -1,0 +1,120 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "contract-review"
+display_name: "Commercial Contract & MSA Review"
+description: >
+  Analyzes Master Service Agreements (MSAs), NDAs, and Vendor Contracts. 
+  Identifies unlimited liability clauses, unfair termination rights, and 
+  hidden auto-renewal traps before the CEO signs the dotted line. Covers key patterns to avoid common pitfalls like documenting compliance controls only at audit time -- contin, and provides actionable best practices for production-ready results.
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "legal-counsel"
+phase: "operations"
+applicable_startups:
+  - B2B, SaaS, Enterprise
+priority: "critical"
+difficulty: "expert"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Review this vendor contract."
+  - "The enterprise client sent their MSA."
+  - "Is this NDA standard?"
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Generate contract redlines."
+  - "Draft liability cap clause."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "contract_text"
+      type: "string"
+      description: "The raw text of the agreement."
+    - name: "party_type"
+      type: "string"
+      description: "Are we the Buyer or the Seller?"
+  optional:
+    - name: "jurisdiction"
+      type: "string"
+      description: "Delaware, California, NY, UK."
+      default: "Delaware"
+
+outputs:
+  files:
+    - path: "legal/contracts/vendor_msa_redlined.md"
+      description: "The redlined contract with risk analysis."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "N/A"
+manual:
+  - "The startup's liability is strictly capped at the total amount paid under the contract in the preceding 12 months (standard SaaS cap)."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "AI Hallucination Risk: AI models cannot provide legally binding advice. The AI can highlight risks and draft redlines, but a licensed, human attorney MUST review the final commercial contract before execution."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Ironclad"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Limitation of Liability (LoL)"
+    tasks:
+      - "The most important clause in the contract. Ensure it excludes indirect/consequential damages and caps direct damages. If there is no liability cap, one server crash could bankrupt the startup."
+  - step: "Indemnification"
+    tasks:
+      - "If the startup's software accidentally infringes on a third party's patent, the startup usually agrees to 'indemnify' (pay the legal fees for) the client. Ensure this is mutually balanced if applicable."
+  - step: "Auto-Renewal & Termination"
+    tasks:
+      - "Watch out for 'Evergreen' clauses where a software vendor automatically renews a $100k contract unless you notify them exactly 90 days before expiration. Redline this to require mutual consent."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Documenting compliance controls only at audit time -- continuous monitoring is cheaper and less stressful than point-in-time fire drills."
+  - "Storing user data indefinitely without a retention policy -- violating 'data minimization' principles of GDPR and CCPA."
+  - "Using the same security controls for all data classifications -- PII, PHI, and public data need different access tiers."
+  - "Writing policies without testing them against real scenarios -- a policy that no one can follow is worse than no policy."
+  - "Failing to log access to sensitive data -- without an audit trail, you can't prove compliance during an investigation."
+  - "When sending out NDAs, use a Mutual NDA (MNDA) even if you are the only one sharing secrets. It signals fairness and prevents the other side's lawyers from wasting 2 weeks arguing about one-sided terms."
+
+  - "Map all data flows from collection through processing to deletion before implementing any compliance program."
+  - "Implement data retention and deletion schedules from day one — deleting old data on request is harder than auto-expiring it."
+  - "Document security controls continuously, not just before an audit — the evidence you need is fresh when captured in real-time."
+  - "Conduct tabletop incident response exercises quarterly — the first time you test your IR plan should not be during a real breach."
+  - "Use automated compliance monitoring tools (Vanta, Drata, Secureframe) instead of manual spreadsheets."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Not defining clear success criteria before starting a task -- leads to ambiguous outcomes, endless revisions, and wasted effort."
+
+best_practices:
+  - "Document all configuration decisions in an Architecture Decision Record (ADR) so future team members understand why choices were made."
+  - "Implement comprehensive error handling with structured logging at every integration boundary to simplify debugging."
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Y Combinator: Standard Legal Docs"
+    url: "https://www.ycombinator.com/documents/"

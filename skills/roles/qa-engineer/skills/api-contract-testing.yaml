@@ -1,0 +1,82 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "api-contract-testing"
+display_name: "API Contract Testing"
+description: >
+  Validate that the backend API implementation strictly adheres to the OpenAPI specification
+  to prevent breaking frontend clients.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "qa-engineer"
+phase: "build"
+applicable_startups: 
+  - all
+priority: "mvp"
+difficulty: "advanced"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "Dredd / Prism contract tests pass against the staging environment."
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Contract Validation Setup"
+    tasks:
+      - "Set up a contract testing tool (e.g., Dredd, Prism, or Pact)."
+      - "Point the tool at the `openapi.yaml` and the running API."
+  - step: "CI Integration"
+    tasks:
+      - "Add a CI step that runs contract tests against ephemeral environments."
+      - "Add environment variable validation that crashes fast on missing required values."
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Manually verifying API responses using Postman instead of automated contract tests."
+
+best_practices:
+  - "Write tests that fail for a clear reason, not mysterious failures."
+  - "Automate regression tests -- manual testing doesn't scale."
+  - "Test edge cases, not just the happy path."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Api Contract Testing process"
+  - "How do I handle api contract testing?"
+  - "Implement api contract testing"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the api contract testing process"
+  optional:
+    - name: "code_repository"
+      type: "string"
+      description: "Path to the code repository"
+      default: "./"
+
+outputs:
+  files:
+    - path: "outputs/api-contract-testing.md"
+      description: "Results of the api contract testing process"
+  artifacts:
+    - "Completed api contract testing deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

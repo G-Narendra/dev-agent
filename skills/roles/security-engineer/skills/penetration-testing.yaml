@@ -1,0 +1,114 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "penetration-testing"
+display_name: "Penetration Testing & Red Teaming"
+description: >
+  Simulates real-world cyberattacks against the company's own infrastructure 
+  and applications. Identifies zero-day exploits, misconfigurations, and 
+  business logic flaws before malicious actors find them. Covers key patterns to avoid common pitfalls like storing passwords in plaintext even in an internal database , and provides actionable best practices for production-ready results.
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "security-engineer"
+phase: "operations"
+applicable_startups:
+  - all
+priority: "high"
+difficulty: "expert"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "We need a pen test for SOC2."
+  - "Hack our new feature."
+  - "Verify the API is secure."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Generate pentest methodology plan."
+  - "Draft executive summary report."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "target_scope"
+      type: "string"
+      description: "The specific APIs or domains in scope."
+    - name: "rules_of_engagement"
+      type: "string"
+      description: "What actions are prohibited (e.g., No DDoS)?"
+  optional:
+    - name: "test_type"
+      type: "string"
+      description: "Black-box, Grey-box, White-box."
+      default: "Grey-box"
+
+outputs:
+  files:
+    - path: "security/reports/pentest-q3.md"
+      description: "The final vulnerability report."
+  artifacts:
+    - "A patched PR fixing the highest severity finding."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "N/A"
+manual:
+  - "All critical and high-severity vulnerabilities are patched within 72 hours of the report being delivered to engineering."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "Production Outages: Never run automated exploitation tools (like SQLMap) aggressively against a production database. It can corrupt data or cause a Denial of Service. Use staging environments."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Burp Suite Professional"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Reconnaissance & Mapping"
+    tasks:
+      - "Map the entire attack surface. Find undocumented APIs, exposed admin panels, and legacy subdomains using tools like `subfinder` and `nmap`."
+  - step: "Business Logic Abuse"
+    tasks:
+      - "Don't just look for technical flaws. Look for logic flaws. E.g., Can you put a negative quantity in the shopping cart to reduce the total price?"
+      - "Set up alert fatigue prevention -- only alert on symptoms, not causes."
+  - step: "Authorization Bypass (BOLA/IDOR)"
+    tasks:
+      - "Create two separate user accounts. Attempt to access or modify User B's data using User A's authentication token."
+      - "Implement rate limiting with exponential backoff for all authentication endpoints."
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Storing passwords in plaintext even in an internal database -- always hash + salt with bcrypt or argon2."
+  - "Trusting client-side validation as a security boundary -- attackers bypass the browser entirely."
+  - "Using outdated dependencies with known CVEs -- run `npm audit`, `pip audit`, or `trivy` as part of CI."
+  - "Hardcoding API keys, tokens, or database URLs in source code -- use environment variables or a vault."
+  - "Rate limiting only on the login endpoint -- all POST endpoints need protection against abuse."
+best_practices:
+  - "Provide engineers with the exact `curl` command or script needed to reproduce the vulnerability locally so they can verify their fix works."
+
+  - "Implement defense in depth: network firewall + WAF + application-level auth + encryption at rest/in transit."
+  - "Run automated vulnerability scanning (Trivy, Snyk, Dependabot) weekly and patch critical CVEs within 48 hours."
+  - "Use the principle of least privilege — every service account should have only the permissions it needs and nothing more."
+  - "Enable audit logging everywhere and store logs in an immutable, append-only store for incident investigation."
+  - "Regularly rotate secrets and access keys — 90-day rotation limits blast radius of leaked credentials."
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "OWASP Testing Guide"
+    url: "https://owasp.org/www-project-web-security-testing-guide/"

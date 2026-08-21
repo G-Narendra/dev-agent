@@ -1,0 +1,109 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "annotation-guideline-creation"
+display_name: "Human Annotation & Labeling Guidelines"
+description: >
+  Write bulletproof, unambiguous instructions for human labelers (e.g., Scale AI, 
+  Upwork contractors, or internal teams). Prevents contradictory ground-truth data 
+  caused by labelers interpreting subjective edge cases differently.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "dataset-engineer"
+phase: "ideation"
+applicable_startups:
+  - ai
+priority: "critical"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Write the labeling guidelines."
+  - "How should the annotators tag this data?"
+  - "Create the Scale AI instructions."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Create a labeling guideline artifact."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "task_description"
+      type: "string"
+      description: "What the labelers are supposed to do (e.g., 'Draw bounding boxes around cars', 'Classify sentiment as Positive/Negative')."
+  optional:
+    - name: "edge_cases"
+      type: "string"
+      description: "Known confusing examples."
+      default: "null"
+
+outputs:
+  files:
+    - path: "ai/annotation-guidelines.md"
+      description: "The official manual provided to the labeling workforce."
+  artifacts:
+    - "A short 'qualification quiz' for new labelers."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "Inter-Annotator Agreement (IAA) score is > 0.85 (meaning different humans agree with each other 85% of the time on the same data)."
+  manual:
+    - "Labelers ask very few clarifying questions after reading the guide."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+
+safety_notes:
+  - "If outsourcing labeling to international contractors, ensure the data contains no PII, PHI, or highly classified company secrets."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Notion / Google Docs"
+      install: "N/A"
+  alternatives:
+    - name: "Labelbox / Snorkel"
+      when: "Managing the actual UI where labelers do the work."
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "The 'Golden Path' Definition"
+    tasks:
+      - "Provide a crystal clear definition of the standard task with a visual example."
+      - "Example: 'A car is any 4-wheeled passenger vehicle. Draw the box tightly around the visible edges.'"
+  - step: "Edge Case Enumeration"
+    tasks:
+      - "Humans fail on edge cases. You must explicitly define them."
+      - "Example: 'What if the car is 50% occluded by a tree? YES, label it.' 'What about toy cars? NO, ignore them.' 'What about pickup trucks? YES, label as car.'"
+  - step: "The 'I Don't Know' Clause"
+    tasks:
+      - "Always provide a way for labelers to flag a task as 'Unsure' or 'Corrupted Data'. If you force them to guess, they will inject random noise into your dataset."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Writing a 1-paragraph instruction for a complex task and assuming 'common sense'. Common sense does not scale across 50 outsourced contractors."
+  - "Providing no examples. Guidelines must be 80% visual examples (Do this, Don't do this) and 20% text."
+
+best_practices:
+  - "Test the guidelines yourself. Grab 3 random coworkers, give them the guidelines and 20 data points. Measure their Inter-Annotator Agreement. If they disagree, the guidelines are broken, not the humans."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Scale AI: How to write great labeling instructions"
+    url: "https://scale.com/guides/data-labeling-best-practices"

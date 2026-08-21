@@ -1,0 +1,103 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "data-modeling"
+display_name: "Data Warehouse Modeling (Star Schema/Data Vault)"
+description: >
+  Architects the structure of the analytical data warehouse. Transforms messy, 
+  highly-normalized application data into denormalized schemas (Star Schema) 
+  that allow business analysts to query massive datasets rapidly without 
+  writing 15 complex SQL joins.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "data-engineer"
+phase: "growth"
+applicable_startups:
+  - all
+priority: "high"
+difficulty: "expert"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "The analytical queries are too slow."
+  - "Design the data warehouse schema."
+  - "Build the fact and dimension tables."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Draft Star Schema diagram."
+  - "Generate dbt models."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "business_process"
+      type: "string"
+      description: "What are we measuring? (e.g., Sales, Signups)."
+  optional:
+    - name: "modeling_technique"
+      type: "string"
+      description: "Kimball (Star Schema) vs Inmon (Data Vault)."
+      default: "Kimball (Star Schema)"
+
+outputs:
+  files:
+    - path: "dbt/models/marts/core/fact_sales.sql"
+      description: "The primary fact table definition."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "N/A"
+manual:
+  - "A Data Analyst can pull 'Total Revenue by Country by Month' writing a simple `SELECT *` query with zero joins."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "db_read"
+
+safety_notes:
+  - "Production DB Impact: Never run heavy analytical ETL queries directly against the primary production PostgreSQL database. Replicate the data to Snowflake/BigQuery first to avoid crashing the live app."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "dbt (Data Build Tool)"
+      install: "pip install dbt-core"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Identify the Grain"
+    tasks:
+      - "Before writing any SQL, clearly define the 'Grain' of the Fact table. E.g., 'One row equals one line item on an invoice'. If the grain is mixed, the numbers will be double-counted."
+  - step: "Dimension Tables"
+    tasks:
+      - "Build 'Slowly Changing Dimensions' (SCD Type 2) for entities that change over time (like a User's subscription tier) so historical revenue isn't accidentally rewritten when a user upgrades."
+  - step: "Fact Tables"
+    tasks:
+      - "Build Fact tables containing ONLY foreign keys to dimensions and numerical measures (Revenue, Quantity). No text strings should exist in a Fact table."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Creating a 'One Big Table' (OBT) that has 400 columns and no structure. While OBT is fast for simple queries, it becomes an unmaintainable nightmare as the company scales."
+best_practices:
+  - "Follow the Medallion Architecture: Bronze (Raw data), Silver (Cleaned data), Gold (Business-level aggregations like Star Schema)."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "The Kimball Dimensional Modeling Techniques"
+    url: "https://www.kimballgroup.com/data-warehouse-business-intelligence-resources/kimball-techniques/"

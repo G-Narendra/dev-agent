@@ -1,0 +1,79 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "content-moderation-pipeline"
+display_name: "Automated Content Moderation"
+description: >
+  Build a dual-layered moderation pipeline (automated pre-filter + human review queue) 
+  to prevent toxic or illegal content from ever being publicly displayed.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "trust-safety-engineer"
+phase: "growth"
+applicable_startups: 
+  - social
+  - marketplace
+priority: "critical"
+difficulty: "expert"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Pre-Flight Interception"
+    tasks:
+      - "Run all user-uploaded images through a PhotoDNA/Hash-matching API to instantly and silently drop known CSAM before it even reaches the database."
+  - step: "Heuristic Shadowbanning"
+    tasks:
+      - "If a new account creates 50 posts in 5 minutes containing URLs, do not ban them (they will just make a new account). Shadowban them so their posts are only visible to themselves."
+  - step: "The Appeals Process"
+    tasks:
+      - "Never permanently ban a user without an automated 'Click here to appeal' workflow. Send appeals directly to a dedicated queue for human review."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Relying 100% on users reporting bad content, meaning highly illegal or toxic material stays live on your platform for hours before you even notice."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Content Moderation Pipeline process"
+  - "How do I handle content moderation pipeline?"
+  - "Implement content moderation pipeline"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the content moderation pipeline process"
+  optional:
+    - name: "N/A"
+      type: "string"
+      description: "No optional inputs needed."
+
+outputs:
+  files:
+    - path: "outputs/content-moderation-pipeline.md"
+      description: "Results of the content moderation pipeline process"
+  artifacts:
+    - "Completed content moderation pipeline deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

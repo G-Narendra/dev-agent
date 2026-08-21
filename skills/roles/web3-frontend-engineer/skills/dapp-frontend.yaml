@@ -1,0 +1,84 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "dapp-frontend"
+display_name: "Decentralized App Frontend Development"
+description: >
+  Builds frontend interfaces for decentralized applications. Specializes in 
+  wallet integration, smart contract interaction, transaction lifecycle 
+  management, and Web3 UX patterns that handle blockchain-specific constraints.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "web3-frontend-engineer"
+phase: "build"
+applicable_startups:
+  - web3
+priority: "critical"
+difficulty: "advanced"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Wallet Connection"
+    tasks:
+      - "Integrate wallet connection (MetaMask, WalletConnect, Coinbase Wallet)."
+      - "Handle chain switching and account changes gracefully."
+  - step: "Transaction UX"
+    tasks:
+      - "Display transaction lifecycle (pending, confirming, confirmed, failed)."
+      - "Estimate and display gas fees before user confirmation."
+  - step: "Data Indexing"
+    tasks:
+      - "Use The Graph or custom indexer for on-chain data queries."
+      - "Implement optimistic UI updates before transaction finality."
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Dapp Frontend process"
+  - "How do I handle dapp frontend?"
+  - "Implement dapp frontend"
+  - "Builds frontend interfaces for decentralized applications"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the dapp frontend process"
+  optional:
+    - name: "N/A"
+      type: "string"
+      description: "No optional inputs needed."
+
+outputs:
+  files:
+    - path: "outputs/dapp-frontend.md"
+      description: "Results of the dapp frontend process"
+  artifacts:
+    - "Completed dapp frontend deliverable"
+# ── QUALITY GATES ────────────────────────────────────────────
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start — retrofitting is expensive."
+anti_patterns:
+  - "Assuming users have ETH for gas — design for sponsored transactions or layer 2."
+  - "Showing a spinner during transactions without displaying the tx lifecycle."
+  - "Reading on-chain data directly on every page load — use an indexer for performance."
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

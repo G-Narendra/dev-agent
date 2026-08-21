@@ -1,0 +1,83 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "internal-developer-platform"
+display_name: "Internal Developer Platform (IDP) Design"
+description: >
+  Build self-serve infrastructure portals that allow developers to provision 
+  databases, spin up environments, and deploy code without submitting DevOps tickets.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "platform-engineer"
+phase: "growth"
+applicable_startups: 
+  - enterprise
+priority: "high"
+difficulty: "expert"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "The Golden Path"
+    tasks:
+      - "Provide a 1-click template that generates a new microservice repository complete with CI/CD pipelines, Dockerfiles, and observability agents already pre-configured."
+  - step: "Self-Serve Infrastructure"
+    tasks:
+      - "Build a Slack bot or Backstage plugin where a developer can type `/provision-db staging` and get a fresh Postgres connection string in 2 minutes."
+  - step: "Ephemeral Environments"
+    tasks:
+      - "Configure the CI pipeline to spin up a completely isolated, full-stack environment for every single Pull Request, allowing product managers to test code before it merges."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Forcing a senior product engineer to spend 4 days writing Kubernetes YAML files just to deploy a basic 'Hello World' Node.js service."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Internal Developer Platform process"
+  - "How do I handle internal developer platform?"
+  - "Implement internal developer platform"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the internal developer platform process"
+  optional:
+    - name: "data_source"
+      type: "string"
+      description: "Source of data to analyze"
+      default: "Internal data"
+    - name: "code_repository"
+      type: "string"
+      description: "Path to the code repository"
+      default: "./"
+
+outputs:
+  files:
+    - path: "outputs/internal-developer-platform.md"
+      description: "Results of the internal developer platform process"
+  artifacts:
+    - "Completed internal developer platform deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

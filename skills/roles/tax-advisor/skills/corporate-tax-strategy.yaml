@@ -1,0 +1,78 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "corporate-tax-strategy"
+display_name: "Corporate Tax Strategy & Compliance"
+description: >
+  Manage the startup's global tax liabilities, including Sales Tax (Nexus), VAT, 
+  R&D Tax Credits, and corporate structuring to optimize cash flow.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "tax-advisor"
+phase: "operations"
+applicable_startups: 
+  - all
+priority: "high"
+difficulty: "expert"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Nexus Tracking"
+    tasks:
+      - "Use a tool like Stripe Tax or Avalara to continuously monitor economic nexus thresholds and automatically collect state/local sales tax when required."
+  - step: "R&D Credits"
+    tasks:
+      - "Meticulously document engineering hours spent on 'novel technical challenges' to claim non-dilutive capital through R&D tax credits."
+  - step: "Transfer Pricing"
+    tasks:
+      - "If operating internationally, establish strict transfer pricing agreements between the US parent and foreign subsidiaries to prevent audit penalties."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Selling software to customers globally for 2 years without realizing the startup crossed the VAT threshold in Europe, resulting in a massive retroactive tax bill."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Corporate Tax Strategy process"
+  - "How do I handle corporate tax strategy?"
+  - "Implement corporate tax strategy"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the corporate tax strategy process"
+  optional:
+    - name: "N/A"
+      type: "string"
+      description: "No optional inputs needed."
+
+outputs:
+  files:
+    - path: "outputs/corporate-tax-strategy.md"
+      description: "Results of the corporate tax strategy process"
+  artifacts:
+    - "Completed corporate tax strategy deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

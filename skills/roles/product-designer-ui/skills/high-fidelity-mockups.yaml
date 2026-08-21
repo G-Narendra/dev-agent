@@ -1,0 +1,82 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "high-fidelity-mockups"
+display_name: "High-Fidelity UI Mockups"
+description: >
+  Convert low-fidelity wireframes into pixel-perfect, production-ready UI designs incorporating
+  brand colors, typography, imagery, and component states.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "product-designer-ui"
+phase: "planning"
+applicable_startups: 
+  - all
+priority: "mvp"
+difficulty: "advanced"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Style Application"
+    tasks:
+      - "Apply the established color palette and typography scales to the wireframes."
+      - "Establish an 8pt or 4pt spacing grid."
+  - step: "Component Detailing"
+    tasks:
+      - "Design all component states (Hover, Focus, Active, Disabled, Error, Loading)."
+      - "Ensure text contrast meets WCAG AA standards."
+  - step: "Handoff Preparation"
+    tasks:
+      - "Annotate complex interactions (e.g., animations, transitions)."
+      - "Export necessary SVGs/assets for the frontend team."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Designing only the 'Happy Path' and ignoring empty states, error states, and loading skeletons."
+  - "Using non-standard fonts that aren't web-safe or optimized for rendering."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the High Fidelity Mockups process"
+  - "How do I handle high fidelity mockups?"
+  - "Implement high fidelity mockups"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the high fidelity mockups process"
+  optional:
+    - name: "N/A"
+      type: "string"
+      description: "No optional inputs needed."
+
+outputs:
+  files:
+    - path: "outputs/high-fidelity-mockups.md"
+      description: "Results of the high fidelity mockups process"
+  artifacts:
+    - "Completed high fidelity mockups deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

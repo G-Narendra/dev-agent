@@ -1,0 +1,94 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "stripe-integration"
+display_name: "Stripe Payment Integration"
+description: >
+  Implement secure payment processing and subscription billing using Stripe.
+  Covers Checkout sessions, webhook verification, idempotency, and dunning management.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "payments-engineer"
+phase: "build"
+applicable_startups: 
+  - saas
+  - ecommerce
+priority: "mvp"
+difficulty: "expert"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "Webhook handler passes signature verification."
+  manual:
+    - "Test credit cards (4242 4242...) successfully create a subscription."
+    - "Simulated webhook (checkout.session.completed) successfully upgrades the user in the database."
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Session Creation"
+    tasks:
+      - "Create a POST endpoint to generate a Stripe Checkout Session."
+      - "Pass `client_reference_id` to link the payment back to the user."
+  - step: "Webhook Handling"
+    tasks:
+      - "Create a raw body parser endpoint for `/webhooks/stripe`."
+      - "Verify the `Stripe-Signature` header using the webhook secret."
+      - "Implement idempotency logic to prevent processing the same webhook twice."
+  - step: "Business Logic"
+    tasks:
+      - "Handle `checkout.session.completed` to provision access."
+      - "Handle `customer.subscription.deleted` to revoke access."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Trusting the client to report success (e.g., updating DB when the user returns to the success page). ONLY trust the webhook."
+  - "Processing webhooks synchronously without idempotency — leads to duplicate charges/upgrades."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Stripe Integration process"
+  - "How do I handle stripe integration?"
+  - "Implement stripe integration"
+  - "Implement secure payment processing and subscription billing using Stripe"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the stripe integration process"
+  optional:
+    - name: "code_repository"
+      type: "string"
+      description: "Path to the code repository"
+      default: "./"
+
+outputs:
+  files:
+    - path: "outputs/stripe-integration.md"
+      description: "Results of the stripe integration process"
+  artifacts:
+    - "Completed stripe integration deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

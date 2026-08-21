@@ -1,0 +1,111 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "llm-fine-tuning"
+display_name: "LLM Fine-Tuning & Customization"
+description: >
+  Specializes in fine-tuning Large Language Models on domain-specific datasets
+  to improve performance, reduce latency, and lower costs. Covers LoRA/QLoRA,
+  full fine-tuning, data preparation, training orchestration, and deployment
+  of custom models for production use cases.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "llm-engineer"
+phase: "build"
+applicable_startups:
+  - ai
+priority: "critical"
+difficulty: "expert"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "We need to fine-tune a model on our data."
+  - "The base model doesn't understand our domain."
+  - "We want a custom model for better accuracy."
+  - "Fine-tune an LLM for our specific use case."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Prepare training dataset."
+  - "Run LoRA fine-tuning job."
+  - "Evaluate fine-tuned model."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "base_model"
+      type: "string"
+      description: "The foundation model to fine-tune (e.g., Llama 3, Mistral, GPT-4o-mini)."
+    - name: "training_data"
+      type: "file"
+      description: "Domain-specific dataset in instruction format (JSONL, Parquet)."
+  optional:
+    - name: "fine_tuning_method"
+      type: "string"
+      description: "LoRA, QLoRA, full fine-tune, or adapter."
+      default: "QLoRA"
+
+outputs:
+  files:
+    - path: "ai/llm/fine-tuned-model/"
+      description: "Fine-tuned model weights and config"
+  artifacts:
+    - "A fine-tuned model with benchmark results vs. base model"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Dataset Preparation"
+    tasks:
+      - "Collect and clean domain-specific training data (minimum 500+ high-quality examples)."
+      - "Format data into instruction-response pairs with clear formatting."
+      - "Deduplicate, filter low-quality samples, and split into train/validation/test sets."
+      - "Check for PII, bias, and data leakage before training."
+  - step: "Method Selection"
+    tasks:
+      - "Choose fine-tuning method: LoRA (fast, cheap), QLoRA (quantized, memory-efficient), or full fine-tune (best quality, expensive)."
+      - "Select rank size for LoRA adapters (r=8 for simple tasks, r=64 for complex)."
+      - "Choose quantization level (4-bit QLoRA for consumer GPUs, 8-bit for more precision)."
+  - step: "Training Execution"
+    tasks:
+      - "Set up training infrastructure (Modal, RunPod, Lambda Labs, or local GPU)."
+      - "Configure hyperparameters: learning rate, batch size, epochs, warmup steps."
+      - "Monitor training with Weights & Biases or TensorBoard."
+      - "Implement early stopping based on validation loss."
+  - step: "Evaluation & Deployment"
+    tasks:
+      - "Benchmark fine-tuned model against base model on domain-specific test set."
+      - "Test for regressions on general capabilities (MMLU, HellaSwag)."
+      - "Deploy fine-tuned adapter with inference server (vLLM, TGI, Ollama)."
+      - "Set up A/B comparison between base and fine-tuned model in production."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Fine-tuning on noisy or poorly formatted data — garbage in, garbage out."
+  - "Overfitting — the model memorizes training data instead of generalizing."
+  - "Using fine-tuning when prompt engineering or RAG would suffice."
+  - "Ignoring catastrophic forgetting of general capabilities."
+best_practices:
+  - "Start with prompt engineering, then RAG, then fine-tuning — in that order."
+  - "Use LoRA adapters so you can swap between fine-tuned versions easily."
+  - "Keep a held-out test set and evaluate before every deployment."
+  - "Document what data the model was trained on for compliance."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Hugging Face PEFT (Parameter-Efficient Fine-Tuning)"
+    url: "https://huggingface.co/docs/peft/en/index"
+  - title: "QLoRA: Efficient Finetuning of Quantized LLMs"
+    url: "https://arxiv.org/abs/2305.14314"

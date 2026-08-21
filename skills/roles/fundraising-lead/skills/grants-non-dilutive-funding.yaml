@@ -1,0 +1,118 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "grants-non-dilutive-funding"
+display_name: "Grants & Non-Dilutive Funding"
+description: >
+  Identifies and applies for grants, government funding, and other non-dilutive
+  funding sources. Covers SBIR/STTR, R&D tax credits, accelerator grants,
+  and corporate innovation programs.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "fundraising-lead"
+phase: "ideation"
+applicable_startups:
+  - ai
+  - healthtech
+  - cleantech
+  - deeptech
+priority: "medium"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Find non-dilutive funding options."
+  - "Apply for government grants."
+  - "What grants are available for our startup?"
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Find relevant grants."
+  - "Write grant application."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "startup_tech_area"
+      type: "string"
+      description: "Technology area (AI, biotech, clean energy, etc.)."
+    - name: "company_location"
+      type: "string"
+      description: "Country and state for grant eligibility."
+  optional:
+    - name: "grant_timeline"
+      type: "string"
+      description: "Immediate or next funding cycle."
+      default: "next available cycle"
+
+outputs:
+  files:
+    - path: "fundraising/grants/grant-strategy.md"
+      description: "Grant opportunities and application plan"
+  artifacts:
+    - "Submitted grant applications with tracked deadlines and requirements"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Grant Opportunity Research"
+    tasks:
+      - "Use Grants.gov (US), Horizon Europe (EU), Innovate UK, and local government programs."
+      - "Research SBIR/STTR programs (large, non-dilutive, up to $2M per award)."
+      - "Identify corporate innovation programs: AWS Activate, Google for Startups, Microsoft for Startups."
+      - "Check accelerator grants: Y Combinator, Techstars (typically dilute but include grants)."
+  - step: "Grant Eligibility Assessment"
+    tasks:
+      - "Check eligibility requirements: company size, stage, technology area, PI qualifications."
+      - "Verify IP ownership requirements — some grants claim rights to your IP."
+      - "Assess the time investment: some grants require 100+ hours to apply."
+      - "Prioritize grants with the highest probability of success vs. effort."
+  - step: "Application Writing"
+    tasks:
+      - "Write to the grant's specific evaluation criteria — generic applications fail."
+      - "Follow the grant's exact format and word limits — they're strictly enforced."
+      - "Include a clear technical approach, innovation statement, and commercial potential."
+      - "Get feedback from a grant writing mentor or previous awardee."
+  - step: "R&D Tax Credits"
+    tasks:
+      - "Research R&D tax credit eligibility (US, UK, Canada, Australia all have programs)."
+      - "Document qualifying activities: technical uncertainty, experimentation, iteration."
+      - "Track R&D hours and expenses from day one for documentation."
+      - "Work with an R&D tax credit specialist to maximize the claim."
+  - step: "Non-Dilutive Capital Stack"
+    tasks:
+      - "Map all potential non-dilutive sources: grants, tax credits, revenue, customer prepayments."
+      - "Time applications around funding needs — grants have long payment cycles."
+      - "Combine non-dilutive sources with equity funding for a capital-efficient structure."
+      - "Track application status and follow up proactively."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Relying on grants as your primary funding source — they're slow and unpredictable."
+  - "Applying for every grant without checking eligibility — wastes time and reputation."
+  - "Missing deadlines or failing to follow submission guidelines."
+  - "Assuming grant approval means commercial validation — grants don't equal market fit."
+best_practices:
+  - "Grants are great for de-risking technology, not for building a business."
+  - "The best non-dilutive funding is revenue from customers."
+  - "Apply early and often — most grants have a low success rate (10-20%)."
+  - "Track grant reporting requirements — you'll need to show how the money was used."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

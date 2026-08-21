@@ -1,0 +1,105 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "media-training-founders"
+display_name: "Founder Media Training & Interview Prep"
+description: >
+  Prepares executives for live media interviews (CNBC, Podcasts, TechCrunch 
+  panels). Trains them to handle hostile questions, stay on message, and 
+  avoid 'foot-in-mouth' moments that go viral for the wrong reasons.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "pr-specialist"
+phase: "growth"
+applicable_startups:
+  - all
+priority: "medium"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "The CEO is going on a podcast."
+  - "Prep for the Bloomberg interview."
+  - "How do I answer this question?"
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Draft Q&A document."
+  - "Create bridging phrases cheat sheet."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "interview_context"
+      type: "string"
+      description: "Who is the host? What is the topic?"
+  optional:
+    - name: "hostile_questions"
+      type: "string"
+      description: "Potential attack vectors from the host."
+      default: "Competitor comparisons, burn rate."
+
+outputs:
+  files:
+    - path: "marketing/pr/interview-prep-doc.md"
+      description: "The briefing document for the founder."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "N/A"
+manual:
+  - "The founder seamlessly pivots away from a trap question and successfully delivers the 3 core company messages."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "Never say 'Off the record' during a live interview. If the microphone is on, everything is on the record."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Zoom (for mock interviews)"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Message Triangle"
+    tasks:
+      - "Identify the 3 (and only 3) Key Messages the founder must deliver. E.g., 1. We are growing 300%. 2. Our tech is patented. 3. We are hiring."
+  - step: "The 'Bridging' Technique"
+    tasks:
+      - "Train the founder to answer the question briefly, then 'bridge' to a key message. Phrase: 'That's an interesting point, but what's really important to focus on is [Key Message].'"
+  - step: "The Murder Board"
+    tasks:
+      - "Compile a list of the 10 worst possible questions the host could ask (e.g., 'Why did your CTO quit?', 'Isn't your valuation a bubble?'). Draft concise, non-defensive answers for each."
+  - step: "Mock Interview"
+    tasks:
+      - "Run a 15-minute simulated interview over Zoom. Play the role of a hostile journalist. Record it and force the founder to watch their own body language."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Rambling. If the founder talks for 3 minutes straight, the editor will cut the clip randomly. Keep answers under 45 seconds to create soundbites."
+best_practices:
+  - "If you do not know the answer, say: 'I don't have the exact data in front of me, but I will have my team follow up with you today.' Never guess on live TV."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Media Training 101"
+    url: "https://www.prsa.org/article/media-training-101"

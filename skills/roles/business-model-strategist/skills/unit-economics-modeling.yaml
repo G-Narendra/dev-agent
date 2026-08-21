@@ -1,0 +1,115 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "unit-economics-modeling"
+display_name: "Unit Economics & Financial Metric Modeling"
+description: >
+  Models and analyzes unit economics for any business model including SaaS,
+  marketplace, e-commerce, and subscription. Covers CAC, LTV, gross margin,
+  payback period, and cohort analysis.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "business-model-strategist"
+phase: "planning"
+applicable_startups:
+  - all
+priority: "mvp"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Model our unit economics."
+  - "Calculate CAC and LTV."
+  - "Do we have healthy unit economics?"
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Calculate unit economics."
+  - "Build cohort analysis."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "business_type"
+      type: "string"
+      description: "SaaS, marketplace, e-commerce, subscription, hardware, or services."
+    - name: "revenue_data"
+      type: "file"
+      description: "Sales, pricing, costs, and customer data."
+  optional:
+    - name: "benchmark_data"
+      type: "string"
+      description: "Industry benchmarks for comparison."
+      default: "Standard SaaS benchmarks"
+
+outputs:
+  files:
+    - path: "strategy/unit-economics/unit-econ-model.md"
+      description: "Unit economics model with key metrics and cohort analysis"
+  artifacts:
+    - "A data-backed unit economics model with actionable improvement recommendations"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Revenue Metrics"
+    tasks:
+      - "Calculate ARPU (Average Revenue Per User) monthly and annually."
+      - "Calculate ARR (Annual Recurring Revenue) for subscription businesses."
+      - "Calculate MRR (Monthly Recurring Revenue) and track month-over-month growth."
+      - "Analyze revenue by cohort: do newer customers generate more or less revenue than older ones?"
+  - step: "Cost Metrics"
+    tasks:
+      - "Calculate COGS: hosting, support, payment processing, content costs."
+      - "Calculate gross margin: (Revenue - COGS) / Revenue — target >70% for SaaS."
+      - "Calculate blended CAC (Customer Acquisition Cost): total sales & marketing / new customers."
+      - "Calculate channel-specific CAC: which channels are most efficient?"
+  - step: "Retention & Churn"
+    tasks:
+      - "Calculate monthly churn rate: customers lost / total customers at start of month."
+      - "Calculate net revenue retention: expansion revenue - churned revenue — target >100%."
+      - "Build cohort retention curves: how does retention vary by acquisition cohort?"
+      - "Calculate average customer lifetime: 1 / monthly churn rate."
+  - step: "LTV & Payback Analysis"
+    tasks:
+      - "Calculate LTV: ARPU × gross margin × average customer lifetime."
+      - "Calculate LTV/CAC ratio: target 3x+ for healthy SaaS."
+      - "Calculate payback period: CAC / (ARPU × gross margin) — target <12 months."
+      - "Run sensitivity analysis: how does a 10% change in churn affect LTV?"
+  - step: "Improvement Strategy"
+    tasks:
+      - "Identify the lever with the biggest impact: increasing pricing, reducing churn, or lowering CAC."
+      - "Model the effect of improvements: if we reduce churn by 2%, LTV increases by X%."
+      - "Set unit economics targets for each stage: pre-product-market fit, growth, scale."
+      - "Track unit economics monthly and report to the team."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Using blended CAC instead of channel-specific CAC — hides which channels are draining cash."
+  - "Calculating LTV before understanding churn — LTV without retention data is a guess."
+  - "Ignoring gross margin — high LTV means nothing if gross margin is negative."
+  - "Using 'headline' churn numbers without cohort analysis — hides worsening trends."
+best_practices:
+  - "The best startups have LTV/CAC > 3x and payback period < 12 months."
+  - "Churn is the most important metric in a subscription business — improving it compounds over time."
+  - "Cohort analysis reveals trends that aggregate numbers hide."
+  - "Unit economics should improve over time as you optimize channels and pricing."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

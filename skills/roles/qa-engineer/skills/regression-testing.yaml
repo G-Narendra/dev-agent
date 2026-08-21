@@ -1,0 +1,111 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "regression-testing"
+display_name: "Regression Testing Strategy"
+description: >
+  Ensure that new features or bug fixes do not accidentally break existing, 
+  working functionality. Focuses on curating a critical 'Smoke Test' suite 
+  and determining what to automate vs what to test manually before a release.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "qa-engineer"
+phase: "ship"
+applicable_startups:
+  - all
+priority: "critical"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Perform a regression test."
+  - "Clear this for release."
+  - "Did we break the old features?"
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Execute the automated regression suite."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "release_candidate"
+      type: "string"
+      description: "The version tag or branch being deployed (e.g., `v1.4.0`)."
+    - name: "changelog"
+      type: "string"
+      description: "List of all changes in this release."
+  optional:
+    - name: "time_constraint"
+      type: "string"
+      description: "How much time before the release window?"
+      default: "4 Hours"
+
+outputs:
+  files:
+    - path: "qa/reports/regression-v1.4.0.md"
+      description: "The Go/No-Go release decision."
+  artifacts:
+    - "A list of any newly discovered regression bugs."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "The automated E2E test suite (Playwright/Cypress) passes 100%."
+  manual:
+    - "The manual QA team completes the core 'Smoke Test' in under 1 hour."
+    - "Zero Sev1 bugs are reported by customers within 24 hours of the release."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+
+safety_notes:
+  - "Never skip regression testing just because 'the change was only one line of CSS'. CSS is global by default and that one line could hide the checkout button on mobile."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Playwright / Cypress"
+      install: "N/A"
+  alternatives:
+    - name: "TestRail"
+      when: "Managing a massive manual regression suite for legacy systems."
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "The Smoke Test Suite (P0)"
+    tasks:
+      - "Identify the 5-10 absolutely critical flows that generate revenue (e.g., Login, Add to Cart, Checkout). These MUST be tested before every single deployment."
+  - step: "Impact Analysis"
+    tasks:
+      - "Review the changelog. If the developers heavily modified the 'User Profile' backend, focus the manual regression testing entirely on the Profile page and its dependencies."
+  - step: "Automation Handoff"
+    tasks:
+      - "Do not manually execute the same regression tests for years. Once a feature is stable, hand its test cases over to the SDET (Software Development Engineer in Test) to automate in Playwright."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "The '100% Manual Regression' nightmare. Spending 3 days manually clicking through a 500-step spreadsheet before every release. This kills startup agility. Automate the repetitive tasks."
+  - "Flaky Tests. If an automated regression test fails 10% of the time due to network timeouts, the team will start ignoring *all* test failures. Delete or fix flaky tests immediately."
+
+best_practices:
+  - "Run the automated regression suite on a schedule (e.g., every midnight) against the `main` branch, not just during pull requests, to catch integration issues early."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Martin Fowler: The Practical Test Pyramid"
+    url: "https://martinfowler.com/articles/practical-test-pyramid.html"

@@ -1,0 +1,120 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "youtube-research"
+display_name: "YouTube & Video Content Market Research"
+description: >
+  Searches YouTube (free API) for real product reviews, tutorials, comparison 
+  videos, and user testimonials. YouTube is the second largest search engine 
+  on the web and contains billions of hours of authentic user-generated content.
+  Video reviews reveal product strengths and weaknesses that written reviews 
+  often miss — you can see the actual product in use, warts and all.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "utility"
+phase: "all"
+applicable_startups:
+  - all
+priority: "medium"
+difficulty: "beginner"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Find YouTube reviews for this product."
+  - "Search tutorials for this technology."
+  - "What do reviewers say about X on YouTube?"
+  - "Find comparison videos for competitors."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Search YouTube via Google."
+  - "Extract review sentiment from video descriptions and comments."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "search_topic"
+      type: "string"
+      description: "Product name, technology, or domain (e.g., 'Linear.app review', 'Next.js tutorial')."
+  optional:
+    - name: "content_type"
+      type: "string"
+      description: "'reviews' (product reviews), 'tutorials' (how-to content), 'comparisons' (vs videos), 'all'."
+      default: "all"
+
+outputs:
+  files:
+    - path: "research/youtube-insights-{topic}.md"
+      description: "A report of video content and sentiment around the topic."
+  artifacts:
+    - "List of top review videos with key praise and criticism points."
+    - "Common questions from video comments (unmet needs)."
+    - "Content gap analysis: what topics have NO good tutorial/review videos?"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "N/A"
+  manual:
+    - "Identified at least 3 specific product criticisms from video reviews that validate a market gap."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "network"
+
+safety_notes:
+  - "Sponsorship bias: Many YouTube reviews are sponsored content. Check the video description for disclosure."
+  - "Comments section skews extreme (superfans and haters). Focus on the video content itself for balanced analysis."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "YouTube Search (via Google or YouTube directly)"
+      install: "N/A"
+  alternatives:
+    - name: "YouTube Data API (free tier: 10,000 queries/day)"
+      when: "Automated video search and metadata extraction."
+      install: "Get API key from Google Cloud Console"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Search for Product Reviews"
+    tasks:
+      - "Use Google: `site:youtube.com {product_name} review`"
+      - "Filter by 'Last year' for recent reviews."
+      - "Sort by view count — high view counts = high community interest."
+      - "Watch the first 2 minutes of the top 3 review videos. Note the 'pros' and 'cons' sections."
+  - step: "Search for Comparison Videos"
+    tasks:
+      - "Search: `site:youtube.com {product_name} vs {competitor}`"
+      - "Comparison videos are the most valuable — they directly explain why users choose one over another."
+      - "Extract the reasons users switched (e.g., 'I switched from X to Y because...')."
+  - step: "Search for Tutorials"
+    tasks:
+      - "Search: `site:youtube.com {technology} tutorial`"
+      - "If there are MANY tutorials → the technology has high adoption."
+      - "If tutorials are old or low quality → there's a documentation gap opportunity."
+  - step: "Mine Video Comments"
+    tasks:
+      - "Read the top comments (most liked) on review videos."
+      - "Look for: 'Does anyone know how to X?', 'I wish this did Y', 'The problem with this is Z'."
+      - "These are real user questions that indicate unmet needs."
+  - step: "Compile Report"
+    tasks:
+      - "Video Title | Creator | Views | Key Takeaways | Unmet Needs Identified"
+      - "Include specific timestamps for the most relevant parts."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Only watching sponsored content. Look for independent reviewers with no affiliate links."
+  - "Skipping the comments section. The comments are often more valuable than the video itself."
+
+best_practices:
+  - "Filter by 'This year' to ensure the reviews reflect the current state of the product."
+  - "Search for '{problem} solution' instead of just product names to discover alternatives you haven't considered."
+  - "For market validation, look for videos titled 'I built X in Y days' — these show what's technically possible."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "YouTube Data API Documentation"
+    url: "https://developers.google.com/youtube/v3"
+  - title: "YouTube Search"
+    url: "https://www.youtube.com/"

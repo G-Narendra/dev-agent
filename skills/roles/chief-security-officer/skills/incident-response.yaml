@@ -1,0 +1,120 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "incident-response"
+display_name: "Security Incident Response & Forensics"
+description: >
+  Manages the immediate chaos of a data breach or cyber attack. Isolates 
+  compromised systems, preserves forensic evidence, and executes the legal 
+  and public relations disclosures required by law. Covers key patterns to avoid common pitfalls like storing passwords in plaintext even in an internal database , and provides actionable best practices for production-ready results.
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "chief-security-officer"
+phase: "operations"
+applicable_startups:
+  - all
+priority: "critical"
+difficulty: "expert"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "We've been hacked."
+  - "There is a ransomware note on the server."
+  - "Customer data was leaked on Reddit."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Draft incident response runbook."
+  - "Generate forensic preservation checklist."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "incident_type"
+      type: "string"
+      description: "Ransomware, Data Exfiltration, Insider Threat."
+    - name: "affected_systems"
+      type: "string"
+      description: "Which databases or servers are compromised?"
+  optional:
+    - name: "pii_exposed"
+      type: "string"
+      description: "Was Personally Identifiable Information leaked?"
+      default: "Unknown"
+
+outputs:
+  files:
+    - path: "security/incidents/breach_protocol.md"
+      description: "The step-by-step action plan to stop the bleeding."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "N/A"
+manual:
+  - "The threat is eradicated, affected customers are legally notified within 72 hours, and the root vulnerability is patched."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "Destroying Evidence: Never immediately 'reboot' or 'wipe' a compromised server. You will destroy the RAM artifacts and logs needed to figure out exactly how the hacker got in and what they stole. Isolate it from the network instead."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "AWS CloudTrail / Datadog Security"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Containment (Stop the Bleeding)"
+    tasks:
+      - "Immediately revoke all active sessions, rotate all AWS IAM keys, rotate all database passwords, and physically sever the compromised instances from the public internet by changing Security Groups."
+  - step: "Eradication & Recovery"
+    tasks:
+      - "Do not try to 'clean' the malware off the infected server. Terminate the server entirely. Rebuild it from known-good, immutable Infrastructure-as-Code templates and restore data from a read-only offline backup."
+  - step: "Legal & Public Disclosure"
+    tasks:
+      - "If PII is leaked, GDPR requires notification within 72 hours. Do not attempt a cover-up. Work with Legal to draft a transparent, honest email to customers explaining exactly what happened and how you fixed it."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Storing passwords in plaintext even in an internal database -- always hash + salt with bcrypt or argon2."
+  - "Trusting client-side validation as a security boundary -- attackers bypass the browser entirely."
+  - "Using outdated dependencies with known CVEs -- run `npm audit`, `pip audit`, or `trivy` as part of CI."
+  - "Hardcoding API keys, tokens, or database URLs in source code -- use environment variables or a vault."
+  - "Rate limiting only on the login endpoint -- all POST endpoints need protection against abuse."
+  - "Create an out-of-band communication channel (e.g., a Signal group). If your Slack or Google Workspace is compromised, you cannot use it to coordinate the incident response."
+
+  - "Implement defense in depth: network firewall + WAF + application-level auth + encryption at rest/in transit."
+  - "Run automated vulnerability scanning (Trivy, Snyk, Dependabot) weekly and patch critical CVEs within 48 hours."
+  - "Use the principle of least privilege — every service account should have only the permissions it needs and nothing more."
+  - "Enable audit logging everywhere and store logs in an immutable, append-only store for incident investigation."
+  - "Regularly rotate secrets and access keys — 90-day rotation limits blast radius of leaked credentials."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Not defining clear success criteria before starting a task -- leads to ambiguous outcomes, endless revisions, and wasted effort."
+
+best_practices:
+  - "Document all configuration decisions in an Architecture Decision Record (ADR) so future team members understand why choices were made."
+  - "Implement comprehensive error handling with structured logging at every integration boundary to simplify debugging."
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "NIST: Incident Handling Guide"
+    url: "https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-61r2.pdf"

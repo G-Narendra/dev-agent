@@ -1,0 +1,78 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "learning-outcome-design"
+display_name: "Learning Outcomes & Scaffolding"
+description: >
+  Structure educational modules using Bloom's Taxonomy to ensure students actually 
+  acquire skills rather than just passively watching videos.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "curriculum-designer"
+phase: "build"
+applicable_startups: 
+  - edtech
+priority: "high"
+difficulty: "advanced"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Action-Oriented Objectives"
+    tasks:
+      - "Never write 'The student will understand X'. Write actionable outcomes using Bloom's verbs: 'The student will be able to *calculate* X' or '*design* Y'."
+  - step: "Cognitive Scaffolding"
+    tasks:
+      - "Structure the syllabus to build from basic recall (Level 1) up to synthesis and creation (Level 6). Do not ask a student to build a full project in week 1."
+  - step: "Formative Assessments"
+    tasks:
+      - "Insert low-stakes, ungraded quizzes every 5 minutes of video content to force active recall and prevent the illusion of competence."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Uploading a 3-hour continuous lecture video and hoping the user miraculously absorbs the information, resulting in a 2% course completion rate."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Learning Outcome Design process"
+  - "How do I handle learning outcome design?"
+  - "Implement learning outcome design"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the learning outcome design process"
+  optional:
+    - name: "N/A"
+      type: "string"
+      description: "No optional inputs needed."
+
+outputs:
+  files:
+    - path: "outputs/learning-outcome-design.md"
+      description: "Results of the learning outcome design process"
+  artifacts:
+    - "Completed learning outcome design deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

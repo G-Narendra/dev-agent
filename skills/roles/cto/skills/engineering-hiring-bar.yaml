@@ -1,0 +1,115 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "engineering-hiring-bar"
+display_name: "Engineering Hiring Bar & Interview Loop Design"
+description: >
+  Design a structured, rigorous, and fair interview loop for software engineers. 
+  Focuses on standardizing rubrics to eliminate bias, designing effective technical 
+  assessments, and establishing clear leveling guidelines (Junior vs Mid vs Senior).
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "cto"
+phase: "growth"
+applicable_startups:
+  - all
+priority: "critical"
+difficulty: "expert"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Design the engineering interview process."
+  - "How do we hire better developers?"
+  - "Define the rubric for a senior engineer."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Create an interview rubric artifact."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "target_level"
+      type: "string"
+      description: "e.g., 'Junior', 'Senior', 'Staff'."
+    - name: "tech_stack"
+      type: "string"
+      description: "Primary languages/frameworks."
+  optional:
+    - name: "interview_type"
+      type: "string"
+      description: "Take-home vs Live Pair Programming."
+      default: "Live Pair Programming"
+
+outputs:
+  files:
+    - path: "operations/hiring/engineering-interview-loop.md"
+      description: "The standard process document for all interviewers."
+  artifacts:
+    - "A scoring rubric (1-4 scale) for technical and behavioral signals."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "N/A"
+  manual:
+    - "Interviewers consistently agree on 'Strong Hire' vs 'No Hire' based on evidence, not 'gut feeling'."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+
+safety_notes:
+  - "Ensure the technical assessment relates to the actual job. Do not ask a frontend React engineer to invert a binary tree on a whiteboard. It selects for LeetCode memorization, not job capability."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Ashby / Greenhouse"
+      install: "N/A"
+  alternatives:
+    - name: "CoderPad"
+      when: "Conducting remote live coding interviews."
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Define the Roles (Leveling)"
+    tasks:
+      - "Junior: Can execute well-defined tasks. Needs mentorship."
+      - "Senior: Can take an ambiguous problem, design the architecture, and execute independently."
+      - "Staff: Multiplies the effectiveness of other engineers. Solves organizational problems."
+  - step: "Design the Loop (Max 4 Hours Total)"
+    tasks:
+      - "1. Recruiter Screen (30m): Cultural fit, comp expectations."
+      - "2. Hiring Manager Screen (45m): Past experience, deep dive on a previous project."
+      - "3. Technical Assessment (60-90m): Pair programming on a real-world problem (e.g., parsing a JSON API and rendering a UI)."
+      - "4. Systems Design (60m - Seniors Only): Architecting a scalable system."
+  - step: "Create the Rubric"
+    tasks:
+      - "Define exactly what a '4/4 (Strong Hire)' looks like for each round. (e.g., 'Candidate wrote clean code, added tests without prompting, and communicated trade-offs')."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "The 'Unstructured Chat'. Five engineers talk to the candidate about their hobbies and then vote based on who they want to grab a beer with. This introduces massive bias and poor technical hires."
+  - "Assigning a 20-hour take-home project. You will lose all your top candidates who have multiple competing offers and no free time."
+
+best_practices:
+  - "The 'Debrief'. Hold a 15-minute synchronous meeting with all interviewers immediately after the loop is complete. Everyone submits their scores blindly *before* the meeting to prevent groupthink."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "GitLab: Engineering Interview Process"
+    url: "https://about.gitlab.com/handbook/engineering/hiring/"

@@ -1,0 +1,114 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "first-time-user-experience"
+display_name: "First Time User Experience (FTUE) Design"
+description: >
+  Design the critical pathway from the moment a user clicks 'Sign Up' to the moment 
+  they experience the core value proposition of the product (the 'Aha!' moment). 
+  Aims to eliminate friction, unnecessary forms, and confusion.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "onboarding-designer"
+phase: "build"
+applicable_startups:
+  - all
+priority: "critical"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Design the onboarding flow."
+  - "Improve our signup conversion."
+  - "Redesign the empty states."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Create a user journey map artifact."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "aha_moment"
+      type: "string"
+      description: "The specific action that locks in retention (e.g., 'Slack: 2000 messages sent')."
+    - name: "current_funnel"
+      type: "file"
+      description: "Analytics showing where users drop off during current signup."
+  optional:
+    - name: "user_personas"
+      type: "string"
+      description: "Different paths based on who the user is."
+      default: "null"
+
+outputs:
+  files:
+    - path: "design/onboarding-flow.md"
+      description: "Wireframes or flow logic for the FTUE."
+  artifacts:
+    - "A list of required fields to cut from the signup form."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "Activation rate (Signups who reach the Aha moment) increases by > 10%."
+  manual:
+    - "A user can sign up and see value in under 3 minutes."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+
+safety_notes:
+  - "Do not force users to invite their coworkers during onboarding before they have seen the value themselves. This destroys trust and looks spammy."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Figma + Mixpanel"
+      install: "N/A"
+  alternatives:
+    - name: "Appcues / Userflow"
+      when: "Want to build onboarding tooltips and modals without engineering resources."
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Friction Audit"
+    tasks:
+      - "List every single field, click, and page load between the landing page and the Aha moment."
+      - "Ruthlessly cut fields that are 'nice to have' (e.g., Phone Number, Job Title, Company Size) and defer them to later."
+  - step: "Empty State Design"
+    tasks:
+      - "Never show a blank white screen with 'No data'. Every empty state must have an illustration, a brief explanation of what belongs there, and a primary CTA button to create it."
+  - step: "Progressive Profiling"
+    tasks:
+      - "Only ask for information when it is needed. Don't ask for a credit card until the user hits a premium feature. Don't ask for an avatar upload during signup."
+  - step: "The Aha Moment Bridge"
+    tasks:
+      - "If the product requires a lot of setup (e.g., an analytics tool requiring code installation), provide a 'Demo Mode' populated with fake data so they can see the end result instantly."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Using a 10-step unskippable product tour consisting of tooltips pointing at UI elements. Users immediately click 'Skip' because they want to play with the product, not read a manual."
+  - "Requiring email verification (clicking a link in an email) before letting the user into the app. This causes a massive drop-off as users get distracted in their inbox."
+
+best_practices:
+  - "Replace product tours with 'learning by doing'. If they need to create a project, make the onboarding flow actually create their first real project."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "UserOnboard: Teardowns"
+    url: "https://www.useronboard.com/user-onboarding-teardowns/"

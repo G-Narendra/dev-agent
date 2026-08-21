@@ -1,0 +1,117 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "chaos-engineering"
+display_name: "Chaos Engineering & Resiliency Testing"
+description: >
+  Applies chaos engineering principles to proactively test system resilience
+  by introducing controlled failures. Uncovers weaknesses before they cause
+  production outages and builds confidence in the system's ability to
+  withstand real-world failures.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "sre-engineer"
+phase: "growth"
+applicable_startups:
+  - all
+priority: "growth"
+difficulty: "expert"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Test our system's resilience."
+  - "Run chaos experiments."
+  - "Find weaknesses in our infrastructure."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Design chaos experiment."
+  - "Run resilience test."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "system_architecture"
+      type: "file"
+      description: "Architecture diagram and dependency map."
+    - name: "failure_hypotheses"
+      type: "string"
+      description: "What you think might break and how."
+  optional:
+    - name: "experiment_scope"
+      type: "string"
+      description: "Which services to experiment on."
+      default: "Non-critical services first"
+
+outputs:
+  files:
+    - path: "devops/chaos/experiment-results.md"
+      description: "Chaos experiment results and system weaknesses found"
+  artifacts:
+    - "A validated system resilience map with identified weaknesses"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Chaos Experiment Design"
+    tasks:
+      - "Define the 'steady state' of normal system behavior (latency, error rate, throughput)."
+      - "Form a hypothesis: 'If we kill the database replica, read requests will still succeed in <200ms.'"
+      - "Define the blast radius: start with non-critical services, never experiment on production without safeguards."
+      - "Set up automated experiments to run in staging or with controlled production traffic."
+  - step: "Common Failure Experiments"
+    tasks:
+      - "Kill a service instance — does traffic reroute to healthy instances?"
+      - "Introduce network latency between services — does the system degrade gracefully?"
+      - "Kill a database replica — does the application still serve reads from the primary?"
+      - "Simulate a DNS failure — does the application have a fallback mechanism?"
+      - "Run out of disk space — does the application log and alert appropriately?"
+  - step: "Execution & Monitoring"
+    tasks:
+      - "Run the experiment during low-traffic hours initially."
+      - "Monitor the steady state metrics in real-time during the experiment."
+      - "Have a manual kill switch ready to stop the experiment instantly."
+      - "If the hypothesis is disproven (system fails), stop the experiment and fix the issue."
+  - step: "Analysis & Improvement"
+    tasks:
+      - "Document every experiment: hypothesis, method, results, and findings."
+      - "Track 'time to recover' — how long did it take the system to self-heal?"
+      - "Prioritize the discovered weaknesses and create improvement tickets."
+      - "Re-run the experiment after fixes to verify the system is now resilient."
+  - step: "Building a Game Day Culture"
+    tasks:
+      - "Schedule regular 'Game Day' sessions where the team simulates failures together."
+      - "Rotate who designs and runs the experiments to build shared knowledge."
+      - "Celebrate finding weaknesses — you discovered them in a safe environment, not production."
+      - "Expand experiment scope over time as confidence in the system grows."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Running chaos experiments on production without monitoring and kill switches."
+  - "Running experiments on systems you don't understand — know the system before breaking it."
+  - "Only running experiments during business hours — real failures happen at 3 AM."
+  - "Creating a culture of fear around breaking things — it's about learning, not blame."
+best_practices:
+  - "Start small: kill a non-critical service before touching the database."
+  - "Chaos engineering is about building confidence, not breaking things randomly."
+  - "Automate experiments once they're proven to be safe — run them weekly."
+  - "The absence of failures during chaos experiments is not boring — it's high confidence."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

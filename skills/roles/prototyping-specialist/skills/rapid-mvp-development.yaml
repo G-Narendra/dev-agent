@@ -1,0 +1,80 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "rapid-mvp-development"
+display_name: "Rapid No-Code / Low-Code Prototyping"
+description: >
+  Utilize tools like Bubble, Retool, Zapier, or basic scripts to build a functional 
+  prototype in less than 48 hours to validate a core assumption.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "prototyping-specialist"
+phase: "ideation"
+applicable_startups: 
+  - all
+priority: "mvp"
+difficulty: "advanced"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Constraint Definition"
+    tasks:
+      - "Define the ONE specific technical or user assumption this prototype must prove."
+  - step: "The Build"
+    tasks:
+      - "Use Retool or Bubble for the frontend UI."
+      - "Use Airtable or Google Sheets as the 'Database'."
+      - "Use Zapier/Make to wire the logic together."
+  - step: "Validation"
+    tasks:
+      - "Put the prototype in front of 5 users and record their reaction. Did the core concept work?"
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Writing custom CSS and implementing an elegant Redux state management system for a prototype that will be thrown away in 3 days."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Rapid Mvp Development process"
+  - "How do I handle rapid mvp development?"
+  - "Implement rapid mvp development"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the rapid mvp development process"
+  optional:
+    - name: "N/A"
+      type: "string"
+      description: "No optional inputs needed."
+
+outputs:
+  files:
+    - path: "outputs/rapid-mvp-development.md"
+      description: "Results of the rapid mvp development process"
+  artifacts:
+    - "Completed rapid mvp development deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

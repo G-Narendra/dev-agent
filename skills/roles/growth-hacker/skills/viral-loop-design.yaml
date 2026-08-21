@@ -1,0 +1,81 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "viral-loop-design"
+display_name: "Viral Loop & Referral Design"
+description: >
+  Design built-in product mechanics that incentivize existing users to invite new users,
+  aiming for a viral coefficient (K-factor) greater than 1.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "growth-hacker"
+phase: "growth"
+applicable_startups: 
+  - all
+priority: "mvp"
+difficulty: "advanced"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Incentive Alignment"
+    tasks:
+      - "Define a double-sided reward (e.g., 'Give $10, Get $10' or 'Get 500MB free storage')."
+  - step: "Friction Reduction"
+    tasks:
+      - "Ensure the invite action is contextually relevant (e.g., inviting a collaborator to a document)."
+      - "Pre-fill the invite message to reduce cognitive load."
+  - step: "Tracking & Analytics"
+    tasks:
+      - "Implement unique tracking links for each user."
+      - "Measure the exact K-factor (Invites sent × Conversion rate)."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Adding a generic 'Share on Twitter' button that provides no value to the user sharing it."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Viral Loop Design process"
+  - "How do I handle viral loop design?"
+  - "Implement viral loop design"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the viral loop design process"
+  optional:
+    - name: "target_audience"
+      type: "string"
+      description: "Target user or customer segment"
+      default: "Primary user persona"
+
+outputs:
+  files:
+    - path: "outputs/viral-loop-design.md"
+      description: "Results of the viral loop design process"
+  artifacts:
+    - "Completed viral loop design deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Reforge Blog"
+    url: "https://www.reforge.com/blog"
+  - title: "GrowthHackers"
+    url: "https://growthhackers.com"

@@ -1,0 +1,102 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "technology-selection"
+display_name: "Technology Stack Selection & Vetting"
+description: >
+  Evaluates and selects the programming languages, databases, and frameworks 
+  the startup will use. Protects the company from adopting hyped 'flavor of 
+  the month' technologies that lack long-term support or hiring pools.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "cto"
+phase: "planning"
+applicable_startups:
+  - all
+priority: "critical"
+difficulty: "expert"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Should we use MongoDB or Postgres?"
+  - "Let's rewrite the frontend in Svelte."
+  - "Choose a tech stack for the MVP."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Generate tech stack evaluation matrix."
+  - "Draft technology radar."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "system_requirements"
+      type: "string"
+      description: "Is this highly relational data? Real-time streaming?"
+  optional:
+    - name: "current_team_expertise"
+      type: "string"
+      description: "What languages do the current engineers know?"
+      default: "JavaScript/Python"
+
+outputs:
+  files:
+    - path: "engineering/architecture/tech-stack-decision.md"
+      description: "The formal ADR (Architecture Decision Record)."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "N/A"
+manual:
+  - "The chosen technology scales to millions of users without requiring a fundamental paradigm shift."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "Innovation Tokens: A startup only gets a limited number of 'innovation tokens'. Spend them on your core product offering. Do not spend an innovation token on writing a custom database."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Tech Radar (ThoughtWorks)"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "The Boring Technology Rule"
+    tasks:
+      - "Choose boring technology (Postgres, Python, React). The capabilities of boring tech are well understood, and when it breaks, the solution is already on StackOverflow."
+  - step: "The Hiring Pool Test"
+    tasks:
+      - "Before adopting a niche language (e.g., Haskell or Clojure), verify that you can actually hire senior engineers who know it within your budget. If not, don't use it."
+  - step: "Architecture Decision Records (ADRs)"
+    tasks:
+      - "Whenever a major technology is selected, write an ADR. Document exactly *why* Postgres was chosen over MongoDB at that specific point in time so future engineers understand the context."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Adopting a technology just because Netflix or Google uses it. You do not have Google's scale, Google's problems, or Google's budget."
+best_practices:
+  - "Standardize the stack. Do not let 5 different teams write microservices in 5 different languages. Standardize on 1 or 2 languages to allow engineers to move between teams easily."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Choose Boring Technology"
+    url: "https://mcfunley.com/choose-boring-technology"

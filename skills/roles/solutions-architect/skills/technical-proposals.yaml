@@ -1,0 +1,109 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "technical-proposals"
+display_name: "Technical Proposals & RFP Response"
+description: >
+  Writes compelling technical proposals and responds to RFPs (Requests for
+  Proposal) for enterprise deals. Structures technical content to address
+  evaluation criteria while highlighting the startup's unique value.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "solutions-architect"
+phase: "growth"
+applicable_startups:
+  - all
+priority: "mvp"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Respond to an RFP."
+  - "Write a technical proposal."
+  - "The prospect needs a formal proposal document."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Draft RFP response."
+  - "Write technical proposal."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "rfp_document"
+      type: "file"
+      description: "The RFP or proposal requirements document."
+    - name: "evaluation_criteria"
+      type: "string"
+      description: "How the prospect will score proposals."
+  optional:
+    - name: "competitor_information"
+      type: "string"
+      description: "Known competitors responding to the same RFP."
+      default: "Unknown"
+
+outputs:
+  files:
+    - path: "sales/proposals/{prospect}-technical-proposal.md"
+      description: "Complete technical proposal document"
+  artifacts:
+    - "A scored, compelling proposal that addresses all evaluation criteria"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "RFP Analysis"
+    tasks:
+      - "Read the RFP thoroughly and highlight all evaluation criteria and scoring weights."
+      - "Identify must-haves vs. nice-to-haves — focus on must-haves first."
+      - "Check for disqualification criteria — missing a required section means automatic rejection."
+      - "Map your capabilities to each requirement — be explicit about what you do and don't support."
+  - step: "Proposal Structure"
+    tasks:
+      - "Executive summary: why your solution is the best fit (1 page max)."
+      - "Technical approach: architecture, integration, security, compliance, scalability."
+      - "Implementation plan: timeline, milestones, team, methodology."
+      - "Pricing: transparent pricing with clear assumptions and options."
+  - step: "Competitive Positioning"
+    tasks:
+      - "Address competitors' strengths without naming them — 'Unlike legacy solutions, our modern architecture provides...'"
+      - "Highlight your differentiators: AI capabilities, developer experience, time-to-value."
+      - "Provide case studies and customer testimonials relevant to the prospect's industry."
+      - "Include a risk mitigation section addressing potential concerns."
+  - step: "Review & Submission"
+    tasks:
+      - "Have a technical peer review the proposal for accuracy — don't over-promise."
+      - "Have a copy editor review for clarity — enterprise buyers read every word."
+      - "Check submission requirements: format, page limits, file types, deadlines."
+      - "Submit early — last-minute issues are not uncommon."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Copy-pasting RFP responses — prospects can tell, and it shows a lack of effort."
+  - "Over-promising capabilities you don't have yet — you'll be held accountable."
+  - "Ignoring the evaluation criteria — address every scoring criterion explicitly."
+  - "Making the proposal too long — executives don't read 50-page documents."
+best_practices:
+  - "Structure your proposal so it's easy to score — use the RFP's own section numbering."
+  - "Answer the question they asked, then add value: 'Yes, we support X. Here's how we go beyond.'"
+  - "Use visuals: architecture diagrams, screenshots, and charts are more persuasive than text."
+  - "The goal is not just to win the deal, but to set expectations for a successful partnership."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

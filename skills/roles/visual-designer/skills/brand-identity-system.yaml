@@ -1,0 +1,81 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "brand-identity-system"
+display_name: "Brand Identity & Visual System Design"
+description: >
+  Develop the core visual language of the startup, including the logo, typography pairings,
+  color palettes, and the foundational design tokens for the UI.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "visual-designer"
+phase: "ideation"
+applicable_startups: 
+  - all
+priority: "mvp"
+difficulty: "advanced"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Identity Definition"
+    tasks:
+      - "Design a versatile logo that works in single-color, as a favicon, and on dark/light backgrounds."
+      - "Select a primary typeface (for readability) and a secondary display typeface (for marketing personality)."
+  - step: "Color System"
+    tasks:
+      - "Define Primary, Secondary, Success, Warning, and Error color hex codes."
+      - "Run contrast checks (WCAG 2.1 AA) on all text/background color combinations."
+  - step: "Documentation"
+    tasks:
+      - "Create a comprehensive Brand Guidelines PDF dictating exact spacing, logo usage, and brand voice for external partners."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Designing a logo with intricate, thin gradients that looks incredible on a 32-inch monitor but completely disappears when scaled down to a 16px mobile app icon."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Brand Identity System process"
+  - "How do I handle brand identity system?"
+  - "Implement brand identity system"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the brand identity system process"
+  optional:
+    - name: "code_repository"
+      type: "string"
+      description: "Path to the code repository"
+      default: "./"
+
+outputs:
+  files:
+    - path: "outputs/brand-identity-system.md"
+      description: "Results of the brand identity system process"
+  artifacts:
+    - "Completed brand identity system deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

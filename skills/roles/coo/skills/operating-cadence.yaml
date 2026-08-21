@@ -1,0 +1,105 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "operating-cadence"
+display_name: "Startup Operating Cadence & OKRs"
+description: >
+  Builds the 'Operating System' of the company. Ensures every department 
+  is marching in the exact same direction by implementing OKRs, weekly 
+  leadership meetings, and strict accountability structures.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "coo"
+phase: "growth"
+applicable_startups:
+  - all
+priority: "critical"
+difficulty: "expert"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Engineering and Sales aren't talking."
+  - "We keep missing our launch dates."
+  - "Implement OKRs."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Generate Q3 OKR tracking template."
+  - "Draft weekly leadership meeting agenda."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "company_stage"
+      type: "string"
+      description: "Pre-seed vs Series B."
+    - name: "primary_bottleneck"
+      type: "string"
+      description: "What is currently breaking?"
+  optional:
+    - name: "management_framework"
+      type: "string"
+      description: "OKRs vs V2MOM vs EOS."
+      default: "OKRs (Objectives & Key Results)"
+
+outputs:
+  files:
+    - path: "ops/planning/q3_operating_rhythm.md"
+      description: "The master calendar of how the company runs."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "N/A"
+manual:
+  - "Cross-functional dependencies are resolved in the weekly leadership meeting, resulting in 90% of quarterly OKRs being achieved."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "The Meeting Bloat: Never solve an alignment problem simply by adding a new recurring meeting. If a meeting has 12 people in it and lasts 60 minutes, it costs the startup $1,000+ per hour. Ruthlessly audit calendars."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Notion / Lattice"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "The L10 Leadership Meeting"
+    tasks:
+      - "Implement a strict 90-minute weekly leadership meeting. First 15 mins: Review scorecards. Next 15 mins: Status updates. Final 60 mins: 'IDS' (Identify, Discuss, Solve) the top 3 biggest issues blocking the company."
+  - step: "OKR Alignment"
+    tasks:
+      - "The CEO sets the 3 Company-Level OKRs. Department heads must set their team OKRs to explicitly feed into the Company OKRs. If a team is working on a project that doesn't map to a Company OKR, cancel the project."
+  - step: "The 'Watermelon' Status"
+    tasks:
+      - "Enforce honest reporting. A project that is 'Green on the outside, Red on the inside' (a watermelon) is deadly. Reward employees for flagging projects as 'Red' early so the leadership team can actually help fix them."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Setting 15 different 'Top Priorities' for the quarter. If you have 15 priorities, you have zero priorities. The company can only handle 3 major cross-functional initiatives at a time."
+best_practices:
+  - "Write things down. The biggest scaling failure is relying on oral tradition (saying things on Zoom). The COO must force the company to write decisions down in a searchable Notion/Confluence database."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "First Round: The Cadence of a Startup"
+    url: "https://review.firstround.com/the-cadence-of-a-startup/"

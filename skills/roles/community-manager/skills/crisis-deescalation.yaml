@@ -1,0 +1,105 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "crisis-deescalation"
+display_name: "Community Crisis & Outage De-escalation"
+description: >
+  Manages communication during a severe product outage, a PR disaster, or a 
+  toxic community uprising. Focuses on transparency, speed, and isolating 
+  bad actors without escalating the drama.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "community-manager"
+phase: "growth"
+applicable_startups:
+  - all
+priority: "critical"
+difficulty: "expert"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "The servers are down and everyone is angry."
+  - "Users are revolting over the price change."
+  - "Ban this toxic user."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Draft incident response message."
+  - "Activate Discord slowmode."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "crisis_type"
+      type: "string"
+      description: "Technical Outage, Pricing Change, Toxic Member."
+  optional:
+    - name: "severity"
+      type: "string"
+      description: "Low, Medium, High."
+      default: "High"
+
+outputs:
+  files:
+    - path: "community/incident-comms.md"
+      description: "The drafted public response."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "N/A"
+manual:
+  - "The community shifts from anger to empathy for the engineering team trying to fix the issue."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "Never delete negative feedback unless it violates terms of service (e.g., hate speech). Deleting legitimate complaints causes the community to lose all trust in the company."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Statuspage"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Acknowledge Immediately"
+    tasks:
+      - "Within 5 minutes of a crisis, post: 'We are aware of the issue and investigating. We will update you in 15 minutes.' Silence breeds conspiracies."
+  - step: "Throttle the Chaos"
+    tasks:
+      - "If the chat is moving too fast with angry messages, enable 'Slowmode' (1 message per minute per user) to force people to think before typing."
+  - step: "The 'Mea Culpa'"
+    tasks:
+      - "When the issue is resolved, post a post-mortem. Explain EXACTLY what went wrong technically, apologize without making excuses, and explain how it will be prevented next time."
+  - step: "Isolating Toxic Actors"
+    tasks:
+      - "If a specific user is inciting a riot, DM them privately first. If they continue, ban them. Do not argue with them in the public `#general` channel."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Arguing with users or getting defensive. The Community Manager must remain a neutral, empathetic party."
+best_practices:
+  - "Over-communicate during an outage. An update that says 'Still working on it, no ETA yet' is infinitely better than 2 hours of silence."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Atlassian Incident Communication Guide"
+    url: "https://www.atlassian.com/incident-management/communications"

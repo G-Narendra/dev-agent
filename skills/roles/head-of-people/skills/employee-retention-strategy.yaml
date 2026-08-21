@@ -1,0 +1,120 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "employee-retention-strategy"
+display_name: "Employee Retention & Culture Scaling"
+description: >
+  Stops the talent bleed. Transitions the company from 'a group of friends 
+  working in a garage' to a structured organization with real management, 
+  career ladders, and psychological safety. Covers key patterns to avoid common pitfalls like writing job descriptions that focus entirely on requirements, and provides actionable best practices for production-ready results.
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "head-of-people"
+phase: "growth"
+applicable_startups:
+  - all
+priority: "critical"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Our best engineers are quitting."
+  - "Managers don't know how to do 1-on-1s."
+  - "We need a promotion process."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Generate engineering career ladder."
+  - "Draft manager 1-on-1 template."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "company_size"
+      type: "string"
+      description: "e.g., Crossed the 50-employee threshold."
+    - name: "core_issue"
+      type: "string"
+      description: "High turnover, Burnout, Lack of structure."
+  optional:
+    - name: "survey_data"
+      type: "string"
+      description: "eNPS score."
+      default: "Unknown"
+
+outputs:
+  files:
+    - path: "hr/retention/career_leveling_guide.md"
+      description: "The clear path for an employee to get promoted."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "N/A"
+manual:
+  - "Voluntary turnover drops below 10% annually, and Employee Net Promoter Score (eNPS) increases by 20 points."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "The 'Ping Pong Table' Fallacy: Never attempt to solve a toxic culture or burnout with free lunches or ping pong tables. Perks do not fix bad management. The Head of People must fix the root cause (bad managers) or face a mass exodus."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Lattice / CultureAmp"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Career Leveling (L1 to L6)"
+    tasks:
+      - "Top performers quit because they don't know how to grow. Create a transparent matrix. Define exactly what an 'L3 Engineer' does versus an 'L4 Engineer'. Tie base salaries directly to these levels to eliminate salary negotiation bias."
+  - step: "Manager Enablement"
+    tasks:
+      - "The #1 reason people quit is a bad manager. Startups promote great engineers to managers and give them zero training. Mandate a 4-week 'Manager Bootcamp' focusing on delegating, delivering critical feedback, and running 1-on-1s."
+  - step: "The 'Stay' Interview"
+    tasks:
+      - "Do not wait for the Exit Interview. Have managers conduct 'Stay Interviews' every 6 months. Ask: 'What is the one thing that would make you look for another job?' Fix that thing before they open LinkedIn."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Writing job descriptions that focus entirely on requirements and nothing on company culture or mission -- candidates self-select out."
+  - "Using unstructured interviews where each candidate gets different questions -- makes fair comparison impossible."
+  - "Relying solely on resume screening without skills-based assessments -- introduces unconscious bias and misses great candidates."
+  - "Delaying feedback to candidates for more than a week -- top talent accepts other offers while waiting."
+  - "Ignoring internal mobility -- hiring externally for every role demotivates existing employees and increases turnover."
+  - "Implement the 'No-Surprise' Firing Rule. If an employee is fired for performance, they should have seen it coming 30 days ago via a formal Performance Improvement Plan (PIP). Sudden firings destroy the psychological safety of the surviving team."
+
+  - "Structured interviews with consistent rubrics produce 2x better hiring outcomes than unstructured conversations."
+  - "Track source-of-hire data — without it, you're guessing which channels actually produce quality candidates."
+  - "Set up an employee referral program with meaningful rewards — referred hires have higher retention and faster ramp time."
+  - "Conduct stay interviews (not just exit interviews) to proactively address what makes employees consider leaving."
+  - "Benchmark compensation against market data annually — losing a key hire over 10% below-market pay is expensive."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Not defining clear success criteria before starting a task -- leads to ambiguous outcomes, endless revisions, and wasted effort."
+
+best_practices:
+  - "Document all configuration decisions in an Architecture Decision Record (ADR) so future team members understand why choices were made."
+  - "Implement comprehensive error handling with structured logging at every integration boundary to simplify debugging."
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Lattice: The Guide to Career Frameworks"
+    url: "https://lattice.com/library/career-frameworks"

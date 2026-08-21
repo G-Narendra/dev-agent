@@ -1,0 +1,102 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "navigation-patterns"
+display_name: "React Navigation & Deep Linking"
+description: >
+  Architects the routing structure of a React Native app using React Navigation. 
+  Implements nested navigators (Tabs, Stacks, Modals) and configures deep 
+  linking to allow users to open specific app screens directly from a web URL.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "mobile-developer-react-native"
+phase: "build"
+applicable_startups:
+  - all
+priority: "high"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Add a bottom tab bar."
+  - "Configure deep links for push notifications."
+  - "The back button is broken."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Generate React Navigation config."
+  - "Draft deep linking configuration."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "screen_hierarchy"
+      type: "string"
+      description: "How screens relate (e.g., Home -> Profile -> Settings)."
+  optional:
+    - name: "deep_link_scheme"
+      type: "string"
+      description: "E.g., myapp://app/profile/123"
+      default: "None"
+
+outputs:
+  files:
+    - path: "src/navigation/RootNavigator.tsx"
+      description: "The primary routing configuration."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "N/A"
+manual:
+  - "Clicking a deep link on the iOS simulator successfully opens the app directly to the deeply nested detail screen."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "Memory Leaks: Be careful pushing the same screen onto the stack repeatedly (e.g., `navigation.push('Profile')`). It will create an infinite stack of screens that consumes RAM until the app crashes."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "React Navigation"
+      install: "npm install @react-navigation/native"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Navigator Nesting"
+    tasks:
+      - "Structure the app correctly: A Root Stack Navigator, which contains an Auth Stack (if logged out) and a Bottom Tab Navigator (if logged in). Each Tab should contain its own Stack Navigator."
+  - step: "Type Checking Navigation"
+    tasks:
+      - "Define a strict TypeScript type for the `RootStackParamList`. This ensures developers get an IDE error if they try to navigate to a screen that doesn't exist or forget to pass required parameters."
+  - step: "Deep Linking Configuration"
+    tasks:
+      - "Configure `linking` in React Navigation. Map incoming URL paths (like `/user/:id`) to the correct nested screen in the navigation tree. Update `AndroidManifest.xml` and `Info.plist` to accept the URL scheme."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Passing massive data objects (like a 1MB JSON user profile) as navigation parameters. This breaks deep linking. Pass the `userId` instead and fetch the data on the destination screen."
+best_practices:
+  - "Use `navigation.navigate()` instead of `navigation.push()` when you just want to go to a screen, preventing duplicates on the stack."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "React Navigation Docs"
+    url: "https://reactnavigation.org/"

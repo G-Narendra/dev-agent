@@ -1,0 +1,78 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "rd-prototyping"
+display_name: "Rapid R&D Prototyping Sprints"
+description: >
+  Lead a small tiger team to build extremely fast, duct-tape prototypes of new technologies
+  (e.g., an LLM integration) to test technical feasibility before full-scale investment.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "innovation-manager"
+phase: "ideation"
+applicable_startups: 
+  - enterprise
+priority: "mvp"
+difficulty: "advanced"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Hypothesis Definition"
+    tasks:
+      - "Define exactly what is being tested (e.g., 'Can we use an LLM to automatically categorize 80% of support tickets?')."
+  - step: "Rapid Build"
+    tasks:
+      - "Ignore scale, security, and clean code. Use low-code tools or hardcoded scripts to prove the core concept."
+  - step: "Evaluation"
+    tasks:
+      - "Present the prototype to the executive team with a clear Go / No-Go recommendation for production."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Spending 6 months building a highly scalable microservice architecture for an R&D concept that hasn't even been proven to work yet."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Rd Prototyping process"
+  - "How do I handle rd prototyping?"
+  - "Implement rd prototyping"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the rd prototyping process"
+  optional:
+    - name: "N/A"
+      type: "string"
+      description: "No optional inputs needed."
+
+outputs:
+  files:
+    - path: "outputs/rd-prototyping.md"
+      description: "Results of the rd prototyping process"
+  artifacts:
+    - "Completed rd prototyping deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

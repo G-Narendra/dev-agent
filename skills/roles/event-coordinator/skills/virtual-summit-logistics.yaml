@@ -1,0 +1,109 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "virtual-summit-logistics"
+display_name: "Virtual Summit & Webinar Logistics"
+description: >
+  Manages the end-to-end execution of a large-scale virtual event. Handles 
+  speaker prep, platform configuration (Zoom/Hopin), registration landing 
+  pages, and live technical troubleshooting.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "event-coordinator"
+phase: "build"
+applicable_startups:
+  - b2b-saas
+  - edtech
+priority: "high"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Plan the Q3 webinar."
+  - "We are hosting a virtual summit."
+  - "Set up the Zoom registration."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Configure Hopin platform."
+  - "Send speaker calendar invites."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "event_date"
+      type: "string"
+      description: "When does it go live?"
+    - name: "expected_attendees"
+      type: "string"
+      description: "100 vs 10,000 (changes the platform)."
+  optional:
+    - name: "platform"
+      type: "string"
+      description: "Zoom Webinar, Hopin, Goldcast."
+      default: "Zoom Webinar"
+
+outputs:
+  files:
+    - path: "marketing/events/virtual-summit-run-of-show.md"
+      description: "The minute-by-minute live schedule."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "N/A"
+manual:
+  - "The event starts exactly on time with zero audio issues, and 40%+ of registrants actually attend live."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "Security: Never use a standard Zoom Meeting link for a public event with 500+ people. Always use Zoom Webinar or similar to prevent 'Zoombombing' (trolls taking over the screen)."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Zoom Webinar / Goldcast"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Registration Setup"
+    tasks:
+      - "Build the landing page. Ensure the form captures standard B2B fields (Company, Role) but keeps it under 5 fields to maximize conversion."
+  - step: "Speaker Prep (Tech Check)"
+    tasks:
+      - "Mandatory: Run a 15-minute 'Tech Check' with every speaker 48 hours before the event to test their microphone, lighting, and screen-sharing permissions."
+  - step: "The 'Run of Show' (RoS)"
+    tasks:
+      - "Create a minute-by-minute spreadsheet. '10:00 - Intro Music. 10:02 - Host welcomes. 10:05 - Pass screen to Speaker A.'"
+  - step: "Live Moderation"
+    tasks:
+      - "Assign a dedicated person (not the speaker) to manage the Q&A box, drop links in the chat, and troubleshoot attendees who 'can't hear anything'."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Sending one reminder email 5 minutes before the event. You must send a 24-hour reminder, a 1-hour reminder, and a 'We are Live' email to get decent attendance."
+best_practices:
+  - "Pre-record the main presentation if the speaker has notoriously bad internet. Play the video live, and then have them jump in live for the Q&A."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Zoom Webinar Best Practices"
+    url: "https://explore.zoom.us/docs/en-us/webinar.html"

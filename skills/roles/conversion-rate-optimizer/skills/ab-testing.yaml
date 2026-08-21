@@ -1,0 +1,80 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "ab-testing"
+display_name: "Statistical A/B Testing"
+description: >
+  Execute and analyze split tests (A/B) on product features and marketing pages to 
+  mathematically prove which variant drives higher conversion.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "conversion-rate-optimizer"
+phase: "growth"
+applicable_startups: 
+  - ecommerce
+  - saas
+priority: "high"
+difficulty: "advanced"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Power Calculation"
+    tasks:
+      - "Calculate the required sample size BEFORE starting the test based on the baseline conversion rate and the Minimum Detectable Effect (MDE)."
+  - step: "Test Isolation"
+    tasks:
+      - "Ensure only ONE variable is changed between the Control and Variant to ensure accurate attribution."
+  - step: "Statistical Significance"
+    tasks:
+      - "Do not declare a winner until the test achieves >95% statistical significance AND the predetermined sample size is reached."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Stopping an A/B test on day 2 because the variant is 'winning' by a huge margin, falling victim to the 'peeking' fallacy before statistical significance is actually reached."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Ab Testing process"
+  - "How do I handle ab testing?"
+  - "Implement ab testing"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the ab testing process"
+  optional:
+    - name: "data_source"
+      type: "string"
+      description: "Source of data to analyze"
+      default: "Internal data"
+
+outputs:
+  files:
+    - path: "outputs/ab-testing.md"
+      description: "Results of the ab testing process"
+  artifacts:
+    - "Completed ab testing deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

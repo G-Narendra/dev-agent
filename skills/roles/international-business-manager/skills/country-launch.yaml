@@ -1,0 +1,81 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "country-launch"
+display_name: "90-Day Country Launch Playbook"
+description: >
+  Execute the operational playbook to launch the startup in a new foreign market, 
+  handling legal entity creation, local hiring, and the initial marketing push.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "international-business-manager"
+phase: "growth"
+applicable_startups: 
+  - all
+priority: "mvp"
+difficulty: "expert"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Legal & Infrastructure (Days 1-30)"
+    tasks:
+      - "Establish the local legal entity (e.g., GmbH in Germany) and open local bank accounts."
+      - "Ensure the product is translated and localized for local payment gateways."
+  - step: "The Landing Team (Days 31-60)"
+    tasks:
+      - "Hire the local 'Country Manager' and the initial sales/support team."
+      - "Secure physical office space if required."
+  - step: "Go-To-Market (Days 61-90)"
+    tasks:
+      - "Execute the localized PR strategy and launch localized paid ad campaigns."
+      - "Sign the first 10 local marquee customers to establish credibility."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Hiring a Country Manager and then micromanaging them from HQ, ignoring their advice on local cultural nuances."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Country Launch process"
+  - "How do I handle country launch?"
+  - "Implement country launch"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the country launch process"
+  optional:
+    - name: "N/A"
+      type: "string"
+      description: "No optional inputs needed."
+
+outputs:
+  files:
+    - path: "outputs/country-launch.md"
+      description: "Results of the country launch process"
+  artifacts:
+    - "Completed country launch deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

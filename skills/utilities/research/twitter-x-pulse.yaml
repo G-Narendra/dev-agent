@@ -1,0 +1,91 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "twitter-x-pulse"
+display_name: "Twitter/X Real-Time Pulse & Influencer Tracking"
+description: >
+  Monitors Twitter/X for real-time sentiment, trending discourse, and influencer 
+  opinions on a topic. Identifies emerging trends before they hit mainstream media 
+  and tracks competitor product launches.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "utility"
+phase: "all"
+applicable_startups:
+  - all
+priority: "medium"
+difficulty: "intermediate"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "What is Tech Twitter saying about X?"
+  - "Track the sentiment on this launch."
+  - "Find influencers in this space."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Search Twitter API."
+  - "Extract trending hashtags."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "keyword_or_competitor"
+      type: "string"
+      description: "The brand name or technology (e.g., 'Devin AI')."
+  optional:
+    - name: "time_window"
+      type: "string"
+      description: "Past 24h, 7d, 30d."
+      default: "Past 7d"
+
+outputs:
+  files:
+    - path: "research/twitter-pulse-{keyword}.md"
+      description: "A summary of the current discourse."
+  artifacts:
+    - "A list of the top 5 most influential accounts discussing the topic."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "N/A"
+  manual:
+    - "Identifies an emerging narrative or backlash *before* it is covered by TechCrunch or mainstream blogs."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "network"
+
+safety_notes:
+  - "The 'Echo Chamber' Warning: Twitter is an extreme echo chamber. Just because 50 loud VCs are talking about a trend does not mean the actual global market cares about it."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Twitter/X Advanced Search"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Advanced Search Operators"
+    tasks:
+      - "Filter out the noise. Use `min_faves:100` to only see tweets that actually gained traction."
+      - "Use `filter:links` to find articles being shared about the topic."
+  - step: "Identify the Thought Leaders"
+    tasks:
+      - "Who are the accounts that consistently drive the conversation? Add them to a curated List."
+  - step: "Analyze the Sentiment"
+    tasks:
+      - "Is the discourse primarily hype (launch announcements), frustration (outages), or technical debate?"
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Relying on basic hashtag searches. Nobody authentic uses hashtags on Twitter anymore. Search for the raw keywords."
+  - "Confusing bot engagement for real sentiment. If a tweet has 5,000 likes but only 2 comments (both saying 'Great project!'), it is bot manipulation."
+
+best_practices:
+  - "Search for conversational phrases rather than just nouns. E.g., Instead of searching 'Stripe', search 'Stripe support' or 'Stripe froze my account'."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Twitter Advanced Search Guide"
+    url: "https://zapier.com/blog/twitter-advanced-search-guide/"

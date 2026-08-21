@@ -1,0 +1,105 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "ip-protection"
+display_name: "Intellectual Property (IP) & Trademarks"
+description: >
+  Protects the startup's core assets: its brand, its code, and its inventions. 
+  Guides the process of filing trademarks, enforcing copyright, and ensuring 
+  employees assign all IP to the company (PIIA agreements).
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "legal-counsel"
+phase: "planning"
+applicable_startups:
+  - all
+priority: "high"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "We need to trademark our name."
+  - "Someone copied our website."
+  - "Are the founders' IP assigned?"
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Draft Cease & Desist letter."
+  - "Generate Trademark search strategy."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "asset_type"
+      type: "string"
+      description: "Brand Name, Source Code, Invention."
+    - name: "action"
+      type: "string"
+      description: "Register, Enforce, Assign."
+  optional:
+    - name: "competitor_name"
+      type: "string"
+      description: "Who is infringing?"
+      default: "Unknown"
+
+outputs:
+  files:
+    - path: "legal/ip/cease_and_desist_template.md"
+      description: "The drafted legal correspondence."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "N/A"
+manual:
+  - "100% of employees, founders, and contractors have signed a Proprietary Information and Inventions Assignment (PIIA) agreement."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "The Open Source Trap: Do not accidentally use AGPL-licensed code in your proprietary, closed-source SaaS backend. AGPL requires you to open-source your entire application. Use MIT or Apache 2.0."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "USPTO TESS (Trademark Search)"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "The PIIA (IP Assignment)"
+    tasks:
+      - "Before a developer writes a single line of code, they MUST sign an IP Assignment agreement. If they don't, they personally own the copyright to the code, and an investor will refuse to fund the startup."
+  - step: "Trademark Clearance Search"
+    tasks:
+      - "Before buying a $5,000 domain name, search the USPTO database. If 'AcmeCorp' is already trademarked in your exact software category (Class 9 / Class 42), you must choose a new name."
+  - step: "Cease and Desist (C&D)"
+    tasks:
+      - "If a small competitor copies your UI, do not immediately file a $50,000 lawsuit. Send a firm but polite Cease & Desist letter first. 90% of the time, they will get scared and take it down within 48 hours."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Trying to patent a generic software concept (e.g., 'A button that orders food over the internet'). Software patents are incredibly expensive ($15k+), take years, and are frequently invalidated. Focus on execution."
+best_practices:
+  - "Register your brand name as a 'Word Mark' first, rather than a 'Design Mark' (Logo). The Word Mark protects the actual name regardless of what font or logo you change it to in the future."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "USPTO: Trademark Basics"
+    url: "https://www.uspto.gov/trademarks"

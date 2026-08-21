@@ -1,0 +1,120 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "martech-stack-integration"
+display_name: "Marketing Operations & Tech Stack Integration"
+description: >
+  Builds the plumbing for the marketing engine. Integrates CRMs, 
+  marketing automation platforms, and analytics tools so data flows 
+  seamlessly and revenue attribution is mathematically perfect. Covers key patterns to avoid common pitfalls like launching a campaign without utm parameters -- you won't kno, and provides actionable best practices for production-ready results.
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "marketing-operations-manager"
+phase: "operations"
+applicable_startups:
+  - B2B, SaaS, E-commerce
+priority: "high"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "HubSpot isn't syncing with Salesforce."
+  - "How do we track lead attribution?"
+  - "Automate the lead routing."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Generate lead routing rules."
+  - "Draft CRM property mapping logic."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "marketing_platform"
+      type: "string"
+      description: "e.g., HubSpot, Marketo, Pardot."
+    - name: "sales_crm"
+      type: "string"
+      description: "e.g., Salesforce, Pipedrive."
+  optional:
+    - name: "data_warehouse"
+      type: "string"
+      description: "Where does the data end up?"
+      default: "Snowflake"
+
+outputs:
+  files:
+    - path: "marketing/ops/martech_sync_rules.md"
+      description: "The architectural diagram of the data flow."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "N/A"
+manual:
+  - "Lead-to-Contact synchronization between HubSpot and Salesforce operates at 99.9% accuracy with <1 minute latency, and attribution gaps are eliminated."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "The Infinite Sync Loop: Never set up bidirectional syncing for ALL properties between two platforms without strict 'Source of Truth' rules. If both platforms update a record simultaneously, it creates an infinite sync loop that will crash both APIs."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Zapier / HubSpot / Salesforce"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Define the System of Record"
+    tasks:
+      - "Marketing Automation (HubSpot) is the system of record for Top-of-Funnel (Leads, UTM tags, Email opens). The CRM (Salesforce) is the system of record for Bottom-of-Funnel (Opportunities, Revenue, Contracts). Map sync directions accordingly."
+  - step: "Lead Routing Automation"
+    tasks:
+      - "When a demo request comes in, do not rely on a human to email the Sales team. Build a workflow: If Company Size > 500, assign to Enterprise Rep and ping them on Slack. If < 500, assign to round-robin SDR queue. Speed to lead is everything."
+  - step: "UTM Parameter Enforcement"
+    tasks:
+      - "Marketing Ops must enforce UTM tracking. If a marketer runs a Facebook ad without a UTM parameter, the lead will show up as 'Direct Traffic'. Build hidden fields on all web forms to capture `utm_source`, `utm_medium`, and `utm_campaign` automatically."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Launching a campaign without UTM parameters -- you won't know which channel drove the conversions."
+  - "A/B testing with a sample size too small to reach statistical significance -- making decisions on noise rather than signal."
+  - "Optimizing for vanity metrics (impressions, page views) instead of actionable KPIs (conversion rate, revenue, retention)."
+  - "Running ads without conversion tracking pixel installed -- you're paying for clicks but can't measure ROI."
+  - "Ignoring mobile page speed for SEO -- Google's mobile-first indexing means a slow mobile site kills rankings."
+  - "Implement strict Data Governance for custom fields. Do not allow Sales reps to create custom fields in the CRM (e.g., 'Target_Industry_2'). Only Marketing Ops can create fields to maintain database hygiene."
+
+  - "Set up end-to-end conversion tracking before launching any campaign — measure from impression to purchase."
+  - "Run A/B tests until they reach 95% statistical significance before making decisions — premature conclusions are worse than no test."
+  - "Build audience segments based on behavior, not just demographics — what users do is more predictive than who they are."
+  - "Test email deliverability (SPF, DKIM, DMARC) before sending any campaign — authentication failures land in spam folders."
+  - "Create a content calendar 30 days ahead and batch-create content — consistency beats intensity in content marketing."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Not defining clear success criteria before starting a task -- leads to ambiguous outcomes, endless revisions, and wasted effort."
+
+best_practices:
+  - "Document all configuration decisions in an Architecture Decision Record (ADR) so future team members understand why choices were made."
+  - "Implement comprehensive error handling with structured logging at every integration boundary to simplify debugging."
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Chiefmartec: The Marketing Technology Landscape"
+    url: "https://chiefmartec.com/"

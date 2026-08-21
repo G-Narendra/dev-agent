@@ -1,0 +1,79 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "data-modeling"
+display_name: "Entity Relationship Data Modeling"
+description: >
+  Design the logical and physical data models for the startup, ensuring relationships 
+  (1:1, 1:N, N:M) are optimized for both read performance and data integrity.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "data-architect"
+phase: "planning"
+applicable_startups: 
+  - all
+priority: "high"
+difficulty: "expert"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Entity Relationship Diagram (ERD)"
+    tasks:
+      - "Draft a complete ERD in Mermaid.js or Draw.io showing all primary keys, foreign keys, and cascading delete rules before creating the first table."
+  - step: "Normalization vs Denormalization"
+    tasks:
+      - "Normalize to 3NF to maintain strict transactional integrity, but explicitly document where intentional denormalization (e.g., caching a `total_count` column) is required for read speed."
+  - step: "Auditability"
+    tasks:
+      - "Implement soft-deletes (`deleted_at`) or strict audit tables for all financial or healthcare-related data models; never permanently `DELETE` a row."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Storing a list of linked IDs as a comma-separated string inside a single `VARCHAR` column, completely destroying the ability to use SQL `JOIN` clauses efficiently."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Data Modeling process"
+  - "How do I handle data modeling?"
+  - "Implement data modeling"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the data modeling process"
+  optional:
+    - name: "data_source"
+      type: "string"
+      description: "Source of data to analyze"
+      default: "Internal data"
+
+outputs:
+  files:
+    - path: "outputs/data-modeling.md"
+      description: "Results of the data modeling process"
+  artifacts:
+    - "Completed data modeling deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

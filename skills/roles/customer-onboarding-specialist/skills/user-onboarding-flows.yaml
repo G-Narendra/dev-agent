@@ -1,0 +1,80 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "user-onboarding-flows"
+display_name: "User Onboarding & Activation"
+description: >
+  Design low-friction user onboarding flows that rapidly guide new signups to 
+  their first 'Aha!' moment and drive product activation.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "customer-onboarding-specialist"
+phase: "growth"
+applicable_startups: 
+  - saas
+  - consumer
+priority: "high"
+difficulty: "advanced"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Progressive Disclosure"
+    tasks:
+      - "Do not ask the user to fill out 10 profile fields on signup. Ask for exactly 2 (Name, Email), and collect the rest contextually as they use the product over the first week."
+  - step: "Empty State Design"
+    tasks:
+      - "Never show a blank white screen when a user hasn't created data yet. Fill the empty state with a 1-click template or a clear Call-to-Action to create their first item."
+  - step: "Checklist Psychology"
+    tasks:
+      - "Provide a 'Getting Started' widget with a progress bar that starts at 25% complete just by signing up, utilizing the Endowed Progress Effect to encourage completion."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Forcing a new user to click through a mandatory 15-step tooltip tour before they are allowed to interact with the actual software."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the User Onboarding Flows process"
+  - "How do I handle user onboarding flows?"
+  - "Implement user onboarding flows"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the user onboarding flows process"
+  optional:
+    - name: "target_audience"
+      type: "string"
+      description: "Target user or customer segment"
+      default: "Primary user persona"
+
+outputs:
+  files:
+    - path: "outputs/user-onboarding-flows.md"
+      description: "Results of the user onboarding flows process"
+  artifacts:
+    - "Completed user onboarding flows deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

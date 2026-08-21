@@ -1,0 +1,109 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "model-serving-infrastructure"
+display_name: "Model Serving & API Infrastructure"
+description: >
+  Takes a trained machine learning model and wraps it in a scalable API 
+  (FastAPI, TorchServe, or Triton) so the main backend application can send 
+  it data and receive predictions with sub-100ms latency.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "ml-ops-engineer"
+phase: "build"
+applicable_startups:
+  - ai-startups
+  - all
+priority: "critical"
+difficulty: "expert"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "The data scientist finished the model. Deploy it."
+  - "We need to serve this PyTorch model."
+  - "The inference API is too slow."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Containerize model with Docker."
+  - "Deploy FastAPI inference server."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "model_artifact"
+      type: "file"
+      description: "Path to the .pkl, .pt, or .onnx file."
+  optional:
+    - name: "framework"
+      type: "string"
+      description: "Scikit-Learn, PyTorch, TensorFlow."
+      default: "PyTorch"
+
+outputs:
+  files:
+    - path: "mlops/serving/Dockerfile"
+      description: "The container definition for the API."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "API responds with a prediction in < 100ms under a load of 1,000 requests per second."
+manual:
+  - "Backend engineers can easily integrate with the model using standard REST/gRPC calls without knowing any Python."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+
+safety_notes:
+  - "Memory Leaks: ML models (especially PyTorch/TF) are notorious for memory leaks if the inference loop is not strictly managed. Ensure memory limits are enforced at the container level."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "FastAPI / Docker / Kubernetes"
+      install: "pip install fastapi uvicorn"
+  alternatives:
+    - name: "NVIDIA Triton Inference Server"
+      when: "Serving massive GPU-accelerated models (LLMs) at enterprise scale."
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Model Serialization"
+    tasks:
+      - "Convert the model to ONNX format if possible. ONNX provides significant CPU inference speedups compared to raw PyTorch or Scikit-Learn."
+  - step: "API Wrapper"
+    tasks:
+      - "Build a FastAPI application. Load the model artifact into memory ONLY ONCE during startup (`@app.on_event('startup')`), not on every API request."
+  - step: "Batching (Advanced)"
+    tasks:
+      - "Implement dynamic batching: If 10 requests hit the API within 10ms, group them into a single matrix multiplication operation to maximize CPU/GPU utilization."
+  - step: "Containerization"
+    tasks:
+      - "Write the Dockerfile. Keep the image small. Use slim Python images and only install necessary dependencies."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Loading the ML model from disk every time the `/predict` endpoint is hit. This will crash the server immediately under load."
+best_practices:
+  - "Always version the API endpoint (e.g., `/v1/predict`) so you can shadow-test a `v2` model in production without breaking the frontend."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "FastAPI ML Deployment Guide"
+    url: "https://fastapi.tiangolo.com/advanced/testing-dependencies/"

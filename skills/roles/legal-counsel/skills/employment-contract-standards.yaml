@@ -1,0 +1,111 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "employment-contract-standards"
+display_name: "Employment Contracts & Labor Law Compliance"
+description: >
+  Draft standard employment agreements that protect the company's IP, 
+  define termination conditions (At-Will vs Notice Periods), and ensure 
+  compliance with local labor laws across distributed/remote teams.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "legal-counsel"
+phase: "growth"
+applicable_startups:
+  - all
+priority: "high"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Draft an offer letter."
+  - "What are the termination rules in California?"
+  - "We are hiring our first contractor."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Create an employment agreement."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "employment_type"
+      type: "string"
+      description: "Full-Time Employee (W-2) vs Independent Contractor (1099)."
+    - name: "jurisdiction"
+      type: "string"
+      description: "Where does the employee physically live and work?"
+  optional:
+    - name: "compensation_structure"
+      type: "string"
+      description: "Salary + Equity + Bonus."
+      default: "Salary + Equity"
+
+outputs:
+  files:
+    - path: "legal/hr/standard-employment-agreement.docx"
+      description: "The official contract to be signed via DocuSign."
+  artifacts:
+    - "A compliance checklist for remote hiring."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "N/A"
+  manual:
+    - "The company faces zero lawsuits regarding wrongful termination or misclassification of contractors."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+
+safety_notes:
+  - "Contractor Misclassification: The IRS and local labor boards aggressively fine startups that hire 'Contractors' but treat them like 'Employees' (e.g., forcing them to work 9-to-5, dictating how they do the work, providing a company laptop). If they act like an employee, you MUST classify them and pay taxes as an employee."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Deel / Rippling"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "At-Will Employment (US Specific)"
+    tasks:
+      - "Explicitly state in the very first paragraph that employment is 'At-Will'. This means the company can terminate the employee at any time, for any legal reason, without notice."
+  - step: "Non-Compete vs Non-Solicit"
+    tasks:
+      - "Non-Competes (preventing them from working for a competitor) are increasingly illegal (e.g., California, FTC rulings). Do not rely on them."
+      - "Instead, strictly enforce Non-Solicitation clauses (preventing them from poaching your clients or other employees) and Confidentiality clauses."
+  - step: "The IP Assignment (PIIA)"
+    tasks:
+      - "This is the most critical clause for a tech startup. State clearly: 'Any invention, code, or idea created by the employee during their employment, related to the company's business, is the sole property of the company, whether created on company time or not.'"
+  - step: "Remote Work Jurisdiction"
+    tasks:
+      - "If the company is in Delaware, but the employee lives in Germany, German labor law applies to that employee (e.g., mandatory 4-week notice periods). Use an Employer of Record (EOR) like Deel to handle international compliance."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Putting the Equity Vesting Schedule in the Offer Letter as a binding contract. Offer letters should be non-binding summaries. The actual equity grant must be governed by the official Stock Option Plan approved by the Board."
+  - "Hand-drafting contracts for every state/country. Use standard templates vetted by local counsel, or use an EOR platform that guarantees local compliance."
+
+best_practices:
+  - "Include a 'Severability Clause'. If a judge rules that your Non-Compete is illegal, the severability clause ensures the rest of the contract (like the IP assignment) remains perfectly valid."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Deel: Global Hiring Guide"
+    url: "https://www.deel.com/resources"

@@ -1,0 +1,113 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "customer-churn-prediction"
+display_name: "Customer Churn Prediction Model"
+description: >
+  Build a predictive model to identify which users are highly likely to cancel 
+  their subscription in the next 30 days. Allows the Customer Success team to 
+  intervene proactively before the revenue is lost.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "data-scientist"
+phase: "growth"
+applicable_startups:
+  - b2b-saas
+  - subscriptions
+priority: "high"
+difficulty: "expert"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Who is going to cancel?"
+  - "Predict churn."
+  - "Find at-risk accounts."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "python scripts/train_churn_model.py"
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "usage_data"
+      type: "string"
+      description: "Historical data of user logins, feature usage, and support tickets."
+    - name: "churn_definition"
+      type: "string"
+      description: "What exactly constitutes 'churn'? (e.g., 'No login for 30 days' vs 'Clicked Cancel button')."
+  optional:
+    - name: "algorithm"
+      type: "string"
+      description: "Random Forest vs XGBoost vs Logistic Regression."
+      default: "XGBoost"
+
+outputs:
+  files:
+    - path: "reports/at-risk-customers.csv"
+      description: "List of users and their churn probability score."
+  artifacts:
+    - "A SHAP values plot explaining *why* they are churning."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "The model achieves an ROC-AUC score > 0.80."
+  manual:
+    - "Customer Success reaches out to the top 100 'At Risk' accounts and successfully saves at least 20% of them."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+
+safety_notes:
+  - "Do not train the model on data that occurs *after* the churn event (e.g., 'Account Status = Closed'). This is data leakage and will result in a useless model."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "XGBoost / LightGBM"
+      install: "pip install xgboost shap"
+  alternatives:
+    - name: "Logistic Regression"
+      when: "You need absolute interpretability (e.g., 'Every support ticket increases churn risk by 2%') rather than pure predictive power."
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Defining the Observation Window"
+    tasks:
+      - "Establish a strict timeline. Example: Use data from Days 1-60 to predict if they will churn between Days 61-90."
+  - step: "Feature Engineering (Behavioral)"
+    tasks:
+      - "The most predictive features are usually velocity metrics (e.g., 'Logins in last 7 days minus Logins in previous 7 days'). A sudden drop in usage is the biggest warning sign."
+      - "Count the number of unresolved support tickets."
+  - step: "Model Training & Explainability"
+    tasks:
+      - "Train a Gradient Boosting model (XGBoost) for high accuracy."
+      - "Use SHAP (SHapley Additive exPlanations) values to explain the predictions. The CS rep needs to know *why* the user is churning so they know what to offer them (e.g., 'They haven't used the new reporting feature')."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Treating a user who 'Downgraded' the same as a user who 'Cancelled entirely'. These are different behaviors and usually require separate models."
+  - "Only giving the CS team a raw probability score (e.g., 'User A is 85% likely to churn'). Without the 'Why' (SHAP values), the CS team has no actionable strategy."
+
+best_practices:
+  - "Integrate the output directly into Salesforce/HubSpot. Do not make the Sales team check a separate Python dashboard. Create a 'Churn Risk Score' field directly on the Account record."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "SHAP: Explain Any Machine Learning Model"
+    url: "https://shap.readthedocs.io/en/latest/"

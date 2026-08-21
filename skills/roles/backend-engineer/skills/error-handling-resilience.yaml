@@ -1,0 +1,105 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "error-handling-resilience"
+display_name: "Global Error Handling & API Resilience"
+description: >
+  Designs a centralized error handling strategy that prevents the application 
+  from crashing, normalizes HTTP error responses, and implements resilience 
+  patterns (retries, circuit breakers) for third-party API calls.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "backend-engineer"
+phase: "build"
+applicable_startups:
+  - all
+priority: "critical"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Set up global error handling."
+  - "Standardize the API error responses."
+  - "The server crashes when Stripe times out."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Configure Express global error middleware."
+  - "Implement Axios interceptors for retries."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "framework"
+      type: "string"
+      description: "Node.js, Python, Go."
+outputs:
+  files:
+    - path: "src/middleware/errorHandler.ts"
+      description: "The global exception filter."
+    - path: "src/utils/AppError.ts"
+      description: "Custom operational error class."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "Throwing a generic Error correctly results in a 500 response and is logged, but does not crash the Node/Python process."
+manual:
+  - "Frontend developers receive a consistent `{ \"error\": { \"code\": \"...\", \"message\": \"...\" } }` payload regardless of where the error occurred."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+
+safety_notes:
+  - "Information Leakage: Never leak stack traces or raw database errors (e.g., SQL syntax errors) to the client in production. They reveal attack vectors."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Custom Middleware"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Operational vs Programmer Errors"
+    tasks:
+      - "Define an `AppError` class that extends `Error`. Add properties for `httpCode` and `isOperational`."
+      - "Operational errors (e.g., 'User not found') are expected. Programmer errors (e.g., 'Cannot read property of undefined') are bugs and should be logged heavily."
+  - step: "Global Exception Filter"
+    tasks:
+      - "Create a catch-all middleware. If `isOperational` is true, return the message to the client. If false, log the stack trace internally and return 'Internal Server Error'."
+  - step: "Resilience (Retries & Circuit Breakers)"
+    tasks:
+      - "When calling external APIs (e.g., sending an email via SendGrid), implement an Exponential Backoff retry strategy for HTTP 429 and 503 errors."
+      - "Do NOT retry HTTP 400 (Bad Request) errors. They will fail every time."
+  - step: "Process Crash Prevention"
+    tasks:
+      - "Catch `unhandledRejection` and `uncaughtException` events. Log them, gracefully shut down connections, and let the process manager (PM2/Kubernetes) restart the server."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Wrapping every single controller in a `try/catch` block and sending the error manually. Use an async wrapper function or modern framework features to route all thrown errors to the global handler."
+  - "Silently swallowing errors (`try { ... } catch (e) { }`)."
+
+best_practices:
+  - "Log errors exactly at the boundary before they are returned to the client, ensuring you capture the context of the HTTP request."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Node.js Best Practices: Error Handling"
+    url: "https://github.com/goldbergyoni/nodebestpractices#2-error-handling-practices"

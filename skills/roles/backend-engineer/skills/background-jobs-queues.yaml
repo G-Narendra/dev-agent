@@ -1,0 +1,111 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "background-jobs-queues"
+display_name: "Background Jobs & Message Queues"
+description: >
+  Offload heavy or slow operations (like sending emails, processing video, or 
+  generating PDFs) from the main HTTP request thread to a background worker. 
+  Ensures fast API response times and robust retry logic for transient failures.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "backend-engineer"
+phase: "build"
+applicable_startups:
+  - all
+priority: "critical"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "The API is too slow."
+  - "Set up a background job."
+  - "We need an email queue."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "npm install bullmq ioredis"
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "task_type"
+      type: "string"
+      description: "What work is being offloaded? (e.g., 'Image Resizing')."
+  optional:
+    - name: "broker"
+      type: "string"
+      description: "Redis (BullMQ) vs SQS vs RabbitMQ."
+      default: "Redis (BullMQ)"
+
+outputs:
+  files:
+    - path: "src/workers/imageWorker.ts"
+      description: "The background consumer code."
+  artifacts:
+    - "A configuration for exponential backoff retries."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "The HTTP endpoint returns a 202 Accepted within 50ms, while the heavy job runs asynchronously."
+  manual:
+    - "If the third-party email API goes down, jobs remain in the queue and retry automatically when the API comes back."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+
+safety_notes:
+  - "Idempotency: Background jobs WILL occasionally run twice due to network hiccups. Code the worker to be idempotent (e.g., check if 'Welcome Email Sent == True' in the DB before sending again)."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "BullMQ (Node) / Celery (Python) / Sidekiq (Ruby)"
+      install: "N/A"
+  alternatives:
+    - name: "Inngest / Trigger.dev"
+      when: "Moving to a fully Serverless architecture where long-running background processes are difficult to host."
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Queue Separation"
+    tasks:
+      - "Create different queues for different priorities. Put 'Password Reset Emails' in a High Priority queue, and 'Weekly Analytics Report' in a Low Priority queue."
+  - step: "Producer / Consumer Split"
+    tasks:
+      - "Producer (API): Validates input, writes the job to Redis, and returns immediately."
+      - "Consumer (Worker): Listens to Redis, pulls the job, does the heavy lifting, and updates the DB status."
+  - step: "Retry Strategy"
+    tasks:
+      - "Configure Exponential Backoff. If an API call fails, retry in 10s, then 1m, then 10m, then 1 hour. Do not rapidly retry 50 times a second and crash your own systems."
+  - step: "Dead Letter Queue (DLQ)"
+    tasks:
+      - "If a job fails 5 times, move it to a DLQ so a human engineer can inspect the error later without it clogging up the main queue."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Passing entire 5MB database objects into the Redis message payload. Redis will run out of memory. Pass the `userID` instead, and have the worker fetch the data from the DB."
+  - "Awaiting the background job to finish before returning the HTTP response. This defeats the entire purpose of a queue."
+
+best_practices:
+  - "Run workers on completely separate infrastructure from your API web servers. If a background job spikes CPU to 100%, it shouldn't take down the public website."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "BullMQ Documentation"
+    url: "https://docs.bullmq.io/"

@@ -1,0 +1,81 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "etl-pipelines"
+display_name: "ETL / ELT Data Pipeline Architecture"
+description: >
+  Extract data from production databases and third-party APIs, transform it for analytics,
+  and load it into a Data Warehouse (Snowflake, BigQuery).
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "data-engineer"
+phase: "build"
+applicable_startups: 
+  - all
+priority: "mvp"
+difficulty: "advanced"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Extraction"
+    tasks:
+      - "Configure robust extraction using tools like Fivetran, Airbyte, or custom Python scripts."
+      - "Implement Change Data Capture (CDC) via Debezium to stream database changes in real-time."
+  - step: "Transformation"
+    tasks:
+      - "Use `dbt` (Data Build Tool) to write modular, testable SQL transformations."
+      - "Implement data quality tests (e.g., 'user_id must not be null and must be unique')."
+  - step: "Orchestration"
+    tasks:
+      - "Schedule and monitor the entire DAG (Directed Acyclic Graph) using Apache Airflow or Prefect."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Writing massive, un-versioned, untestable SQL scripts directly in the Data Warehouse console."
+
+best_practices:
+  - "Design idempotent data pipelines that can be safely re-run."
+  - "Validate data quality with automated checks at each stage."
+  - "Use partitioning for efficient query performance on large datasets."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Etl Pipelines process"
+  - "How do I handle etl pipelines?"
+  - "Implement etl pipelines"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the etl pipelines process"
+  optional:
+    - name: "data_source"
+      type: "string"
+      description: "Source of data to analyze"
+      default: "Internal data"
+
+outputs:
+  files:
+    - path: "outputs/etl-pipelines.md"
+      description: "Results of the etl pipelines process"
+  artifacts:
+    - "Completed etl pipelines deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "dbt Documentation"
+    url: "https://docs.getdbt.com"
+  - title: "Apache Airflow Documentation"
+    url: "https://airflow.apache.org/docs/"

@@ -1,0 +1,116 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "revenue-model-design"
+display_name: "Revenue Model Design & Validation"
+description: >
+  Designs and validates revenue models for new business ideas. Covers
+  subscription, usage-based, marketplace, freemium, and hybrid models
+  with willingness-to-pay validation.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "business-model-strategist"
+phase: "ideation"
+applicable_startups:
+  - all
+priority: "mvp"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Design our revenue model."
+  - "How should we charge for this?"
+  - "Choose between subscription and usage-based pricing."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Design revenue model."
+  - "Validate willingness to pay."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "product_description"
+      type: "string"
+      description: "What the product does and who it serves."
+    - name: "customer_segment"
+      type: "string"
+      description: "Primary customer segment and their buying behavior."
+  optional:
+    - name: "similar_products"
+      type: "string"
+      description: "How similar products charge."
+      default: "TBD from market research"
+
+outputs:
+  files:
+    - path: "strategy/revenue-model/revenue-model.md"
+      description: "Revenue model design with validation results"
+  artifacts:
+    - "A validated revenue model with pricing structure"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Revenue Model Options"
+    tasks:
+      - "Subscription (SaaS): predictable revenue, high LTV, requires sustained value delivery."
+      - "Usage-based: aligns cost with value, scales with customer success, unpredictable revenue."
+      - "Marketplace: platform fees on transactions or subscriptions, chicken-and-egg problem."
+      - "Freemium: free tier drives adoption, premium features drive revenue, low conversion rate (2-5%)."
+      - "Hybrid: base subscription + usage overages (most common for modern SaaS)."
+  - step: "Model Fit Assessment"
+    tasks:
+      - "Score each model on: customer fit (will they pay this way?), revenue predictability, scalability, and competitive positioning."
+      - "Consider customer psychology: do customers prefer predictable bills (subscription) or paying for what they use (usage)?"
+      - "Analyze competitor models: what are customers in this market already paying for?"
+      - "Model the economics of each option: projected revenue, cash flow, and unit economics."
+  - step: "Willingness-to-Pay Validation"
+    tasks:
+      - "Run Van Westendorp Price Sensitivity Meter surveys to find acceptable price range."
+      - "Use Gabor-Granger technique: ask 'Would you buy at $X?' at different price points."
+      - "Test pricing in real-world settings: put price on landing page, measure conversion."
+      - "Interview 10-20 target customers with concrete pricing scenarios."
+  - step: "Pricing Structure Design"
+    tasks:
+      - "Design pricing tiers: Free (limited), Pro (core), Enterprise (full)."
+      - "Determine value metric: per seat, per API call, per GB, per active user."
+      - "Set anchor pricing: the highest tier makes the mid-tier look reasonable."
+      - "Design packaging: what features go in which tier (value-based gating)."
+  - step: "Go-to-Market Testing"
+    tasks:
+      - "Launch with the simplest pricing model possible — you can always add complexity."
+      - "Track conversion rate at each price point immediately."
+      - "Run pricing A/B tests once you have sufficient traffic."
+      - "Interview churned customers: didn't they see value, or was price the barrier?"
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Copying competitor pricing without understanding your own value proposition."
+  - "Over-complicating pricing with too many tiers or add-ons — confuses customers."
+  - "Underpricing because you're worried about scaring away customers."
+  - "Changing pricing too frequently — erodes trust and complicates sales."
+best_practices:
+  - "Price based on the value you deliver, not the cost to build."
+  - "The best pricing model aligns your success with your customer's success."
+  - "Raise prices regularly — most SaaS companies underprice at launch."
+  - "You can always discount to close a deal, but you can never raise a price after it's set."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

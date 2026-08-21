@@ -1,0 +1,105 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "board-deck-creation"
+display_name: "Investor Relations & Board Deck Architecture"
+description: >
+  Manages the narrative. Translates raw company data into a compelling, 
+  VC-friendly story. Prepares the CEO for quarterly board meetings, ensuring 
+  investors remain confident and supportive rather than panicked.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "investor-relations-manager"
+phase: "growth"
+applicable_startups:
+  - Series A+, Pre-IPO
+priority: "high"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "The board meeting is next week."
+  - "We need to explain the churn spike."
+  - "Draft the quarterly investor update."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Generate Board Deck outline."
+  - "Draft investor update email."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "quarterly_financials"
+      type: "string"
+      description: "ARR, Cash Burn, Runway."
+    - name: "key_challenges"
+      type: "string"
+      description: "What went wrong this quarter?"
+  optional:
+    - name: "meeting_type"
+      type: "string"
+      description: "Standard Board Meeting vs Emergency Bridge Round."
+      default: "Standard Board Meeting"
+
+outputs:
+  files:
+    - path: "finance/investors/q3_board_deck_narrative.md"
+      description: "The structured story for the slides."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "N/A"
+manual:
+  - "The board meeting remains strategic (focusing on the future) rather than tactical (micromanaging the past), and investors unanimously approve the next quarter's budget."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "The Fiduciary Duty Breach: Never hide material financial losses, impending lawsuits, or catastrophic churn from the Board of Directors. Hiding material facts from investors is fraud. Always present the brutal truth, followed immediately by the mitigation plan."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Pitch / PowerPoint / Carta"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "The 'Pre-Read' Protocol"
+    tasks:
+      - "Never spend the 2-hour board meeting reading slides to smart people. Send the 40-page deck and financials 48 hours in advance as a 'Pre-Read'. Use the actual meeting time exclusively for high-level debate and strategic decision making."
+  - step: "The Standard Agenda"
+    tasks:
+      - "1. CEO Highlights/Lowlights (10 min). 2. Financial Metrics (20 min). 3. Department Updates (30 min). 4. Strategic Deep Dive (e.g., 'How do we beat Competitor X?') (45 min). 5. Closed Session (Board only) (15 min)."
+  - step: "The 'Asks' Slide"
+    tasks:
+      - "Put VCs to work. The last slide must be 'Where we need your help.' E.g., 'We need introductions to the VP of Engineering at Stripe', or 'We need a recommendation for a new CFO.' Make them earn their equity."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Changing the metric definitions every quarter. If you define 'Active User' as someone who logs in once a month in Q1, and then change it to 'someone who logs in once a quarter' in Q2 to make the graph go up, the VCs will catch it and lose all trust in the CEO."
+best_practices:
+  - "The 'Watermelon' Rule. Do not present 'Watermelon' metrics (Green on the outside, Red on the inside). If revenue is up 10%, but it's only because you sold heavily discounted multi-year deals that will churn next year, highlight the risk immediately."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Sequoia Capital: Preparing a Board Deck"
+    url: "https://www.sequoiacap.com/article/preparing-a-board-deck/"

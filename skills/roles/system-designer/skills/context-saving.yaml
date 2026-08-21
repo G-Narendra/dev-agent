@@ -1,0 +1,104 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "context-saving"
+display_name: "Staff System Designer: Distributed State Checkpointing"
+description: >
+  Operates at the Principal/Staff Engineer level (10+ years FAANG). Designs 
+  fault-tolerant state management systems. Ensures that long-running 
+  distributed transactions and agentic workflows are mathematically persisted 
+  to durable storage, enabling seamless recovery after catastrophic node failure.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "system-designer"
+phase: "operate"
+applicable_startups:
+  - all
+priority: "high"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Save the context."
+  - "Checkpoint the state."
+  - "How do we persist this workflow?"
+  - "/context-save"
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Generate state payload JSON."
+  - "Write context to durable storage."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "current_state_payload"
+      type: "string"
+      description: "The JSON or Markdown representation of current execution state."
+  optional:
+    - name: "checkpoint_id"
+      type: "string"
+      description: "UUID for this specific point in time."
+      default: "auto-generated"
+
+outputs:
+  files:
+    - path: ".dev/context/state_snapshot.md"
+      description: "Durable, immutable state record."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "N/A"
+manual:
+  - "The system can be hard-killed (SIGKILL) mid-execution, and upon restart, perfectly resumes from the last saved context with zero data loss."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "file_write"
+safety_notes:
+  - "The Ephemeral Memory Trap: Never trust RAM for state management in a distributed system or long-running agent loop. OOM (Out of Memory) kills happen. Persist state to a durable disk or external key-value store (Redis AOF / DynamoDB) after every atomic phase."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "LangGraph Checkpointer / Redis"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Atomic State Serialization"
+    tasks:
+      - "Gather all open variables, conversational history, and pending tasks. Serialize them into a strict JSON or Markdown schema. Ensure no cyclic dependencies in the data structure prevent serialization."
+  - step: "Immutable Append-Only Writes"
+    tasks:
+      - "Do not overwrite the previous context file directly (which risks corruption during a crash). Write to a temporary file (`state.tmp`), then perform an atomic rename (POSIX `mv`) to the final target file (`state.md`)."
+  - step: "Data Scrubbing (PII)"
+    tasks:
+      - "Before saving context to disk, automatically scrub out temporary API keys or sensitive PII that were used in memory but should not be persisted in raw text logs."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Saving excessive context: Dumping 50MB of raw logs into the state file. This will bloat the context window upon restoration and crash the agent. Summarize completed tasks and only save the strict 'Diff' or necessary pointers."
+
+best_practices:
+  - "Implement the Memento Design Pattern for agentic workflows. State should be captured as an immutable 'snapshot' at explicit checkpoints (e.g., End of Phase 1)."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Martin Fowler: Event Sourcing & Snapshots"
+    url: "https://martinfowler.com/eaaDev/EventSourcing.html"

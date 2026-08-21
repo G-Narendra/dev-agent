@@ -1,0 +1,102 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "developer-portal"
+display_name: "Internal Developer Portal (IDP)"
+description: >
+  Builds and maintains the internal developer portal (e.g., Backstage). 
+  Provides a centralized catalog of all microservices, API documentation, 
+  and self-service scaffolding tools to drastically improve developer productivity.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "platform-engineer"
+phase: "growth"
+applicable_startups:
+  - all
+priority: "high"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "How do I create a new microservice?"
+  - "Where is the API documentation?"
+  - "Set up Backstage."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Draft Backstage software template."
+  - "Generate service catalog metadata."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "service_info"
+      type: "string"
+      description: "Name, owner, and repository URL."
+  optional:
+    - name: "framework"
+      type: "string"
+      description: "Node.js, Go, Python."
+      default: "Node.js"
+
+outputs:
+  files:
+    - path: "catalog-info.yaml"
+      description: "The metadata file for the IDP."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "N/A"
+manual:
+  - "A new engineer can completely scaffold, provision, and deploy a 'Hello World' microservice to staging on their first day using the self-service portal."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "Portal Rot: If the information in the developer portal is outdated, engineers will lose trust in it and go back to asking questions in Slack. Mandate that catalog updates are part of the CI process."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Spotify Backstage"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Service Catalog"
+    tasks:
+      - "Require every repository to have a `catalog-info.yaml` file defining the service owner, PagerDuty integration, and dependencies. Ingest this into the central IDP."
+  - step: "Golden Paths (Software Templates)"
+    tasks:
+      - "Create 'Golden Path' templates. When an engineer wants a new Node.js service, they click a button in the IDP, and it automatically creates the GitHub repo, CI/CD pipeline, and Kubernetes YAMLs."
+  - step: "TechDocs Integration"
+    tasks:
+      - "Store documentation alongside the code as Markdown. Configure the IDP to render this Markdown centrally so engineers have a single searchable wiki for all technical docs."
+      - "Add a troubleshooting section covering the top 3 known issues and their solutions."
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Forcing engineers to file Jira tickets to the DevOps team just to create a new Git repository or provision an S3 bucket. Automate it via self-service."
+best_practices:
+  - "Treat your internal developers as your primary customers. The platform is a product; run user interviews with your engineers to find out what is slowing them down."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Spotify: What is Backstage?"
+    url: "https://backstage.spotify.com/"

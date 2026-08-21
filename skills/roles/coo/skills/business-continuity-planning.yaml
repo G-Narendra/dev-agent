@@ -1,0 +1,105 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "business-continuity-planning"
+display_name: "Business Continuity & Disaster Recovery"
+description: >
+  Ensure the company can survive extreme disruption. Covers natural disasters, 
+  critical SaaS vendor bankruptcies, and 'Key Person Risk' (what happens if the 
+  CTO gets hit by a bus?).
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "coo"
+phase: "operations"
+applicable_startups:
+  - all
+priority: "growth"
+difficulty: "expert"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Create a disaster recovery plan."
+  - "What if AWS goes down?"
+  - "Mitigate key person risk."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Create a business continuity artifact."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "critical_systems"
+      type: "string"
+      description: "List of the systems required to keep the lights on."
+  optional:
+    - name: "compliance_requirement"
+      type: "string"
+      description: "Are we required to have this for SOC2/ISO27001?"
+      default: "Yes"
+
+outputs:
+  files:
+    - path: "operations/business-continuity-plan.md"
+      description: "The emergency operating procedures."
+  artifacts:
+    - "A list of 'Key Person' knowledge silos that must be documented."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "N/A"
+  manual:
+    - "If a critical vendor goes offline, the team has a documented plan to failover or operate in degraded mode within 4 hours."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+
+safety_notes:
+  - "Never store the Business Continuity Plan exclusively inside the systems it covers. If your entire IT infrastructure is locked by ransomware, you cannot access a Notion doc explaining how to recover from ransomware. Print it out or use an isolated backup."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Notion / Google Drive"
+      install: "N/A"
+
+implementation_checklist:
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+  - step: "Identify Key Person Risk"
+    tasks:
+      - "Ask: 'If [Person X] disappeared tomorrow, could anyone else deploy the code, access the bank accounts, or manage the AWS infrastructure?'"
+      - "Force the documentation of those tasks. Use shared password managers (1Password/Bitwarden) for all critical accounts, not personal emails."
+  - step: "Vendor Redundancy"
+    tasks:
+      - "Identify Single Points of Failure (SPOF) in your SaaS stack. If you rely 100% on Stripe for billing, what happens if Stripe terminates your account? Build a contingency plan (e.g., maintaining a dormant Braintree account)."
+  - step: "Data Backup Verification"
+    tasks:
+      - "Having backups is useless if you don't test restoring them. Schedule a quarterly 'Game Day' where engineering actually attempts to restore the production database from a backup to an isolated staging environment."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Writing a 100-page policy document to satisfy an auditor and then putting it in a drawer. A Business Continuity Plan must be an actionable, 5-page runbook."
+  - "Assuming 'The Cloud' means you don't need a disaster recovery plan. AWS regions go down. You must plan for `us-east-1` being completely offline."
+
+best_practices:
+  - "The 'Chaos Monkey' approach. Occasionally inject small amounts of chaos (turning off a non-critical server, revoking a staging credential) to see if the team's automated alerts and recovery processes actually work."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Ready.gov: Business Continuity Plan"
+    url: "https://www.ready.gov/business-continuity-plan"

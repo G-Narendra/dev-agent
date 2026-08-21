@@ -1,0 +1,105 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "ci-cd-automation"
+display_name: "CI/CD Pipeline & Build Automation"
+description: >
+  Eliminates the 'It works on my machine' problem. Builds automated 
+  pipelines that lint, test, and deploy code to production 10 times a day 
+  without human intervention or downtime.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "devops-engineer"
+phase: "build"
+applicable_startups:
+  - all
+priority: "critical"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Automate the deployments."
+  - "The build takes 45 minutes."
+  - "Set up GitHub Actions."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Generate GitHub Actions YAML."
+  - "Draft Docker multi-stage build."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "tech_stack"
+      type: "string"
+      description: "e.g., Node.js, Python, Go."
+    - name: "deployment_target"
+      type: "string"
+      description: "e.g., AWS EKS, Vercel, ECS."
+  optional:
+    - name: "ci_provider"
+      type: "string"
+      description: "GitHub Actions vs GitLab CI."
+      default: "GitHub Actions"
+
+outputs:
+  files:
+    - path: ".github/workflows/production_deploy.yml"
+      description: "The automated CI/CD pipeline script."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "The CI/CD pipeline completes linting, unit testing, Docker building, and EKS deployment in under 5 minutes."
+manual:
+  - "Developers can merge to the `main` branch with complete confidence that broken code will be caught before it reaches production."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "The Secrets Leak Risk: Never hardcode AWS keys, database passwords, or API tokens in the CI/CD yaml file. A malicious pull request could `echo` those secrets to the public logs. Always use GitHub Secrets or AWS Secrets Manager."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "GitHub Actions / Docker"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "The PR Quality Gate"
+    tasks:
+      - "Configure branch protection rules. A developer cannot merge a Pull Request unless the CI pipeline passes. The pipeline must run: Prettier (formatting), ESLint (linting), and Jest (unit tests)."
+  - step: "Docker Multi-Stage Builds"
+    tasks:
+      - "If building a Node app, do not deploy an image with `devDependencies` (like Cypress). Use a multi-stage Dockerfile: build the app in Stage 1, and copy only the compiled `dist` folder into a lightweight Alpine image in Stage 2."
+  - step: "Zero-Downtime Deployment"
+    tasks:
+      - "Never deploy by turning off the old server and turning on the new one. Use Rolling Updates (Kubernetes) or Blue/Green deployments. Start the new V2 pods, wait for them to pass the Health Check, and then drain traffic from V1."
+      - "Set up automated rollback mechanism that triggers if health checks fail after deployment."
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Running heavy End-to-End (E2E) browser tests on every single commit. E2E tests take 20 minutes and are flaky. Run Unit/Integration tests on every PR commit, but only run E2E tests nightly or on release branches."
+best_practices:
+  - "Implement Docker Layer Caching. If a developer only changes 1 line of CSS, the CI pipeline should not reinstall `node_modules`. Cache the `npm install` layer to reduce build times by 80%."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "GitHub Actions Documentation"
+    url: "https://docs.github.com/en/actions"

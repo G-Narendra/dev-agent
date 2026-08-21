@@ -1,0 +1,114 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "model-architecture-design"
+display_name: "Machine Learning Architecture & Research"
+description: >
+  Pushes the boundaries of AI capabilities. Designs novel neural network 
+  architectures, loss functions, and training paradigms to solve complex 
+  problems that standard out-of-the-box models cannot handle. Covers key patterns to avoid common pitfalls like training on the full dataset without a holdout test set -- m, and provides actionable best practices for production-ready results.
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "machine-learning-researcher"
+phase: "build"
+applicable_startups:
+  - AI, DeepTech, Autonomous Systems
+priority: "high"
+difficulty: "expert"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "The standard model isn't accurate enough."
+  - "Design a custom transformer."
+  - "How do we reduce hallucinations?"
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Generate PyTorch model architecture."
+  - "Draft custom loss function logic."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "problem_domain"
+      type: "string"
+      description: "NLP, Computer Vision, Time Series."
+    - name: "failure_mode"
+      type: "string"
+      description: "Why does the baseline model fail?"
+  optional:
+    - name: "compute_constraints"
+      type: "string"
+      description: "Edge device (mobile) vs Cloud Cluster."
+      default: "Cloud Cluster"
+
+outputs:
+  files:
+    - path: "ai/research/custom_architecture_spec.py"
+      description: "The mathematical definition of the new model."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "N/A"
+manual:
+  - "The custom architecture achieves a State-Of-The-Art (SOTA) benchmark for the specific internal dataset, outperforming baseline models by >15%."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "The 'Research Trap': Never spend 6 months designing a custom architecture if a pre-trained API (like OpenAI or Anthropic) can solve the problem with 95% accuracy today. Custom research should be strictly reserved for core proprietary IP."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "PyTorch / Weights & Biases / HuggingFace"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Establish the Baseline"
+    tasks:
+      - "Before writing custom PyTorch, you must prove it is necessary. Train a simple XGBoost model or fine-tune a standard BERT/ResNet model. If the simple baseline achieves 90% accuracy, stop. If it achieves 60%, proceed to custom architecture."
+  - step: "Data Ablation Studies"
+    tasks:
+      - "If the model isn't learning, it's usually the data, not the math. Run an ablation study. Train the model by systematically removing one feature at a time to identify which data points are confusing the network."
+      - "Add database migration testing -- test both up and down migrations in CI."
+  - step: "Loss Function Optimization"
+    tasks:
+      - "Standard Cross-Entropy loss treats all mistakes equally. If classifying cancer, a False Negative (saying someone is healthy when they are sick) is infinitely worse than a False Positive. Design a custom, heavily weighted loss function."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Training on the full dataset without a holdout test set -- model performance metrics will be unrealistically optimistic."
+  - "Serving an ML model without input validation -- adversarial inputs can cause silent incorrect predictions."
+  - "Not monitoring for data drift in production -- a model that was 95% accurate at launch can degrade to 60% as real-world data shifts."
+  - "Using default hyperparameters without any tuning -- can leave 10-30% performance on the table."
+  - "Deploying a model to production without a rollback plan -- a bad model can degrade user experience until manually caught."
+best_practices:
+  - "Use Weights & Biases (WandB) religiously. Never train a model in a Jupyter Notebook and lose the hyperparameters when the kernel crashes. Log every learning rate, epoch, and metric centrally."
+
+  - "Design in vector format (SVG/EPS) — logos must scale from favicon (16px) to billboard (10m) without quality loss."
+  - "Test every logo in three formats: full color, single color (black), and inverted (white on dark background)."
+  - "Ensure the logo is recognizable at 16x16px before finalizing — if it doesn't work as a favicon, simplify."
+  - "Wait 48 hours between creating and finalizing a logo — fresh eyes catch symmetry and proportion issues."
+  - "Create a brand guidelines document that specifies clear space, minimum size, color palette, and incorrect usage examples."
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Andrej Karpathy: A Recipe for Training Neural Networks"
+    url: "http://karpathy.github.io/2019/04/25/recipe/"

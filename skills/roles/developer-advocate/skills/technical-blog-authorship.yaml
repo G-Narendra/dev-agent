@@ -1,0 +1,112 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "technical-blog-authorship"
+display_name: "Technical Blog Authorship & Developer Marketing"
+description: >
+  Write deeply technical, highly credible blog posts that attract senior engineers 
+  to the startup's product. Translates the company's internal engineering 
+  challenges into compelling narratives that rank on Hacker News and Reddit.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "developer-advocate"
+phase: "growth"
+applicable_startups:
+  - developer-tools
+  - b2b-saas
+priority: "high"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "We need to get on Hacker News."
+  - "Write a blog post about our new architecture."
+  - "How do we market to developers?"
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Draft a technical blog post."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "technical_topic"
+      type: "string"
+      description: "The core challenge (e.g., 'How we migrated from Postgres to ClickHouse')."
+    - name: "target_audience"
+      type: "string"
+      description: "Junior devs vs CTOs."
+  optional:
+    - name: "product_tie_in"
+      type: "string"
+      description: "How the startup's product subtly solves the problem."
+      default: "None (Pure educational)"
+
+outputs:
+  files:
+    - path: "dev-rel/blog/postgres-to-clickhouse.md"
+      description: "The ready-to-publish markdown article."
+  artifacts:
+    - "A distribution plan for Reddit, Hacker News, and Twitter."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "N/A"
+  manual:
+    - "The article reaches the front page of Hacker News, driving > 10,000 unique visitors to the startup's domain."
+    - "Developers actively share the post on Twitter citing it as a 'must-read' resource."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+
+safety_notes:
+  - "The 'Marketing Fluff' Risk: Do NOT let the Marketing team edit a technical blog post. If they inject corporate jargon ('synergistic cloud-native solutions'), engineers will immediately close the tab and the startup will lose all credibility."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Markdown / GitHub Pages / Docusaurus"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "The Hook (The Pain)"
+    tasks:
+      - "Start with a universally understood developer pain point. 'Last month, our primary database locked up for 45 minutes and we lost $100k in revenue. Here is exactly what we did wrong, and how we fixed it'."
+  - step: "Show the Code (The Proof)"
+    tasks:
+      - "Engineers do not trust words; they trust code. Include actual, syntax-highlighted code snippets, architecture diagrams, and real benchmark data. Show the messy reality, not just the polished final state."
+  - step: "The 'Aha!' Moment"
+    tasks:
+      - "Explain the pivotal moment where the team realized the standard solution wouldn't work, and the creative pivot they had to make."
+  - step: "The Soft Pitch"
+    tasks:
+      - "Do not write an ad. Provide 95% pure, objective, educational value. In the last paragraph, casually mention: 'If you don't want to build this yourself, our API handles it automatically. Check out the docs here'."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Writing 'Thought Leadership' without technical depth. (e.g., 'Why AI is the future of coding'). Senior engineers hate vague philosophy. Write about concrete implementations (e.g., 'How we built an AST parser in Rust to reduce latency by 40%')."
+  - "Hiding failures. The most viral technical posts are usually post-mortems of spectacular failures. Be vulnerable. It builds massive trust."
+
+best_practices:
+  - "Open-source a tiny utility alongside the post. If you wrote a script to migrate the database, put it in a public GitHub repo and link it in the article. It drastically increases the shareability."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Cloudflare Blog: How we built..."
+    url: "https://blog.cloudflare.com/"

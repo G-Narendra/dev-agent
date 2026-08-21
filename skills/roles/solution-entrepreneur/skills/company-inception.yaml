@@ -1,0 +1,80 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "company-inception"
+display_name: "Startup Inception & Team Assembly"
+description: >
+  Take the validated solution and transition it from a 'project' into a legal, operational 
+  startup company by incorporating, recruiting co-founders, and building the MVP.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "solution-entrepreneur"
+phase: "ideation"
+applicable_startups: 
+  - all
+priority: "mvp"
+difficulty: "expert"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Legal Foundation"
+    tasks:
+      - "Incorporate as a Delaware C-Corp (standard for venture-backed startups) using Stripe Atlas or Clerky."
+      - "Assign all intellectual property developed so far to the new corporate entity."
+  - step: "Team Assembly"
+    tasks:
+      - "Recruit a technical co-founder (if you are non-technical) or a go-to-market co-founder (if you are technical)."
+      - "Establish 4-year vesting schedules."
+  - step: "MVP Execution"
+    tasks:
+      - "Lead the sprint to build the Minimum Viable Product. Focus only on the core value proposition."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Incorporating as an LLC in a random state, which will require a massively expensive and painful legal restructuring before any VC will invest."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Company Inception process"
+  - "How do I handle company inception?"
+  - "Implement company inception"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the company inception process"
+  optional:
+    - name: "N/A"
+      type: "string"
+      description: "No optional inputs needed."
+
+outputs:
+  files:
+    - path: "outputs/company-inception.md"
+      description: "Results of the company inception process"
+  artifacts:
+    - "Completed company inception deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

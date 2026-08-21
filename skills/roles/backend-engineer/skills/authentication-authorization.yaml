@@ -1,0 +1,102 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "authentication-authorization"
+display_name: "Authentication & Role-Based Access Control"
+description: >
+  Implements secure login flows (OAuth, JWT, SAML) and strict Role-Based 
+  Access Control (RBAC). Ensures users can only access data they explicitly own 
+  and protects against Broken Object Level Authorization (BOLA).
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "backend-engineer"
+phase: "build"
+applicable_startups:
+  - all
+priority: "critical"
+difficulty: "expert"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Implement JWT login."
+  - "Add admin permissions to this endpoint."
+  - "Prevent users from seeing other users' data."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Generate RBAC middleware."
+  - "Draft OAuth2 implementation spec."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "roles_list"
+      type: "string"
+      description: "List of user types (Admin, Manager, User)."
+  optional:
+    - name: "auth_provider"
+      type: "string"
+      description: "Auth0, Supabase, NextAuth."
+      default: "Custom JWT"
+
+outputs:
+  files:
+    - path: "src/middleware/auth.ts"
+      description: "The security middleware intercepting requests."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "Unit tests verify that attempting to access a resource with a lower-privilege token returns a 403 Forbidden."
+manual:
+  - "Security audit confirms no IDOR (Insecure Direct Object Reference) vulnerabilities exist."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "Token Leakage: Never store JWT access tokens in `localStorage` as they are vulnerable to XSS. Store them in `httpOnly` secure cookies."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Auth0 / Clerk"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "JWT Security"
+    tasks:
+      - "Set short expiration times (e.g., 15 mins) on Access Tokens. Use long-lived Refresh Tokens stored securely to issue new Access Tokens."
+  - step: "Broken Object Level Authorization (BOLA) Prevention"
+    tasks:
+      - "For every data fetch (e.g., `GET /orders/123`), verify that the `user_id` inside the JWT actually owns `order_id 123` at the database query level."
+  - step: "Password Hashing"
+    tasks:
+      - "Never roll your own crypto. Use Argon2 or bcrypt with a salt to hash passwords. Never store plain text passwords."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Validating authorization on the frontend UI by simply hiding the 'Delete' button. Hackers will bypass the UI and hit the API directly. Enforce rules on the backend."
+best_practices:
+  - "Default to Deny. Endpoints should require authentication by default. You should have to explicitly decorate an endpoint with `@Public` to expose it."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "OWASP Top 10: Broken Access Control"
+    url: "https://owasp.org/Top10/A01_2021-Broken_Access_Control/"

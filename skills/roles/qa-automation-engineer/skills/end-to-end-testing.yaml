@@ -1,0 +1,79 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "end-to-end-testing"
+display_name: "End-to-End (E2E) Testing"
+description: >
+  Automate the testing of critical user flows using Playwright or Cypress to guarantee 
+  the application actually works in a real browser environment before deploying.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "qa-automation-engineer"
+phase: "growth"
+applicable_startups: 
+  - all
+priority: "high"
+difficulty: "advanced"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Critical Path Selection"
+    tasks:
+      - "Focus E2E tests strictly on the 'Happy Paths' that generate revenue (e.g., Signup, Checkout, Core Workflow) rather than exhaustively testing every edge case button."
+  - step: "Test Resilience"
+    tasks:
+      - "Use specific `data-testid` attributes (e.g., `<button data-testid='submit-btn'>`) to select elements, rather than brittle CSS classes or XPath."
+  - step: "Data Seeding"
+    tasks:
+      - "Before each E2E test runs, programmatically seed the database with known, deterministic test data, and tear it down afterward to prevent state leakage."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Writing an E2E test that depends on the state left behind by the PREVIOUS test, causing random failures if the test runner executes them in a different order."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the End To End Testing process"
+  - "How do I handle end to end testing?"
+  - "Implement end to end testing"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the end to end testing process"
+  optional:
+    - name: "target_audience"
+      type: "string"
+      description: "Target user or customer segment"
+      default: "Primary user persona"
+
+outputs:
+  files:
+    - path: "outputs/end-to-end-testing.md"
+      description: "Results of the end to end testing process"
+  artifacts:
+    - "Completed end to end testing deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

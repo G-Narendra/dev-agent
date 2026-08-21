@@ -1,0 +1,111 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "investor-pitch-deck"
+display_name: "Fundraising Pitch Deck Architecture"
+description: >
+  Construct the narrative and slide architecture for Seed or Series A fundraising. 
+  Translates complex technical visions into the language of Venture Capital: 
+  TAM, Moat, Unit Economics, and 'Why Now?'.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "founder-ceo"
+phase: "build"
+applicable_startups:
+  - all
+priority: "critical"
+difficulty: "expert"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "We are raising a Seed round."
+  - "Review my pitch deck."
+  - "How do we pitch to VCs?"
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Draft a pitch deck outline."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "problem_statement"
+      type: "string"
+      description: "The painful problem the startup is solving."
+    - name: "solution"
+      type: "string"
+      description: "How the startup solves it better than anyone else."
+  optional:
+    - name: "funding_stage"
+      type: "string"
+      description: "Pre-Seed (Selling the Dream) vs Series A (Selling the Metrics)."
+      default: "Seed"
+
+outputs:
+  files:
+    - path: "fundraising/pitch-deck/deck-outline-v1.md"
+      description: "The 10-slide narrative structure."
+  artifacts:
+    - "A script for the 3-minute elevator pitch."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "N/A"
+  manual:
+    - "The startup successfully secures the target funding round at a favorable valuation."
+    - "Investors explicitly state that the narrative is clear and compelling within the first 3 minutes of the pitch."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+
+safety_notes:
+  - "SEC Violations: Never publicly solicit investment (e.g., tweeting 'Buy equity in our startup') unless you have explicitly filed for a Regulation Crowdfunding (Reg CF) or Reg A+ exemption. Standard VC rounds (Reg D) require strict rules around only talking to Accredited Investors."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Figma / Pitch.com"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "The Hook (Slide 1-2)"
+    tasks:
+      - "Do not start with the 'Team' or 'How it works'. Start with the 'Problem'. Make the VC feel the pain of the customer. 'X is fundamentally broken, and it costs the industry $Y billion a year'."
+  - step: "The 'Why Now?' (Slide 3)"
+    tasks:
+      - "This is the most critical slide for a Seed stage. Why didn't someone build this 5 years ago? (e.g., 'LLMs were too expensive', 'A new law just passed'). If there is no 'Why Now', VCs will pass."
+  - step: "Traction & Unit Economics (Slide 6)"
+    tasks:
+      - "Do not use cumulative charts that only go up and to the right. Show MoM (Month-over-Month) growth, CAC (Customer Acquisition Cost), and LTV. If you don't have revenue yet, show deep user engagement metrics."
+  - step: "The 'Ask' (Slide 10)"
+    tasks:
+      - "Be explicitly clear: 'We are raising $2M to hire 4 engineers and reach $1M ARR in 18 months'. Do not just say 'We need money'."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "The '50-Slide Deck'. VCs look at 100 decks a week. They will give your deck 3 minutes. It must be exactly 10-12 slides. Move all technical architecture diagrams and financial models to the Appendix."
+  - "Lying about competitors. Claiming 'We have no competitors' means you either haven't done your research, or the market doesn't exist. List your competitors and explain exactly why your approach is better."
+
+best_practices:
+  - "Send the 'Reading Deck' (high text, self-explanatory) via email. Present the 'Pitch Deck' (high visuals, low text, you provide the voiceover) in the actual meeting."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Sequoia Capital: How to Write a Pitch Deck"
+    url: "https://articles.sequoiacap.com/writing-a-pitch-deck"

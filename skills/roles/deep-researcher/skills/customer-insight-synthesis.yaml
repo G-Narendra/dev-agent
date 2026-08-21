@@ -1,0 +1,111 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "customer-insight-synthesis"
+display_name: "Customer Insight Synthesis & Persona Creation"
+description: >
+  Synthesizes qualitative and quantitative customer research into actionable 
+  insights, personas, jobs-to-be-done, and customer journey maps. Transforms 
+  raw data from interviews, surveys, social listening, and support logs into 
+  a deep understanding of customer needs, pains, and behaviors.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "deep-researcher"
+phase: "ideation"
+applicable_startups:
+  - all
+priority: "critical"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Synthesize customer research findings."
+  - "Create customer personas."
+  - "Map customer journey."
+  - "What do our customers really need?"
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Synthesize interview transcripts."
+  - "Build customer personas."
+  - "Map jobs-to-be-done."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "research_data"
+      type: "file"
+      description: "Interview transcripts, survey results, support logs, or social listening data."
+    - name: "research_questions"
+      type: "string"
+      description: "What the research aimed to discover."
+  optional:
+    - name: "existing_personas"
+      type: "file"
+      description: "Any existing persona or customer documentation."
+
+outputs:
+  files:
+    - path: "research/customers/{segment}-insight-synthesis.md"
+      description: "Synthesized customer insights with personas and journey maps"
+  artifacts:
+    - "Data-backed customer personas and actionable product recommendations"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Data Organization & Coding"
+    tasks:
+      - "Import all data sources into a structured format for analysis."
+      - "Code the data: tag pain points, needs, behaviors, quoted statements, and emotions."
+      - "Identify recurring themes and patterns across the dataset."
+      - "Quantify theme frequency to understand relative importance."
+  - step: "Persona Development"
+    tasks:
+      - "Group respondents into clusters based on shared needs, behaviors, and demographics."
+      - "Create 3-5 distinct personas with: name, role, goals, pains, current solutions, and quotes."
+      - "Include a 'day in the life' narrative for each persona."
+      - "Validate personas by checking they represent real, distinct user segments."
+  - step: "Jobs-to-Be-Done Mapping"
+    tasks:
+      - "For each persona, identify the 'job' they're trying to accomplish."
+      - "Map the functional, emotional, and social dimensions of each job."
+      - "Identify the 'struggling moment' that triggers them to seek a solution."
+      - "Document their current workaround — that's your competition."
+  - step: "Insight Synthesis & Recommendations"
+    tasks:
+      - "Distill findings into 3-5 'key insights' that challenge or confirm assumptions."
+      - "Highlight 'unknown unknowns' — things customers said that surprised you."
+      - "Provide specific product recommendations backed by customer quotes."
+      - "Include direct verbatim quotes (anonymized) to build empathy in the team."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Creating personas from assumptions rather than real data."
+  - "Averaging contradictory feedback instead of exploring why it differs."
+  - "Ignoring outlier responses — they often reveal new segments or use cases."
+  - "Making recommendations without direct evidence from the data."
+best_practices:
+  - "The most powerful insights come from what customers DO, not what they SAY."
+  - "Look for 'workarounds' — customers jury-rigging solutions tells you about unmet needs."
+  - "Include negative feedback prominently — it's usually more valuable than praise."
+  - "Personas should evolve as you learn more — they're hypotheses, not facts."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "User Interview Synthesis Utility"
+    url: "path:./roles/ux-researcher/skills/user-interview-synthesis.yaml"
+  - title: "Jobs to Be Done Framework"
+    url: "https://jobs-to-be-done.com/jobs-to-be-done-a-framework-for-customer-needs-8b6f2c5e4d5a"

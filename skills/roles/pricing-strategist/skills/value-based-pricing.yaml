@@ -1,0 +1,105 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "value-based-pricing"
+display_name: "Pricing Strategy & Value-Based Packaging"
+description: >
+  Unlocks hidden revenue. Moves the startup away from 'Cost-Plus' pricing 
+  (guessing a price) to 'Value-Based' pricing, ensuring the company captures 
+  the maximum possible value it creates for the customer.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "pricing-strategist"
+phase: "growth"
+applicable_startups:
+  - SaaS, Enterprise, API-First
+priority: "high"
+difficulty: "expert"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Are we charging enough?"
+  - "We need a new pricing tier."
+  - "How do we transition to usage-based pricing?"
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Generate Van Westendorp pricing analysis."
+  - "Draft pricing page feature matrix."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "current_pricing_model"
+      type: "string"
+      description: "Flat rate, Per Seat, Usage-based."
+    - name: "target_customer_segment"
+      type: "string"
+      description: "SMB vs Enterprise."
+  optional:
+    - name: "competitor_pricing"
+      type: "string"
+      description: "What does the market charge?"
+      default: "Unknown"
+
+outputs:
+  files:
+    - path: "product/pricing/v3_pricing_packaging.md"
+      description: "The mathematical breakdown of the new tiers."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "N/A"
+manual:
+  - "Average Revenue Per User (ARPU) increases by 20% without causing a statistically significant increase in the churn rate."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "The 'Grandfathering' Disaster: Never force a massive price increase on your legacy, Day-1 early adopters without warning. You will trigger a PR nightmare and mass churn. Always 'Grandfather' early users into their old pricing for at least 12-24 months."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "ProfitWell / Stripe Billing"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "The Value Metric Identification"
+    tasks:
+      - "Do not charge 'Per User' if users don't extract value individually. (e.g., A CRM should charge per user; a video hosting tool should charge per gigabyte). Identify the exact metric that aligns with the customer's success and charge based on that."
+  - step: "The 'Good, Better, Best' Decoy Pricing"
+    tasks:
+      - "Create 3 tiers. Make the 'Good' tier too basic. Make the 'Best' tier incredibly expensive. The goal is to make the 'Better' tier look like an absolute steal. This psychological anchoring drives 80% of users to the middle tier."
+  - step: "Feature Fencing"
+    tasks:
+      - "Review usage data. If 90% of your Free users are utilizing the 'Export to PDF' feature, it is too valuable to be free. Move it behind the Paywall (Fence it) into the Pro tier to force upgrades."
+      - "Add environment variable validation that crashes fast on missing required values."
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Using 'Cost-Plus' pricing in software. If AWS costs you $1 per user, do not charge $2 just to get a 50% margin. If that user uses your software to save $1,000 a week, the software is worth $100. Price based on value, not your costs."
+best_practices:
+  - "Implement the Van Westendorp Price Sensitivity Meter. Survey 100 ICPs with 4 questions: At what price is this a bargain? At what price is it getting expensive? At what price is it too expensive? At what price is it so cheap you doubt its quality? The intersection of these lines is your price."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Patrick Campbell (ProfitWell): Pricing Strategy"
+    url: "https://www.paddle.com/resources/pricing-strategy"

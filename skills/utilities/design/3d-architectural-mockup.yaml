@@ -1,0 +1,99 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "3d-architectural-mockup"
+display_name: "3D Architectural & Spatial Mockup Design"
+description: >
+  Designs 3D spatial layouts for physical environments. Used for retail pop-ups, 
+  hardware manufacturing floors, conference booths, and prop-tech visualizations.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "utility"
+phase: "all"
+applicable_startups:
+  - retail
+  - hardware
+  - real-estate
+priority: "medium"
+difficulty: "expert"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Design our conference booth."
+  - "Layout the warehouse floor."
+  - "Mockup the retail space."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Generate floor plan."
+  - "Export 3D spatial render."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "dimensions"
+      type: "string"
+      description: "Exact square footage and ceiling height."
+    - name: "functional_requirements"
+      type: "string"
+      description: "What needs to happen in this space? (e.g., 'Checkout counter, 3 displays, storage')."
+  optional:
+    - name: "brand_guidelines"
+      type: "string"
+      description: "Brand colors and typography for signage."
+      default: "None"
+
+outputs:
+  files:
+    - path: "design/spatial/booth-layout-v1.pdf"
+      description: "A top-down floor plan with exact measurements."
+  artifacts:
+    - "3D rendered perspective shots of the space."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "N/A"
+  manual:
+    - "The physical contractors can build the space exactly to spec without asking for clarification on dimensions."
+    - "Traffic flow prevents bottlenecks during peak usage."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+
+safety_notes:
+  - "Physical Safety & ADA: Do not design spatial layouts that violate fire codes or ADA (Americans with Disabilities Act) wheelchair clearance requirements. Aisle widths must meet legal minimums."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "SketchUp / Blender"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "The Floor Plan (2D Logic)"
+    tasks:
+      - "Always start in 2D. Map out the 'Customer Journey'. Where do they enter? What do they see first? Where do they exit?"
+      - "Account for 'dead space' (pillars, utility closets, structural walls)."
+  - step: "Extrusion and Blocking (3D)"
+    tasks:
+      - "Extrude the 2D plan into 3D. Add human scale figures immediately to verify the ceiling height and counter heights feel correct."
+  - step: "Branding and Materials"
+    tasks:
+      - "Apply brand colors, textures (wood, concrete, metal), and simulate realistic lighting."
+  - step: "The Builder's Handoff"
+    tasks:
+      - "A beautiful render is useless to a carpenter. Export annotated, dimensioned drawings showing exactly where to build the walls."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Ignoring sightlines. If a 6-foot display blocks the view of the main brand logo from the entrance, the design fails."
+  - "Designing impossible structures. Don't design a massive floating sign if there's no ceiling grid to hang it from."
+
+best_practices:
+  - "Design for 'Modular Reusability'. If you design a $10,000 conference booth, design it so it can be broken down and reused at smaller events."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "ADA Standards for Accessible Design"
+    url: "https://www.ada.gov/law-and-regs/design-standards/"

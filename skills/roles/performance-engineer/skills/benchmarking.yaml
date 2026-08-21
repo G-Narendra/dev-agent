@@ -1,0 +1,80 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "benchmarking"
+display_name: "Performance Benchmarking & Profiling"
+description: >
+  Establish baseline performance metrics for critical API endpoints and algorithms, 
+  ensuring regressions are caught before they reach production.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "performance-engineer"
+phase: "operations"
+applicable_startups: 
+  - deeptech
+  - devtools
+priority: "high"
+difficulty: "expert"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Continuous Benchmarking"
+    tasks:
+      - "Run benchmarks on the core rendering or processing loop in the CI/CD pipeline. Fail the build if performance degrades by more than 5%."
+  - step: "Memory Profiling"
+    tasks:
+      - "Track heap allocations over time to identify slow memory leaks that only crash the server after 3 days of uptime."
+  - step: "Database Profiling"
+    tasks:
+      - "Use `EXPLAIN ANALYZE` on every new complex SQL query to verify that the query planner is actually hitting the intended index."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Writing a 'performance fix' by completely guessing what is slow, rather than using a profiler or flame graph to definitively prove where the bottleneck is."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Benchmarking process"
+  - "How do I handle benchmarking?"
+  - "Implement benchmarking"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the benchmarking process"
+  optional:
+    - name: "data_source"
+      type: "string"
+      description: "Source of data to analyze"
+      default: "Internal data"
+
+outputs:
+  files:
+    - path: "outputs/benchmarking.md"
+      description: "Results of the benchmarking process"
+  artifacts:
+    - "Completed benchmarking deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

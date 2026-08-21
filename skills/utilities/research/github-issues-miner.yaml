@@ -1,0 +1,119 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "github-issues-miner"
+display_name: "GitHub Issues & Discussions Pain Point Miner"
+description: >
+  Mines GitHub Issues, Discussions, and PRs across relevant repositories to
+  extract real user complaints, feature requests, and pain points. Developers
+  are brutally honest in GitHub Issues — they report bugs, vent frustrations,
+  and request features they'd pay for. This is a goldmine for product validation.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "utility"
+phase: "all"
+applicable_startups:
+  - all
+priority: "high"
+difficulty: "intermediate"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "What are developers complaining about?"
+  - "Find feature requests for X."
+  - "Search GitHub Issues for pain points."
+  - "What bugs do people report in this tool?"
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Search GitHub Issues using search operators."
+  - "Extract feature requests and complaints."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "target_topic"
+      type: "string"
+      description: "The tool, library, or domain (e.g., 'Docker Compose', 'Next.js auth')."
+  optional:
+    - name: "search_focus"
+      type: "string"
+      description: "'bug' (complaints/pain points), 'feature' (feature requests), 'question' (confusion), or 'all'."
+      default: "all"
+
+outputs:
+  files:
+    - path: "research/github-issues-{topic}.md"
+      description: "A categorized report of real user pain points found in GitHub Issues."
+  artifacts:
+    - "List of the top 10 most-upvoted feature requests or bug reports."
+    - "Direct quotes from users describing their frustration."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "N/A"
+  manual:
+    - "Identifies at least 3 unmet user needs that the startup could address."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "network"
+
+safety_notes:
+  - "Selection bias: GitHub users are developers. This is excellent for developer-tools research but not representative of general consumers."
+  - "Do not scrape aggressively. Use GitHub's built-in search operators — these are public and intended for this purpose."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "GitHub Issue Search (Web)"
+      install: "N/A"
+  alternatives:
+    - name: "GitHub CLI (`gh`)"
+      install: "gh search issues --label=enhancement --repo=owner/repo"
+    - name: "GitHub REST API"
+      when: "Automated large-scale mining."
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Identify Target Repositories"
+    tasks:
+      - "Find the top 3-5 open-source projects in the target domain (e.g., for 'auth libraries', search GitHub for 'authentication library')."
+      - "Sort by stars to find the most active communities."
+  - step: "Search for Feature Requests"
+    tasks:
+      - "Use: `is:issue is:open label:enhancement repo:owner/repo sort:reactions-+1-desc`"
+      - "This shows the most requested features people actually want."
+      - "Read the top 10. These are validated feature requests with real demand."
+  - step: "Search for Bugs (Pain Points)"
+    tasks:
+      - "Use: `is:issue is:open label:bug repo:owner/repo sort:reactions-+1-desc`"
+      - "Also search: `is:issue is:open label:\"help wanted\" repo:owner/repo` — these are things maintainers acknowledge need fixing."
+  - step: "Mine Discussions"
+    tasks:
+      - "Use: `is:open category:ideas repo:owner/repo` or `is:open category:\"Q&A\" repo:owner/repo`"
+      - "Discussions often contain long-form feedback and workarounds that reveal product gaps."
+  - step: "Analyze Closed Issues"
+    tasks:
+      - "Check recently closed issues to see what was rejected. A rejected PR or feature request often means the maintainer doesn't have bandwidth — that's a startup opportunity."
+  - step: "Compile Report"
+    tasks:
+      - "Group findings into: Confirmed Bugs, Desired Features, Unanswered Questions."
+      - "Include direct quotes and link to each issue."
+      - "Rate the severity: 'Showstopper', 'Annoyance', 'Nice to have'."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Only looking at open issues. Closed issues often contain MORE valuable information (solutions, workarounds, maintainer decisions)."
+  - "Assuming all labeled 'enhancement' requests are good ideas. Check the reactions (👍) to gauge actual demand."
+  - "Ignoring stale issues. An issue with 500 👍 that's been open for 3 years with no fix is the strongest signal of an unmet need."
+
+best_practices:
+  - "Search for `is:issue label:\"good first issue\"` in competitor repos — these are often the low-hanging fruit features users want."
+  - "Look at the `reactions` count. An issue with 100+ reactions but no response from maintainers is a screaming market signal."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "GitHub Issue Search Syntax"
+    url: "https://docs.github.com/en/search-github/searching-on-github/searching-issues-and-pull-requests"
+  - title: "GitHub CLI Search"
+    url: "https://cli.github.com/manual/gh_search_issues"

@@ -1,0 +1,105 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "end-to-end-testing"
+display_name: "End-to-End (E2E) Testing Strategy"
+description: >
+  Designs and implements reliable E2E test suites that validate the entire 
+  system from the UI down to the database. Eliminates manual regression testing 
+  before deployments by automating critical user flows.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "fullstack-engineer"
+phase: "growth"
+applicable_startups:
+  - all
+priority: "high"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "We broke the login flow again."
+  - "Add Playwright tests for the checkout."
+  - "Automate our regression testing."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Generate Playwright test suite."
+  - "Draft E2E testing strategy."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "critical_path"
+      type: "string"
+      description: "The #1 user flow that must never break (e.g., checkout)."
+  optional:
+    - name: "testing_framework"
+      type: "string"
+      description: "Playwright, Cypress, Selenium."
+      default: "Playwright"
+
+outputs:
+  files:
+    - path: "e2e/tests/checkout.spec.ts"
+      description: "The automated test script."
+  artifacts:
+    - "A CI/CD pipeline integration."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "The E2E test suite runs successfully in CI before every merge to the main branch."
+manual:
+  - "QA engineers spend 0 hours manually clicking through the 'Happy Path' before a release."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "Flaky Tests: A flaky test (fails 10% of the time randomly) is worse than no test. It trains engineers to ignore the CI pipeline. If a test flakes, delete it or fix it immediately."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Playwright"
+      install: "npm init playwright@latest"
+  alternatives:
+    - name: "Cypress"
+      when: "Working in a legacy frontend stack."
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Test Data Isolation"
+    tasks:
+      - "Never run E2E tests against the production database. Spin up a dedicated test database, seed it with deterministic data before the test, and tear it down after."
+  - step: "Resilient Selectors"
+    tasks:
+      - "Do not select elements by CSS classes (e.g., `.btn-blue`). They change often. Select by data attributes (e.g., `data-testid=\"submit-btn\"`) or accessibility roles."
+  - step: "Network Mocking vs. Real API"
+    tasks:
+      - "For true E2E, hit the real backend API. For UI-only integration tests, mock the network responses to drastically speed up the test suite."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Writing E2E tests for every single edge case (the 'Ice Cream Cone' anti-pattern). E2E tests are slow and expensive. Only write them for the top 5 critical user flows."
+best_practices:
+  - "Implement the 'Testing Trophy'. Write lots of fast unit/integration tests, and a small, highly reliable suite of E2E tests at the top."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Kent C. Dodds: The Testing Trophy"
+    url: "https://kentcdodds.com/blog/the-testing-trophy-and-testing-classifications"

@@ -1,0 +1,124 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "model-evaluation"
+display_name: "ML Model Evaluation & Validation"
+description: >
+  Evaluate machine learning models using rigorous metrics, cross-validation,
+  error analysis, and fairness assessment. Ensures models are production-ready
+  before deployment.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "machine-learning-engineer"
+phase: "ship"
+applicable_startups:
+  - ai
+  - all
+priority: "critical"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Evaluate the trained model on the test set"
+  - "Run cross-validation to assess model stability"
+  - "Analyze model errors and edge cases"
+  - "Check model fairness across demographic groups"
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "python evaluate.py --model-path models/model.pt --test-set data/test.parquet"
+  - "python -m torchmetrics --task multiclass --average macro"
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "model_path"
+      type: "string"
+      description: "Path to the trained model checkpoint."
+    - name: "test_dataset"
+      type: "string"
+      description: "Holdout test dataset for final evaluation."
+  optional:
+    - name: "metrics"
+      type: "list"
+      description: "List of metrics to compute."
+      default: "auto (based on task type)"
+
+outputs:
+  files:
+    - path: "evaluation/report.md"
+      description: "Comprehensive evaluation report with tables and charts."
+    - path: "evaluation/confusion_matrix.png"
+      description: "Confusion matrix visualization for classification tasks."
+  artifacts:
+    - "ROC/PR curves saved as PNG and JSON for dashboard consumption."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "All primary metrics are computed and logged to the experiment tracker."
+    - "Evaluation results include confidence intervals (bootstrapped or asymptotic)."
+  manual:
+    - "Error analysis identifies at least 3 distinct failure modes with root cause hypotheses."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+  - "read access to test dataset"
+
+safety_notes:
+  - "Do not compute fairness metrics on datasets with fewer than 100 samples per demographic group — results are statistically meaningless."
+  - "Ensure the test set is strictly held out and never used for training or validation."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "TorchMetrics / sklearn.metrics"
+      install: "pip install torchmetrics"
+  alternatives:
+    - name: "Evaluate (HuggingFace)"
+      when: "Working with NLP models and need standard benchmarks."
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Metric Selection"
+    tasks:
+      - "Select metrics appropriate for the task: accuracy/F1 for classification, RMSE/MAE for regression, NDCG for ranking."
+      - "Compute both macro and weighted averages for multiclass problems."
+  - step: "Confidence Intervals"
+    tasks:
+      - "Compute bootstrapped confidence intervals with 1000 resamples."
+      - "Report the 95% CI alongside each point estimate."
+  - step: "Error Analysis"
+    tasks:
+      - "Slice the test set by predicted confidence scores to find high-uncertainty regions."
+      - "Hand-inspect 50 random misclassified examples to identify failure patterns."
+  - step: "Fairness Assessment"
+    tasks:
+      - "Compute parity metrics (demographic parity, equal opportunity) across defined groups."
+      - "Document any disparities and flag for model governance review."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Reporting only accuracy on a balanced test set when the real-world class distribution is highly imbalanced (e.g., 99% negative class)."
+  - "Tuning hyperparameters based on test set performance, which leaks test set information and invalidates the evaluation."
+best_practices:
+  - "Maintain a separate, strictly untouched test set that is never used during development or hyperparameter tuning."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Google ML Fairness"
+    url: "https://developers.google.com/machine-learning/fairness-overview"

@@ -1,0 +1,110 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "ab-testing-statistical-analysis"
+display_name: "A/B Testing & Statistical Significance"
+description: >
+  Design experiments and analyze results with mathematical rigor. 
+  Ensures the product team does not launch features based on random noise, 
+  and prevents the 'Peeking' problem in frequentist statistics.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "data-scientist"
+phase: "operations"
+applicable_startups:
+  - all
+priority: "high"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Did the new feature increase conversion?"
+  - "Is the A/B test significant?"
+  - "How long should we run this test?"
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "python scripts/analyze_ab_test.py"
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "experiment_data"
+      type: "file"
+      description: "CSV of user IDs, their variant (Control/Treatment), and their outcome."
+  optional:
+    - name: "mde"
+      type: "string"
+      description: "Minimum Detectable Effect."
+      default: "5%"
+
+outputs:
+  files:
+    - path: "reports/ab-test-results.md"
+      description: "The final statistical conclusion (Reject or Fail to Reject Null Hypothesis)."
+  artifacts:
+    - "A Sample Size Calculator."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "N/A"
+  manual:
+    - "Product Managers trust the test results and stop arguing over subjective design preferences."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+
+safety_notes:
+  - "The 'Peeking' Problem: NEVER check the p-value every day and stop the test early as soon as it hits 0.05. This guarantees a high False Positive rate. You must fix the sample size in advance and wait."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "SciPy (Python) / Statsmodels"
+      install: "pip install scipy statsmodels"
+  alternatives:
+    - name: "Optimizely / Statsig"
+      when: "The company uses a full experimentation platform rather than manual analysis."
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Pre-Experiment: Power Analysis"
+    tasks:
+      - "Determine the baseline conversion rate (e.g., 2%)."
+      - "Determine the Minimum Detectable Effect (MDE). (e.g., 'We only care if it improves by 10% relative, up to 2.2%')."
+      - "Calculate the required Sample Size. If it requires 100,000 users and your site gets 1,000 a week, you cannot run this test."
+  - step: "Randomization Verification (A/A Test)"
+    tasks:
+      - "Verify the hashing algorithm randomly assigns users perfectly 50/50. Check that the control and treatment groups have similar demographics before analyzing the outcome."
+  - step: "Post-Experiment: Statistical Testing"
+    tasks:
+      - "For binary outcomes (Conversion Yes/No): Use a Two-Proportion Z-Test or Chi-Squared Test."
+      - "For continuous outcomes (Revenue per User): Use a T-Test (or Mann-Whitney U if the data is heavily skewed)."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Testing 20 different button colors at the same time and declaring the one with a p < 0.05 the winner. This is the 'Multiple Comparisons Problem'. If you test 20 things, 1 will look statistically significant by pure random chance."
+  - "Declaring a 'Winner' just because the treatment group was 0.1% higher, even though the p-value was 0.40. That difference is noise. The test is inconclusive."
+
+best_practices:
+  - "Consider switching to Bayesian A/B testing instead of Frequentist. It allows you to answer the question Product Managers actually ask: 'What is the probability that Variant B is better than Variant A?'"
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Evan Miller: A/B Testing Sample Size Calculator"
+    url: "https://www.evanmiller.org/ab-testing/sample-size.html"

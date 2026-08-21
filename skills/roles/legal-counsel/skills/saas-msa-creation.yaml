@@ -1,0 +1,110 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "saas-msa-creation"
+display_name: "Master Services Agreement (MSA) Creation"
+description: >
+  Draft and negotiate the core B2B contract that dictates the terms of service, 
+  liability limits, and payment obligations between the startup and enterprise clients. 
+  Protects the startup from catastrophic lawsuits.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "legal-counsel"
+phase: "operations"
+applicable_startups:
+  - b2b-saas
+priority: "critical"
+difficulty: "expert"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "The enterprise client wants to redline our contract."
+  - "We need an MSA."
+  - "Draft the terms of service."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Draft a standard MSA."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "product_type"
+      type: "string"
+      description: "Is this a self-serve tool or a highly customized enterprise deployment?"
+    - name: "jurisdiction"
+      type: "string"
+      description: "Governing law (e.g., Delaware, California, UK)."
+  optional:
+    - name: "sla_requirements"
+      type: "string"
+      description: "Are we guaranteeing 99.9% uptime with financial penalties?"
+      default: "Standard 99.0%"
+
+outputs:
+  files:
+    - path: "legal/contracts/master-services-agreement.docx"
+      description: "The official contract template."
+  artifacts:
+    - "A 'Playbook' for the Sales team detailing which clauses they are allowed to negotiate without legal approval."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "N/A"
+  manual:
+    - "The startup's liability is strictly capped at 'fees paid in the last 12 months', preventing a $10M lawsuit over a $1,000/month software glitch."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+
+safety_notes:
+  - "Indemnification Traps: Be incredibly careful when a massive enterprise client (like Walmart) asks you to 'Indemnify them against all third-party claims'. If your software causes a data breach, you could be liable for their entire $50M loss. Limit indemnification strictly to IP infringement."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Ironclad / DocuSign"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Limitation of Liability (The Shield)"
+    tasks:
+      - "This is the most fought-over clause. State clearly that the startup is NOT liable for 'indirect, consequential, or punitive damages' (e.g., lost profits). Cap direct damages at the amount the customer paid you in the last 12 months."
+  - step: "Payment Terms & Auto-Renewal"
+    tasks:
+      - "Net 30 days is standard. Explicitly state that the contract auto-renews annually unless either party gives 30 days written notice before the end of the term. (This is how SaaS companies maintain high NRR)."
+  - step: "Intellectual Property Ownership"
+    tasks:
+      - "State clearly: 'The customer owns their data. The startup owns the software, the algorithms, and any improvements made based on customer feedback.' Do not let the customer claim ownership over custom features you built for them."
+  - step: "Data Security & Privacy (DPA)"
+    tasks:
+      - "Attach a Data Processing Agreement (DPA) as an exhibit to handle GDPR/CCPA requirements regarding how their data is stored and deleted."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "The 'Blind Sign'. Letting the Sales VP sign a Fortune 500 company's custom 60-page MSA just to hit their quarterly quota, without having Legal review the indemnity clauses. This can bankrupt the startup."
+  - "Writing a 50-page MSA for a $50/month product. Match the friction of the contract to the value of the deal. Use a simple 'Click-Wrap' Terms of Service for self-serve users."
+
+best_practices:
+  - "Create a 'Fallback Matrix' for Sales. If the client strikes the 'Auto-Renewal' clause, the Sales team is pre-authorized to accept it. If the client strikes the 'Liability Cap', the Sales team MUST escalate to Legal."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Y Combinator: Safe Documents and Standard Contracts"
+    url: "https://www.ycombinator.com/documents"

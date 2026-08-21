@@ -1,0 +1,82 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "authentication"
+display_name: "Authentication & Identity Management"
+description: >
+  Implement secure, scalable authentication systems (OAuth2, JWT, Session-based) and 
+  Role-Based Access Control (RBAC) to protect the application from unauthorized access.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "backend-engineer"
+phase: "build"
+applicable_startups: 
+  - all
+priority: "mvp"
+difficulty: "expert"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Token Management"
+    tasks:
+      - "Implement short-lived access tokens (JWT) paired with HTTP-only, secure, sameSite=strict refresh tokens."
+      - "Ensure JWTs are never stored in `localStorage` to prevent XSS exfiltration."
+  - step: "OAuth Integration"
+    tasks:
+      - "Integrate Google/GitHub SSO using the Authorization Code flow with PKCE, never exposing client secrets to the frontend."
+  - step: "Password Security"
+    tasks:
+      - "Hash all passwords using Argon2id or bcrypt with a minimum work factor of 12."
+      - "Implement generic error messages for login failures (e.g., 'Invalid credentials' rather than 'User not found') to prevent email enumeration."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Storing user passwords in plaintext, or using outdated hashing algorithms like MD5/SHA1."
+  - "Storing JWTs in `localStorage` without rotating them on every request."
+
+best_practices:
+  - "Design APIs with idempotency in mind -- same request, same result."
+  - "Always validate inputs at the API boundary before processing."
+  - "Use database transactions for operations that modify multiple records."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Authentication process"
+  - "How do I handle authentication?"
+  - "Implement authentication"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the authentication process"
+  optional:
+    - name: "code_repository"
+      type: "string"
+      description: "Path to the code repository"
+      default: "./"
+
+outputs:
+  files:
+    - path: "outputs/authentication.md"
+      description: "Results of the authentication process"
+  artifacts:
+    - "Completed authentication deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "PostgreSQL Documentation"
+    url: "https://postgresql.org/docs"
+  - title: "Node.js Documentation"
+    url: "https://nodejs.org/en/docs/"

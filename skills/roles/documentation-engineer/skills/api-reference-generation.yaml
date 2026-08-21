@@ -1,0 +1,112 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "api-reference-generation"
+display_name: "Automated API Reference Generation (OpenAPI)"
+description: >
+  Sets up the pipeline to automatically generate beautiful, interactive API 
+  reference documentation from OpenAPI/Swagger specifications, ensuring the 
+  docs never drift from the actual code implementation.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "documentation-engineer"
+phase: "build"
+applicable_startups:
+  - developer-tools
+  - saas
+priority: "critical"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Generate the API docs."
+  - "Make our Swagger file look good."
+  - "Publish the OpenAPI spec."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Run OpenAPI generator."
+  - "Lint the `openapi.yaml` file."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "openapi_spec"
+      type: "file"
+      description: "The path to the openapi.json or openapi.yaml file."
+  optional:
+    - name: "target_generator"
+      type: "string"
+      description: "Redoc, Swagger UI, or ReadMe.io."
+      default: "Redoc"
+
+outputs:
+  files:
+    - path: "docs/api-reference.html"
+      description: "The generated static API reference."
+  artifacts:
+    - "A live 'Try it out' API explorer."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "The OpenAPI spec passes Spectral linting with 0 errors (validating schema compliance)."
+  manual:
+    - "Every endpoint has at least one example request and one example response payload."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+
+safety_notes:
+  - "API Key Leakage: Ensure the generated examples do not contain real production API keys or PII from the developers' local environments."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Redocly"
+      install: "npm install -g @redocly/cli"
+  alternatives:
+    - name: "Swagger UI"
+      when: "Need a quick, standard interactive playground."
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Spec Linting"
+    tasks:
+      - "Run a linter (like Spectral) against the OpenAPI spec to enforce descriptions on all parameters and schemas."
+  - step: "Code-to-Spec Automation"
+    tasks:
+      - "If possible, do not hand-write the `openapi.yaml`. Use framework tools (like FastAPI's auto-docs or `tsoa` for Node) to generate the spec directly from the code types."
+  - step: "Generator Configuration"
+    tasks:
+      - "Configure Redocly to group endpoints by tags (e.g., 'Authentication', 'Users', 'Payments') rather than a single massive list."
+  - step: "Code Samples"
+    tasks:
+      - "Use a tool like `httpsnippet` to automatically generate curl, Python, Node, and Go code samples for every endpoint based on the spec."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Hand-writing an OpenAPI spec. It will be out of date within 1 week of the next code deployment."
+  - "Missing descriptions on Enums. If a field accepts 'status', you must define if it means 'pending/active' or '1/2/3'."
+
+best_practices:
+  - "Provide multiple response examples for an endpoint: HTTP 200 (Success), HTTP 400 (Validation Error), and HTTP 404 (Not Found)."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Redocly CLI"
+    url: "https://redocly.com/docs/cli/"

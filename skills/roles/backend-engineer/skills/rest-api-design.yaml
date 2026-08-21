@@ -1,0 +1,112 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "rest-api-design"
+display_name: "RESTful API Design & OpenAPI Spec"
+description: >
+  Designs clean, resource-oriented REST APIs. Establishes standards for URL 
+  naming, HTTP verbs, status codes, pagination, and JSON payload structures. 
+  Generates the OpenAPI (Swagger) specification.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "backend-engineer"
+phase: "planning"
+applicable_startups:
+  - all
+priority: "critical"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Design the API endpoints."
+  - "How should the frontend communicate with the backend?"
+  - "Create the OpenAPI spec."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Generate openapi.yaml."
+  - "Set up controller routes."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "resources"
+      type: "string"
+      description: "The core entities (e.g., Users, Invoices, Organizations)."
+  optional:
+    - name: "framework"
+      type: "string"
+      description: "Express, FastAPI, Go Gin."
+      default: "Express"
+
+outputs:
+  files:
+    - path: "docs/openapi.yaml"
+      description: "The API contract."
+  artifacts:
+    - "A Postman collection."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "The OpenAPI spec is structurally valid."
+manual:
+  - "Frontend developers can build the UI using mock data before the backend is even implemented."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+
+safety_notes:
+  - "Never expose internal database IDs (auto-incrementing integers) in the API if security via obscurity is desired. Use UUIDs or public-facing hash IDs."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "FastAPI (Python) or tsoa (Node)"
+      install: "N/A"
+  alternatives:
+    - name: "GraphQL"
+      when: "The frontend requires highly flexible data fetching across deeply nested relations."
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Resource Naming"
+    tasks:
+      - "Use plural nouns for collections: `/users`, not `/user` or `/getUsers`."
+      - "Use nesting for relationships: `/organizations/{id}/users`."
+  - step: "HTTP Verb Standardization"
+    tasks:
+      - "GET (Read), POST (Create), PUT (Full Replace), PATCH (Partial Update), DELETE (Remove)."
+      - "Never use GET to modify state. Browsers pre-fetch GET requests, which could accidentally delete data."
+  - step: "Pagination and Filtering"
+    tasks:
+      - "Never return unpaginated lists. Default to cursor-based pagination (`?cursor=xyz&limit=50`) for infinite scroll, or offset-based for data tables."
+  - step: "Standardized Responses"
+    tasks:
+      - "Wrap responses in an envelope for list endpoints: `{ \"data\": [...], \"meta\": { \"total\": 100 } }`."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Using `POST /updateUser` or `GET /deleteUser`. REST relies on HTTP verbs, not action words in the URL."
+  - "Returning HTTP 200 OK for errors, with a payload like `{ \"success\": false, \"error\": \"Not Found\" }`. Use real HTTP status codes (400, 401, 403, 404, 500)."
+
+best_practices:
+  - "Return a `201 Created` with a `Location` header pointing to the new resource when a POST succeeds."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Microsoft API Design Guidelines"
+    url: "https://learn.microsoft.com/en-us/azure/architecture/best-practices/api-design"

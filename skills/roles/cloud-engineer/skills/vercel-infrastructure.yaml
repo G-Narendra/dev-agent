@@ -1,0 +1,80 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "vercel-infrastructure"
+display_name: "Vercel Edge & Serverless Architecture"
+description: >
+  Deploy and scale Next.js/React applications instantly on Vercel, leveraging Edge 
+  Functions and ISR (Incremental Static Regeneration) for zero-latency UI.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "cloud-engineer"
+phase: "build"
+applicable_startups: 
+  - saas
+  - consumer
+priority: "high"
+difficulty: "advanced"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Edge vs Node"
+    tasks:
+      - "Use Edge Functions for auth middleware and redirects (sub-10ms boot time), but reserve Node.js Serverless functions for heavy database connections that don't support Edge."
+  - step: "Caching Strategy"
+    tasks:
+      - "Aggressively use ISR to serve statically generated pages from the CDN, revalidating them only when the underlying Sanity/Contentful CMS data changes."
+  - step: "Preview Environments"
+    tasks:
+      - "Require all GitHub PRs to deploy to a Vercel Preview URL and run automated Lighthouse/Cypress checks against that specific URL before merging."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Deploying a Next.js app to Vercel but wrapping the entire application in a client-side Apollo GraphQL provider, completely negating Vercel's SSR and Edge CDN benefits."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Vercel Infrastructure process"
+  - "How do I handle vercel infrastructure?"
+  - "Implement vercel infrastructure"
+  - "Deploy and scale Next"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the vercel infrastructure process"
+  optional:
+    - name: "N/A"
+      type: "string"
+      description: "No optional inputs needed."
+
+outputs:
+  files:
+    - path: "outputs/vercel-infrastructure.md"
+      description: "Results of the vercel infrastructure process"
+  artifacts:
+    - "Completed vercel infrastructure deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "AWS Documentation"
+    url: "https://docs.aws.amazon.com"
+  - title: "Terraform Documentation"
+    url: "https://developer.hashicorp.com/terraform/docs"

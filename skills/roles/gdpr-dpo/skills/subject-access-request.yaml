@@ -1,0 +1,111 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "subject-access-request"
+display_name: "DSAR & Right to be Forgotten Automation"
+description: >
+  Design the technical workflows required to fulfill a Data Subject Access Request (DSAR) 
+  where a user demands a copy of all their data, or requests full deletion ('Right to be Forgotten') 
+  within the legally mandated 30-day window.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "gdpr-dpo"
+phase: "growth"
+applicable_startups:
+  - all
+priority: "critical"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "A user requested their data be deleted."
+  - "How do we handle a DSAR?"
+  - "Implement the right to be forgotten."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Create a data deletion playbook artifact."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "database_architecture"
+      type: "string"
+      description: "How user data is linked across tables (foreign keys)."
+  optional:
+    - name: "third_party_tools"
+      type: "string"
+      description: "List of tools where data must also be deleted (e.g., Mailchimp, Intercom)."
+      default: "null"
+
+outputs:
+  files:
+    - path: "compliance/dsar-playbook.md"
+      description: "Step-by-step guide for engineering to execute a deletion."
+  artifacts:
+    - "A JSON schema for the data export payload."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "Automated deletion script fully purges user from the primary DB without breaking referential integrity."
+  manual:
+    - "The user receives a complete, human-readable export of their data within 30 days of the request."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+
+safety_notes:
+  - "Identity Verification is critical. Do not hand over a user's entire data history or delete their account just because someone emailed support saying 'I am John, delete my data'. You must verify they own the account."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Custom SQL Scripts / Admin Dashboard"
+      install: "N/A"
+  alternatives:
+    - name: "Transcend / Securiti.ai"
+      when: "High volume of DSARs requiring automated orchestration across 50+ SaaS tools."
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Identity Verification"
+    tasks:
+      - "Establish a secure channel (e.g., they must be logged into the app to click 'Export Data', or must click a magic link sent to their verified email)."
+  - step: "Data Export (Access Request)"
+    tasks:
+      - "Design a script to query the database, assemble all user data into a clean JSON or CSV format, and deliver it securely."
+  - step: "Hard Deletion (Erasure Request)"
+    tasks:
+      - "Write a cascading delete script. Remember that simply deleting the `users` table row might leave orphaned data in `user_analytics` or `billing_logs`."
+      - "Implement API calls to third-party tools (e.g., `stripe.customers.del()`, Intercom API) to ensure the deletion cascades outside your own infrastructure."
+  - step: "Legal Exceptions"
+    tasks:
+      - "Do not delete data that you are legally required to keep. Even if a user asks to be forgotten, you must retain financial transaction records for tax compliance (usually 7 years)."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Setting `is_deleted = true` (Soft Delete) and leaving all PII intact in the database when a user exercises their Right to be Forgotten. GDPR requires hard deletion or irreversible anonymization."
+  - "Manually hunting through the database to delete a user. This takes 4 hours of engineering time per request. It must be scripted."
+
+best_practices:
+  - "Anonymization: If you need to keep analytics data for aggregate metrics, replace the user's name/email with a one-way hash or 'ANONYMIZED_USER' so the metrics stay intact but the PII is destroyed."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "ICO: Right to Erasure"
+    url: "https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/individual-rights/right-to-erasure/"

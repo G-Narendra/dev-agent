@@ -1,0 +1,80 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "vendor-negotiation"
+display_name: "Strategic Sourcing & Vendor Negotiation"
+description: >
+  Identify suppliers, issue Requests for Proposal (RFPs), and aggressively negotiate 
+  pricing, payment terms (Net 30/60), and Service Level Agreements (SLAs).
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "procurement-manager"
+phase: "operations"
+applicable_startups: 
+  - all
+priority: "mvp"
+difficulty: "advanced"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Sourcing & RFP"
+    tasks:
+      - "Draft a highly specific RFP detailing the exact technical specifications and expected volume."
+      - "Distribute the RFP to at least 3 vetted suppliers."
+  - step: "Negotiation"
+    tasks:
+      - "Negotiate for extended payment terms (e.g., Net 60) to improve the startup's cash conversion cycle."
+      - "Include volume-based discount tiers in the contract."
+  - step: "Contract Execution"
+    tasks:
+      - "Ensure strict SLAs and financial penalties for late delivery are legally bound."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Accepting the first price quoted by a single vendor because 'we need it fast', permanently destroying margin."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Vendor Negotiation process"
+  - "How do I handle vendor negotiation?"
+  - "Implement vendor negotiation"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the vendor negotiation process"
+  optional:
+    - name: "N/A"
+      type: "string"
+      description: "No optional inputs needed."
+
+outputs:
+  files:
+    - path: "outputs/vendor-negotiation.md"
+      description: "Results of the vendor negotiation process"
+  artifacts:
+    - "Completed vendor negotiation deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

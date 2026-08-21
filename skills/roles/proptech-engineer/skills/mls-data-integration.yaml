@@ -1,0 +1,82 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "mls-data-integration"
+display_name: "MLS / RESO Web API Data Integration"
+description: >
+  Build a robust ETL pipeline to continually ingest, normalize, and geocode millions of 
+  property listings from legacy MLS systems or the modern RESO Web API.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "proptech-engineer"
+phase: "build"
+applicable_startups: 
+  - proptech
+priority: "mvp"
+difficulty: "advanced"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Ingestion Pipeline"
+    tasks:
+      - "Establish a reliable polling mechanism to fetch delta updates (new/modified listings) via RESO Web API."
+      - "Handle rate limits and connection drops gracefully."
+  - step: "Normalization"
+    tasks:
+      - "Map proprietary MLS field names to a standard internal schema."
+      - "Normalize addresses using a geocoding service (e.g., SmartyStreets or Google Maps API)."
+  - step: "Storage & Search"
+    tasks:
+      - "Store spatial data in PostGIS."
+      - "Index properties in Elasticsearch for sub-50ms map-bounding-box queries."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Attempting to do a full database sync every night instead of fetching only the delta updates, which wastes bandwidth and causes severe lag."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Mls Data Integration process"
+  - "How do I handle mls data integration?"
+  - "Implement mls data integration"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the mls data integration process"
+  optional:
+    - name: "code_repository"
+      type: "string"
+      description: "Path to the code repository"
+      default: "./"
+
+outputs:
+  files:
+    - path: "outputs/mls-data-integration.md"
+      description: "Results of the mls data integration process"
+  artifacts:
+    - "Completed mls data integration deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

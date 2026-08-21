@@ -1,0 +1,79 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "react-native-dev"
+display_name: "React Native UI & Expo Deployment"
+description: >
+  Build cross-platform applications using React Native and Expo, utilizing web paradigms 
+  while optimizing performance to feel fully native.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "mobile-developer-react-native"
+phase: "build"
+applicable_startups: 
+  - all
+priority: "mvp"
+difficulty: "advanced"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Environment & Architecture"
+    tasks:
+      - "Initialize the project using Expo (managed workflow) for rapid over-the-air (OTA) updates via EAS."
+      - "Share state management (Zustand/Redux) patterns with the web frontend team."
+  - step: "UI & Performance"
+    tasks:
+      - "Use `react-native-reanimated` to declare animations that run smoothly on the native UI thread, completely bypassing the JS bridge."
+  - step: "Navigation"
+    tasks:
+      - "Implement deep linking and native stack navigation using Expo Router or React Navigation."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Writing complex, looping animations in raw JavaScript, causing the JS bridge to clog and the app UI to freeze during scrolling."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the React Native Dev process"
+  - "How do I handle react native dev?"
+  - "Implement react native dev"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the react native dev process"
+  optional:
+    - name: "N/A"
+      type: "string"
+      description: "No optional inputs needed."
+
+outputs:
+  files:
+    - path: "outputs/react-native-dev.md"
+      description: "Results of the react native dev process"
+  artifacts:
+    - "Completed react native dev deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

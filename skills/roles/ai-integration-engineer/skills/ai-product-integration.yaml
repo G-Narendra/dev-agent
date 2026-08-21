@@ -1,0 +1,143 @@
+# â”€â”€ IDENTITY â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+name: "ai-product-integration"
+display_name: "AI Product Features Integration"
+description: >
+  Seamlessly embeds AI capabilities into existing traditional software products. 
+  Transforms static tables into natural language query interfaces and adds 
+  'magic' auto-complete features without breaking the core user experience.
+
+# â”€â”€ CLASSIFICATION â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+role: "ai-integration-engineer"
+phase: "growth"
+applicable_startups:
+  - SaaS, B2B, Consumer
+priority: "high"
+difficulty: "advanced"
+
+# â”€â”€ TRIGGER â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+trigger_phrases:
+  - "Add an AI copilot to the dashboard."
+  - "Let users talk to their data."
+  - "Build an auto-summarize feature."
+
+# â”€â”€ ACTIONS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+example_cli_actions:
+  - "Generate AI integration roadmap."
+  - "Draft prompt injection defenses."
+
+# â”€â”€ INPUTS / OUTPUTS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+inputs:
+  required:
+    - name: "target_feature"
+      type: "string"
+      description: "e.g., The search bar, the text editor."
+    - name: "user_expectation"
+      type: "string"
+      description: "What should the AI actually do for them?"
+  optional:
+    - name: "api_provider"
+      type: "string"
+      description: "OpenAI, Anthropic, local."
+      default: "OpenAI"
+
+outputs:
+  files:
+    - path: "product/ai_integration_spec.md"
+      description: "The architectural spec for the new AI feature."
+  artifacts:
+    - "N/A"
+
+# â”€â”€ SUCCESS CRITERIA â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+automated:
+  - "The AI endpoint responds in < 800ms to maintain a snappy user experience."
+manual:
+  - "User engagement with the specific feature increases by 20% post-integration, without a spike in customer support tickets."
+
+# â”€â”€ PERMISSIONS & SAFETY â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "The Hallucinated Promise: Never let the AI act as a customer support agent with access to user billing without strict tool-use restrictions. If the AI hallucinates a '100% discount', you are legally liable."
+
+# â”€â”€ TOOLING â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+recommended_tools:
+  primary:
+    - name: "Vercel AI SDK"
+      install: "npm install ai"
+
+# â”€â”€ IMPLEMENTATION CHECKLIST â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+implementation_checklist:
+  - step: "Streaming UI"
+    tasks:
+      - "If an LLM takes 4 seconds to generate a response, the user will think the app is broken. You MUST use Server-Sent Events (SSE) to stream the text token-by-token directly to the frontend."
+  - step: "Graceful Fallbacks"
+    tasks:
+      - "APIs go down. Rate limits get hit. If the AI feature fails, it should fail gracefully (e.g., 'AI is thinking... please try again later') rather than crashing the entire React application."
+  - step: "Structured Outputs"
+    tasks:
+      - "If you are integrating AI into a database tool, force the LLM to output strict JSON using 'Function Calling' or structured output modes. Do not try to parse raw text with Regex."
+
+# â”€â”€ QUALITY GATES â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+anti_patterns:
+  - "Adding an AI chatbot just to say you have AI. If the user can click a button in 1 second, do not force them to type a 5-second sentence to a chatbot to do the same thing."
+best_practices:
+  - "Implement prompt injection defenses on Day 1. Users will try to make your 'Resume Analyzer AI' write python code. Hardcode system boundaries."
+
+# â”€â”€ REFERENCES â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+references:
+  - title: "Vercel AI SDK Docs"
+    url: "https://sdk.vercel.ai/docs"
+
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Ai Product Integration process"
+  - "How do I handle ai product integration?"
+  - "Implement ai product integration"
+  - "Seamlessly embeds AI capabilities into existing traditional software products"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the ai product integration process"
+  optional:
+    - name: "target_audience"
+      type: "string"
+      description: "Target user or customer segment"
+      default: "Primary user persona"
+
+outputs:
+  files:
+    - path: "outputs/ai-product-integration.md"
+      description: "Results of the ai product integration process"
+  artifacts:
+    - "Completed ai product integration deliverable"
+
+# ── QUALITY GATES ────────────────────────────────────────────
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start — retrofitting is expensive."
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

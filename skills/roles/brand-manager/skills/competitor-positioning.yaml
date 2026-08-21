@@ -1,0 +1,105 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "competitor-positioning"
+display_name: "Strategic Positioning & Competitor Differentiation"
+description: >
+  Determines the unique space the startup occupies in the customer's mind. 
+  Moves beyond feature comparisons to define a distinct category or a highly 
+  differentiated value proposition.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "brand-manager"
+phase: "planning"
+applicable_startups:
+  - all
+priority: "critical"
+difficulty: "expert"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "How are we different from X?"
+  - "Why should they choose us?"
+  - "Write the positioning statement."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Generate positioning matrix."
+  - "Draft unique value proposition (UVP)."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "competitors"
+      type: "string"
+      description: "Top 3 competitors in the market."
+  optional:
+    - name: "target_niche"
+      type: "string"
+      description: "The specific subset of the market being targeted."
+      default: "Broad market"
+
+outputs:
+  files:
+    - path: "marketing/brand/positioning-strategy.md"
+      description: "The internal positioning charter."
+  artifacts:
+    - "A 2x2 Positioning Matrix."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "N/A"
+manual:
+  - "When a customer visits the homepage, they immediately understand what the product is and who it is for within 3 seconds."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "network (Competitor research)"
+
+safety_notes:
+  - "Do not base positioning purely on 'We are cheaper'. Pricing is a race to the bottom. Position on value, speed, or a specific niche."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Miro / FigJam"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Competitive Audit"
+    tasks:
+      - "Analyze the top 3 competitors. What is their core promise? Where do their customers complain (e.g., G2 reviews)? That complaint is your positioning wedge."
+  - step: "The 2x2 Matrix"
+    tasks:
+      - "Plot competitors on a 2x2 grid based on the two most important variables to the customer (e.g., Speed vs Accuracy, Enterprise vs SMB). Find the empty quadrant."
+  - step: "The Positioning Formula"
+    tasks:
+      - "Draft the statement: 'For [target customer] who [statement of the need], [Product Name] is a [category] that [statement of key benefit]. Unlike [competitor], our product [statement of primary differentiation].'"
+  - step: "Tagline Extraction"
+    tasks:
+      - "Distill the 3-sentence positioning statement down to a 5-word H1 headline for the website."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Trying to be 'everything for everyone'. If your product is for everyone, it is positioned for no one."
+best_practices:
+  - "Positioning must dictate product development, not just marketing. If you are positioned as 'The fastest tool', the engineering team must prioritize latency over new features."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Obviously Awesome by April Dunford"
+    url: "https://www.aprildunford.com/obviously-awesome"

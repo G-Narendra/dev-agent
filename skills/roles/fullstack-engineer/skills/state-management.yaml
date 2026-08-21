@@ -1,0 +1,107 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "state-management"
+display_name: "Frontend State Management"
+description: >
+  Architects how data flows through the frontend application. Distinguishes 
+  between Server State (data fetching/caching) and Client State (UI toggles). 
+  Eliminates prop drilling and prevents unnecessary component re-renders.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "fullstack-engineer"
+phase: "build"
+applicable_startups:
+  - all
+priority: "critical"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "The app is rendering too many times."
+  - "We need to cache this API request."
+  - "Set up Redux or Zustand."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Generate Zustand store."
+  - "Draft React Query hook."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "state_type"
+      type: "string"
+      description: "Is this server data (API) or client UI data (dark mode)?"
+  optional:
+    - name: "framework"
+      type: "string"
+      description: "React, Vue, Svelte."
+      default: "React"
+
+outputs:
+  files:
+    - path: "src/store/useUserStore.ts"
+      description: "The global client state store."
+    - path: "src/hooks/useUserData.ts"
+      description: "The server state fetching hook."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "React Profiler confirms no unnecessary re-renders are occurring on unrelated UI components when state changes."
+manual:
+  - "Developers stop passing props down 5 levels deep in the component tree."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "Global State Abuse: Do not put every single variable into the global store. If a state is only used by one specific form, keep it as local state within that form component."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "TanStack Query (for Server State)"
+      install: "npm i @tanstack/react-query"
+  alternatives:
+    - name: "Zustand (for Client State)"
+      when: "Need a lightweight alternative to Redux."
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Server State vs Client State"
+    tasks:
+      - "Separate concerns. Use TanStack Query to fetch, cache, and synchronize data from your API. Do NOT use Redux to store API responses."
+  - step: "Atomic State Updates"
+    tasks:
+      - "Use a tool like Zustand or Jotai to manage global UI state (e.g., 'Is the sidebar open?'). Ensure components only subscribe to the specific slice of state they care about to prevent re-renders."
+  - step: "Optimistic UI Updates"
+    tasks:
+      - "When a user likes a post, immediately update the UI state to show the 'liked' heart icon BEFORE waiting for the API response. If the API fails, roll back the UI state."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Using `useEffect` to fetch data and manually setting it into a Redux store. This introduces race conditions, lacks automatic retries, and requires massive boilerplate."
+best_practices:
+  - "Keep state as close to where it is used as possible. Lift state up only when absolutely necessary."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "TkDodo: Practical React Query"
+    url: "https://tkdodo.eu/blog/practical-react-query"

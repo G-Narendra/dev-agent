@@ -1,0 +1,112 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "etl-pipeline-creation"
+display_name: "ETL / ELT Pipeline Automation"
+description: >
+  Extract data from operational databases and third-party SaaS tools, Transform it 
+  into usable business models, and Load it into the Data Warehouse. Focuses on 
+  dbt (Data Build Tool) and Airflow/Prefect orchestration.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "data-engineer"
+phase: "growth"
+applicable_startups:
+  - all
+priority: "critical"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Build an ETL pipeline."
+  - "Sync Salesforce to Snowflake."
+  - "Automate the data extraction."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "pip install dbt-core dbt-snowflake"
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "source_systems"
+      type: "string"
+      description: "Where is the data coming from? (e.g., 'Postgres', 'Stripe', 'Zendesk')."
+    - name: "destination_warehouse"
+      type: "string"
+      description: "Where is it going? (e.g., 'BigQuery')."
+  optional:
+    - name: "sync_frequency"
+      type: "string"
+      description: "Hourly, Daily, or Real-time."
+      default: "Daily"
+
+outputs:
+  files:
+    - path: "data/dbt/models/staging/stg_stripe_payments.sql"
+      description: "The dbt transformation model."
+  artifacts:
+    - "A DAG (Directed Acyclic Graph) for the orchestrator."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "The pipeline completes successfully every night at 2:00 AM."
+  manual:
+    - "Business analysts log in at 9:00 AM and have fresh, accurate data from the previous day."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+
+safety_notes:
+  - "PII Scrubbing: The ETL process is the exact point where you must hash or drop Personally Identifiable Information (SSNs, raw passwords) before it lands in the Data Warehouse where analysts can see it."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Fivetran (Extract/Load) + dbt (Transform)"
+      install: "pip install dbt-core"
+  alternatives:
+    - name: "Airbyte (Open Source Fivetran) + Apache Airflow"
+      when: "Need to self-host the extraction layer for compliance reasons."
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Extract & Load (EL)"
+    tasks:
+      - "Do not write custom Python scripts to pull data from the Stripe API. Use a tool like Fivetran or Airbyte. They handle rate limits, pagination, and schema changes automatically."
+      - "Load the raw data directly into the 'Bronze' layer of the warehouse."
+  - step: "Transform (T) with dbt"
+    tasks:
+      - "Use dbt (Data Build Tool) to write SQL that transforms the raw data into business models."
+      - "Keep SQL DRY (Don't Repeat Yourself) using dbt macros and ref() functions."
+  - step: "Orchestration (The DAG)"
+    tasks:
+      - "Use Airflow, Prefect, or Dagster to orchestrate the dependencies. Example: Task A (Sync Postgres) AND Task B (Sync Stripe) must both succeed before Task C (Run dbt transformations) can begin."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "ETL instead of ELT. In 2010, you transformed data in Python *before* loading it because warehouses were slow. Today, warehouses (Snowflake) are insanely fast. Extract and Load the raw data first, then Transform it inside the warehouse (ELT)."
+  - "Hardcoding passwords in Airflow DAG files. Use Airflow Connections or AWS Secrets Manager."
+
+best_practices:
+  - "Implement Incremental Loads. Do not pull all 5 years of historical data every night. Only pull rows where `updated_at > last_sync_time`."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "dbt: What is dbt?"
+    url: "https://docs.getdbt.com/docs/introduction"

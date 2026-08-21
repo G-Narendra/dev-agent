@@ -1,0 +1,80 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "localization-audit"
+display_name: "Cultural UX & Marketing Audit"
+description: >
+  Review upcoming product launches, ad campaigns, and UI designs to identify cultural 
+  insensitivities, localization errors, or missed local market nuances.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "cultural-consultant"
+phase: "growth"
+applicable_startups: 
+  - gaming
+  - global
+priority: "mvp"
+difficulty: "advanced"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Product Review"
+    tasks:
+      - "Review all UI copy, ensuring idioms and slang are removed or properly adapted."
+      - "Verify date formats (DD/MM vs MM/DD), currencies, and address fields match local standards."
+  - step: "Visual Audit"
+    tasks:
+      - "Review marketing imagery to ensure the diversity and attire of models align with local cultural norms."
+  - step: "Feedback Loop"
+    tasks:
+      - "Provide a redlined document to the Product/Marketing team highlighting high-risk assets."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Translating an aggressive, high-pressure American sales slogan directly into Japanese, resulting in severe brand alienation."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Localization Audit process"
+  - "How do I handle localization audit?"
+  - "Implement localization audit"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the localization audit process"
+  optional:
+    - name: "N/A"
+      type: "string"
+      description: "No optional inputs needed."
+
+outputs:
+  files:
+    - path: "outputs/localization-audit.md"
+      description: "Results of the localization audit process"
+  artifacts:
+    - "Completed localization audit deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

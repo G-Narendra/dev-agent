@@ -1,0 +1,80 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "react-ui-development"
+display_name: "React Frontend Architecture & UI Execution"
+description: >
+  Build complex, responsive web interfaces using React/Next.js, connecting UI components
+  to backend APIs while managing complex client-side state.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "frontend-developer"
+phase: "build"
+applicable_startups: 
+  - all
+priority: "mvp"
+difficulty: "advanced"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Component Architecture"
+    tasks:
+      - "Break down Figma designs into atomic components (Atoms, Molecules, Organisms)."
+      - "Implement strict TypeScript interfaces for all component props."
+  - step: "State & Data Fetching"
+    tasks:
+      - "Use specialized data fetching libraries (e.g., React Query, SWR) rather than raw `useEffect` to handle caching and loading states."
+  - step: "Accessibility (a11y)"
+    tasks:
+      - "Ensure all interactive elements are keyboard navigable and have correct ARIA labels."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Storing massive arrays of fetched API data in a global Redux store when it only needs to be rendered by a single, isolated component."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the React Ui Development process"
+  - "How do I handle react ui development?"
+  - "Implement react ui development"
+  - "Build complex, responsive web interfaces using React/Next"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the react ui development process"
+  optional:
+    - name: "N/A"
+      type: "string"
+      description: "No optional inputs needed."
+
+outputs:
+  files:
+    - path: "outputs/react-ui-development.md"
+      description: "Results of the react ui development process"
+  artifacts:
+    - "Completed react ui development deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

@@ -1,0 +1,105 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "brand-voice-guidelines"
+display_name: "Brand Voice & Tone Mapping"
+description: >
+  Defines how the company 'speaks'. Differentiates Voice (the core personality) 
+  from Tone (how the voice adapts to context—e.g., an error message vs a 
+  marketing launch).
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "brand-manager"
+phase: "planning"
+applicable_startups:
+  - all
+priority: "high"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "How should we sound on Twitter?"
+  - "Rewrite this copy to be more on-brand."
+  - "Create the copy guidelines."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Draft voice pillars."
+  - "Review UX copy."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "brand_archetype"
+      type: "string"
+      description: "The Hero, The Sage, The Jester, The Creator."
+  optional:
+    - name: "competitor_voices"
+      type: "string"
+      description: "How the competition sounds (to ensure differentiation)."
+      default: "Corporate and dry"
+
+outputs:
+  files:
+    - path: "marketing/brand/voice-and-tone.md"
+      description: "The documentation for writers and product managers."
+  artifacts:
+    - "Before/After copywriting examples."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "N/A"
+manual:
+  - "A user cannot tell if a tweet was written by the CEO, the intern, or the social media manager."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "Humor Risk: If your startup handles sensitive data (healthcare, fintech), 'funny and quirky' is dangerous. If their bank account is frozen, a joke will infuriate them."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Notion / Google Docs"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Define the 3 Pillars"
+    tasks:
+      - "Choose 3 adjectives for the Voice. Example (Mailchimp): 'Clear, Genuine, and a little bit dry'."
+  - step: "We Are / We Are Not"
+    tasks:
+      - "Create boundaries. 'We are confident, but we are not arrogant. We are casual, but we are not sloppy. We are experts, but we are not bossy.'"
+  - step: "Tone Mapping by Context"
+    tasks:
+      - "Map out scenarios. Success Message: Cheerful and brief. Error 404: Empathetic and helpful. Security Alert: Serious, direct, zero jokes."
+  - step: "The Vocabulary List"
+    tasks:
+      - "Create a 'Do Not Use' list. (e.g., 'We say *customers*, not *users*. We say *sign in*, not *log in*.')"
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Using internal engineering jargon in customer-facing copy. Customers don't know what a 'cron job failure' is."
+best_practices:
+  - "Write exactly like you speak. Read the copy out loud. If you wouldn't say it to a human in a coffee shop, rewrite it."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Mailchimp Content Style Guide"
+    url: "https://styleguide.mailchimp.com/voice-and-tone/"

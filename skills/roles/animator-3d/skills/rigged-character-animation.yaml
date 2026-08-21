@@ -1,0 +1,109 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "rigged-character-animation"
+display_name: "3D Character Rigging & Animation"
+description: >
+  Builds skeletal structures (rigs), assigns vertex weights (skinning), and 
+  creates keyframe animations (walk cycles, idle loops) for 3D characters 
+  used in games, web experiences, or videos.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "animator-3d"
+phase: "build"
+applicable_startups:
+  - gaming
+  - consumer-social
+priority: "high"
+difficulty: "expert"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Rig this 3D character."
+  - "Animate a walk cycle."
+  - "Make the avatar move."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Export animation to GLB."
+  - "Bake keyframes."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "base_mesh"
+      type: "file"
+      description: "The static 3D model (.obj or .fbx)."
+  optional:
+    - name: "animation_type"
+      type: "string"
+      description: "Idle, Walk, Run, Jump."
+      default: "Idle"
+
+outputs:
+  files:
+    - path: "assets/3d/character_rigged.glb"
+      description: "The animated asset ready for web/engine."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "Exported GLB file size is under 5MB for web usage."
+manual:
+  - "Character joints bend naturally without texture stretching or clipping."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+
+safety_notes:
+  - "Avoid excessive bone counts for web/mobile applications. Keep rigs minimal (e.g., standard humanoid rig without full facial muscle bones) unless absolutely required."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Blender"
+      install: "N/A"
+  alternatives:
+    - name: "Mixamo"
+      when: "Need rapid, generic human animations without manual keyframing."
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Rigging (Skeleton)"
+    tasks:
+      - "Create the armature. Use Inverse Kinematics (IK) for legs and arms to make animating natural movements easier."
+  - step: "Weight Painting (Skinning)"
+    tasks:
+      - "Bind the mesh to the armature. Manually paint the vertex weights around joints (knees, elbows) to prevent rubber-banding or mesh collapsing."
+  - step: "Keyframing"
+    tasks:
+      - "Create the extremes (poses) first. Then add breakdowns and in-betweens. Utilize the graph editor to adjust ease-in/ease-out curves."
+  - step: "Baking and Exporting"
+    tasks:
+      - "Bake the IK animations down to raw forward kinematics (FK) keyframes before exporting to GLTF/GLB for engine compatibility."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Exporting animations at 60 FPS with a keyframe on every single frame. This creates massive file sizes. Use interpolation and fewer keyframes."
+best_practices:
+  - "Ensure the character's root bone stays at `0,0,0` for walk cycles (in-place animation) if the game engine/code will be handling the actual forward translation."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Blender Rigging Documentation"
+    url: "https://docs.blender.org/manual/en/latest/animation/armatures/index.html"

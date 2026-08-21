@@ -1,0 +1,105 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "campaign-management"
+display_name: "Cross-Channel Marketing Campaigns"
+description: >
+  Orchestrates large-scale marketing campaigns across Email, Paid Ads, and 
+  Social Media. Ensures a unified brand message and tracks Return on Ad Spend 
+  (ROAS) to ensure marketing dollars are actually driving revenue.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "marketing-manager"
+phase: "growth"
+applicable_startups:
+  - all
+priority: "high"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Plan the Black Friday sale."
+  - "Launch the new product feature."
+  - "Our Facebook ads aren't converting."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Draft campaign brief."
+  - "Generate multi-channel content calendar."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "campaign_goal"
+      type: "string"
+      description: "e.g., 500 new signups, $50k in sales."
+    - name: "budget"
+      type: "string"
+      description: "Total budget for ads and creatives."
+  optional:
+    - name: "primary_channel"
+      type: "string"
+      description: "Where will the majority of the budget go?"
+      default: "Meta Ads"
+
+outputs:
+  files:
+    - path: "marketing/campaigns/q3_launch_plan.md"
+      description: "The execution timeline and budget allocation."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "N/A"
+manual:
+  - "Customer Acquisition Cost (CAC) remains lower than the Customer Lifetime Value (LTV) throughout the campaign (LTV:CAC ratio > 3:1)."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "Budget Runaway: Always set hard daily spending limits on ad platforms (Google/Meta). A misconfigured ad set targeting the entire world can drain a $10,000 budget in a weekend with zero conversions."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "HubSpot / Meta Ads Manager"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "UTM Tracking"
+    tasks:
+      - "Append strict UTM parameters (utm_source, utm_medium, utm_campaign) to every single link shared in the campaign. Without this, you cannot prove which channel generated the revenue."
+  - step: "The Retargeting Pixel"
+    tasks:
+      - "Ensure the Meta/Google Pixel is installed on the website. 98% of users will not buy on the first visit. You must retarget them with a different ad (e.g., a testimonial) 3 days later."
+  - step: "A/B Testing Creatives"
+    tasks:
+      - "Never launch a campaign with just one ad image. Launch 5 vastly different images (e.g., Professional vs User-Generated-Content selfie) and let the algorithm determine the winner after $100 in spend."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Sending traffic from a paid ad directly to the generic Homepage. Traffic should always go to a dedicated Landing Page that exactly matches the promise made in the ad."
+best_practices:
+  - "Align the sales and marketing teams. If marketing launches a massive campaign on Tuesday, the sales team must have the bandwidth to follow up with the influx of leads on Wednesday."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "HubSpot: Ultimate Guide to Marketing Campaigns"
+    url: "https://blog.hubspot.com/marketing/marketing-campaigns"

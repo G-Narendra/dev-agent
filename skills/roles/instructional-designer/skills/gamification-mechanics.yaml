@@ -1,0 +1,79 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "gamification-mechanics"
+display_name: "Gamification & Habit Loops"
+description: >
+  Apply game design mechanics (streaks, variable rewards, loss aversion) to 
+  educational software to build daily active habits.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "instructional-designer"
+phase: "growth"
+applicable_startups: 
+  - edtech
+  - consumer
+priority: "high"
+difficulty: "advanced"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "The Streak Mechanic"
+    tasks:
+      - "Implement a visible 'Daily Streak' counter. Allow users to freeze their streak for 1 day using earned virtual currency to mitigate the catastrophic churn that happens when a 100-day streak is broken."
+  - step: "Variable Rewards"
+    tasks:
+      - "Do not give the exact same 'Good Job' badge every time. Use a loot-box style variable reward schedule where completing a hard lesson occasionally yields a rare cosmetic item."
+  - step: "Cognitive Load Management"
+    tasks:
+      - "Keep interactive lessons under 3 minutes. If a concept requires more time, break it into two separate 'levels' to maintain the sense of rapid progression."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Adding a generic 'Leaderboard' to a B2B compliance training app, which just causes anxiety and resentment among employees rather than actually teaching them anything."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Gamification Mechanics process"
+  - "How do I handle gamification mechanics?"
+  - "Implement gamification mechanics"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the gamification mechanics process"
+  optional:
+    - name: "N/A"
+      type: "string"
+      description: "No optional inputs needed."
+
+outputs:
+  files:
+    - path: "outputs/gamification-mechanics.md"
+      description: "Results of the gamification mechanics process"
+  artifacts:
+    - "Completed gamification mechanics deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

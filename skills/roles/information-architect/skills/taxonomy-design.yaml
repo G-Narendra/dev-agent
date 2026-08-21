@@ -1,0 +1,105 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "taxonomy-design"
+display_name: "Information Architecture & Taxonomy Design"
+description: >
+  Brings order to chaos. Designs the structural logic, navigation menus, 
+  and tagging taxonomies for complex websites, documentation portals, and 
+  knowledge bases so users can actually find what they are looking for.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "information-architect"
+phase: "build"
+applicable_startups:
+  - E-commerce, Media, SaaS
+priority: "medium"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Our help center is a mess."
+  - "Users can't find products."
+  - "Redesign the website navigation."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Generate site map taxonomy."
+  - "Draft URL routing structure."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "target_platform"
+      type: "string"
+      description: "E-commerce store, Help Center, App."
+    - name: "primary_user_goal"
+      type: "string"
+      description: "What are they trying to find?"
+  optional:
+    - name: "current_categories"
+      type: "string"
+      description: "List of existing top-level categories."
+      default: "None"
+
+outputs:
+  files:
+    - path: "design/ux/sitemap_taxonomy_v2.md"
+      description: "The structural hierarchy of the entire application."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "N/A"
+manual:
+  - "Time-on-site spent searching decreases by 30%, while completion rates for primary user tasks (e.g., finding a support article or product) increase by 40%."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "The SEO Annihilation Risk: Never drastically change the URL structure and category names of a live e-commerce site without implementing 301 Redirects. If you change `/shoes/sneakers` to `/footwear/athletic`, Google will 404 all old links and your organic traffic will drop to zero overnight."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Lucidchart / Optimal Workshop / Figma"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Card Sorting Exercises"
+    tasks:
+      - "Do not guess how users categorize things. Give 50 users a list of 30 topics (e.g., 'Reset Password', 'Billing') and ask them to group them into buckets. Use their mental models to build the navigation, not your internal company jargon."
+  - step: "The 3-Click Rule Mitigation"
+    tasks:
+      - "The '3-Click Rule' is a myth. Users don't care how many clicks it takes, as long as they feel they are getting closer to the goal. Focus on 'Information Scent'. Ensure every category label gives a strong hint of what is inside."
+  - step: "Faceted Search & Filtering"
+    tasks:
+      - "For e-commerce or large datasets, a strict hierarchy fails (Is a 'Red Running Shoe' under 'Color' or 'Activity'?). Implement Faceted Navigation (tags) so users can filter by multiple attributes simultaneously."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Mirroring the org chart in the navigation. If your website menu is 'Sales', 'Marketing', 'Support', you are designing for yourselves. The user doesn't care about your departments; they care about their problems (e.g., 'Buy', 'Learn', 'Get Help')."
+best_practices:
+  - "Implement 'Breadcrumbs' on every page (e.g., Home > Electronics > Laptops). It grounds the user in the hierarchy and drastically reduces bounce rates from users who arrive deep in the site via a Google search."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Nielsen Norman Group: Information Architecture"
+    url: "https://www.nngroup.com/articles/ia/"

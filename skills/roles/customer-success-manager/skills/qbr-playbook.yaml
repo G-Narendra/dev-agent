@@ -1,0 +1,111 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "qbr-playbook"
+display_name: "Quarterly Business Review (QBR) Playbook"
+description: >
+  Structures the Quarterly Business Review meeting to prove ROI to the 
+  customer's executive sponsor. Shifts the conversation from 'product features' 
+  to 'business outcomes' to secure the upcoming renewal.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "customer-success-manager"
+phase: "growth"
+applicable_startups:
+  - b2b-saas
+priority: "high"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Prepare for the QBR."
+  - "We need to prove value before renewal."
+  - "The executive sponsor wants an update."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Generate QBR slide deck."
+  - "Calculate customer ROI."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "customer_name"
+      type: "string"
+      description: "The enterprise account name."
+    - name: "original_goals"
+      type: "string"
+      description: "Why they bought the software 9 months ago."
+  optional:
+    - name: "usage_metrics"
+      type: "string"
+      description: "Data showing how much they use the tool."
+      default: "None"
+
+outputs:
+  files:
+    - path: "business/success/qbr-deck-template.md"
+      description: "The slide-by-slide QBR agenda."
+  artifacts:
+    - "An ROI calculation sheet."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "N/A"
+manual:
+  - "The customer's Economic Buyer attends the meeting and verbally confirms the software has delivered the expected ROI."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "Do not use the QBR as a training session or a bug-reporting meeting. If the customer brings up a bug, acknowledge it, log it, and steer the conversation back to strategic goals."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Google Slides / Pitch.com"
+      install: "N/A"
+  alternatives:
+    - name: "Gainsight / Catalyst"
+      when: "Auto-generating QBR data at scale."
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Pre-Meeting Prep"
+    tasks:
+      - "Ensure the Executive Sponsor (the person holding the budget) is actually attending. A QBR with just the daily users is a waste of time."
+  - step: "The ROI Slide"
+    tasks:
+      - "Tie usage to dollars. 'Your team used our automation feature 4,000 times this quarter. At 5 minutes saved per use, we saved your company 333 hours, or approximately $16,000 in labor costs.'"
+  - step: "The Roadmap Review"
+    tasks:
+      - "Show them 2-3 upcoming features that align perfectly with their specific business goals for the next quarter."
+  - step: "The Upsell Pivot"
+    tasks:
+      - "If ROI is proven, transition to: 'To hit your Q4 goal of X, we recommend upgrading to the Enterprise tier to unlock Y'."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "A 40-slide deck showing every single feature they clicked on. Executives do not care. Keep it under 10 slides focusing on business impact."
+best_practices:
+  - "Always end the QBR by establishing the specific goals and metrics for the *next* quarter."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Gainsight: How to Run a QBR"
+    url: "https://www.gainsight.com/guides/the-essential-guide-to-quarterly-business-reviews/"

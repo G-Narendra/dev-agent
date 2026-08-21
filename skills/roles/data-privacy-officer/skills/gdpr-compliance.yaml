@@ -1,0 +1,79 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "gdpr-compliance"
+display_name: "GDPR/CCPA Compliance & Data Mapping"
+description: >
+  Map out where all PII (Personally Identifiable Information) is stored across the startup's
+  infrastructure and ensure legal compliance with global privacy laws.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "data-privacy-officer"
+phase: "operations"
+applicable_startups: 
+  - saas
+  - consumer
+priority: "mvp"
+difficulty: "advanced"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Data Mapping"
+    tasks:
+      - "Create a data inventory mapping out every third-party SaaS tool (HubSpot, Mixpanel) that receives user PII."
+  - step: "Deletion Workflows"
+    tasks:
+      - "Implement an automated workflow so that when a user requests deletion, their data is scrubbed from the DB and all connected APIs."
+  - step: "Cookie Consent"
+    tasks:
+      - "Deploy a compliant cookie banner that blocks Google Analytics from firing until the user explicitly clicks 'Accept'."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Storing user passwords and credit card numbers in a plaintext Slack channel for 'easy customer support access'."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Gdpr Compliance process"
+  - "How do I handle gdpr compliance?"
+  - "Implement gdpr compliance"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the gdpr compliance process"
+  optional:
+    - name: "N/A"
+      type: "string"
+      description: "No optional inputs needed."
+
+outputs:
+  files:
+    - path: "outputs/gdpr-compliance.md"
+      description: "Results of the gdpr compliance process"
+  artifacts:
+    - "Completed gdpr compliance deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

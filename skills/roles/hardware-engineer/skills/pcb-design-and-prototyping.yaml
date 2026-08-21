@@ -1,0 +1,79 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "pcb-design-and-prototyping"
+display_name: "PCB Layout & Rapid Prototyping"
+description: >
+  Design circuit schematics, route multi-layer PCBs, and manage the procurement of 
+  components for rapid hardware prototyping.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "hardware-engineer"
+phase: "build"
+applicable_startups: 
+  - hardware
+  - iot
+priority: "mvp"
+difficulty: "expert"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Component Selection"
+    tasks:
+      - "Select MCUs and sensors based not just on performance, but on supply chain availability (checking lead times on DigiKey/Mouser)."
+  - step: "Schematic & Layout"
+    tasks:
+      - "Create the schematic and route the PCB in Altium or KiCad, ensuring proper trace width for high-current paths."
+  - step: "Prototyping"
+    tasks:
+      - "Order Rev A boards from a rapid turnaround fab (e.g., JLCPCB) and perform bring-up testing with an oscilloscope."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Designing a board using a specialized microchip that is facing a global 52-week supply chain shortage, halting all production."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Pcb Design And Prototyping process"
+  - "How do I handle pcb design and prototyping?"
+  - "Implement pcb design and prototyping"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the pcb design and prototyping process"
+  optional:
+    - name: "N/A"
+      type: "string"
+      description: "No optional inputs needed."
+
+outputs:
+  files:
+    - path: "outputs/pcb-design-and-prototyping.md"
+      description: "Results of the pcb design and prototyping process"
+  artifacts:
+    - "Completed pcb design and prototyping deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

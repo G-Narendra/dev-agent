@@ -1,0 +1,79 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "unit-testing"
+display_name: "Unit & Integration Testing (TDD)"
+description: >
+  Write isolated unit tests and robust integration tests to ensure individual functions 
+  and database interactions work perfectly before they hit staging.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "qa-automation-engineer"
+phase: "build"
+applicable_startups: 
+  - all
+priority: "high"
+difficulty: "advanced"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Test Isolation"
+    tasks:
+      - "Mock external APIs and network calls in Unit Tests to ensure they run deterministically and fast (<10ms per test)."
+  - step: "Integration Testing"
+    tasks:
+      - "Use a test database (e.g., Testcontainers) to verify that complex SQL queries return the correct data structures."
+  - step: "Coverage Thresholds"
+    tasks:
+      - "Configure Jest/PyTest to fail the CI build if the code coverage drops below a reasonable threshold (e.g., 80% for critical business logic)."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Writing 'tests' that just assert `expect(true).toBe(true)` in order to falsely inflate the code coverage metric."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Unit Testing process"
+  - "How do I handle unit testing?"
+  - "Implement unit testing"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the unit testing process"
+  optional:
+    - name: "data_source"
+      type: "string"
+      description: "Source of data to analyze"
+      default: "Internal data"
+
+outputs:
+  files:
+    - path: "outputs/unit-testing.md"
+      description: "Results of the unit testing process"
+  artifacts:
+    - "Completed unit testing deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

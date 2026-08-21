@@ -1,0 +1,109 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "rate-limiting-throttling"
+display_name: "API Rate Limiting & Throttling"
+description: >
+  Implement protective limits on API endpoints to prevent abuse, scraping, 
+  and denial-of-service attacks. Covers Token Bucket algorithms, sliding windows, 
+  and tiered limits for free vs paid users.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "backend-engineer"
+phase: "growth"
+applicable_startups:
+  - all
+priority: "critical"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Stop the API abuse."
+  - "Implement rate limiting."
+  - "Users are scraping our database."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "npm install express-rate-limit redis"
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "target_endpoints"
+      type: "string"
+      description: "Which routes need protection? (e.g., '/api/v1/search', '/login')."
+  optional:
+    - name: "storage_backend"
+      type: "string"
+      description: "In-memory vs Redis."
+      default: "Redis"
+
+outputs:
+  files:
+    - path: "src/middleware/rateLimiter.ts"
+      description: "The rate limiting middleware code."
+  artifacts:
+    - "Documentation on HTTP 429 response headers."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "Load tests sending >100 req/sec receive HTTP 429 Too Many Requests."
+  manual:
+    - "Legitimate high-volume users on enterprise tiers are not accidentally blocked."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+
+safety_notes:
+  - "Do not use simple In-Memory rate limiting if running multiple server instances (e.g., a Kubernetes cluster). The limits will not be shared across pods, allowing abusers to bypass the limit by hitting different load balancers. You MUST use a centralized store like Redis."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Redis + Upstash"
+      install: "N/A"
+  alternatives:
+    - name: "Cloudflare WAF"
+      when: "Need to block malicious traffic at the CDN level before it even hits your servers."
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Algorithm Selection"
+    tasks:
+      - "Token Bucket: Allows short bursts of traffic while enforcing a long-term average."
+      - "Sliding Window: Smoother limiting, prevents the 'rush' at the top of the minute that Fixed Window suffers from."
+  - step: "Identifier Selection"
+    tasks:
+      - "For public endpoints (like Login): Limit by IP Address."
+      - "For authenticated endpoints: Limit by User ID or API Key (crucial for SaaS pricing tiers)."
+  - step: "Headers & Feedback"
+    tasks:
+      - "Always return standard headers: `X-RateLimit-Limit`, `X-RateLimit-Remaining`, and `X-RateLimit-Reset` so client apps know when to retry."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Returning a generic 500 Server Error when a user hits a limit. You must return HTTP 429 (Too Many Requests) so client SDKs can automatically back off and retry."
+  - "Limiting login attempts too loosely. `/login` should be strictly limited to ~5 attempts per minute per IP to prevent credential stuffing attacks."
+
+best_practices:
+  - "Implement 'Tiered' limiting. Example: 10 req/min for free users, 1000 req/min for paid API users. Pass the User ID to Redis to check their tier on the fly."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Stripe: Rate Limiters and API Design"
+    url: "https://stripe.com/blog/rate-limiters"

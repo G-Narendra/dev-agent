@@ -1,0 +1,80 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "variance-analysis"
+display_name: "Budget vs. Actuals & Variance Analysis"
+description: >
+  Compare the monthly actual financial performance against the projected budget, 
+  identifying areas of overspend and adjusting the cash runway forecast accordingly.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "financial-analyst"
+phase: "operations"
+applicable_startups: 
+  - all
+priority: "mvp"
+difficulty: "advanced"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Data Aggregation"
+    tasks:
+      - "Export the final monthly ledger from the accounting software."
+      - "Align the actual expenses with the exact cost centers used in the budget model."
+  - step: "Variance Investigation"
+    tasks:
+      - "Identify any department that exceeded their budget by more than 10%."
+      - "Interview the department head to determine if the overspend is a one-time anomaly or a structural issue."
+  - step: "Runway Update"
+    tasks:
+      - "Update the cash runway forecast based on the new, higher (or lower) burn rate."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Ignoring a 5% monthly compounding increase in server costs because 'it's a small number right now', only to realize it cuts the runway by 4 months."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Variance Analysis process"
+  - "How do I handle variance analysis?"
+  - "Implement variance analysis"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the variance analysis process"
+  optional:
+    - name: "N/A"
+      type: "string"
+      description: "No optional inputs needed."
+
+outputs:
+  files:
+    - path: "outputs/variance-analysis.md"
+      description: "Results of the variance analysis process"
+  artifacts:
+    - "Completed variance analysis deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

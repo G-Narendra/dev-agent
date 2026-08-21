@@ -1,0 +1,79 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "kmp-architecture"
+display_name: "Kotlin Multiplatform (KMP) Architecture"
+description: >
+  Share business logic, networking, and data models across iOS and Android using Kotlin 
+  Multiplatform, while maintaining fully native UI layers.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "mobile-developer-kotlin"
+phase: "build"
+applicable_startups: 
+  - consumer
+priority: "high"
+difficulty: "expert"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Shared Logic Separation"
+    tasks:
+      - "Keep the KMP shared module strictly focused on Repositories, Use Cases, and API Clients (Ktor), completely independent of any UI framework."
+  - step: "Concurrency"
+    tasks:
+      - "Use Kotlin Coroutines and Flows in the shared module, exposing them correctly to Swift using libraries like SKIE so iOS engineers can consume them naturally."
+  - step: "Native UI Integration"
+    tasks:
+      - "Build the Android UI purely in Jetpack Compose and the iOS UI purely in SwiftUI, binding them to the shared KMP ViewModels."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Attempting to force UI-specific logic (like screen pixel dimensions or alert dialog configurations) into the shared KMP module, breaking the separation of concerns."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Kmp Architecture process"
+  - "How do I handle kmp architecture?"
+  - "Implement kmp architecture"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the kmp architecture process"
+  optional:
+    - name: "data_source"
+      type: "string"
+      description: "Source of data to analyze"
+      default: "Internal data"
+
+outputs:
+  files:
+    - path: "outputs/kmp-architecture.md"
+      description: "Results of the kmp architecture process"
+  artifacts:
+    - "Completed kmp architecture deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

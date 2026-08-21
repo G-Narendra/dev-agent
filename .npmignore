@@ -1,0 +1,48 @@
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# Virtual environment
+.venv/
+venv/
+env/
+
+# Dev tools
+.dev/
+.devrules/
+*.egg-info/
+dist/
+build/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Git
+.git/
+.gitignore
+
+# Docs (keep README, exclude others)
+ANALYSIS.md
+AUDIT_REPORT.md
+AUDIT_PROMPT.md
+DEV.md
+docs/
+review*.md
+
+# Tests
+tests/
+
+# CI/CD
+.github/
+
+# Build artifacts
+*.tar.gz
+*.whl

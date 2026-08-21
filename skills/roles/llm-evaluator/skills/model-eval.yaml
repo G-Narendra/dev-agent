@@ -1,0 +1,80 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "model-eval"
+display_name: "Automated LLM Evaluation Pipeline"
+description: >
+  Establish a deterministic evaluation framework for non-deterministic LLM outputs using
+  Golden Datasets, RAGAS metrics, and LLM-as-a-Judge.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "llm-evaluator"
+phase: "build"
+applicable_startups: 
+  - ai
+priority: "mvp"
+difficulty: "advanced"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Dataset Construction"
+    tasks:
+      - "Curate 50-100 'Golden' input/output pairs that represent perfect behavior."
+  - step: "Evaluation Metrics"
+    tasks:
+      - "Implement deterministic checks (e.g., 'Did the output contain valid JSON?')."
+      - "Implement LLM-as-a-Judge using a strict scoring rubric (1-5 scale) for nuance (e.g., tone, hallucination)."
+  - step: "CI/CD Integration"
+    tasks:
+      - "Run the eval pipeline on every PR that changes a system prompt or temperature."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Deploying a prompt change to production without running it against the regression dataset."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Model Eval process"
+  - "How do I handle model eval?"
+  - "Implement model eval"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the model eval process"
+  optional:
+    - name: "data_source"
+      type: "string"
+      description: "Source of data to analyze"
+      default: "Internal data"
+
+outputs:
+  files:
+    - path: "outputs/model-eval.md"
+      description: "Results of the model eval process"
+  artifacts:
+    - "Completed model eval deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

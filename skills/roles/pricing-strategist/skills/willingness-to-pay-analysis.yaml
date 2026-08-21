@@ -1,0 +1,84 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "willingness-to-pay-analysis"
+display_name: "Willingness-to-Pay (WTP) Modeling"
+description: >
+  Use quantitative survey data to pinpoint the exact price elasticity curve of the 
+  customer base, maximizing revenue extraction without increasing churn.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "pricing-strategist"
+phase: "planning"
+applicable_startups: 
+  - saas
+  - enterprise
+priority: "high"
+difficulty: "expert"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Van Westendorp Surveying"
+    tasks:
+      - "Ask 100 users the 4 core questions: At what price is it a bargain? Getting expensive? Too expensive to consider? So cheap you doubt the quality? Plot the intersections to find the Optimal Price Point (OPP)."
+  - step: "Feature Conjoint Analysis"
+    tasks:
+      - "Force users to make trade-offs between features in surveys to mathematically determine which features actually drive purchasing decisions (put these in the Pro tier) vs which are 'nice-to-haves'."
+  - step: "Usage-Based Caps"
+    tasks:
+      - "If implementing a freemium model, set the free tier limit just below the point where the user derives massive professional value, forcing the upgrade precisely when they need it."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Asking a customer directly 'How much would you pay for this?', which always results in them lying and saying a number 50% lower than reality."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Willingness To Pay Analysis process"
+  - "How do I handle willingness to pay analysis?"
+  - "Implement willingness to pay analysis"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the willingness to pay analysis process"
+  optional:
+    - name: "data_source"
+      type: "string"
+      description: "Source of data to analyze"
+      default: "Internal data"
+    - name: "target_audience"
+      type: "string"
+      description: "Target user or customer segment"
+      default: "Primary user persona"
+
+outputs:
+  files:
+    - path: "outputs/willingness-to-pay-analysis.md"
+      description: "Results of the willingness to pay analysis process"
+  artifacts:
+    - "Completed willingness to pay analysis deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

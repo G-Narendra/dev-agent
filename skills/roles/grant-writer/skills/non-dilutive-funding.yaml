@@ -1,0 +1,81 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "non-dilutive-funding"
+display_name: "SBIR / Federal Grant Proposal Writing"
+description: >
+  Draft complex, highly technical proposals for Small Business Innovation Research (SBIR) 
+  grants or equivalent federal funding vehicles.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "grant-writer"
+phase: "ideation"
+applicable_startups: 
+  - deeptech
+  - biotech
+priority: "mvp"
+difficulty: "expert"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Topic Alignment"
+    tasks:
+      - "Search agency solicitations (e.g., DOD, NSF) to find a topic that exactly matches the startup's R&D roadmap."
+  - step: "Drafting the Narrative"
+    tasks:
+      - "Write the 'Significance' section, clearly defining the technical hurdle that currently prevents this technology from existing."
+      - "Write the 'Commercialization Plan' detailing the Total Addressable Market and go-to-market strategy."
+  - step: "Budgeting & Submission"
+    tasks:
+      - "Build a compliant budget adhering to strict federal overhead and indirect cost rates."
+      - "Submit through the notoriously difficult government portals (e.g., grants.gov) 48 hours before the deadline."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Writing a marketing pitch instead of a scientific proposal. Evaluators are PhDs looking for technical depth, not buzzwords."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Non Dilutive Funding process"
+  - "How do I handle non dilutive funding?"
+  - "Implement non dilutive funding"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the non dilutive funding process"
+  optional:
+    - name: "N/A"
+      type: "string"
+      description: "No optional inputs needed."
+
+outputs:
+  files:
+    - path: "outputs/non-dilutive-funding.md"
+      description: "Results of the non dilutive funding process"
+  artifacts:
+    - "Completed non dilutive funding deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

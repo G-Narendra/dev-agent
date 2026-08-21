@@ -1,0 +1,79 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "engineering-onboarding"
+display_name: "Engineering Onboarding & Ramp-Up"
+description: >
+  Design the technical onboarding flow so a new engineer can commit code to production 
+  on their very first day, building extreme early momentum.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "technical-lead"
+phase: "growth"
+applicable_startups: 
+  - all
+priority: "high"
+difficulty: "advanced"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Automated Environment Setup"
+    tasks:
+      - "Provide a single bash script (`./setup.sh`) that installs Homebrew, Node, Docker, and pulls the DB credentials automatically."
+  - step: "The 'Good First Issue'"
+    tasks:
+      - "Curate a backlog of isolated, low-risk tickets tagged `good-first-issue` (e.g., fixing a typo, updating a button color) explicitly for Day 1."
+  - step: "Architecture Walkthrough"
+    tasks:
+      - "Conduct a 1-hour whiteboard session explaining data flow from the DB to the UI, explicitly explaining WHY certain tech debt exists so they don't judge it."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Forcing a new Senior Engineer to spend their entire first week manually debugging local Redis connection issues because the README is 3 years out of date."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Engineering Onboarding process"
+  - "How do I handle engineering onboarding?"
+  - "Implement engineering onboarding"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the engineering onboarding process"
+  optional:
+    - name: "code_repository"
+      type: "string"
+      description: "Path to the code repository"
+      default: "./"
+
+outputs:
+  files:
+    - path: "outputs/engineering-onboarding.md"
+      description: "Results of the engineering onboarding process"
+  artifacts:
+    - "Completed engineering onboarding deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

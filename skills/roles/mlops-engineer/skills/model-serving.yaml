@@ -1,0 +1,78 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "model-serving"
+display_name: "High-Throughput Model Serving"
+description: >
+  Deploy ML models behind optimized inference servers (vLLM, Triton) to handle 
+  high concurrency while maximizing GPU utilization.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "mlops-engineer"
+phase: "growth"
+applicable_startups: 
+  - ai
+priority: "high"
+difficulty: "expert"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Dynamic Batching"
+    tasks:
+      - "Configure the inference server to hold incoming requests for up to 50ms to form a 'batch', allowing the GPU to process 16 requests simultaneously instead of sequentially."
+  - step: "PagedAttention"
+    tasks:
+      - "If deploying LLMs, strictly use vLLM or a framework that supports PagedAttention to eliminate memory fragmentation in the KV cache, doubling throughput."
+  - step: "Model Quantization"
+    tasks:
+      - "Serve models in FP8 or INT8 quantization (using AWQ or GPTQ) to fit larger models on cheaper GPUs (like an L4 or T4) without massive latency hits."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Wrapping a PyTorch model in a basic Flask app running on a CPU, causing the endpoint to lock up and crash the moment 5 users try to access it at the same time."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Model Serving process"
+  - "How do I handle model serving?"
+  - "Implement model serving"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the model serving process"
+  optional:
+    - name: "N/A"
+      type: "string"
+      description: "No optional inputs needed."
+
+outputs:
+  files:
+    - path: "outputs/model-serving.md"
+      description: "Results of the model serving process"
+  artifacts:
+    - "Completed model serving deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

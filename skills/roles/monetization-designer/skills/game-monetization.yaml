@@ -1,0 +1,83 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "game-monetization"
+display_name: "Game Monetization & Economy Design"
+description: >
+  Designs and optimizes game monetization strategies including in-app 
+  purchases, battle passes, subscriptions, and ads. Balances player 
+  satisfaction with revenue goals through economic system design.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "monetization-designer"
+phase: "growth"
+applicable_startups:
+  - gaming
+priority: "high"
+difficulty: "advanced"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Monetization Model"
+    tasks:
+      - "Design monetization model (IAP, battle pass, subscription, ads)."
+      - "Price point testing and willingness-to-pay analysis."
+  - step: "Virtual Economy"
+    tasks:
+      - "Design virtual currency systems with sinks and faucets."
+      - "Balance free vs. premium progression curves."
+  - step: "Analytics & Optimization"
+    tasks:
+      - "Track conversion funnel (install → payer → repeat payer)."
+      - "A/B test monetization features for LTV optimization."
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Game Monetization process"
+  - "How do I handle game monetization?"
+  - "Implement game monetization"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the game monetization process"
+  optional:
+    - name: "N/A"
+      type: "string"
+      description: "No optional inputs needed."
+
+outputs:
+  files:
+    - path: "outputs/game-monetization.md"
+      description: "Results of the game monetization process"
+  artifacts:
+    - "Completed game monetization deliverable"
+# ── QUALITY GATES ────────────────────────────────────────────
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start — retrofitting is expensive."
+anti_patterns:
+  - "Designing pay-to-win mechanics that drive away the free-to-play player base."
+  - "Setting prices based on gut feel instead of willingness-to-pay analysis."
+  - "Not balancing the virtual economy — inflation destroys both payer and free player experience."
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

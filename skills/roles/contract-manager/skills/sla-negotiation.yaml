@@ -1,0 +1,112 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "sla-negotiation"
+display_name: "Service Level Agreement (SLA) Design"
+description: >
+  Define and negotiate the Service Level Agreement (SLA) for enterprise customers. 
+  Balances the customer's need for guaranteed uptime (e.g., 99.9%) and rapid support 
+  responses against the engineering team's actual realistic capabilities.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "contract-manager"
+phase: "growth"
+applicable_startups:
+  - b2b-saas
+  - enterprise
+priority: "critical"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "What is our SLA?"
+  - "The client wants 99.99% uptime."
+  - "Define our support response times."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Create an SLA definitions document."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "current_uptime"
+      type: "string"
+      description: "The historical uptime average of the platform over the last 90 days."
+    - name: "support_coverage"
+      type: "string"
+      description: "Support team hours (e.g., '24/7' vs '9-5 EST')."
+  optional:
+    - name: "tier"
+      type: "string"
+      description: "Standard vs Premium Support SLA."
+      default: "Standard"
+
+outputs:
+  files:
+    - path: "legal/service-level-agreement.md"
+      description: "The official SLA contract language."
+  artifacts:
+    - "A calculation of the maximum financial penalty for breaking the SLA."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "N/A"
+  manual:
+    - "Engineering agrees they can comfortably hit the SLA without requiring constant midnight page-outs."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+
+safety_notes:
+  - "Never agree to 99.99% ('Four Nines') uptime unless your infrastructure is genuinely multi-region, active-active, and highly mature. 99.99% means less than 5 minutes of downtime *per month*."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Statuspage.io"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Uptime Definition"
+    tasks:
+      - "Clearly define 'Downtime'. It should only include unplanned outages of the *core* service, not scheduled maintenance or third-party outages (e.g., AWS going down)."
+      - "Set standard uptime at 99.9% (43 minutes of allowed downtime per month)."
+  - step: "Support Severity Levels"
+    tasks:
+      - "Define Severity 1 (Critical: Core system down for all users). Response time: 1 hour."
+      - "Define Severity 2 (High: Feature broken but workaround exists). Response time: 4 hours."
+      - "Define Severity 3 (Low: General question). Response time: 24 business hours."
+  - step: "Financial Penalties (Service Credits)"
+    tasks:
+      - "If the SLA is breached, do NOT agree to cash refunds or right to terminate. Agree to 'Service Credits' (e.g., 'If uptime drops below 99.9%, you get 10% off next month's bill')."
+      - "Cap total service credits at 30% or 50% of the monthly fee."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Promising a 1-hour 'Resolution Time'. You can promise a 1-hour *Response* Time, but you can never guarantee how long a complex bug will take to fix."
+  - "Including beta features or free tiers in the SLA calculation. SLAs should only apply to paid, production systems."
+
+best_practices:
+  - "Require the customer to explicitly *claim* the service credit within 30 days of an outage. Do not apply them automatically. Many customers won't bother claiming them for minor blips."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Atlassian: SLA Best Practices"
+    url: "https://www.atlassian.com/itsm/service-request-management/slas"

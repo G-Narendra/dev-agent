@@ -1,0 +1,114 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "hipaa-compliance"
+display_name: "HIPAA & Healthcare Data Compliance"
+description: >
+  Keeps the founders out of federal prison. Ensures all software architecture, 
+  data storage, and employee processes comply with the Health Insurance 
+  Portability and Accountability Act (HIPAA). Covers key patterns to avoid common pitfalls like documenting compliance controls only at audit time -- contin, and provides actionable best practices for production-ready results.
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "healthcare-compliance-officer"
+phase: "operations"
+applicable_startups:
+  - HealthTech, MedTech, BioTech
+priority: "critical"
+difficulty: "expert"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Are we HIPAA compliant?"
+  - "We need a BAA from AWS."
+  - "How do we store patient data safely?"
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Generate Business Associate Agreement (BAA)."
+  - "Draft HIPAA risk assessment."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "data_type"
+      type: "string"
+      description: "PHI (Protected Health Information)."
+    - name: "storage_location"
+      type: "string"
+      description: "Where does the data live? (AWS, GCP, local)."
+  optional:
+    - name: "third_party_vendors"
+      type: "string"
+      description: "List of tools touching the data (e.g., Slack, Zendesk)."
+      default: "None"
+
+outputs:
+  files:
+    - path: "compliance/healthcare/hipaa_audit_report.md"
+      description: "The technical and administrative safeguards implemented."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "N/A"
+manual:
+  - "The startup passes a third-party HIPAA audit, securing a SOC 2 Type II + HIPAA certification to sell to major hospital networks."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "The Unsecured PHI Violation: Never send Protected Health Information (PHI) like patient names or diagnoses over unencrypted channels (e.g., regular SMS, standard email, or public Slack channels). A single breach of 500+ records requires notifying the Department of Health and Human Services (HHS) and local media, destroying the startup's reputation."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Vanta / Drata / AWS Artifact"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "The BAA (Business Associate Agreement) Audit"
+    tasks:
+      - "You must sign a BAA with EVERY vendor that touches your data. AWS, Google Workspace, Datadog, Zendesk. If a vendor refuses to sign a BAA (e.g., OpenAI's free tier), you CANNOT send PHI to them. Period."
+      - "Add environment variable validation that crashes fast on missing required values."
+  - step: "Encryption at Rest and in Transit"
+    tasks:
+      - "Ensure all RDS/Postgres databases have 'Encryption at Rest' enabled via AWS KMS. Ensure all web traffic is forced to HTTPS (TLS 1.2 or higher). Unencrypted PHI is an immediate HIPAA violation."
+  - step: "Access Controls & Audit Logging"
+    tasks:
+      - "Developers cannot have 'God Mode' access to production patient data. Implement Principle of Least Privilege. Furthermore, every time a user (or admin) views a patient record, it MUST be logged (Who, What, When) and retained for 6 years."
+      - "Create a test data factory/seeder so tests are deterministic and repeatable."
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Documenting compliance controls only at audit time -- continuous monitoring is cheaper and less stressful than point-in-time fire drills."
+  - "Storing user data indefinitely without a retention policy -- violating 'data minimization' principles of GDPR and CCPA."
+  - "Using the same security controls for all data classifications -- PII, PHI, and public data need different access tiers."
+  - "Writing policies without testing them against real scenarios -- a policy that no one can follow is worse than no policy."
+  - "Failing to log access to sensitive data -- without an audit trail, you can't prove compliance during an investigation."
+best_practices:
+  - "Implement MDM (Mobile Device Management). If a doctor or employee loses their laptop, you must have the ability to remotely wipe the hard drive. If the drive is encrypted and remotely wiped, it is not considered a 'breach' under the HIPAA Safe Harbor rule."
+
+  - "Map all data flows from collection through processing to deletion before implementing any compliance program."
+  - "Implement data retention and deletion schedules from day one — deleting old data on request is harder than auto-expiring it."
+  - "Document security controls continuously, not just before an audit — the evidence you need is fresh when captured in real-time."
+  - "Conduct tabletop incident response exercises quarterly — the first time you test your IR plan should not be during a real breach."
+  - "Use automated compliance monitoring tools (Vanta, Drata, Secureframe) instead of manual spreadsheets."
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "HHS: HIPAA for Professionals"
+    url: "https://www.hhs.gov/hipaa/for-professionals/index.html"

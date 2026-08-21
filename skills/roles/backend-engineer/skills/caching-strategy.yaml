@@ -1,0 +1,83 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "caching-strategy"
+display_name: "Caching Strategy & Redis Architecture"
+description: >
+  Implement distributed caching layers (Redis) to offload heavy database reads, handle 
+  rate limiting, and manage session states for stateless API architectures.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "backend-engineer"
+phase: "growth"
+applicable_startups: 
+  - all
+priority: "high"
+difficulty: "advanced"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Read-Through Caching"
+    tasks:
+      - "Cache the results of heavily requested, rarely changing database queries (e.g., User Profiles) in Redis with a TTL."
+  - step: "Cache Invalidation"
+    tasks:
+      - "Implement a pub/sub or event-driven mechanism to actively delete the Redis key whenever the underlying Postgres record is updated."
+  - step: "Rate Limiting"
+    tasks:
+      - "Use Redis sliding window algorithms to enforce API rate limits and protect the backend from abuse."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Implementing caching without an invalidation strategy, resulting in users seeing data that is 2 hours out of date because the TTL hasn't expired."
+
+best_practices:
+  - "Design APIs with idempotency in mind -- same request, same result."
+  - "Always validate inputs at the API boundary before processing."
+  - "Use database transactions for operations that modify multiple records."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Caching Strategy process"
+  - "How do I handle caching strategy?"
+  - "Implement caching strategy"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the caching strategy process"
+  optional:
+    - name: "data_source"
+      type: "string"
+      description: "Source of data to analyze"
+      default: "Internal data"
+    - name: "code_repository"
+      type: "string"
+      description: "Path to the code repository"
+      default: "./"
+
+outputs:
+  files:
+    - path: "outputs/caching-strategy.md"
+      description: "Results of the caching strategy process"
+  artifacts:
+    - "Completed caching strategy deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "PostgreSQL Documentation"
+    url: "https://postgresql.org/docs"
+  - title: "Node.js Documentation"
+    url: "https://nodejs.org/en/docs/"

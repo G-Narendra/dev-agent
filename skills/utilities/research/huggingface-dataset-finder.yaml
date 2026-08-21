@@ -1,0 +1,121 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "huggingface-dataset-finder"
+display_name: "HuggingFace Dataset & Model Search"
+description: >
+  Searches HuggingFace Hub for real datasets, pre-trained models, and Spaces 
+  that are relevant to the startup's domain. Enables teams to leverage 
+  existing open-source AI resources instead of building from scratch.
+  Finds everything from training datasets to deployable demo apps.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "utility"
+phase: "all"
+applicable_startups:
+  - ai
+  - developer-tools
+  - saas
+priority: "high"
+difficulty: "intermediate"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Find a dataset for this problem."
+  - "Is there a pre-trained model for X?"
+  - "Search HuggingFace for training data."
+  - "What open-source models exist for this use case?"
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Search HuggingFace Hub via API."
+  - "Analyze dataset quality and licensing."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "search_topic"
+      type: "string"
+      description: "The domain or task (e.g., 'sentiment analysis for financial news', 'Tamil speech recognition')."
+    - name: "resource_type"
+      type: "string"
+      description: "What to search for: 'datasets', 'models', 'spaces', or 'all'."
+      default: "all"
+  optional:
+    - name: "min_downloads"
+      type: "integer"
+      description: "Minimum number of downloads to filter for quality."
+      default: 100
+    - name: "license_filter"
+      type: "string"
+      description: "Preferred license (e.g., 'mit', 'apache-2.0', 'cc-by-4.0')."
+      default: "any"
+
+outputs:
+  files:
+    - path: "research/huggingface-resources-{topic}.md"
+      description: "A curated list of the most relevant datasets, models, and Spaces found."
+  artifacts:
+    - "A shortlist of top 3 resources with download links and license notes."
+    - "Quality assessment: is the dataset clean? Is the model actively maintained?"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "N/A"
+  manual:
+    - "The team saved at least 2 weeks of data collection or model training time by finding a suitable resource."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "network"
+
+safety_notes:
+  - "License Compliance: A dataset may be CC-BY (attribution required) or CC-BY-NC (non-commercial only). Commercial startups MUST avoid NC-licensed data or risk legal issues."
+  - "Data Quality: High download counts do NOT guarantee data quality. Check the dataset viewer and sample rows before committing."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "HuggingFace Hub API"
+      install: "pip install huggingface-hub"
+  alternatives:
+    - name: "HuggingFace Website Search"
+      when: "Manual browsing is preferred."
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Search Datasets"
+    tasks:
+      - "Use HuggingFace Hub API: `huggingface_hub.list_datasets(search=search_topic)`"
+      - "Filter by `downloads > min_downloads` to ensure it's battle-tested."
+      - "Check the `tags` field for language, task, and license metadata."
+      - "Open the dataset viewer and inspect 5-10 rows to verify data quality."
+  - step: "Search Models"
+    tasks:
+      - "Use HuggingFace Hub API: `huggingface_hub.list_models(search=search_topic)`"
+      - "Filter by `pipeline_tag` (e.g., 'text-classification', 'automatic-speech-recognition')."
+      - "Check the model card for training data, evaluation metrics, and bias disclosures."
+      - "Verify the model has been pushed recently (not abandoned for 2+ years)."
+  - step: "Search Spaces (Demo Apps)"
+    tasks:
+      - "Search for Spaces that demonstrate the model in action."
+      - "Check if the Space's code can be forked or adapted for the startup's use case."
+  - step: "Compile Recommendations"
+    tasks:
+      - "Create a markdown report with: dataset/model name, HF link, download count, license, quality notes."
+      - "Flag any NC-licensed resources clearly so the team doesn't accidentally use them commercially."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Assuming the most downloaded model is the best. The 'tiny' version may be more practical for production latency."
+  - "Ignoring dataset licenses. Using NC data commercially can get the startup sued."
+
+best_practices:
+  - "Prefer datasets with a clear `data/labeling methodology` section. Vague descriptions usually mean low quality."
+  - "For models, check the `model card` for bias evaluations. A model trained on Reddit comments will not perform well on formal business documents."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "HuggingFace Hub API Documentation"
+    url: "https://huggingface.co/docs/hub/en/api"
+  - title: "HuggingFace Datasets Library"
+    url: "https://huggingface.co/docs/datasets/en/index"

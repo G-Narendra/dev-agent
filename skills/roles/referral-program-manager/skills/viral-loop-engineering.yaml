@@ -1,0 +1,107 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "viral-loop-engineering"
+display_name: "Viral Loop & Product-Led Growth Mechanics"
+description: >
+  Design 'intrinsic' viral loops where a user simply using the product inherently 
+  markets it to others (e.g., Calendly links, Zoom invites, 'Sent with iPhone' signatures). 
+  This is fundamentally different from 'extrinsic' bribery (e.g., 'Invite a friend for $10').
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "referral-program-manager"
+phase: "growth"
+applicable_startups:
+  - all
+priority: "critical"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "How do we make the product viral?"
+  - "Design a viral loop."
+  - "Implement product-led growth."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Create a viral coefficient model."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "core_value_prop"
+      type: "string"
+      description: "The primary action a user takes in the app."
+  optional:
+    - name: "collaboration_model"
+      type: "string"
+      description: "Is this a single-player or multi-player app?"
+      default: "Single-player"
+
+outputs:
+  files:
+    - path: "growth/viral-loop-design.md"
+      description: "The mechanics of the intrinsic referral system."
+  artifacts:
+    - "A map of the viral cycle time (time from user joining to user inviting)."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "Viral Coefficient (K-factor) is > 0.5 (Every 2 users bring in 1 new user for free)."
+  manual:
+    - "The referral mechanism feels natural to the product's use case, not forced."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+
+safety_notes:
+  - "Do not scrape a user's address book and send spam invites on their behalf without explicit, opt-in consent. This is illegal (CAN-SPAM/GDPR) and destroys trust."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Figma / Product Analytics"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Identify the 'Exhibition' Moment"
+    tasks:
+      - "Find the moment where the product naturally touches a non-user (e.g., sharing a dashboard, sending an invoice, hosting a meeting)."
+  - step: "Inject the Hook"
+    tasks:
+      - "Add a low-friction 'Powered by [Startup Name]' badge or link to that exhibition moment."
+  - step: "Optimize the Landing Experience"
+    tasks:
+      - "When the non-user clicks the link, they should land on a page that not only shows them the shared content, but immediately pitches the value of signing up themselves."
+  - step: "Reduce Cycle Time"
+    tasks:
+      - "Ensure the exhibition moment happens as early in the user lifecycle as possible. A loop that takes 3 days to trigger is exponentially more viral than one that takes 30 days."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Forcing users to invite 3 friends before they are allowed to use the product (Gated virality). This causes massive churn and fake email signups."
+  - "Building viral features into a product that has terrible retention. If a leaky bucket goes viral, it just runs out of water faster."
+
+best_practices:
+  - "Make the 'Powered by' badge removable only on paid tiers. This acts as both a viral loop (for free users) and an upgrade incentive (for premium users)."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Andrew Chen: Viral Loops"
+    url: "https://andrewchen.com/viral-product-design/"

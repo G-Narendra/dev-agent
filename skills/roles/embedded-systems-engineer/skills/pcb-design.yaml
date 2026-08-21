@@ -1,0 +1,81 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "pcb-design"
+display_name: "PCB Design & Firmware Integration"
+description: >
+  Design the physical schematic and layout of Printed Circuit Boards (PCBs) and write
+  the low-level driver code to interface with the components.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "embedded-systems-engineer"
+phase: "build"
+applicable_startups: 
+  - hardware
+priority: "mvp"
+difficulty: "expert"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Schematic Design"
+    tasks:
+      - "Select the appropriate MCU (e.g., STM32, ESP32) based on I/O and power requirements."
+      - "Design the power delivery network (LDOs, Buck Converters)."
+  - step: "PCB Layout"
+    tasks:
+      - "Route high-speed differential pairs (e.g., USB, Ethernet) with precise impedance matching."
+      - "Implement proper ground planes to mitigate EMI."
+  - step: "Firmware Integration"
+    tasks:
+      - "Write the C/C++ drivers to communicate with sensors over I2C, SPI, or UART."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Routing a high-speed noisy digital signal directly underneath an ultra-sensitive analog trace."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Pcb Design process"
+  - "How do I handle pcb design?"
+  - "Implement pcb design"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the pcb design process"
+  optional:
+    - name: "code_repository"
+      type: "string"
+      description: "Path to the code repository"
+      default: "./"
+
+outputs:
+  files:
+    - path: "outputs/pcb-design.md"
+      description: "Results of the pcb design process"
+  artifacts:
+    - "Completed pcb design deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

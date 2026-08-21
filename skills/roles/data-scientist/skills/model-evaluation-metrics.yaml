@@ -1,0 +1,110 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "model-evaluation-metrics"
+display_name: "Model Evaluation & Metric Selection"
+description: >
+  Choose the correct mathematical metric to evaluate a machine learning model based 
+  on the business objective. Prevents the dangerous mistake of optimizing for 
+  'Accuracy' on highly imbalanced datasets.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "data-scientist"
+phase: "build"
+applicable_startups:
+  - all
+priority: "critical"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Evaluate the model."
+  - "Is this model good enough?"
+  - "Calculate the F1 score."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "python scripts/evaluate_model.py"
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "y_true"
+      type: "string"
+      description: "The actual labels (Ground Truth)."
+    - name: "y_pred"
+      type: "string"
+      description: "The labels predicted by the model."
+  optional:
+    - name: "business_goal"
+      type: "string"
+      description: "Minimize False Positives vs Minimize False Negatives."
+      default: "Balanced"
+
+outputs:
+  files:
+    - path: "reports/model-evaluation.md"
+      description: "The detailed breakdown of model performance."
+  artifacts:
+    - "A Confusion Matrix visualization."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "N/A"
+  manual:
+    - "The chosen metric perfectly aligns with the financial risk of the business (e.g., heavily penalizing false negatives in fraud detection)."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+
+safety_notes:
+  - "The 'Accuracy' Trap: If 99% of transactions are legitimate and 1% are fraud, a dumb model that just outputs 'Legitimate' every single time will be 99% Accurate, but completely useless for catching fraud. NEVER use Accuracy for imbalanced classes."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Scikit-Learn Metrics"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Classification Metrics (Imbalanced Data)"
+    tasks:
+      - "Precision: Out of all the transactions the model flagged as Fraud, how many were actually Fraud? (Optimize this if False Positives are expensive, e.g., blocking a good customer's credit card)."
+      - "Recall: Out of all the actual Fraud transactions, how many did the model catch? (Optimize this if False Negatives are expensive, e.g., letting a hacker into the system)."
+      - "F1 Score: The harmonic mean of Precision and Recall. Use this for a balanced metric."
+  - step: "Regression Metrics (Predicting Numbers)"
+    tasks:
+      - "RMSE (Root Mean Squared Error): Penalizes large errors heavily. Use this if a prediction being off by $1000 is much worse than being off by $10."
+      - "MAE (Mean Absolute Error): Treats all errors linearly. Easier to explain to non-technical stakeholders ('We are off by $5 on average')."
+  - step: "The ROC-AUC Curve"
+    tasks:
+      - "Plot the True Positive Rate against the False Positive Rate across all classification thresholds. An AUC of 0.5 is random guessing. An AUC of 1.0 is perfect."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Evaluating the model on the Training Data. This will always show an artificially high score due to overfitting. You MUST evaluate on a holdout Test Set that the model has never seen."
+  - "Treating a 0.5 classification threshold as sacred. If you need 99% Recall to catch cancer, lower the threshold to 0.1 so the model flags anything even remotely suspicious for human review."
+
+best_practices:
+  - "Calculate the 'Baseline Model'. If your complex Neural Network achieves 85% accuracy, but a simple heuristic rule ('If user age < 18, predict X') achieves 84% accuracy, throw away the Neural Network."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Google ML Crash Course: Classification"
+    url: "https://developers.google.com/machine-learning/crash-course/classification/true-false-positive-negative"

@@ -1,0 +1,79 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "crm-architecture"
+display_name: "CRM Architecture & Sales Automation"
+description: >
+  Architect the CRM (Salesforce/HubSpot) to track the entire customer journey, build 
+  executive forecasting dashboards, and automate lead routing.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "sales-ops-manager"
+phase: "growth"
+applicable_startups: 
+  - b2b
+priority: "mvp"
+difficulty: "advanced"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Pipeline Architecture"
+    tasks:
+      - "Define strict entry and exit criteria for every stage of the sales pipeline (e.g., 'To move to Stage 3, a technical PoC must be scheduled')."
+  - step: "Automation"
+    tasks:
+      - "Implement lead routing rules to instantly assign inbound leads to the correct rep based on territory and company size."
+  - step: "Reporting"
+    tasks:
+      - "Build the 'CEO Dashboard' showing Pipeline Velocity, Win Rate, and Forecasted Revenue."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Adding 45 mandatory, manually-typed text fields to the CRM Opportunity object, causing reps to stop updating the CRM entirely because it takes too long."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Crm Architecture process"
+  - "How do I handle crm architecture?"
+  - "Implement crm architecture"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the crm architecture process"
+  optional:
+    - name: "target_audience"
+      type: "string"
+      description: "Target user or customer segment"
+      default: "Primary user persona"
+
+outputs:
+  files:
+    - path: "outputs/crm-architecture.md"
+      description: "Results of the crm architecture process"
+  artifacts:
+    - "Completed crm architecture deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

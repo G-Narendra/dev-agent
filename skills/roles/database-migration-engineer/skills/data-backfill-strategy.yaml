@@ -1,0 +1,111 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "data-backfill-strategy"
+display_name: "Safe Data Backfilling & Transformation"
+description: >
+  Designs and executes scripts to populate new columns, migrate data between tables, 
+  or transform millions of rows without overwhelming the production database CPU 
+  or memory.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "database-migration-engineer"
+phase: "growth"
+applicable_startups:
+  - all
+priority: "high"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Write a script to backfill the missing data."
+  - "Populate the new column for all 10 million users."
+  - "Migrate data from table A to table B."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Execute batching script."
+  - "Monitor DB CPU utilization."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "target_table"
+      type: "string"
+      description: "The table being modified."
+    - name: "row_count"
+      type: "string"
+      description: "Estimated number of rows (e.g., '5 million')."
+  optional:
+    - name: "batch_size"
+      type: "string"
+      description: "How many rows to process per transaction."
+      default: "1000"
+
+outputs:
+  files:
+    - path: "scripts/backfills/2023_backfill_users.ts"
+      description: "The idempotent backfill script."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "Running the script twice results in the exact same database state (Idempotency)."
+  manual:
+    - "Production database CPU does not spike above 80% during the script execution."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+
+safety_notes:
+  - "Never run an `UPDATE users SET new_col = 'default'` on a large table without a `WHERE` clause. It will lock the entire table and take down the application."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Node.js / Python worker"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Cursor-Based Pagination"
+    tasks:
+      - "Do NOT use `OFFSET / LIMIT` for backfilling. It gets exponentially slower. Use a cursor-based approach: `WHERE id > last_processed_id LIMIT 1000`."
+  - step: "Idempotency Check"
+    tasks:
+      - "Ensure the script checks if the row already has the data before updating: `WHERE new_col IS NULL`."
+  - step: "Throttling / Sleep"
+    tasks:
+      - "Add a small delay (e.g., `sleep(50ms)`) between batches. A backfill script should take hours to run quietly in the background, not finish in 2 minutes while locking out real users."
+  - step: "Logging and Resumability"
+    tasks:
+      - "Log the `last_processed_id` constantly. If the script crashes, you must be able to restart it exactly where it left off."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Pulling 5 million rows into application memory (`SELECT * FROM users`), mapping over them, and writing them back. You will OOM (Out of Memory) crash the server."
+  - "Doing a massive backfill inside a single SQL transaction. If it fails at 99%, the entire thing rolls back, wasting hours of compute."
+
+best_practices:
+  - "Test the backfill script on a copy of the production database (staging) to measure exactly how long it takes and how much CPU it consumes."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Stripe: Online Migrations at Scale"
+    url: "https://stripe.com/blog/online-migrations"

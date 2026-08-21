@@ -1,0 +1,115 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "cac-optimization"
+display_name: "Performance Marketing & CAC Optimization"
+description: >
+  Masters the algorithms. Manages massive ad budgets across Google, Meta, 
+  and LinkedIn, ruthlessly optimizing bids, creative, and audiences to 
+  acquire customers at the lowest possible Customer Acquisition Cost (CAC). Covers key patterns to avoid common pitfalls like launching a campaign without utm parameters -- you won't kno, and provides actionable best practices for production-ready results.
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "performance-marketing-manager"
+phase: "growth"
+applicable_startups:
+  - D2C, B2B SaaS, Consumer Tech
+priority: "high"
+difficulty: "expert"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Our Facebook ads are too expensive."
+  - "Scale the Google Ads budget."
+  - "Why did our CPA double this week?"
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Generate ad account audit script."
+  - "Draft A/B testing matrix for creatives."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "ad_platform"
+      type: "string"
+      description: "Meta, Google, LinkedIn."
+    - name: "target_cpa"
+      type: "string"
+      description: "What is the maximum we can pay for a lead?"
+  optional:
+    - name: "daily_budget"
+      type: "string"
+      description: "How much are we spending a day?"
+      default: "$1,000/day"
+
+outputs:
+  files:
+    - path: "marketing/performance/q3_meta_ads_strategy.md"
+      description: "The campaign architecture and bidding rules."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "N/A"
+manual:
+  - "The blended Cost Per Acquisition (CPA) decreases by 20% while total conversion volume increases, achieving positive Return on Ad Spend (ROAS)."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "The 'Broad Match' Budget Burn: Never use Google Ads 'Broad Match' keywords without a massive negative keyword list. If you bid on 'Enterprise Software' (Broad), Google will spend $5,000 showing your ad to people searching for 'Free software downloads'. Use Exact or Phrase match."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Meta Ads Manager / Google Ads / TripleWhale"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Account Consolidation (The Algorithm Feeds on Data)"
+    tasks:
+      - "Do not create 50 different micro-campaigns with $10 budgets. The AI needs at least 50 conversions per week to exit the 'Learning Phase'. Consolidate into 3 massive campaigns to feed the algorithm enough data to optimize."
+      - "Add database migration testing -- test both up and down migrations in CI."
+  - step: "Creative Testing Framework"
+    tasks:
+      - "In modern performance marketing, the Creative IS the targeting. Do not test 5 completely different videos at once. Test systematically: Same video, 3 different hooks (first 3 seconds). Find the winning hook, then test 3 different Call-to-Actions."
+      - "Create a test data factory/seeder so tests are deterministic and repeatable."
+  - step: "Offline Conversion Tracking (CAPI)"
+    tasks:
+      - "The iOS14 update killed browser pixel tracking. You must implement the Conversions API (CAPI) to send server-side purchase data directly from your backend (Stripe/Shopify) back to Meta, or Meta will under-report your ROI by 30%."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Launching a campaign without UTM parameters -- you won't know which channel drove the conversions."
+  - "A/B testing with a sample size too small to reach statistical significance -- making decisions on noise rather than signal."
+  - "Optimizing for vanity metrics (impressions, page views) instead of actionable KPIs (conversion rate, revenue, retention)."
+  - "Running ads without conversion tracking pixel installed -- you're paying for clicks but can't measure ROI."
+  - "Ignoring mobile page speed for SEO -- Google's mobile-first indexing means a slow mobile site kills rankings."
+best_practices:
+  - "Implement 'First-Party Data Lookalikes'. Do not rely on Facebook's internal interests. Export a CSV of your top 1,000 Highest LTV customers, upload it to Facebook, and create a 1% Lookalike Audience. Let the AI find their twins."
+
+  - "Set up end-to-end conversion tracking before launching any campaign — measure from impression to purchase."
+  - "Run A/B tests until they reach 95% statistical significance before making decisions — premature conclusions are worse than no test."
+  - "Build audience segments based on behavior, not just demographics — what users do is more predictive than who they are."
+  - "Test email deliverability (SPF, DKIM, DMARC) before sending any campaign — authentication failures land in spam folders."
+  - "Create a content calendar 30 days ahead and batch-create content — consistency beats intensity in content marketing."
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Meta Business: Best Practices for Performance"
+    url: "https://www.facebook.com/business/help/"

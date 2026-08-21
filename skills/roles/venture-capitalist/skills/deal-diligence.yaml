@@ -1,0 +1,79 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "deal-diligence"
+display_name: "Startup Due Diligence & Deal Execution"
+description: >
+  Evaluate hundreds of pitch decks, run deep technical/market due diligence on the top 1%, 
+  and negotiate the Term Sheet to secure an equity position.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "venture-capitalist"
+phase: "planning"
+applicable_startups: 
+  - all
+priority: "mvp"
+difficulty: "expert"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Sourcing & Screening"
+    tasks:
+      - "Review pitch decks focusing on Total Addressable Market (TAM). If the TAM is under $1B, pass immediately."
+  - step: "Deep Diligence"
+    tasks:
+      - "Conduct reference calls on the founders with their previous managers/investors."
+      - "Hire external experts to validate the startup's core technical claims (especially in DeepTech/BioTech)."
+  - step: "Term Sheet Negotiation"
+    tasks:
+      - "Structure the deal (Valuation, Board Seats, Pro-Rata rights, and Liquidation Preferences)."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Investing in a 'lifestyle business' that maxes out at $5M/year in revenue, which will never provide the exit multiple required by the fund."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Deal Diligence process"
+  - "How do I handle deal diligence?"
+  - "Implement deal diligence"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the deal diligence process"
+  optional:
+    - name: "N/A"
+      type: "string"
+      description: "No optional inputs needed."
+
+outputs:
+  files:
+    - path: "outputs/deal-diligence.md"
+      description: "Results of the deal diligence process"
+  artifacts:
+    - "Completed deal diligence deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

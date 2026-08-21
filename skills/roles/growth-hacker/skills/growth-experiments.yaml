@@ -1,0 +1,79 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "growth-experiments"
+display_name: "Growth Hacking & Experiment Design"
+description: >
+  Design and execute high-velocity marketing and product experiments to identify new 
+  acquisition channels and optimize the funnel conversion rate.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "growth-hacker"
+phase: "growth"
+applicable_startups: 
+  - consumer
+  - saas
+priority: "high"
+difficulty: "advanced"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "ICE Scoring"
+    tasks:
+      - "Prioritize the backlog of growth ideas using ICE: Impact (how big?), Confidence (how sure?), and Ease (how fast to build?)."
+  - step: "The Minimum Viable Test"
+    tasks:
+      - "Instead of building a 3-week referral program, manually email 100 users asking them to refer a friend to test if they actually care about the incentive."
+  - step: "Post-Experiment Analysis"
+    tasks:
+      - "Document the result of every failed experiment in a central 'Learnings' database to ensure the company never runs the same failed test twice."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Running 5 growth experiments simultaneously on the homepage, making it mathematically impossible to attribute which change actually caused the 10% increase in signups."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Growth Experiments process"
+  - "How do I handle growth experiments?"
+  - "Implement growth experiments"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the growth experiments process"
+  optional:
+    - name: "N/A"
+      type: "string"
+      description: "No optional inputs needed."
+
+outputs:
+  files:
+    - path: "outputs/growth-experiments.md"
+      description: "Results of the growth experiments process"
+  artifacts:
+    - "Completed growth experiments deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Reforge Blog"
+    url: "https://www.reforge.com/blog"
+  - title: "GrowthHackers"
+    url: "https://growthhackers.com"

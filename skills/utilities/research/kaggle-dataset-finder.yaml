@@ -1,0 +1,116 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "kaggle-dataset-finder"
+display_name: "Kaggle Dataset & Competition Research"
+description: >
+  Searches Kaggle for real-world datasets, competition solutions, and notebooks. 
+  Kaggle hosts thousands of high-quality datasets curated by the data science 
+  community, along with winning solutions from competitions that reveal 
+  state-of-the-art approaches. Uses Kaggle's free tier (no paid API needed).
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "utility"
+phase: "all"
+applicable_startups:
+  - ai
+  - data-engineer
+  - all
+priority: "medium"
+difficulty: "intermediate"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Find a real dataset for this problem."
+  - "Search Kaggle for training data."
+  - "What Kaggle competition solved this?"
+  - "Find notebooks for this approach."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Search Kaggle datasets via web search."
+  - "Extract competition-winning approaches."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "problem_domain"
+      type: "string"
+      description: "The domain or problem (e.g., 'credit card fraud detection', 'plant disease classification')."
+  optional:
+    - name: "resource_type"
+      type: "string"
+      description: "'datasets', 'competitions', 'notebooks', or 'all'."
+      default: "all"
+    - name: "min_kernels"
+      type: "integer"
+      description: "Minimum number of notebooks using the dataset (indicates quality)."
+      default: 10
+
+outputs:
+  files:
+    - path: "research/kaggle-resources-{topic}.md"
+      description: "A curated list of relevant Kaggle datasets and competition techniques."
+  artifacts:
+    - "Top 3 dataset recommendations with quality indicators."
+    - "Key techniques from winning competition solutions."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "N/A"
+  manual:
+    - "Found a dataset that covers the exact domain with enough samples for training."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "network"
+
+safety_notes:
+  - "Dataset size: Some Kaggle datasets are massive (100GB+). Consider sample subsets for rapid prototyping."
+  - "Competition data may have different license terms than user-uploaded datasets."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Google Search (site:kaggle.com)"
+      install: "N/A"
+  alternatives:
+    - name: "Kaggle Web UI"
+      when: "Browsing and inspecting datasets manually."
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Search Datasets"
+    tasks:
+      - "Use Google: `site:kaggle.com/datasets {problem_domain}`"
+      - "Filter by `usability` rating (look for 'perfect' or 'good' usability)."
+      - "Check the number of kernels (notebooks) — more kernels means the dataset is well-documented."
+      - "Verify the dataset has a clear data dictionary (column descriptions)."
+  - step: "Search Competitions"
+    tasks:
+      - "Use Google: `site:kaggle.com/competitions {problem_domain}`"
+      - "Read the winning solution descriptions for techniques and architectures."
+      - "Check the discussion forum for common pitfalls and preprocessing tricks."
+  - step: "Search Notebooks"
+    tasks:
+      - "Find top-voted notebooks that solve similar problems."
+      - "Extract the preprocessing pipeline, feature engineering, and model architecture."
+  - step: "Compile Report"
+    tasks:
+      - "Document each dataset with: name, link, rows/columns, license, usability score."
+      - "Document top techniques from competition winners."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Using a competition dataset without checking if it mirrors real-world distribution (competition data is often sanitized)."
+  - "Assuming Kaggle-winning techniques work in production (they often optimize for leaderboard score, not inference speed)."
+
+best_practices:
+  - "Filter datasets by 'recently updated' to ensure the data is still relevant."
+  - "For production, prefer datasets with a permissive license (CC0, CC-BY, or Kaggle's competition terms)."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Kaggle Datasets"
+    url: "https://www.kaggle.com/datasets"
+  - title: "Kaggle Competitions"
+    url: "https://www.kaggle.com/competitions"

@@ -1,0 +1,79 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "guardrails"
+display_name: "Security Guardrails & Hardening"
+description: >
+  Establish automated security guardrails that prevent developers from accidentally 
+  deploying vulnerable code or exposing sensitive infrastructure.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "chief-security-officer"
+phase: "growth"
+applicable_startups: 
+  - all
+priority: "high"
+difficulty: "expert"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "SAST & DAST"
+    tasks:
+      - "Integrate Static Application Security Testing (e.g., SonarQube, Snyk) into the CI pipeline to automatically fail PRs that contain known CVEs."
+  - step: "Secret Scanning"
+    tasks:
+      - "Enable GitHub Advanced Security or trufflehog to block any commit that contains a regex match for an API key or RSA private key."
+  - step: "IAM Boundaries"
+    tasks:
+      - "Use AWS Service Control Policies (SCPs) to fundamentally block any user, even admins, from creating public S3 buckets in the production account."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Relying on manual code review to catch security vulnerabilities, knowing that tired engineers will eventually miss a critical SQL injection flaw."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Guardrails process"
+  - "How do I handle guardrails?"
+  - "Implement guardrails"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the guardrails process"
+  optional:
+    - name: "code_repository"
+      type: "string"
+      description: "Path to the code repository"
+      default: "./"
+
+outputs:
+  files:
+    - path: "outputs/guardrails.md"
+      description: "Results of the guardrails process"
+  artifacts:
+    - "Completed guardrails deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

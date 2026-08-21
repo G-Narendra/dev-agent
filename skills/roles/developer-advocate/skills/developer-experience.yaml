@@ -1,0 +1,80 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "developer-experience"
+display_name: "Developer Experience (DevEx)"
+description: >
+  Optimize the tooling, documentation, and internal workflows to ensure engineers 
+  can ship code fast without fighting their own local environments.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "developer-advocate"
+phase: "operations"
+applicable_startups: 
+  - api-first
+  - devtools
+priority: "high"
+difficulty: "advanced"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Time to First 'Hello World'"
+    tasks:
+      - "Ensure a brand new user (or internal hire) can run the project locally and see the UI in under 3 minutes, using Docker or DevContainers."
+  - step: "API Documentation"
+    tasks:
+      - "Maintain immaculate, interactive API documentation (Swagger/Redoc) that is automatically generated from the code, not manually updated."
+  - step: "Feedback Loops"
+    tasks:
+      - "Optimize the local hot-reloading (HMR) setup so developers see their code changes reflected on screen in <1 second."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Accepting a 5-minute build time for running local unit tests, destroying the developers' state of 'flow' and costing the company thousands of hours a year."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Developer Experience process"
+  - "How do I handle developer experience?"
+  - "Implement developer experience"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the developer experience process"
+  optional:
+    - name: "code_repository"
+      type: "string"
+      description: "Path to the code repository"
+      default: "./"
+
+outputs:
+  files:
+    - path: "outputs/developer-experience.md"
+      description: "Results of the developer experience process"
+  artifacts:
+    - "Completed developer experience deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

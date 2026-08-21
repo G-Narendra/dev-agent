@@ -1,0 +1,78 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "talent-acquisition"
+display_name: "Talent Acquisition & Sourcing"
+description: >
+  Design the recruiting funnel, source high-leverage passive candidates, and 
+  standardize the interview process to prevent bad hires.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "recruiter"
+phase: "growth"
+applicable_startups: 
+  - all
+priority: "high"
+difficulty: "advanced"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Passive Sourcing"
+    tasks:
+      - "Do not rely on inbound applications for senior roles. Use GitHub, StackOverflow, and specialized communities to find top 1% talent who are not actively looking."
+  - step: "Standardized Rubrics"
+    tasks:
+      - "Never conduct 'vibe checks'. Provide every interviewer with a strict scoring rubric for their specific module (e.g., System Design, Culture Fit) to eliminate bias."
+  - step: "The Sell"
+    tasks:
+      - "Treat recruiting like enterprise sales. Understand the candidate's core motivation (money, title, autonomy) and tailor the offer pitch directly to that motivation."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Asking a senior engineer to reverse a binary tree on a whiteboard for a role that primarily involves writing React components."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Talent Acquisition process"
+  - "How do I handle talent acquisition?"
+  - "Implement talent acquisition"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the talent acquisition process"
+  optional:
+    - name: "N/A"
+      type: "string"
+      description: "No optional inputs needed."
+
+outputs:
+  files:
+    - path: "outputs/talent-acquisition.md"
+      description: "Results of the talent acquisition process"
+  artifacts:
+    - "Completed talent acquisition deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

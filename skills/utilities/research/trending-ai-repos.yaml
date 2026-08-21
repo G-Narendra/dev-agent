@@ -1,0 +1,157 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "trending-ai-repos"
+display_name: "Trending AI GitHub Repository Tracker"
+description: >
+  Tracks and evaluates the most impactful open-source AI repositories 
+  trending in 2025-2026. Covers the complete AI agent ecosystem: 
+  local LLM runners (Ollama), agent frameworks (LangGraph, CrewAI), 
+  workflow automation (n8n, Dify), self-hosted interfaces (Open WebUI), 
+  RAG engines (RAGFlow), MCP servers, and more. Evaluates each repo 
+  for production readiness, community health, and integration fit.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "utility"
+phase: "all"
+applicable_startups:
+  - all
+priority: "high"
+difficulty: "intermediate"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "What AI repos are trending right now?"
+  - "Find the best open-source AI tools."
+  - "What's the current state of AI frameworks?"
+  - "Which AI repo should I use for this project?"
+  - "Track trending AI GitHub projects."
+  - "Evaluate an AI framework for production."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Research trending AI repos."
+  - "Evaluate AI framework for project."
+  - "Compare RAG engine options."
+  - "Find local LLM runner tool."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "ai_need"
+      type: "string"
+      description: "What AI capability is needed (local-llm, agent-framework, rag, workflow-automation, coding-agent, self-hosted-ui)."
+  optional:
+    - name: "production_ready"
+      type: "boolean"
+      description: "Does the project need production-ready status?"
+      default: true
+    - name: "self_hosted"
+      type: "boolean"
+      description: "Must be self-hostable?"
+      default: false
+
+outputs:
+  files:
+    - path: "research/trending-ai-repos-{topic}.md"
+      description: "Evaluation report of top repos for the given need."
+  artifacts:
+    - "Top 3 repo recommendations with stars, license, install command."
+    - "Production readiness assessment (community health, maintenance, security)."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "N/A"
+  manual:
+    - "The recommended repo is actively maintained (commits within 1 month)."
+    - "The repo has a permissive license (MIT/Apache 2.0) suitable for commercial use."
+    - "The repo has enough community adoption (>500 stars) to ensure longevity."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "network"
+
+safety_notes:
+  - "Trending repos change rapidly. Always check the last commit date before adopting — a repo trending 6 months ago may now be abandoned."
+  - "Many AI repos are experimental. Check for security advisories before using in production."
+  - "Prefer repos with an active community (open issues being addressed, regular releases)."
+  - "Check the license carefully — some AI repos use custom/non-commercial licenses."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "OSS Insight — Trending AI Repos"
+      install: "N/A (Web)"
+      url: "https://ossinsight.io/trending/ai"
+  alternatives:
+    - name: "GitHub Trending Page"
+      install: "N/A (Web)"
+      url: "https://github.com/trending"
+    - name: "ByteByteGo — Top AI GitHub Repos"
+      install: "N/A (Web)"
+      url: "https://blog.bytebytego.com/p/top-ai-github-repositories-in-2026"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Map Need to Repo Category"
+    tasks:
+      - "Need to run LLMs locally? → Ollama (the standard) or LM Studio."
+      - "Need an AI agent framework? → LangChain/LangGraph, CrewAI, or AutoGen."
+      - "Need workflow automation with AI? → n8n (visual, no-code) or Dify (production platform)."
+      - "Need a self-hosted ChatGPT-like UI? → Open WebUI (connects to Ollama, has RAG and agent marketplace)."
+      - "Need a RAG engine for document QA? → RAGFlow (document ingestion focus, traceable answers) or Qdrant."
+      - "Need a personal AI assistant with integrations? → OpenClaw (connects LLMs to 50+ services like WhatsApp, Slack, shell)."
+      - "Need a coding agent? → Claude Code, Cursor, Cline, Aider, or OpenCode."
+      - "Need MCP servers for agent tool access? → modelcontextprotocol/servers (official), mcp.so marketplace."
+  - step: "Evaluate Each Repository"
+    tasks:
+      - "Check GitHub stars and fork count — proxy for community adoption."
+      - "Check last commit date — must be within 1 month for active maintenance."
+      - "Check open vs closed issues ratio — a healthy project closes issues regularly."
+      - "Check for recent releases (tags/releases tab) — indicates stable development cycles."
+      - "Read the security policy (SECURITY.md) — important for production adoption."
+      - "Check the license file — MIT/Apache 2.0 for commercial use, AGPL/GPL for specific needs only."
+  - step: "Compare Top 3 Candidates"
+    tasks:
+      - "Create a comparison table with: stars, license, last commit, install method, key features, security posture."
+      - "Check if the repo has an active Discord/Slack community for support."
+      - "Read 3-5 recent closed issues to understand the maintainer's responsiveness."
+      - "Test the Quick Start instructions — if they don't work, the documentation quality is suspect."
+  - step: "Recommend with Install Guidance"
+    tasks:
+      - "Provide the exact install command for the chosen platform."
+      - "Note any required dependencies (Python version, CUDA, Docker, etc.)."
+      - "Include a 'hello world' test command to verify the installation works."
+      - "Document the first configuration step to get from zero to working."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Adopting a trending repo without checking if it's production-ready (many AI repos are experimental)."
+  - "Using a non-permissive license (AGPL, custom) for a commercial product without legal review."
+  - "Installing an AI repo globally instead of in a virtual environment."
+  - "Assuming a repo with many stars is well-maintained — check the last commit date!"
+
+best_practices:
+  - "Always pin to a specific version/tag in production, never use `latest`."
+  - "For local LLMs, start with Ollama — it's the 'Docker of local AI' and the most widely adopted."
+  - "For agent workflows, start with LangGraph (most mature) before experimenting with newer frameworks."
+  - "Monitor OSS Insight's trending page weekly to stay current with the AI ecosystem."
+  - "Build a small proof-of-concept before committing to a framework for the full project."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "OSS Insight — Trending AI Repositories"
+    url: "https://ossinsight.io/trending/ai"
+  - title: "Ollama — Local LLM Runner"
+    url: "https://github.com/ollama/ollama"
+  - title: "Open WebUI — Self-Hosted AI Interface"
+    url: "https://github.com/open-webui/open-webui"
+  - title: "n8n — Workflow Automation"
+    url: "https://github.com/n8n-io/n8n"
+  - title: "Dify — LLM Application Platform"
+    url: "https://github.com/langgenius/dify"
+  - title: "LangChain / LangGraph — Agent Framework"
+    url: "https://github.com/langchain-ai/langchain"
+  - title: "RAGFlow — Document RAG Engine"
+    url: "https://github.com/infiniflow/ragflow"
+  - title: "ByteByteGo — Top AI GitHub Repos in 2026"
+    url: "https://blog.bytebytego.com/p/top-ai-github-repositories-in-2026"

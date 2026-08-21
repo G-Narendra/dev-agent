@@ -1,0 +1,112 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "data-lake-architecture"
+display_name: "Data Lake & Warehouse Architecture"
+description: >
+  Design the central repository for all company data (structured and unstructured). 
+  Focuses on separating compute from storage, partitioning data for fast querying, 
+  and transitioning from operational databases to analytical warehouses.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "data-engineer"
+phase: "growth"
+applicable_startups:
+  - all
+priority: "critical"
+difficulty: "expert"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Set up the data warehouse."
+  - "Where do we store the analytics data?"
+  - "Design the data lake."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Create a Snowflake/BigQuery schema."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "data_volume"
+      type: "string"
+      description: "Expected daily data ingestion (e.g., '100GB/day')."
+    - name: "data_types"
+      type: "string"
+      description: "Postgres tables, raw JSON logs, third-party API dumps."
+  optional:
+    - name: "provider"
+      type: "string"
+      description: "Snowflake, BigQuery, or Databricks."
+      default: "Snowflake"
+
+outputs:
+  files:
+    - path: "data/architecture-diagram.md"
+      description: "The layout of the Bronze, Silver, and Gold data layers."
+  artifacts:
+    - "A partitioning strategy for the raw S3 buckets."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "Queries against a 1TB table complete in under 5 seconds."
+  manual:
+    - "Data Analysts can query the data without bringing down the production application database."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+
+safety_notes:
+  - "Never run analytical queries (OLAP) directly against the production transactional database (OLTP). A poorly written `GROUP BY` on a 10 million row table will lock the DB and crash the public website."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Snowflake / Google BigQuery"
+      install: "N/A"
+  alternatives:
+    - name: "Databricks (Spark)"
+      when: "Dealing with massive unstructured data or heavy machine learning workloads."
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "The Medallion Architecture"
+    tasks:
+      - "Bronze (Raw): Dump data exactly as it arrives from the source (e.g., JSON files in S3). Never mutate this layer."
+      - "Silver (Cleaned): Parse the JSON into columnar tables (Parquet/Iceberg), filter out nulls, and enforce schemas."
+      - "Gold (Business-Level): Aggregated tables ready for the BI tool (e.g., `daily_active_users`, `mrr_by_month`)."
+  - step: "Storage / Compute Separation"
+    tasks:
+      - "Ensure your architecture allows you to scale storage (S3) independently from compute (Snowflake warehouses). This keeps costs low."
+  - step: "Partitioning Strategy"
+    tasks:
+      - "Partition the Raw S3 bucket by date: `s3://data-lake/events/year=2024/month=10/day=05/`. This allows queries to scan only 1 day of data instead of the entire 10-year history."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "The 'Data Swamp'. Dumping petabytes of undocumented CSVs into an S3 bucket with no schema, no catalog, and no data governance. No one will ever be able to use that data."
+  - "Optimizing for storage costs over compute costs. Storage is practically free. Compute is wildly expensive. Denormalize your data if it saves query time."
+
+best_practices:
+  - "Use columnar formats (Parquet, ORC, Apache Iceberg) for analytics instead of row-based formats (CSV, JSON). Columnar reads are 10x-100x faster for analytical queries."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Databricks: What is a Medallion Architecture?"
+    url: "https://www.databricks.com/glossary/medallion-architecture"

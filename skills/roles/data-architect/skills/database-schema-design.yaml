@@ -1,0 +1,85 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "database-schema-design"
+display_name: "Database Schema Design & ERD"
+description: >
+  Translate business requirements into a normalized relational database schema (or optimized NoSQL structure),
+  complete with primary/foreign keys, indexes, and constraints.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "data-architect"
+phase: "planning"
+applicable_startups: 
+  - all
+priority: "mvp"
+difficulty: "expert"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Entity Modeling"
+    tasks:
+      - "Extract nouns from the PRD to identify core entities (e.g., Users, Products, Orders)."
+      - "Define the properties/columns for each entity and their strict data types."
+  - step: "Relationship Mapping"
+    tasks:
+      - "Define relations (1:1, 1:N, M:N) between entities."
+      - "Resolve M:N relationships using junction/join tables."
+  - step: "Optimization & Integrity"
+    tasks:
+      - "Apply Primary Keys (UUIDs or ULIDs preferred over auto-increment)."
+      - "Add Foreign Key constraints with appropriate ON DELETE rules (e.g., RESTRICT or CASCADE)."
+      - "Identify highly queried columns and define B-Tree or Hash indexes."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Storing JSON blobs for highly structured relational data just to avoid migrations."
+  - "Using `VARCHAR(255)` for everything. Use exact constraints or `TEXT` depending on the DB engine."
+  - "Failing to add indexes to Foreign Keys — this causes massive table scans during JOINs."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Database Schema Design process"
+  - "How do I handle database schema design?"
+  - "Implement database schema design"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the database schema design process"
+  optional:
+    - name: "data_source"
+      type: "string"
+      description: "Source of data to analyze"
+      default: "Internal data"
+
+outputs:
+  files:
+    - path: "outputs/database-schema-design.md"
+      description: "Results of the database schema design process"
+  artifacts:
+    - "Completed database schema design deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

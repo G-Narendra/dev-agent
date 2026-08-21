@@ -1,0 +1,102 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "video-production"
+display_name: "Short-Form Video Production (TikTok/Reels)"
+description: >
+  Scripts and produces high-retention short-form videos for TikTok, Instagram 
+  Reels, and YouTube Shorts. Focuses on the 'hook' to stop the scroll and 
+  maximizes watch time to appease the algorithmic recommendation engines.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "content-creator"
+phase: "growth"
+applicable_startups:
+  - B2C, Media, E-commerce
+priority: "high"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Write a script for TikTok."
+  - "Our Reels aren't getting views."
+  - "How do we go viral?"
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Draft 60-second video script."
+  - "Generate hook variations."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "topic"
+      type: "string"
+      description: "The core subject of the video."
+  optional:
+    - name: "platform"
+      type: "string"
+      description: "TikTok, Reels, or Shorts."
+      default: "TikTok"
+
+outputs:
+  files:
+    - path: "marketing/content/tiktok_script_01.md"
+      description: "The script with visual/audio cues."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "N/A"
+manual:
+  - "The video achieves an average watch time of > 70% of the video length, triggering algorithmic virality."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "Copyright Strikes: Never use copyrighted commercial music for a brand account without purchasing a license. Use the platform's royalty-free commercial library to avoid having the account banned."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "CapCut / Premiere Pro"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "The 3-Second Hook"
+    tasks:
+      - "The first 3 seconds dictate the success of the entire video. Start in the middle of the action. Do not say 'Hi guys, today we are going to talk about...' They already scrolled past."
+  - step: "Pacing and B-Roll"
+    tasks:
+      - "The visual frame must change every 2 to 3 seconds to retain attention. Cut out every single pause, breath, and 'umm' from the audio track. Overlay text popups dynamically."
+  - step: "The Call to Action (CTA)"
+    tasks:
+      - "Put the CTA ('Follow for Part 2' or 'Link in bio') in the last 2 seconds. Better yet, make the video a seamless loop where the ending sentence perfectly flows back into the hook."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Producing a 5-minute corporate explainer video and just chopping it into a 60-second vertical video. Short-form requires a completely different, fast-paced, native editing style."
+best_practices:
+  - "Native features perform better. Use the native text-to-speech voice, native text fonts, and native trending sounds of the specific platform (TikTok/Reels) to make it feel organic."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "TikTok: Creative Best Practices"
+    url: "https://www.tiktok.com/business/en-US/blog/tiktok-creative-best-practices"

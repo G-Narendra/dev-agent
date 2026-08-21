@@ -1,0 +1,219 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "modern-cli-arsenal"
+display_name: "Modern CLI Arsenal (Native Tooling for AI Agents)"
+description: >
+  Maps the modern UNIX CLI ecosystem (ripgrep, jq, fd, bat, fzf, 
+  dasel, HTTPie, dust, delta, sd, tokei, bottom, procs, dog, 
+  Starship, usql, DuckDB) into a toolkit the AI agent uses natively 
+  instead of reimplementing their logic in Python. Teaching the AI 
+  to pipe these tools together is drastically more efficient — 
+  LLMs already know how shell pipelines work from training data.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "utility"
+phase: "all"
+applicable_startups:
+  - all
+priority: "critical"
+difficulty: "intermediate"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Search for files matching a pattern."
+  - "Parse this JSON output."
+  - "Find large files wasting disk space."
+  - "Count lines of code in the project."
+  - "Make an HTTP request to an API."
+  - "Transform this data format."
+  - "View this file with syntax highlighting."
+  - "Find a file by name in this directory."
+  - "Count lines of code in a codebase."
+  - "Diff two files with syntax highlighting."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Search codebase with ripgrep."
+  - "Filter JSON with jq."
+  - "Find files with fd."
+  - "Count lines of code with tokei."
+  - "Make API call with HTTPie."
+  - "Transform YAML/JSON with dasel."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "task_type"
+      type: "string"
+      description: "What operation to perform (search, parse, transform, count, request, locate, view)."
+  optional:
+    - name: "target_path"
+      type: "string"
+      description: "Directory or file path for the operation."
+      default: "Current directory"
+    - name: "pattern"
+      type: "string"
+      description: "Search pattern, JSON filter, or query string."
+      default: "None"
+    - name: "output_format"
+      type: "string"
+      description: "Desired output format (json, text, table, csv)."
+      default: "Auto-detected"
+
+outputs:
+  files:
+    - path: "outputs/cli-arsenal-{timestamp}.json"
+      description: "Captured structured output from the CLI tool."
+  artifacts:
+    - "Filtered, transformed, or analyzed data ready for downstream processing."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "The CLI tool exits with code 0 and produces the expected output."
+    - "Structured output (JSON) can be parsed by a downstream tool."
+  manual:
+    - "The AI agent uses native CLI tools instead of Python-lib reimplementations."
+    - "Pipelines chain multiple tools together (e.g., `fd | rg | jq`) for complex tasks."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+  - "shell_execution"
+
+safety_notes:
+  - "Prefer CLI tools over Python libraries for file operations — they're faster, more reliable, and LLMs already know their syntax from training data."
+  - "Never use `curl | bash` patterns to install tools. Always use package managers: `apt`, `brew`, `cargo install`, `pip install` (in a venv)."
+  - "For Windows systems, use `scoop install` or `winget install` for these tools."
+  - "When chaining pipes, always validate intermediate output before passing to the next tool."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "ripgrep (rg) — ESSENTIAL"
+      install: "cargo install ripgrep OR apt install ripgrep OR brew install ripgrep"
+      url: "https://github.com/BurntSushi/ripgrep"
+    - name: "jq — ESSENTIAL"
+      install: "apt install jq OR brew install jq OR scoop install jq"
+      url: "https://jqlang.github.io/jq/"
+    - name: "fd — RECOMMENDED"
+      install: "cargo install fd-find OR apt install fd-find OR brew install fd"
+      url: "https://github.com/sharkdp/fd"
+    - name: "HTTPie — RECOMMENDED"
+      install: "pip install httpie OR brew install httpie OR scoop install httpie"
+      url: "https://github.com/httpie/cli"
+  alternatives:
+    - name: "bat (syntax highlighting cat)"
+      install: "cargo install bat OR apt install bat OR brew install bat"
+      url: "https://github.com/sharkdp/bat"
+    - name: "fzf (fuzzy finder)"
+      install: "apt install fzf OR brew install fzf OR scoop install fzf"
+      url: "https://github.com/junegunn/fzf"
+    - name: "dasel"
+      install: "curl -sSLf https://dasel.sh/install.sh | bash"
+      url: "https://github.com/TomWright/dasel"
+    - name: "delta"
+      install: "cargo install git-delta OR brew install git-delta"
+      url: "https://github.com/dandavison/delta"
+    - name: "dust"
+      install: "cargo install dust OR brew install dust"
+      url: "https://github.com/bootandy/dust"
+    - name: "sd"
+      install: "cargo install sd OR brew install sd"
+      url: "https://github.com/chmln/sd"
+    - name: "tokei"
+      install: "cargo install tokei OR brew install tokei OR scoop install tokei"
+      url: "https://github.com/XAMPPRocky/tokei"
+    - name: "bottom (btm)"
+      install: "cargo install bottom OR brew install bottom OR scoop install bottom"
+      url: "https://github.com/clementtsang/bottom"
+    - name: "procs"
+      install: "cargo install procs OR brew install procs"
+      url: "https://github.com/dalance/procs"
+    - name: "DuckDB CLI"
+      install: "pip install duckdb OR brew install duckdb"
+      url: "https://github.com/duckdb/duckdb"
+    - name: "usql"
+      install: "go install github.com/xo/usql@latest OR brew install usql"
+      url: "https://github.com/xo/usql"
+    - name: "Starship"
+      install: "curl -sS https://starship.rs/install.sh | sh OR brew install starship"
+      url: "https://github.com/starship/starship"
+    - name: "pgcli"
+      install: "pip install pgcli OR brew install pgcli"
+      url: "https://github.com/dbcli/pgcli"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Identify Which Tool Fits the Task"
+    tasks:
+      - "Search for text/regex patterns in files → ripgrep (`rg 'pattern' --type py`)."
+      - "Find files by name → fd (`fd '*.ts' src/`)."
+      - "Parse/transform JSON → jq (`cat data.json | jq '.users[] | {name, email}'`)."
+      - "Make API calls → HTTPie (`http GET https://api.example.com/users`)."
+      - "Transform YAML/TOML/XML → dasel (`dasel select -f config.yaml '.database.host'`)."
+      - "Replace text across files → sd (`sd 'old_text' 'new_text' file.txt`)."
+      - "Count lines of code → tokei (`tokei src/`)."
+      - "Check disk usage → dust (`dust src/`)."
+      - "View files with syntax → bat (`bat src/main.py`)."
+      - "Query CSV/JSON/Parquet → DuckDB CLI (`duckdb -c \"SELECT * FROM 'data.csv'\"`)."
+      - "Diff with highlighting → delta (`git diff | delta`)."
+      - "Interactive navigation → fzf (`find . -name '*.ts' | fzf`)."
+      - "Universal database queries → usql (`usql postgres://localhost/mydb`)."
+  - step: "Chain Tools in Pipelines"
+    tasks:
+      - |
+        Search codebase to extract paths then filter by language:
+        `rg 'TODO' src/ -l | rg '\.py$'`
+      - |
+        Find large files then format as JSON:
+        `fd '*.log' -s 10M -l 0 | jq -R -s 'split("\n") - [""] | {files: .}'`
+      - "Count LOC → extract per-language: `tokei src/ --output json | jq '.Rust.code, .Python.code'`"
+      - "Query DB → output JSON → transform: `usql pg://localhost/mydb -c 'SELECT * FROM users' -J | jq '.users[] | {id, name}'`"
+  - step: "Install Only What's Needed"
+    tasks:
+      - "Install ripgrep first — it's the most universally useful CLI tool for code agents."
+      - "Add jq — essential for processing any API response or JSON config."
+      - "Add fd — dramatically faster than `find` for file discovery."
+      - "Add HTTPie or keep curl — for API interactions."
+      - "Add tools only as needed — don't bloat the environment."
+  - step: "Verify Installation"
+    tasks:
+      - "Run `which rg && rg --version` to confirm installation."
+      - "Run `jq --version` to check jq availability."
+      - "Test a simple pipeline: `echo '{\"test\": \"hello\"}' | jq '.test'`"
+      - "Run `fd '*.py' .` in a project to verify fd works."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Writing a 50-line Python script to search files when `rg 'pattern'` does it in one line."
+  - "Parsing JSON with `grep` and `awk` — use `jq` instead. It's designed for this."
+  - "Using `find` when `fd` is available — fd respects .gitignore and is 5-10x faster."
+  - "Using `cat file | jq` when `jq '...' file` works without the cat."
+  - "Re-implementing a CLI tool's logic in Python/Node when the tool already exists and is battle-tested."
+
+best_practices:
+  - "LLMs are trained on millions of shell scripts — they know how to pipe CLI tools better than they know ad-hoc Python for file operations."
+  - "Write the pipeline as a single-line command first, then break into steps if debugging is needed."
+  - "Use `jq` for ALL JSON operations — it's more reliable than Python's json module for streaming."
+  - "Use `rg` instead of `grep` — it's faster, respects .gitignore, and has better defaults."
+  - "For large datasets, use DuckDB CLI to query CSV/JSON directly instead of loading into Python."
+  - "Always check if a tool is available with `which` before using it in a script."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "ripgrep — BurntSushi/ripgrep"
+    url: "https://github.com/BurntSushi/ripgrep"
+  - title: "jq Manual — jqlang"
+    url: "https://jqlang.github.io/jq/manual/"
+  - title: "fd — sharkdp/fd"
+    url: "https://github.com/sharkdp/fd"
+  - title: "bat — sharkdp/bat"
+    url: "https://github.com/sharkdp/bat"
+  - title: "HTTPie — CLI HTTP Client"
+    url: "https://github.com/httpie/cli"
+  - title: "awesome-cli-apps (Curated Tool List)"
+    url: "https://github.com/agarrharr/awesome-cli-apps"
+  - title: "awesome-shell (Curated Shell Tools)"
+    url: "https://github.com/alebcay/awesome-shell"
+  - title: "modern Unix commands (Cheat Sheet)"
+    url: "https://github.com/ibraheemdev/modern-unix"

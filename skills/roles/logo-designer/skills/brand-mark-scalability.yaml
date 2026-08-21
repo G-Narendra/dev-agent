@@ -1,0 +1,117 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "brand-mark-scalability"
+display_name: "Logo Scalability & Responsive Architecture"
+description: >
+  Ensure the logo performs flawlessly across every possible medium, from a 
+  massive billboard to a tiny smartwatch screen. Creates responsive variations 
+  (Horizontal, Vertical, Monotone) for every edge case.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "logo-designer"
+phase: "operations"
+applicable_startups:
+  - all
+priority: "medium"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "We need a white version of the logo."
+  - "The logo doesn't fit in the sponsor banner."
+  - "Export the logo package."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Generate comprehensive logo package."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "master_logo"
+      type: "string"
+      description: "The primary vector logo."
+    - name: "color_palette"
+      type: "string"
+      description: "The brand's primary and secondary hex/CMYK codes."
+  optional:
+    - name: "usage_contexts"
+      type: "string"
+      description: "Where will this be used? (Web, Print, Merch, Video)."
+      default: "All Contexts"
+
+outputs:
+  files:
+    - path: "design/logo/brand-assets.zip"
+      description: "A heavily organized folder structure of every logo variation."
+  artifacts:
+    - "A 'Logo Usage Guidelines' one-pager for external partners."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "N/A"
+  manual:
+    - "The marketing team never has to ping the designer on Slack asking for 'a version of the logo with a transparent background'."
+    - "The logo never appears squished, stretched, or pixelated in the wild."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+
+safety_notes:
+  - "The Unintended Racism/Profanity Check: Before finalizing a logo, view it upside down, in a mirror, and extremely small. Ensure the negative space does not accidentally form offensive imagery. This happens surprisingly often."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Logo Package Express (Illustrator Plugin)"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Layout Variations"
+    tasks:
+      - "Primary (Usually Horizontal)."
+      - "Stacked (Vertical, icon above text, for square profiles)."
+      - "Icon Only (For avatars and tight spaces)."
+      - "Wordmark Only (When the icon is too distracting)."
+  - step: "Color Variations"
+    tasks:
+      - "Full Color (For white/light backgrounds)."
+      - "Inverted (Full color optimized for dark backgrounds)."
+      - "Pure Black (For cheap laser printing or faxes)."
+      - "Pure White (For overlaying on top of photography or busy backgrounds)."
+  - step: "File Format Matrix"
+    tasks:
+      - "Generate EVERY combination of the above in: SVG (Web Vector), EPS (Print Vector), PNG (Transparent Raster), and JPG (Solid Raster)."
+  - step: "The Handoff Package"
+    tasks:
+      - "Organize the ZIP file meticulously. `/Print`, `/Web`, `/Social`. If you just hand the CEO a folder with 100 randomly named files, they will use the wrong one."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Exporting SVGs with embedded fonts. If you send an SVG to a printer and they don't have 'Helvetica Neue' installed, the logo will default to Arial and look terrible. ALWAYS convert fonts to outlines/paths before exporting."
+  - "Sending an EPS to a non-designer. The CEO cannot open an EPS file on their phone. Always include high-res PNGs for general use."
+
+best_practices:
+  - "The 'Knockout' White version. Don't just invert the colors. Ensure the visual weight remains the same when the logo is rendered in pure white on a black background. Sometimes optical illusions cause the white logo to look 'fatter'."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "The Logo Package: How to structure logo handoffs"
+    url: "https://thelogopackage.com/"

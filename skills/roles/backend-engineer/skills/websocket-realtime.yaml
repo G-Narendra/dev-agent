@@ -1,0 +1,107 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "websocket-realtime"
+display_name: "WebSockets & Real-Time Communication"
+description: >
+  Implement bi-directional, persistent connections between the client and server. 
+  Essential for chat applications, live multiplayer collaboration (Figma/Google Docs), 
+  and real-time financial dashboards.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "backend-engineer"
+phase: "build"
+applicable_startups:
+  - all
+priority: "growth"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Make the UI update in real-time."
+  - "Add a live chat."
+  - "Implement WebSockets."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "npm install socket.io"
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "use_case"
+      type: "string"
+      description: "Chat vs Collaborative Editing vs Live Notifications."
+  optional:
+    - name: "scaling_strategy"
+      type: "string"
+      description: "How to handle multiple server nodes."
+      default: "Redis Pub/Sub"
+
+outputs:
+  files:
+    - path: "src/sockets/socketManager.ts"
+      description: "The core websocket handling logic."
+  artifacts:
+    - "A sequence diagram of connection, authentication, and disconnection events."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "Clients automatically reconnect within 5 seconds if the connection drops."
+  manual:
+    - "Messages sent by User A appear on User B's screen in under 100ms without page refreshes."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+
+safety_notes:
+  - "Authentication: WebSockets do not automatically inherit HTTP headers easily. You must explicitly validate the user's JWT token during the initial websocket connection handshake."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Socket.io (Node)"
+      install: "npm install socket.io"
+  alternatives:
+    - name: "Pusher / Supabase Realtime"
+      when: "You don't want to manage stateful websocket servers and prefer a managed SaaS."
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Connection Handling"
+    tasks:
+      - "Implement a 'Heartbeat' (Ping/Pong) mechanism to detect dead connections and free up server memory."
+  - step: "Rooms / Channels"
+    tasks:
+      - "Do not broadcast every message to every connected client. Implement 'Rooms' (e.g., `room:project_123`) so clients only receive updates for documents they are currently viewing."
+  - step: "The Scaling Problem (Pub/Sub)"
+    tasks:
+      - "If you have 2 Node servers behind a load balancer, User A (Server 1) cannot chat with User B (Server 2) by default. You MUST implement a Redis Pub/Sub backplane to route messages between servers."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Using WebSockets for everything. If you only need server-to-client updates (e.g., a live sports score), Server-Sent Events (SSE) are vastly simpler and more scalable than WebSockets."
+  - "Ignoring memory leaks. Every open connection consumes server RAM. If you don't aggressively disconnect inactive users, your server will eventually crash."
+
+best_practices:
+  - "Assume connections *will* drop constantly (e.g., user walks into an elevator). The client MUST have logic to fetch missed messages from a REST API upon reconnection to fill the gap."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Socket.io: Using multiple nodes"
+    url: "https://socket.io/docs/v4/using-multiple-nodes/"

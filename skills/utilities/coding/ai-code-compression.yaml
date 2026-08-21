@@ -1,0 +1,182 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "ai-code-compression"
+display_name: "AI Code Compression (Ponytail Decision Ladder)"
+description: >
+  Enforces minimal code generation from AI agents using the Ponytail
+  "Decision Ladder" methodology. Before generating ANY code, forces 
+  the AI to evaluate five gates in order: YAGNI → Reuse → Stdlib → 
+  Native APIs → Simplicity. This prevents AI over-engineering and 
+  produces code that is ~54% smaller, ~20% cheaper in tokens, and
+  MORE production-ready than verbose alternatives. Includes Caveman
+  prompting as a lightweight alternative, and implementation hooks
+  for Claude Code, Copilot CLI, Gemini CLI, and Aider.
+
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "utility"
+phase: "all"
+applicable_startups:
+  - all
+priority: "critical"
+difficulty: "intermediate"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "The AI is generating too much code."
+  - "Make the code more concise."
+  - "This is over-engineered."
+  - "Reduce the lines of code."
+  - "We don't need all this boilerplate."
+  - "Write minimal, production-ready code."
+  - "The agent keeps adding unnecessary abstractions."
+  - "Stop writing so many helper functions."
+  - "Write this like a senior engineer would."
+  - "Keep it simple, stupid."
+  - "No fancy patterns — just get it done."
+  - "Reduce bloat in AI-generated code."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Install Ponytail Node.js plugin into the AI agent's lifecycle."
+  - "Inject the Decision Ladder into the system prompt for Claude Code or Copilot CLI."
+  - "Apply Caveman prompting style for a single response."
+  - "Audit existing AI-generated code for over-engineering."
+  - "Rewrite verbose code using the Decision Ladder gates."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "agent_type"
+      type: "string"
+      description: "Which AI agent to compress (Claude Code, Copilot CLI, Gemini CLI, Aider, Cursor, Cline)."
+    - name: "compression_method"
+      type: "string"
+      description: "Method to use: ponytail_plugin, decision_ladder_prompt, caveman_prompt, or post_audit."
+  optional:
+    - name: "target_path"
+      type: "string"
+      description: "Path to the project directory where the agent should be configured."
+      default: "Current directory"
+    - name: "existing_code_path"
+      type: "string"
+      description: "Path to existing AI-generated code to audit/reduce."
+      default: "None"
+
+outputs:
+  files:
+    - path: "outputs/code-compression-{timestamp}.md"
+      description: "Report of compression applied — which gates fired, LOC before/after, tokens saved."
+  artifacts:
+    - "A configured AI agent that produces minimal code by default."
+    - "Audited code with over-engineering removed."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "The Decision Ladder is injected into the agent's system prompt or lifecycle."
+    - "A test prompt produces visibly less code than before."
+    - "The compressed code passes all existing tests."
+  manual:
+    - "The AI now defaults to YAGNI-first thinking."
+    - "Generated code avoids unnecessary abstractions, factories, and dependency injection by default."
+    - "LOC reduced by at least 30% from baseline."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+  - "network"
+
+safety_notes:
+  - "The Decision Ladder does NOT strip error handling, security validation, or accessibility. The original Ponytail research shows that compressed code is MORE production-ready because it reduces surface area for bugs."
+  - "For Caveman prompting: be explicit about what NOT to strip. Error handling, input validation, and edge cases should survive compression."
+  - "Always run tests after applying compression to ensure nothing critical was removed."
+  - "Apply compression EARLY — it's harder to refactor existing bloated code than to prevent bloat during initial generation."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Ponytail (Node.js Plugin)"
+      install: "npm install ponytail"
+      url: "https://github.com/DietrichGebert/ponytail"
+  alternatives:
+    - name: "Caveman Prompting (Methodology)"
+      install: "N/A — Use 'Act as a senior engineer with amnesia...' as prompt prefix"
+    - name: "CONTEXT.md with Decision Ladder rules (See context-engineering utility)"
+      install: "Create a CONTEXT.md file in project root — see utilities/cognitive/context-engineering.yaml"
+    - name: "Aider with --lint/--test flags"
+      install: "pip install aider-chat (in venv)"
+      url: "https://github.com/Aider-AI/aider"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Choose Compression Method"
+    tasks:
+      - "If using Claude Code or Copilot CLI with Node.js lifecycle hooks: use Ponytail plugin (npm install ponytail)."
+      - "If the agent supports system prompt injection: add the Decision Ladder as a verbose system rule."
+      - "If you need one-off compression: use Caveman prompting as a prefix to the coding request."
+      - "If dealing with existing bloated code: use the post-audit method (step 4)."
+  - step: "Inject the Decision Ladder (The Core Method)"
+    tasks:
+      - "Add these five gates to the agent's system prompt or CONTEXT.md:"
+      - "GATE 1 — YAGNI: Ask 'Does the user actually need this feature/abstraction? If not, skip it.'"
+      - "GATE 2 — REUSE: 'Does existing code in the project already handle this? If yes, extend it. Do NOT duplicate.'"
+      - "GATE 3 — STDLIB: 'Can the language's standard library solve this without a third-party package?'"
+      - "GATE 4 — NATIVE APIs: 'Can HTML/CSS/OS native features solve this without JS/Python hacks?'"
+      - "GATE 5 — SIMPLICITY: 'What is the MINIMUM code that satisfies the requirement? Write that.'"
+      - "Enforce ordering: DO NOT skip to Gate 5 without passing through Gates 1-4 first."
+  - step: "Apply Caveman Prompting (Quick Alternative)"
+    tasks:
+      - "Use as a prefix to any coding request:"
+      - "'Act as a senior engineer with amnesia. You have 3 bullet points of working memory. Write ONLY essential code. No comments. No helper files. Just the minimal implementation. YAGNI.'"
+      - "This style forces the LLM to generate terse, senior-level code. Works with any model."
+      - "Combine with Decision Ladder for maximum effect."
+  - step: "Post-Audit Existing Code for Over-Engineering"
+    tasks:
+      - "Run a script that counts LOC and flags patterns of over-engineering:"
+      - "   → Unnecessary abstract classes / factories / interfaces (single implementation)"
+      - "   → Dependency injection for trivial dependencies"
+      - "   → Configuration files for features that don't need configuration"
+      - "   → Error handling for errors that can't occur (defensive programming overreach)"
+      - "   → Unused imports, variables, and functions (run `rg 'def ' | grep -v '__'` to audit)"
+      - "For each flagged pattern, apply the Decision Ladder in reverse:"
+      - "   'Does this code need to exist? What's the simplest version?'"
+      - "Use `tokei src/` before and after to measure LOC reduction."
+  - step: "Verify Compression Integrity"
+    tasks:
+      - "Run all existing tests to confirm compressed code still passes."
+      - "Run the linter/formatter to verify syntax is correct."
+      - "Use `tokei src/ --output json | jq '.[] | {language: .language, code: .code}'` to measure LOC by language."
+      - "Compare before/after token count (if using Claude Code with token analytics)."
+      - "Document the compression ratio in `outputs/code-compression-timestamp.md`."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "The 'Anxious AI' pattern: generating 5x the necessary code because the LLM thinks 'more code = more correct'. This is ALWAYS wrong."
+  - "Defaulting to a 12-layer abstract factory architecture for a script that could be 50 lines."
+  - "Adding error handling for impossible states just to 'be safe' — test the actual edges instead."
+  - "Installing a heavy framework when the native HTML/JS API does it in 3 lines."
+  - "Creating a separate file/class/function for every single concern — YAGNI until proven necessary."
+  - "Using dependency injection frameworks for code with 2 dependencies."
+  - "Over-engineering as a substitute for understanding the problem."
+
+best_practices:
+  - "The Decision Ladder is NOT about writing sloppy code — it's about writing intentional code."
+  - "Senior engineers don't write more code than juniors — they write LESS code that does MORE."
+  - "The best line of code is the one you never wrote. Every abstraction has a cost (maintenance, cognitive load, test surface)."
+  - "Gate order matters: most LLMs default to Gate 5 (simplicity) but skip Gates 1-4. Force the sequence."
+  - "Pair Decision Ladder with `utilities/cognitive/context-engineering.yaml` for the full effect."
+  - "Use `rg 'TODO' src/ -l` to find places where compression was deferred — revisit them."
+  - "For React: prefer hooks composition over HOC or render props. For Python: prefer functions over classes."
+  - "For Node.js: prefer built-in `fetch` (Node 18+) over `axios`. For Python: prefer `sqlite3` over SQLAlchemy for simple cases."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Ponytail — DietrichGebert/ponytail"
+    url: "https://github.com/DietrichGebert/ponytail"
+  - title: "Caveman Prompting — Minimalist AI Communication (Methodology)"
+  - title: "YAGNI — Extreme Programming Principle"
+    url: "https://www.martinfowler.com/bliki/Yagni.html"
+  - title: "You're Probably Over-Engineering (HN Discussion)"
+    url: "https://news.ycombinator.com/item?id=overengineering"
+  - title: "Aider — AI Pair Programming CLI"
+    url: "https://github.com/Aider-AI/aider"

@@ -1,0 +1,109 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "proof-of-concept"
+display_name: "Proof of Concept (POC) Delivery"
+description: >
+  Designs and delivers technical proof of concepts to prospective enterprise
+  clients. Builds working demonstrations that validate the startup's solution
+  against the client's specific requirements and data.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "solution-architect"
+phase: "growth"
+applicable_startups:
+  - all
+priority: "mvp"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Build a POC for an enterprise prospect."
+  - "Demonstrate our solution with their data."
+  - "Create a technical proof of concept."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Design POC scope and timeline."
+  - "Build working POC demonstration."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "client_requirements"
+      type: "file"
+      description: "Client's specific technical requirements."
+    - name: "client_data_sample"
+      type: "file"
+      description: "Sample of client's data for the POC."
+  optional:
+    - name: "poc_duration"
+      type: "string"
+      description: "How long the POC will run."
+      default: "2-4 weeks"
+
+outputs:
+  files:
+    - path: "sales/pocs/{client}-poc-summary.md"
+      description: "POC results and demonstration documentation"
+  artifacts:
+    - "A successful POC that validates the solution and unblocks the deal"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "POC Scoping"
+    tasks:
+      - "Define clear success criteria: what specific outcomes prove the solution works?"
+      - "Scope tightly: demonstrate ONE critical capability exceptionally well, not multiple mediocre ones."
+      - "Get the client to commit resources: data access, stakeholder time for demos, a decision timeline."
+      - "Define what happens after POC: evaluation period, pilot, or direct procurement?"
+  - step: "Technical Setup"
+    tasks:
+      - "Set up a dedicated environment or sandbox for the POC."
+      - "Ingest a representative sample of the client's data (anonymized if needed)."
+      - "Configure the solution to address their specific use case."
+      - "Instrument the POC with monitoring to capture performance metrics and usage data."
+  - step: "Demonstration & Validation"
+    tasks:
+      - "Walk through the POC with the client's technical team — let them drive."
+      - "Highlight how the solution addresses each of their stated requirements."
+      - "Collect feedback and address any concerns immediately."
+      - "Document POC results: what worked, what didn't, and what's needed for production."
+  - step: "POC to Production Handoff"
+    tasks:
+      - "Create a transition plan: what's needed to go from POC to production deployment."
+      - "Document any customizations made for the POC and whether they're maintained."
+      - "Provide a timeline and cost estimate for full production implementation."
+      - "Set expectations for the procurement process after successful POC."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "POC scope creep — building feature after feature without a clear 'done' criteria."
+  - "Over-promising — promising production-ready features in a 2-week POC."
+  - "Using the POC as free consulting — scope is limited to demonstrating your solution."
+  - "No exit criteria — the POC can drag on indefinitely without a decision."
+best_practices:
+  - "A successful POC isn't one that works — it's one that leads to a signed contract."
+  - "Make the POC a 'try and buy' experience — let them love using it."
+  - "Time-box POCs: 2-4 weeks max. Longer POCs lose urgency and momentum."
+  - "Document every POC outcome as a case study for future prospects."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

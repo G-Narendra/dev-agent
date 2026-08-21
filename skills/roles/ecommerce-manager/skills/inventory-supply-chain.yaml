@@ -1,0 +1,113 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "inventory-supply-chain"
+display_name: "Inventory Forecasting & Supply Chain Management"
+description: >
+  Optimize the flow of physical goods from the manufacturer to the warehouse 
+  to the customer. Balances the risk of 'Stockouts' (lost revenue) against 
+  the risk of 'Overstock' (tied-up cash flow).
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "ecommerce-manager"
+phase: "operations"
+applicable_startups:
+  - e-commerce
+  - hardware
+priority: "high"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "We are out of stock."
+  - "How much inventory should we order?"
+  - "Calculate the reorder point."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Calculate Economic Order Quantity (EOQ)."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "daily_sales_velocity"
+      type: "string"
+      description: "Average units sold per day."
+    - name: "supplier_lead_time"
+      type: "string"
+      description: "How many days does it take from placing the order to receiving it?"
+  optional:
+    - name: "seasonality_factor"
+      type: "string"
+      description: "Are sales heavily skewed (e.g., Black Friday)?"
+      default: "Flat"
+
+outputs:
+  files:
+    - path: "ecommerce/operations/inventory-forecast.csv"
+      description: "The purchasing schedule for the next 6 months."
+  artifacts:
+    - "A Reorder Point (ROP) calculation for all SKUs."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "N/A"
+  manual:
+    - "Top-selling SKUs never hit 0 stock."
+    - "Inventory Turnover Ratio remains high, ensuring cash is not trapped in dead stock sitting in a warehouse."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+
+safety_notes:
+  - "The Cash Flow Trap: Buying 10,000 units instead of 1,000 units just to save $1 on the unit cost. If it takes 2 years to sell those 10,000 units, you have suffocated the startup's cash flow and cannot pay for marketing or payroll."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Shopify / InventoryPlanner"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Calculate the Reorder Point (ROP)"
+    tasks:
+      - "Formula: ROP = (Average Daily Sales * Lead Time in Days) + Safety Stock."
+      - "If you sell 10 a day, and it takes 30 days to get from China to your warehouse, your ROP is 300. You MUST place a new order the exact moment inventory hits 300."
+  - step: "Determine Safety Stock"
+    tasks:
+      - "Safety Stock is the buffer for unpredictable events (e.g., a viral TikTok video triples sales, or a cargo ship gets stuck in a canal). Calculate standard deviation of demand to set a mathematical buffer, rather than guessing."
+  - step: "ABC Analysis"
+    tasks:
+      - "Categorize SKUs. 'A' items (20% of items generating 80% of revenue) must NEVER go out of stock. Over-order these. 'C' items (slow movers) should be ordered 'Just in Time' to preserve cash."
+  - step: "Supplier Diversification"
+    tasks:
+      - "If 100% of your product comes from one factory, a strike or local political issue can destroy your company overnight. Always have a 'Secondary' supplier fully vetted and ready, even if they cost 5% more."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Relying purely on 'Gut Feeling' to place Purchase Orders (POs). Forecasting must be mathematical, based on historical velocity and lead times, not optimism."
+  - "Ignoring holding costs. Warehouses charge by the cubic foot per month. If you buy a 3-year supply of inventory, the warehouse storage fees will wipe out all the profit."
+
+best_practices:
+  - "Implement continuous 'Cycle Counts'. Do not wait for an annual massive inventory audit. Count 10 different SKUs every day to ensure the computer's inventory matches the physical reality on the shelves."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Shopify: Inventory Management Guide"
+    url: "https://www.shopify.com/blog/inventory-management"

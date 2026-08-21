@@ -1,0 +1,115 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "executive-hiring"
+display_name: "Executive Hiring & Leadership Structuring"
+description: >
+  Architects the leadership team. Drives the process for sourcing, vetting, 
+  and closing VP and C-level executives. Ensures the startup is hiring 
+  leaders who can scale the company to the next revenue milestone, not just 
+  managers who maintain the status quo.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "ceo"
+phase: "growth"
+applicable_startups:
+  - all
+priority: "critical"
+difficulty: "expert"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "We need to hire a VP of Sales."
+  - "How do I interview a CTO?"
+  - "Our early leaders are struggling to scale."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Draft executive scorecard."
+  - "Generate compensation benchmark."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "role_title"
+      type: "string"
+      description: "E.g., VP of Engineering, CRO."
+    - name: "company_stage"
+      type: "string"
+      description: "Seed, Series A, Series C."
+  optional:
+    - name: "budget"
+      type: "string"
+      description: "Base salary + Equity pool allocation."
+      default: "Market Rate"
+
+outputs:
+  files:
+    - path: "hr/hiring/executive-scorecard.md"
+      description: "The precise rubric for interviewing the executive."
+  artifacts:
+    - "A targeted sourcing list of competitor executives."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "N/A"
+manual:
+  - "The hired executive autonomously builds their department and hits their KPIs without requiring daily micromanagement from the CEO."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "Equity Dilution: Executive hires require massive equity grants (0.5% - 2.0%). Firing a bad executive after a 1-year cliff is incredibly expensive to the cap table."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Executive Search Firm (Retained)"
+      install: "N/A"
+  alternatives:
+    - name: "LinkedIn Recruiter"
+      when: "Sourcing organically before Series B."
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "The Scorecard Design"
+    tasks:
+      - "Before sourcing, write down the 3 specific outcomes this executive MUST achieve in the next 12 months. Do not hire based on pedigree; hire based on their ability to hit these 3 outcomes."
+  - step: "The 'Been There, Done That' Filter"
+    tasks:
+      - "If you are scaling from $1M to $10M ARR, hire an executive who has specifically scaled a company from $1M to $10M ARR before. Do NOT hire an executive who has only ever worked at a $1B corporate giant; they will drown without infrastructure."
+  - step: "Backchannel References"
+    tasks:
+      - "Do not rely on references provided by the candidate. Use your network to find people who worked with them previously and call them. Ask: 'Would you eagerly work for this person again?'"
+  - step: "The 90-Day Plan Presentation"
+    tasks:
+      - "For the final interview round, require the candidate to present a detailed 90-day execution plan to the founders. This tests their strategic thinking and domain knowledge."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Hiring a 'big name' executive from Google or Meta for a Seed stage startup. They are used to having 50 people beneath them and will freeze when asked to do individual contributor work."
+  - "Promoting an early, loyal employee to VP simply because they've been there the longest, even though they lack the skills to manage a 100-person department."
+
+best_practices:
+  - "Structure executive compensation with a significant performance-based bonus or equity milestones tied directly to company revenue targets."
+  - "Include the board of directors in the final interview loop for any C-level hire."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "A16Z: The Fine Art of Executive Hiring"
+    url: "https://a16z.com/2021/07/23/executive-hiring/"

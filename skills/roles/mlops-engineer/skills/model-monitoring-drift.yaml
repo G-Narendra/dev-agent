@@ -1,0 +1,111 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "model-monitoring-drift"
+display_name: "Model Monitoring & Data Drift Detection"
+description: >
+  Establish automated surveillance of machine learning models in production. 
+  Detects when the real-world data starts to diverge from the training data 
+  (Data Drift) or when the model's accuracy silently degrades over time (Concept Drift).
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "mlops-engineer"
+phase: "operations"
+applicable_startups:
+  - all
+priority: "critical"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Is the model still accurate?"
+  - "Monitor for data drift."
+  - "Set up model alerts."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "pip install evidently"
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "reference_data"
+      type: "string"
+      description: "The dataset the model was trained on."
+    - name: "production_data"
+      type: "string"
+      description: "The live data currently hitting the API."
+  optional:
+    - name: "monitoring_tool"
+      type: "string"
+      description: "EvidentlyAI, Arize, or Custom Grafana."
+      default: "EvidentlyAI"
+
+outputs:
+  files:
+    - path: "mlops/monitoring/drift_report.html"
+      description: "A dashboard showing feature drift metrics."
+  artifacts:
+    - "An automated alert sent to Slack when drift exceeds 10%."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "A scheduled job compares last week's production data against the training baseline and calculates the Population Stability Index (PSI)."
+  manual:
+    - "The data science team is alerted *before* a degraded model causes a drop in company revenue."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+
+safety_notes:
+  - "Do not capture and store raw user inputs (especially PII like credit card numbers) in the monitoring database without redacting or hashing them. Log the numerical features, not the sensitive raw text."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Evidently AI / Grafana"
+      install: "pip install evidently"
+  alternatives:
+    - name: "Arize AI / Arthur"
+      when: "Need an enterprise SaaS platform with advanced explainability features."
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Log Everything"
+    tasks:
+      - "The inference API MUST log every prediction, including: 1. A unique Request ID, 2. The exact feature vector used, 3. The predicted output, 4. The model version (e.g., `v1.2.0`)."
+  - step: "Data Drift Detection (Input Decay)"
+    tasks:
+      - "Monitor the distribution of the input features. If the model was trained on users aged 18-35, but a new marketing campaign brings in users aged 50-70, the model is flying blind. Alert the team to retrain."
+      - "Use statistical tests like the Kolmogorov-Smirnov (K-S) test or Population Stability Index (PSI)."
+  - step: "Concept Drift Detection (Output Decay)"
+    tasks:
+      - "This happens when the fundamental rules of the world change (e.g., COVID-19 breaking all consumer purchasing models). If you have 'Ground Truth' data (e.g., you predicted someone would click, and 24 hours later you know if they actually did), track the live F1/RMSE score over time."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "The 'Deploy and Forget' anti-pattern. Assuming a model that is 95% accurate today will be 95% accurate next year. Models degrade silently. Software throws an error when it breaks; models just make bad predictions."
+  - "Alerting on every minor statistical fluctuation. If you alert the team every time a single feature drifts by 1%, they will mute the channel. Alert on aggregate drift or critical feature drift."
+
+best_practices:
+  - "Establish an automated 'Retraining Trigger'. If Data Drift exceeds a certain threshold, automatically kick off an Airflow DAG to retrain the model on the latest data and evaluate it."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Evidently AI: Data Drift Detection"
+    url: "https://www.evidentlyai.com/data-drift"

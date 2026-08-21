@@ -1,0 +1,86 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "recommendation-systems"
+display_name: "Recommendation & Personalization Systems"
+description: >
+  Builds recommendation engines that drive engagement and discovery. 
+  Specializes in collaborative filtering, content-based recommendations, 
+  hybrid models, and real-time personalization at scale.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "recommendation-engineer"
+phase: "build"
+applicable_startups:
+  - media-creator
+  - ecommerce
+  - marketplace
+priority: "high"
+difficulty: "expert"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Data Collection"
+    tasks:
+      - "Instrument implicit signals (views, clicks, dwell time, shares)."
+      - "Collect explicit feedback (ratings, likes, saves)."
+  - step: "Model Selection"
+    tasks:
+      - "Start with collaborative filtering for user-item interactions."
+      - "Add content-based features (tags, categories, metadata)."
+  - step: "Real-Time Serving"
+    tasks:
+      - "Build real-time inference pipeline for personalization."
+      - "Implement cold-start handling for new users and items."
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Recommendation Systems process"
+  - "How do I handle recommendation systems?"
+  - "Implement recommendation systems"
+  - "Builds recommendation engines that drive engagement and discovery"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the recommendation systems process"
+  optional:
+    - name: "N/A"
+      type: "string"
+      description: "No optional inputs needed."
+
+outputs:
+  files:
+    - path: "outputs/recommendation-systems.md"
+      description: "Results of the recommendation systems process"
+  artifacts:
+    - "Completed recommendation systems deliverable"
+# ── QUALITY GATES ────────────────────────────────────────────
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start — retrofitting is expensive."
+anti_patterns:
+  - "Deploying a complex ML model before establishing a simple rule-based baseline."
+  - "Not handling the cold-start problem for new users or new items."
+  - "Optimizing for click-through rate when dwell time better measures genuine interest."
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

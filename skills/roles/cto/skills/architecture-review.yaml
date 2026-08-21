@@ -1,0 +1,105 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "architecture-review"
+display_name: "Architecture & Systems Design Review"
+description: >
+  Vets and approves the technical architecture for all major new systems. 
+  Ensures the proposed design is scalable, secure, and doesn't introduce 
+  crippling technical debt. Acts as the final quality gate before massive 
+  engineering effort is expended.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "cto"
+phase: "planning"
+applicable_startups:
+  - all
+priority: "critical"
+difficulty: "expert"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Can you review this system design?"
+  - "We are migrating to a microservices architecture."
+  - "Approve the technical spec."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Review design document (RFC)."
+  - "Generate architecture risk assessment."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "rfc_document"
+      type: "file"
+      description: "The Request for Comments (RFC) or Design Doc."
+  optional:
+    - name: "scale_requirements"
+      type: "string"
+      description: "Target TPS (Transactions Per Second)."
+      default: "1000 TPS"
+
+outputs:
+  files:
+    - path: "engineering/architecture/review-notes.md"
+      description: "The feedback and final decision (Approved/Rejected)."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "N/A"
+manual:
+  - "The system survives Black Friday traffic spikes without requiring a complete rewrite 6 months after launch."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "Analysis Paralysis: Do not let architecture reviews block development for weeks. Enforce a strict 48-hour SLA for providing feedback on design docs."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Excalidraw / Lucidchart"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "The 'Why' Verification"
+    tasks:
+      - "Before looking at the technical solution, verify the business problem. If an engineer proposes Kafka to solve a problem that could be solved by a simple Postgres table, reject it."
+  - step: "Single Point of Failure (SPOF) Analysis"
+    tasks:
+      - "Trace the critical path of the system. If the redis cache goes down, does the whole application crash, or does it gracefully degrade to reading from the primary database?"
+  - step: "The Migration Plan"
+    tasks:
+      - "Never approve a 'rewrite from scratch' without a phased migration plan. How will the old system run in parallel with the new system? How do we route traffic? How do we rollback?"
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Resume Driven Development. Approving Kubernetes and 15 microservices for a CRUD app that has 100 users just because the engineers want to learn it."
+  - "Rubber stamping designs without actually reading them, leading to fundamentally broken data models that take months to fix."
+
+best_practices:
+  - "Use the RFC (Request for Comments) process. Force engineers to write down the problem, the proposed solution, and the ALTERNATIVES they considered and rejected."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Gergely Orosz: Scaling Engineering Teams"
+    url: "https://blog.pragmaticengineer.com/scaling-engineering-teams-via-writing-things-down-rfcs/"

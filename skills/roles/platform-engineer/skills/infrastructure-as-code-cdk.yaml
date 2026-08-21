@@ -1,0 +1,111 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "infrastructure-as-code-cdk"
+display_name: "Infrastructure as Code (AWS CDK / Terraform)"
+description: >
+  Eradicate 'ClickOps' (manually clicking around the AWS console). 
+  Defines the entire cloud infrastructure in version-controlled code, 
+  making disaster recovery instant and environment replication trivial.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "platform-engineer"
+phase: "build"
+applicable_startups:
+  - all
+priority: "critical"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Spin up a staging environment."
+  - "Write the Terraform."
+  - "Deploy the VPC."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "cdk deploy"
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "cloud_provider"
+      type: "string"
+      description: "AWS, GCP, or Azure."
+    - name: "iac_tool"
+      type: "string"
+      description: "Terraform vs AWS CDK vs Pulumi."
+  optional:
+    - name: "environment"
+      type: "string"
+      description: "Dev vs Staging vs Prod."
+      default: "Dev"
+
+outputs:
+  files:
+    - path: "infrastructure/lib/network-stack.ts"
+      description: "The code defining the VPC, Subnets, and NAT Gateways."
+  artifacts:
+    - "A state file stored securely in an S3 backend."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "A new AWS account can be fully provisioned with the exact same architecture as Production in under 30 minutes via a single command."
+  manual:
+    - "Nobody logs into the AWS Web Console to make changes. All infrastructure changes go through GitHub Pull Requests."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+  - "network"
+
+safety_notes:
+  - "State File Security: The Terraform State file contains raw, unencrypted secrets (like database passwords). It MUST be stored in a highly secure remote backend (like an encrypted S3 bucket) with strict IAM restrictions, NEVER committed to GitHub."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "AWS CDK / Terraform"
+      install: "npm install -g aws-cdk"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Remote State & Locking"
+    tasks:
+      - "If two engineers run `terraform apply` at the same time, the infrastructure will corrupt. Configure a DynamoDB table for State Locking to prevent concurrent executions."
+  - step: "Modular Architecture"
+    tasks:
+      - "Do not write one massive 5,000-line `main.tf` file. Break it down into logical modules: Network (VPC), Database (RDS), Compute (EKS/ECS). This limits the blast radius if someone makes a mistake."
+  - step: "Least Privilege IAM"
+    tasks:
+      - "Never use `AdministratorAccess`. The code must define strict IAM roles for every Lambda function or ECS task. If a Lambda only needs to read from S3, explicitly deny it the ability to write to DynamoDB."
+  - step: "Drift Detection"
+    tasks:
+      - "If an engineer panics at 3 AM and manually changes a Security Group in the AWS console, the code is now out of sync with reality ('Drift'). Run a nightly drift detection script to flag any manual changes."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Hardcoding environment variables (e.g., `vpc_id = \"vpc-12345\"`). Infrastructure code must be dynamic and reusable. Use variables so the exact same code can deploy to both `us-east-1` and `eu-west-1`."
+  - "Deleting stateful resources blindly. Always set `prevent_destroy = true` on critical databases (RDS). If a junior engineer runs `cdk destroy`, it should fail rather than deleting the production customer data."
+
+best_practices:
+  - "Use AWS CDK (TypeScript/Python) instead of Terraform (HCL) if your team consists entirely of software engineers. They will adopt it 10x faster because they can use standard `for` loops and `if` statements."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "AWS CDK Best Practices"
+    url: "https://docs.aws.amazon.com/cdk/v2/guide/best-practices.html"

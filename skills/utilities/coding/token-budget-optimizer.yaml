@@ -1,0 +1,91 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "token-budget-optimizer"
+display_name: "LLM Token Budget Optimizer"
+description: >
+  Optimizes prompts, context injections, and agent loops to reduce LLM token 
+  burn. Employs summarization, RAG chunking, and JSON-enforcement to get 
+  high-quality AI reasoning at a fraction of the API cost.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "utility"
+phase: "all"
+applicable_startups:
+  - ai-startups
+  - all
+priority: "high"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Optimize this prompt for cost."
+  - "We are hitting the context window limit."
+  - "Save tokens on this request."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Compress prompt."
+  - "Extract dense summary."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "original_prompt"
+      type: "string"
+      description: "The verbose prompt or context block."
+  optional:
+    - name: "target_reduction"
+      type: "string"
+      description: "e.g., 'Reduce by 50%'."
+      default: "Max compression without losing facts."
+
+outputs:
+  files:
+    - path: "prompts/optimized.md"
+      description: "The dense, high-signal prompt."
+  artifacts:
+    - "A token count comparison (Before vs After)."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "Token count is reduced by at least 30%."
+  manual:
+    - "When fed to an LLM, the optimized prompt produces the exact same (or better) output quality as the original verbose prompt."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "Do not compress away edge-case instructions or safety guardrails. Saving 50 tokens is not worth a prompt injection vulnerability."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Tiktoken"
+      install: "pip install tiktoken"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Remove Conversational Fluff"
+    tasks:
+      - "Delete phrases like 'Please', 'Thank you', 'I would like you to...', and 'As an AI language model...'."
+  - step: "Format for Density"
+    tasks:
+      - "Convert prose paragraphs into bulleted lists or YAML structures. LLMs parse structured data highly efficiently."
+  - step: "Chain of Density Summarization"
+    tasks:
+      - "If injecting background documents, run a first-pass summarization to extract *only* the entities and facts relevant to the immediate task."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Using abbreviations the LLM doesn't understand to save tokens."
+  - "Sending the entire codebase in the context window instead of using semantic search (RAG) to find the 2 relevant files."
+
+best_practices:
+  - "Use few-shot examples (providing 2 input/output pairs) instead of 5 paragraphs explaining how to format the output. Examples are highly token-efficient."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Chain of Density Prompting"
+    url: "https://arxiv.org/abs/2309.04269"

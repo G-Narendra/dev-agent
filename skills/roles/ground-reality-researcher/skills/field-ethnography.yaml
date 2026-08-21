@@ -1,0 +1,82 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "field-ethnography"
+display_name: "In-Field Ethnographic Research"
+description: >
+  Conduct direct observational research in the user's physical work environment to identify
+  hidden workflows, workarounds, and environmental constraints.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "ground-reality-researcher"
+phase: "ideation"
+applicable_startups: 
+  - proptech
+  - logistics
+  - govtech
+priority: "mvp"
+difficulty: "advanced"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Observation"
+    tasks:
+      - "Shadow the target user for a full shift. Document every piece of software or physical paper they touch."
+      - "Note any environmental factors (noise, bad Wi-Fi, gloves, glare)."
+  - step: "Identify the 'Workaround'"
+    tasks:
+      - "Look for 'Post-It Note' workflows—places where the user has hacked together a solution because the official tool is broken."
+  - step: "Synthesis"
+    tasks:
+      - "Present a reality-check report to the engineering team detailing why the current mobile app design will fail in the field."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Designing a complex inventory app for warehouse workers without realizing they don't have reliable Wi-Fi inside the metal warehouse."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Field Ethnography process"
+  - "How do I handle field ethnography?"
+  - "Implement field ethnography"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the field ethnography process"
+  optional:
+    - name: "target_audience"
+      type: "string"
+      description: "Target user or customer segment"
+      default: "Primary user persona"
+
+outputs:
+  files:
+    - path: "outputs/field-ethnography.md"
+      description: "Results of the field ethnography process"
+  artifacts:
+    - "Completed field ethnography deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

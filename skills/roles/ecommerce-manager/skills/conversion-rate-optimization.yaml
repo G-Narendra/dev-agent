@@ -1,0 +1,114 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "conversion-rate-optimization"
+display_name: "Conversion Rate Optimization (CRO)"
+description: >
+  Systematically increase the percentage of website visitors who complete a 
+  checkout. Focuses on A/B testing layouts, reducing cart friction, and 
+  optimizing page load speeds to drive immediate top-line revenue growth.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "ecommerce-manager"
+phase: "operations"
+applicable_startups:
+  - e-commerce
+priority: "critical"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Traffic is high but sales are low."
+  - "Optimize the checkout page."
+  - "Run an A/B test on the product page."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Analyze heatmaps and configure VWO test."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "current_conversion_rate"
+      type: "string"
+      description: "The baseline metric (e.g., 2.1%)."
+    - name: "target_page"
+      type: "string"
+      description: "Homepage vs Product Page vs Cart."
+  optional:
+    - name: "traffic_volume"
+      type: "string"
+      description: "Monthly Unique Visitors (Need >10k for statistical significance)."
+      default: "10,000+"
+
+outputs:
+  files:
+    - path: "ecommerce/cro/ab-test-plan.md"
+      description: "The hypothesis and variations for the test."
+  artifacts:
+    - "A wireframe of the optimized product page."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "N/A"
+  manual:
+    - "The e-commerce conversion rate increases by 0.5% absolute (e.g., 2.0% to 2.5%), directly increasing revenue without increasing ad spend."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+
+safety_notes:
+  - "The 'Flicker' Effect: When using client-side A/B testing tools (like Optimizely), ensure the script loads synchronously at the top of the `<head>`. If it loads asynchronously, users will see the original page for 0.5 seconds before it snaps to the Variation, ruining the test."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "VWO / Optimizely"
+      install: "N/A"
+  alternatives:
+    - name: "Hotjar / Microsoft Clarity"
+      when: "Need qualitative heatmaps to figure out *why* users aren't clicking."
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Identify the Bottleneck"
+    tasks:
+      - "Look at the funnel: Homepage -> Product Page -> Add to Cart -> Checkout -> Purchase. If 80% drop off at Checkout, stop testing the Homepage. Focus all CRO efforts on the Checkout."
+  - step: "Qualitative Research (Heatmaps)"
+    tasks:
+      - "Watch Hotjar session recordings. Are users furiously clicking on an image that isn't actually a link? Are they scrolling past the 'Add to Cart' button because it blends into the background?"
+  - step: "Formulate the Hypothesis"
+    tasks:
+      - "Do not just guess. Write a hypothesis: 'Because users cannot see shipping costs until the final step, they abandon the cart. If we add a Shipping Estimator to the Product Page, conversions will increase by X%'."
+  - step: "The 'Frictionless' Checkout"
+    tasks:
+      - "Enable Guest Checkout. Forcing a user to create an account with a complex password just to buy a $20 t-shirt is the #1 killer of e-commerce conversions."
+      - "Implement Apple Pay / Google Pay / Shop Pay for 1-click checkout."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Testing 5 things at once (Button Color + Headline + Image + Pricing). If conversions go up, you have no idea which change actually caused the increase. Test ONE variable at a time (A/B) unless using Multivariate Testing with massive traffic."
+  - "Ending tests too early. If Variation B is winning on Day 2, do not stop the test. You must reach Statistical Significance (usually 95%) and run the test for at least one full business cycle (7-14 days) to account for weekend behavior."
+
+best_practices:
+  - "The 'Squint Test'. Squint your eyes and look at the product page. If the 'Add to Cart' button is not the absolute most obvious, high-contrast element on the screen, change its color immediately."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "CXL: Conversion Rate Optimization Guide"
+    url: "https://cxl.com/guides/conversion-rate-optimization/"

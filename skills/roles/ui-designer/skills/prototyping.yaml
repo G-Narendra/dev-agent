@@ -1,0 +1,120 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "prototyping"
+display_name: "High-Fidelity Prototyping & Micro-Interactions"
+description: >
+  Transforms static UI mockups into interactive, clickable prototypes. 
+  Bridges the gap between design and development by validating complex user 
+  flows and micro-animations before engineering writes any code. Covers key patterns to avoid common pitfalls like designing for the ideal screen size first -- mobile-first fo, and provides actionable best practices for production-ready results.
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "ui-designer"
+phase: "build"
+applicable_startups:
+  - all
+priority: "high"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "How exactly does this animation work?"
+  - "Link these screens together."
+  - "Create a clickable prototype for investors."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Draft prototype interaction specs."
+  - "Generate animation easing curves."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "user_flow"
+      type: "string"
+      description: "The sequence of screens to connect."
+  optional:
+    - name: "animation_complexity"
+      type: "string"
+      description: "Basic (Screen transitions) vs Advanced (Micro-interactions)."
+      default: "Basic"
+
+outputs:
+  files:
+    - path: "design/prototypes/onboarding_flow_v2.md"
+      description: "Interaction and easing specifications."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "N/A"
+manual:
+  - "A user testing the prototype believes they are using the real, coded application."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "Impossible Engineering: Do not design beautiful, complex 3D particle animations in a prototyping tool like Principle or After Effects if the engineering team has no budget or framework (like WebGL) to actually build it."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Figma (Prototyping Mode)"
+      install: "N/A"
+  alternatives:
+    - name: "Framer / Protopie"
+      when: "Advanced logic or hardware sensor prototyping is needed."
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Component-Level Prototyping"
+    tasks:
+      - "Instead of creating 15 duplicate screens just to show a button's hover state, use Figma's 'Interactive Components' to bake the hover state directly into the Master Component."
+  - step: "Realistic Content"
+    tasks:
+      - "Never prototype an empty state (unless testing the empty state itself). Fill the prototype with realistic data, realistic user names, and realistic edge cases (like a failed password attempt)."
+  - step: "Handoff Documentation"
+    tasks:
+      - "Document the exact physics of the animation for the engineers. Don't just say 'It bounces in'. Specify: `ease-out-back, duration: 300ms, delay: 0ms`."
+      - "Add a troubleshooting section covering the top 3 known issues and their solutions."
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Designing for the ideal screen size first -- mobile-first forces better prioritization and prevents content overflow disasters."
+  - "Using color as the only differentiator for states (error, success, disabled) -- inaccessible to colorblind users."
+  - "Shipping UI without loading, empty, and error states -- the user is left guessing what happened."
+  - "Creating components in isolation without real content -- 'lorem ipsum' hides layout problems that real text exposes."
+  - "Ignoring touch target sizes (minimum 44x44px) on mobile -- users fat-finger the wrong button and get frustrated."
+  - "Test the prototype on the actual target device. A mobile prototype feels very different when clicked with a mouse on a 27-inch monitor compared to tapping it on a real iPhone."
+
+  - "Design in vector format (SVG/EPS) — logos must scale from favicon (16px) to billboard (10m) without quality loss."
+  - "Test every logo in three formats: full color, single color (black), and inverted (white on dark background)."
+  - "Ensure the logo is recognizable at 16x16px before finalizing — if it doesn't work as a favicon, simplify."
+  - "Wait 48 hours between creating and finalizing a logo — fresh eyes catch symmetry and proportion issues."
+  - "Create a brand guidelines document that specifies clear space, minimum size, color palette, and incorrect usage examples."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Not defining clear success criteria before starting a task -- leads to ambiguous outcomes, endless revisions, and wasted effort."
+
+best_practices:
+  - "Document all configuration decisions in an Architecture Decision Record (ADR) so future team members understand why choices were made."
+  - "Implement comprehensive error handling with structured logging at every integration boundary to simplify debugging."
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Figma: Guide to Prototyping"
+    url: "https://help.figma.com/hc/en-us/articles/360040314193-Guide-to-prototyping-in-Figma"

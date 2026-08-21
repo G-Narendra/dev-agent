@@ -1,0 +1,81 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "ambassador-program"
+display_name: "Community Ambassador Programs"
+description: >
+  Identify power users and empower them with tools, status, and direct access to the 
+  founding team to scale community support and evangelism organically.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "community-manager"
+phase: "growth"
+applicable_startups: 
+  - devtools
+  - web3
+  - consumer
+priority: "high"
+difficulty: "advanced"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Identification"
+    tasks:
+      - "Use analytics to identify the top 1% of users who organically answer questions in the forum or Discord before the official support team does."
+  - step: "Status vs Money"
+    tasks:
+      - "Reward ambassadors with high-status titles, exclusive merchandise, and early beta access rather than purely cash, which turns community into a transaction."
+  - step: "The Feedback Loop"
+    tasks:
+      - "Host a private, monthly roundtable with the top 10 ambassadors and the CEO, giving them direct influence over the product roadmap."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Paying random people on Fiverr to pretend to be enthusiastic users in the community server, instantly destroying all trust with actual customers."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Ambassador Program process"
+  - "How do I handle ambassador program?"
+  - "Implement ambassador program"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the ambassador program process"
+  optional:
+    - name: "target_audience"
+      type: "string"
+      description: "Target user or customer segment"
+      default: "Primary user persona"
+
+outputs:
+  files:
+    - path: "outputs/ambassador-program.md"
+      description: "Results of the ambassador program process"
+  artifacts:
+    - "Completed ambassador program deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

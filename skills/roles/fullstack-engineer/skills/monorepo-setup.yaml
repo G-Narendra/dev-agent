@@ -1,0 +1,110 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "monorepo-setup"
+display_name: "Monorepo Setup & Package Sharing"
+description: >
+  Configure a single Git repository to hold multiple projects (e.g., frontend app, 
+  backend API, shared UI components, shared TS types). Focuses on Turborepo/Nx 
+  for fast caching and workspace linking.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "fullstack-engineer"
+phase: "build"
+applicable_startups:
+  - all
+priority: "high"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Set up a monorepo."
+  - "Share code between frontend and backend."
+  - "Configure Turborepo."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "npx create-turbo@latest"
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "projects"
+      type: "string"
+      description: "List of apps (e.g., 'web', 'api', 'admin')."
+  optional:
+    - name: "tooling"
+      type: "string"
+      description: "Turborepo vs Nx vs Lerna."
+      default: "Turborepo"
+
+outputs:
+  files:
+    - path: "turbo.json"
+      description: "The pipeline caching configuration."
+  artifacts:
+    - "A shared `@company/ui` package."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "Running `npm run build` caches the results. Running it again takes < 1 second."
+  manual:
+    - "A developer can update a shared button component and immediately see it reflect in both the Admin app and the Consumer app."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+
+safety_notes:
+  - "Do not accidentally deploy the entire monorepo to a single Vercel/Render instance. Ensure the CI/CD pipeline correctly identifies the `apps/web` root directory when deploying the frontend."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Turborepo + pnpm workspaces"
+      install: "npm i -g pnpm"
+  alternatives:
+    - name: "Nx"
+      when: "Need aggressive code generation and strict boundary enforcement in enterprise Angular/React."
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Workspace Configuration"
+    tasks:
+      - "Create a `pnpm-workspace.yaml` defining the `apps/*` and `packages/*` directories."
+      - "Create a `packages/config` folder to hold shared ESLint and TypeScript configs. This prevents config drift."
+  - step: "Shared Packages Setup"
+    tasks:
+      - "Create a `packages/ui` folder for shared React components. Ensure it has a `package.json` with a name like `@acme/ui`."
+      - "Create a `packages/database` folder containing the Prisma schema and the generated client. This allows the Next.js app and the Express API to use the exact same DB types."
+  - step: "Turborepo Pipeline"
+    tasks:
+      - "Configure `turbo.json`. Ensure the `build` task depends on its dependencies' build task (`^build`)."
+      - "Enable Remote Caching so if Developer A builds the project, Developer B gets a cache hit and skips the build."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "The 'Monolith Repo'. Putting the frontend and backend in the same folder without using Workspace configuration, causing `node_modules` conflicts and impossible deployments."
+  - "Circular dependencies between internal packages (e.g., `packages/ui` imports from `apps/web`). Packages must only depend downstream."
+
+best_practices:
+  - "Enforce a strict boundary. Apps can import Packages, but Apps cannot import other Apps, and Packages cannot import Apps."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Turborepo Documentation"
+    url: "https://turbo.build/repo/docs"

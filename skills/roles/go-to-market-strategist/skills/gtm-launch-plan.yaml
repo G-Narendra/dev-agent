@@ -1,0 +1,105 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "gtm-launch-plan"
+display_name: "Go-To-Market (GTM) Launch Strategy"
+description: >
+  Orchestrates the chaotic launch of a new product or feature. Aligns 
+  Product, Sales, and Marketing so the feature doesn't just launch 
+  silently, but generates immediate pipeline and market noise.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "go-to-market-strategist"
+phase: "growth"
+applicable_startups:
+  - all
+priority: "critical"
+difficulty: "expert"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "We are launching V2 next month."
+  - "How do we announce this feature?"
+  - "The Sales team doesn't know what to sell."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Generate GTM alignment checklist."
+  - "Draft Product Hunt launch strategy."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "product_release"
+      type: "string"
+      description: "What exactly is shipping?"
+    - name: "launch_date"
+      type: "string"
+      description: "When is the embargo lifting?"
+  optional:
+    - name: "target_audience"
+      type: "string"
+      description: "Existing users vs Net-new logos."
+      default: "Net-New Logos"
+
+outputs:
+  files:
+    - path: "marketing/gtm/v2_launch_manifesto.md"
+      description: "The synchronized plan across all departments."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "N/A"
+manual:
+  - "The launch generates a 300% spike in inbound pipeline over the baseline, and the Sales team is fully equipped to pitch it on Day 1."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "The 'Silent Release' Failure: Never let Engineering deploy a major feature on a Friday without telling Marketing. If you build it, they will NOT come. A product release without a coordinated GTM motion is a waste of engineering time."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Notion / Product Hunt"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "The Tiered Launch Strategy"
+    tasks:
+      - "Not every feature is a Tier 1 launch (Press Release, Webinars, Ads). If it's a minor UI update, it's Tier 3 (Changelog only). Define the tier immediately so Marketing doesn't waste 40 hours writing copy for a minor bug fix."
+  - step: "Sales Enablement (The 'Why Buy Now')"
+    tasks:
+      - "Before the public launch, train the Sales team. They do not care how the feature works technically; they care how to sell it. Give them 3 discovery questions to ask prospects to pivot the conversation to the new feature."
+  - step: "The 'Rolling Thunder' Launch"
+    tasks:
+      - "Do not blow all your marketing on Day 1. Day 1: Product Hunt. Day 3: Founder Podcast interview drops. Day 7: Customer Case Study published. Day 14: Webinar. Keep the startup in the news cycle for a full month."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Setting a GTM launch date based on 'When the code is done'. Code is never done on time. If you book a massive PR campaign for Oct 1st, and the code slips to Oct 15th, you waste $50k. Freeze the code 2 weeks before the PR hits."
+best_practices:
+  - "Implement the 'Dark Launch' first. Release the feature behind a feature-flag to 5% of users to test for catastrophic bugs. Once it's stable, trigger the massive Marketing launch."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Reforge: Go-To-Market Strategy"
+    url: "https://www.reforge.com/go-to-market-strategy"

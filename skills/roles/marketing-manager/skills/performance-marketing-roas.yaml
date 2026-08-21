@@ -1,0 +1,112 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "performance-marketing-roas"
+display_name: "Performance Marketing & ROAS Optimization"
+description: >
+  Manage paid advertising campaigns (Google Ads, Meta, LinkedIn) with strict 
+  financial discipline. Focuses on maximizing Return on Ad Spend (ROAS) and 
+  lowering Customer Acquisition Cost (CAC) through aggressive A/B testing.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "marketing-manager"
+phase: "growth"
+applicable_startups:
+  - e-commerce
+  - b2b-saas
+priority: "high"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Launch a Facebook ad campaign."
+  - "Our CAC is too high."
+  - "Optimize the Google Ads."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Calculate target CPA and ROAS."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "daily_budget"
+      type: "string"
+      description: "How much money can we burn per day?"
+    - name: "target_cpa"
+      type: "string"
+      description: "Cost Per Acquisition. Maximum amount we can pay to acquire one user."
+  optional:
+    - name: "ad_platform"
+      type: "string"
+      description: "Google Ads (Intent) vs Meta (Discovery)."
+      default: "Google Ads"
+
+outputs:
+  files:
+    - path: "marketing/ads/campaign-structure.md"
+      description: "The layout of Ad Groups and specific creatives."
+  artifacts:
+    - "A spreadsheet tracking weekly CAC, LTV, and ROAS."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "N/A"
+  manual:
+    - "The campaign achieves a ROAS > 3.0 (For every $1 spent, the startup earns $3 in revenue)."
+    - "LTV:CAC ratio is maintained above 3:1."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+
+safety_notes:
+  - "Budget Runaways: Check the 'Broad Match' settings in Google Ads. If you bid on 'CRM software' as Broad Match, Google will spend your entire budget showing ads to people searching for 'free software development tutorials'. Use Exact or Phrase match initially."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Google Ads / Meta Ads Manager"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Platform Selection"
+    tasks:
+      - "Google Ads captures 'Intent' (they are actively searching to buy). Meta/TikTok captures 'Discovery' (they didn't know they needed it). LinkedIn is for high-ticket B2B (expensive clicks, but targeted by Job Title)."
+  - step: "Tracking Setup (The Pixel)"
+    tasks:
+      - "Do NOT spend a single dollar until tracking is perfectly configured. Install the Meta Pixel / Google Tag Manager. Ensure a 'Conversion' is only fired when a credit card is actually charged, not just when a button is clicked."
+  - step: "The A/B Testing Matrix"
+    tasks:
+      - "Test one variable at a time. Run 3 ads with the exact same Image, but 3 different Headlines. Find the winning Headline. Then run that Headline against 3 different Images. Iterate endlessly."
+  - step: "Landing Page Optimization"
+    tasks:
+      - "If the ad has a 5% Click-Through Rate (great), but the landing page has a 0.5% conversion rate (terrible), stop tweaking the ad. Fix the landing page. Ensure the headline of the landing page perfectly matches the promise made in the ad."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Focusing on 'Vanity Metrics'. Celebrating a low Cost Per Click (CPC) or millions of Impressions is useless if those clicks don't buy the product. Optimize strictly for Cost Per Acquisition (CPA) and ROAS."
+  - "Over-segmenting the audience on Facebook. Meta's algorithm is smarter than you. If you restrict the audience to 10,000 people, the algorithm cannot learn. Give it a broad audience (2M+) and let the creative do the targeting."
+
+best_practices:
+  - "Implement Retargeting immediately. 98% of people will not buy on their first visit. Set up a campaign that shows ads specifically to people who visited the pricing page in the last 7 days but didn't convert."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Google Ads: Bidding Strategies"
+    url: "https://support.google.com/google-ads/answer/2472725"

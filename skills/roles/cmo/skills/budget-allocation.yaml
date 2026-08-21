@@ -1,0 +1,109 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "budget-allocation"
+display_name: "Marketing Budget Allocation & ROI Tracking"
+description: >
+  Determines exactly where marketing dollars should be spent across Paid Ads, 
+  Content, Events, and Outbound. Tracks Customer Acquisition Cost (CAC) 
+  by channel to aggressively reallocate budget toward the highest-performing 
+  channels.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "cmo"
+phase: "operations"
+applicable_startups:
+  - all
+priority: "critical"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Where should we spend our marketing budget?"
+  - "Our CAC is too high."
+  - "Which channel is driving the most revenue?"
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Generate marketing budget."
+  - "Calculate blended CAC vs. channel CAC."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "total_budget"
+      type: "string"
+      description: "Total marketing spend allowed per quarter."
+    - name: "revenue_target"
+      type: "string"
+      description: "The pipeline/revenue marketing needs to generate."
+  optional:
+    - name: "attribution_model"
+      type: "string"
+      description: "First-touch, Last-touch, or Multi-touch."
+      default: "Multi-touch"
+
+outputs:
+  files:
+    - path: "marketing/operations/q3-budget-allocation.xlsx"
+      description: "The line-item breakdown of spend."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "N/A"
+manual:
+  - "Marketing generates $3+ in Pipeline for every $1 spent (a 3:1 Pipeline ROI ratio)."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "Vanity Metrics: Do not allocate budget to channels just because they generate 'impressions' or 'clicks'. If the traffic doesn't convert to paying customers, cut the budget immediately."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Google Analytics 4 / HubSpot"
+      install: "N/A"
+  alternatives:
+    - name: "HockeyStack / Dreamdata"
+      when: "Doing complex B2B multi-touch attribution."
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "The 70-20-10 Rule"
+    tasks:
+      - "Allocate 70% of the budget to proven channels that generate ROI. 20% to scaling new promising channels. 10% to wild, high-risk experiments."
+  - step: "Channel CAC Isolation"
+    tasks:
+      - "Calculate the exact CAC for Google Ads vs. LinkedIn Ads vs. SEO. Do not rely on 'Blended CAC' because it hides the fact that one channel is burning money while another is highly profitable."
+  - step: "Diminishing Returns Tracking"
+    tasks:
+      - "Understand that spending $10k on Facebook Ads might yield a $50 CAC, but scaling that spend to $100k might increase the CAC to $200. Reallocate budget when a channel saturates."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Funding 'Brand Awareness' campaigns without any mechanism to track if that awareness ever turns into revenue. Startups cannot afford unmeasurable branding."
+best_practices:
+  - "Hold a weekly 'Marketing Metrics' sync with the CFO. Present the exact Pipeline generated vs. Dollars spent. The CMO must own a revenue number, not just a leads number."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Reforge: Marketing Strategy"
+    url: "https://www.reforge.com/marketing-strategy"

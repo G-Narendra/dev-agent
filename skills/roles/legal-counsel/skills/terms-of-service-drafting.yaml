@@ -1,0 +1,81 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "terms-of-service-drafting"
+display_name: "Terms of Service & Privacy Policy Setup"
+description: >
+  Draft the foundational legal agreements (ToS, Privacy Policy) required to operate a web platform,
+  protecting the company from liability and outlining data usage.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "legal-counsel"
+phase: "operations"
+applicable_startups: 
+  - all
+priority: "mvp"
+difficulty: "advanced"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Privacy Policy"
+    tasks:
+      - "Detail exactly what data is collected (e.g., Cookies, Email, IP)."
+      - "Explain how the data is used and state explicitly if it is sold to third parties."
+  - step: "Terms of Service"
+    tasks:
+      - "Include an 'As-Is' clause limiting liability for bugs or downtime."
+      - "Include a 'Termination' clause reserving the right to ban users for abuse."
+  - step: "User Consent"
+    tasks:
+      - "Ensure the frontend requires explicit checkbox consent during signup (no pre-checked boxes)."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Copy-pasting a privacy policy from a random website without verifying if it applies to your specific data practices."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Terms Of Service Drafting process"
+  - "How do I handle terms of service drafting?"
+  - "Implement terms of service drafting"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the terms of service drafting process"
+  optional:
+    - name: "data_source"
+      type: "string"
+      description: "Source of data to analyze"
+      default: "Internal data"
+
+outputs:
+  files:
+    - path: "outputs/terms-of-service-drafting.md"
+      description: "Results of the terms of service drafting process"
+  artifacts:
+    - "Completed terms of service drafting deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "US Copyright Office"
+    url: "https://www.copyright.gov"
+  - title: "SEC EDGAR"
+    url: "https://www.sec.gov/edgar"

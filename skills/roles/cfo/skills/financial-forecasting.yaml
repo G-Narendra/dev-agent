@@ -1,0 +1,108 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "financial-forecasting"
+display_name: "Financial Forecasting & Projections"
+description: >
+  Projects future revenue and expenses based on historical data, sales pipeline, 
+  and market conditions. Provides leadership with visibility into when to hire, 
+  when to cut costs, and when the company will hit profitability.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "cfo"
+phase: "planning"
+applicable_startups:
+  - all
+priority: "high"
+difficulty: "expert"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "What is our Q4 revenue projection?"
+  - "Can we afford to hire 5 more engineers?"
+  - "Update the financial forecast."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Generate revenue forecast."
+  - "Run hiring scenario model."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "sales_pipeline"
+      type: "string"
+      description: "Weighted value of current CRM deals."
+    - name: "historical_churn"
+      type: "string"
+      description: "Monthly customer churn rate."
+  optional:
+    - name: "headcount_plan"
+      type: "string"
+      description: "Proposed hires for the next 12 months."
+      default: "Current headcount only"
+
+outputs:
+  files:
+    - path: "finance/planning/q4-forecast.md"
+      description: "The projected P&L (Profit and Loss)."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "N/A"
+manual:
+  - "Actual end-of-quarter revenue and expenses fall within a 5% margin of error of the forecasted numbers."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "Garbage In, Garbage Out: Do not base revenue forecasts on un-weighted sales pipelines. An early-stage deal is not a 100% guarantee; weight it at 10% probability."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Excel / Google Sheets"
+      install: "N/A"
+  alternatives:
+    - name: "Mosaic / Cube"
+      when: "Automating FP&A (Financial Planning & Analysis)."
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Bottom-Up Forecasting"
+    tasks:
+      - "Do not forecast top-down ('We will capture 1% of a $1B market'). Forecast bottom-up: 'We have 5 sales reps. Each rep makes 50 calls a day. A 2% conversion yields X deals'."
+  - step: "Headcount Modeling"
+    tasks:
+      - "Remember that a $100k salary costs the company $130k when factoring in taxes, benefits, and software licenses. Model the fully-loaded cost of every new hire."
+  - step: "The 'Variance' Meeting"
+    tasks:
+      - "At the end of every month, hold a Variance Meeting with department heads. 'You budgeted $10k for marketing but spent $15k. Why did this variance occur?'"
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "The 'Hockey Stick' Forecast. Projecting flat revenue for 11 months, followed by an inexplicable 500% spike in month 12 just to make the annual goal look achievable on paper."
+best_practices:
+  - "Always forecast cash on a monthly basis, not annually. A company can be profitable annually but run out of cash in March because annual software subscriptions are paid upfront."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "a16z: 16 Startup Metrics"
+    url: "https://a16z.com/2015/08/21/16-startup-metrics/"

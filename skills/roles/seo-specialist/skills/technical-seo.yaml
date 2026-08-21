@@ -1,0 +1,80 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "technical-seo"
+display_name: "Technical SEO & Indexing Architecture"
+description: >
+  Ensure the web platform is perfectly indexable by search engine bots, optimizing 
+  Core Web Vitals, dynamic sitemaps, and canonical architectures.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "seo-specialist"
+phase: "growth"
+applicable_startups: 
+  - ecommerce
+  - media
+  - saas
+priority: "high"
+difficulty: "advanced"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Crawl Budget Optimization"
+    tasks:
+      - "Implement canonical tags on all paginated pages and product variants to prevent duplicate content from eating the crawl budget."
+  - step: "Dynamic Rendering"
+    tasks:
+      - "Ensure the frontend framework (Next.js/Nuxt) serves fully rendered HTML to Googlebot, rather than requiring the bot to execute JavaScript."
+  - step: "Structured Data"
+    tasks:
+      - "Inject JSON-LD schema markup (e.g., Article, Product, Organization) to secure rich snippets in the SERP."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Deploying a massive Single Page Application (React SPA) without Server-Side Rendering (SSR), meaning Googlebot just sees an empty `<div id='root'></div>`."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Technical Seo process"
+  - "How do I handle technical seo?"
+  - "Implement technical seo"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the technical seo process"
+  optional:
+    - name: "N/A"
+      type: "string"
+      description: "No optional inputs needed."
+
+outputs:
+  files:
+    - path: "outputs/technical-seo.md"
+      description: "Results of the technical seo process"
+  artifacts:
+    - "Completed technical seo deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Google Search Central"
+    url: "https://developers.google.com/search/docs"
+  - title: "Ahrefs Blog"
+    url: "https://ahrefs.com/blog"

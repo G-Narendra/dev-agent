@@ -1,0 +1,95 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "cluster-setup"
+display_name: "Kubernetes Cluster Setup & Management"
+description: >
+  Provision, configure, and manage production-grade Kubernetes clusters.
+  Covers node pools, networking, RBAC, and cluster autoscaling.
+role: "kubernetes-engineer"
+phase: "build"
+applicable_startups:
+  - all
+priority: "critical"
+difficulty: "advanced"
+trigger_phrases:
+  - "Set up a Kubernetes cluster for..."
+  - "Provision an EKS/GKE/AKS cluster for..."
+  - "Configure cluster networking and RBAC..."
+example_cli_actions:
+  - "eksctl create cluster --config-file cluster.yaml"
+  - "kubectl apply -f manifests/ --namespace production"
+inputs:
+  required:
+    - name: "cloud_provider"
+      type: "string"
+      description: "AWS (EKS), GCP (GKE), or Azure (AKS)."
+    - name: "environment"
+      type: "string"
+      description: "production, staging, or development."
+  optional:
+    - name: "node_groups"
+      type: "list"
+      description: "Node group configurations."
+      default: "1 system group + 1 application group per environment"
+outputs:
+  files:
+    - path: "infra/cluster/cluster-config.yaml"
+      description: "Cluster provisioning configuration."
+    - path: "infra/cluster/rbac-policies.yaml"
+      description: "RBAC policies for team access."
+  artifacts:
+    - "kubeconfig file for cluster access."
+success_criteria:
+  automated:
+    - "Cluster nodes pass all health checks within 10 minutes of provisioning."
+    - "All control plane components are healthy."
+  manual:
+    - "Developers can deploy an application using kubectl apply with correct RBAC."
+permissions_needed:
+  - "cloud provider admin access"
+  - "IAM role creation permissions"
+safety_notes:
+  - "Never expose the Kubernetes API server to the public internet without IP whitelisting."
+  - "Always use managed control planes (EKS/GKE/AKS) instead of self-managed etcd in production."
+recommended_tools:
+  primary:
+    - name: "eksctl / gcloud CLI / az aks"
+      install: "N/A (provider-specific CLI)"
+  alternatives:
+    - name: "kops"
+      when: "Need to provision on EC2 directly without EKS."
+implementation_checklist:
+  - step: "Network Design"
+    tasks:
+      - "Design a VPC with public/private subnets across 3 availability zones."
+      - "Configure Calico or Cilium for network policies."
+  - step: "Node Groups"
+    tasks:
+      - "Create a system node group for critical add-ons (CoreDNS, metrics-server)."
+      - "Create a spot instance node group for stateless workloads."
+  - step: "RBAC Setup"
+    tasks:
+      - "Create role bindings for each team (dev, ops, security)."
+      - "Integrate with OIDC provider for SSO-based authentication."
+anti_patterns:
+  - "Running production workloads on a single-node cluster with no HA."
+  - "Granting cluster-admin to every developer instead of using namespaced roles."
+best_practices:
+  - "Use Infrastructure as Code (Terraform, Pulumi) for all cluster provisioning."
+references:
+  - title: "EKS Best Practices"
+    url: "https://aws.github.io/aws-eks-best-practices/"
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."

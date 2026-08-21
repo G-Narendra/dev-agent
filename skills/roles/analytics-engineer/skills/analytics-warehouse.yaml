@@ -1,0 +1,95 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "analytics-warehouse"
+display_name: "Analytics Warehouse Architecture"
+description: >
+  Design and optimize analytics data warehouses for fast query performance.
+  Covers schema design, partitioning, clustering, and query optimization.
+role: "analytics-engineer"
+phase: "operations"
+applicable_startups:
+  - all
+priority: "critical"
+difficulty: "advanced"
+trigger_phrases:
+  - "Design the analytics warehouse schema for..."
+  - "Optimize query performance on..."
+  - "Set up partitioning and clustering for..."
+example_cli_actions:
+  - "dbt run-operation optimize_warehouse"
+  - "python scripts/analyze_query_performance.py"
+inputs:
+  required:
+    - name: "warehouse_platform"
+      type: "string"
+      description: "Snowflake, BigQuery, Redshift, or ClickHouse."
+    - name: "data_volume_estimate"
+      type: "string"
+      description: "Estimated data volume (GB/day)."
+  optional:
+    - name: "query_patterns"
+      type: "string"
+      description: "Common query patterns to optimize for."
+      default: "Time-range based aggregations"
+outputs:
+  files:
+    - path: "warehouse/schema-design.md"
+      description: "Schema design documentation."
+    - path: "warehouse/cost-optimization.md"
+      description: "Cost optimization recommendations."
+  artifacts:
+    - "DDL scripts for table creation with partitioning/clustering."
+success_criteria:
+  automated:
+    - "Common dashboard queries execute in under 2 seconds."
+    - "Warehouse costs stay within 90% of monthly budget."
+  manual:
+    - "Schema supports both high-level summaries and granular drill-downs."
+permissions_needed:
+  - "warehouse admin access"
+  - "billing/cost monitoring access"
+safety_notes:
+  - "Never run ALTER TABLE SET OPTIMIZATION on production without testing first."
+  - "Monitor query costs after schema changes."
+recommended_tools:
+  primary:
+    - name: "Snowflake / BigQuery"
+      install: "N/A (managed service)"
+  alternatives:
+    - name: "ClickHouse"
+      when: "Need real-time analytical queries on high-velocity data."
+implementation_checklist:
+  - step: "Schema Design"
+    tasks:
+      - "Design a star schema with fact and dimension tables."
+      - "Use surrogate keys for dimension tables."
+  - step: "Partitioning Strategy"
+    tasks:
+      - "Partition large fact tables by date (monthly or daily)."
+      - "Cluster by frequently filtered columns."
+  - step: "Cost Optimization"
+    tasks:
+      - "Set up warehouse auto-suspend after 5 minutes of inactivity."
+      - "Create materialized views for expensive queries."
+anti_patterns:
+  - "Using transactional DB as analytics warehouse, degrading both systems."
+  - "Creating hundreds of tables without naming conventions or docs."
+best_practices:
+  - "Separate compute from storage so query load doesnt affect data freshness."
+references:
+  - title: "Snowflake Schema Design Guide"
+    url: "https://docs.snowflake.com/en/user-guide/schemas"
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."

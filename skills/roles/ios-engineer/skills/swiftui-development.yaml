@@ -1,0 +1,81 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "swiftui-development"
+display_name: "SwiftUI Native Development"
+description: >
+  Build native iOS user interfaces using SwiftUI and the MVVM architecture, ensuring
+  reactive state management and adherence to Apple Human Interface Guidelines.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "ios-engineer"
+phase: "build"
+applicable_startups: 
+  - mobile-first
+priority: "mvp"
+difficulty: "advanced"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Architecture Setup"
+    tasks:
+      - "Implement the MVVM (Model-View-ViewModel) pattern to separate business logic from UI."
+      - "Use `@StateObject` and `@Published` for reactive data flow."
+  - step: "UI Implementation"
+    tasks:
+      - "Translate Figma designs into SwiftUI Views using `VStack`, `HStack`, and `ZStack`."
+      - "Implement accessibility labels (`.accessibilityLabel()`) for all interactive elements."
+  - step: "Networking"
+    tasks:
+      - "Implement generic network managers using Swift Concurrency (`async/await`)."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Performing heavy data parsing or networking operations on the main thread, causing the UI to freeze."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Swiftui Development process"
+  - "How do I handle swiftui development?"
+  - "Implement swiftui development"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the swiftui development process"
+  optional:
+    - name: "target_audience"
+      type: "string"
+      description: "Target user or customer segment"
+      default: "Primary user persona"
+
+outputs:
+  files:
+    - path: "outputs/swiftui-development.md"
+      description: "Results of the swiftui development process"
+  artifacts:
+    - "Completed swiftui development deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

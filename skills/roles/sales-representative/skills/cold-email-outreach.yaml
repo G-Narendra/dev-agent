@@ -1,0 +1,82 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "cold-email-outreach"
+display_name: "Cold Outbound Email Campaigns"
+description: >
+  Design and execute highly personalized, low-volume cold email campaigns targeting
+  Ideal Customer Profile (ICP) decision-makers.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "sales-representative"
+phase: "growth"
+applicable_startups: 
+  - b2b-saas
+priority: "mvp"
+difficulty: "advanced"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Targeting & Data"
+    tasks:
+      - "Scrape or build a highly qualified list of 50-100 decision-makers (e.g., VP of Engineering)."
+      - "Verify all email addresses to prevent bounce rates that destroy domain reputation."
+  - step: "Copywriting"
+    tasks:
+      - "Write a subject line that sounds internal and urgent (e.g., 'Quick question about [Company] frontend')."
+      - "Keep the email under 50 words. Focus entirely on a specific pain point they likely have."
+  - step: "Call to Action (CTA)"
+    tasks:
+      - "Use a low-friction CTA (e.g., 'Worth exploring?' or 'Are you the right person for this?')."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Sending massive, unpersonalized blasts (10,000+ emails) — this will instantly blacklist your domain."
+  - "Writing multi-paragraph essays pitching every feature of the product."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Cold Email Outreach process"
+  - "How do I handle cold email outreach?"
+  - "Implement cold email outreach"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the cold email outreach process"
+  optional:
+    - name: "target_audience"
+      type: "string"
+      description: "Target user or customer segment"
+      default: "Primary user persona"
+
+outputs:
+  files:
+    - path: "outputs/cold-email-outreach.md"
+      description: "Results of the cold email outreach process"
+  artifacts:
+    - "Completed cold email outreach deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

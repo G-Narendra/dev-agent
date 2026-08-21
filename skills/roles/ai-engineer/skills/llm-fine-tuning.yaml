@@ -1,0 +1,141 @@
+# â”€â”€ IDENTITY â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+name: "llm-fine-tuning"
+display_name: "LLM Fine-Tuning (LoRA / QLoRA)"
+description: >
+  Customizes open-source Large Language Models (like Llama 3 or Mistral) for 
+  highly specific domain tasks. Uses Parameter-Efficient Fine-Tuning (PEFT) 
+  to train models cheaply on consumer-grade GPUs without losing core intelligence.
+
+# â”€â”€ CLASSIFICATION â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+role: "ai-engineer"
+phase: "growth"
+applicable_startups:
+  - all
+priority: "high"
+difficulty: "expert"
+
+# â”€â”€ TRIGGER â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+trigger_phrases:
+  - "The model doesn't understand our industry jargon."
+  - "We need it to output strictly in our JSON format."
+  - "Fine-tune a Llama model."
+
+# â”€â”€ ACTIONS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+example_cli_actions:
+  - "Format dataset for fine-tuning."
+  - "Generate HuggingFace training script."
+
+# â”€â”€ INPUTS / OUTPUTS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+inputs:
+  required:
+    - name: "dataset"
+      type: "string"
+      description: "Path to JSONL file containing instruction-response pairs."
+    - name: "base_model"
+      type: "string"
+      description: "HuggingFace model ID (e.g., meta-llama/Meta-Llama-3-8B)."
+  optional:
+    - name: "training_method"
+      type: "string"
+      description: "Full Fine-Tune vs QLoRA."
+      default: "QLoRA"
+
+outputs:
+  files:
+    - path: "ai/training/finetune_lora.py"
+      description: "The execution script for fine-tuning."
+  artifacts:
+    - "LoRA Adapter Weights."
+
+# â”€â”€ SUCCESS CRITERIA â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+automated:
+  - "Training loss converges steadily without spiking, indicating stable learning."
+manual:
+  - "The fine-tuned model consistently outputs the requested domain-specific tone without hallucinating on generic questions."
+
+# â”€â”€ PERMISSIONS & SAFETY â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "Catastrophic Forgetting: Over-training a model on a narrow dataset can cause it to completely forget how to speak English properly. Monitor validation loss carefully and use early stopping."
+
+# â”€â”€ TOOLING â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+recommended_tools:
+  primary:
+    - name: "HuggingFace Transformers / PEFT"
+      install: "pip install transformers peft bitsandbytes accelerate"
+
+# â”€â”€ IMPLEMENTATION CHECKLIST â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+implementation_checklist:
+  - step: "Dataset Curation (Quality over Quantity)"
+    tasks:
+      - "Do not train on 100,000 garbage rows. 500 perfectly curated, high-quality human-written examples will produce a significantly better fine-tune than a massive scraped dataset."
+  - step: "Quantization (QLoRA)"
+    tasks:
+      - "Load the base model in 4-bit quantization using `bitsandbytes`. This allows you to fine-tune a massive 8B parameter model on a single 24GB GPU (like an RTX 3090/4090) instead of needing a $30,000 A100 cluster."
+  - step: "Adapter Merging"
+    tasks:
+      - "Once training is complete, the output is just the LoRA adapter weights (very small). You must merge these back into the base model weights if you want to deploy it as a single standalone model."
+
+# â”€â”€ QUALITY GATES â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+anti_patterns:
+  - "Trying to fine-tune a model to inject raw factual knowledge (e.g., 'Learn our company handbook'). Fine-tuning is for teaching *style* and *format*. Use RAG for teaching *facts*."
+best_practices:
+  - "Use a strict system prompt format in your training data that matches EXACTLY how you will query the model in production. If the formatting differs by one newline character, performance degrades."
+
+# â”€â”€ REFERENCES â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+references:
+  - title: "HuggingFace PEFT Documentation"
+    url: "https://huggingface.co/docs/peft/index"
+
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Llm Fine Tuning process"
+  - "How do I handle llm fine tuning?"
+  - "Implement llm fine tuning"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the llm fine tuning process"
+  optional:
+    - name: "N/A"
+      type: "string"
+      description: "No optional inputs needed."
+
+outputs:
+  files:
+    - path: "outputs/llm-fine-tuning.md"
+      description: "Results of the llm fine tuning process"
+  artifacts:
+    - "Completed llm fine tuning deliverable"
+
+# ── QUALITY GATES ────────────────────────────────────────────
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start — retrofitting is expensive."
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

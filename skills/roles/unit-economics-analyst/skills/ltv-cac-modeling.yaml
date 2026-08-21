@@ -1,0 +1,104 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "ltv-cac-modeling"
+display_name: "Unit Economics Analyst & Financial Modeling"
+description: >
+  Determines if the business actually makes money. Ruthlessly calculates 
+  the Customer Acquisition Cost (CAC) against the Customer Lifetime Value 
+  (LTV) to ensure the startup isn't selling dollar bills for 90 cents.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "unit-economics-analyst"
+phase: "growth"
+applicable_startups:
+  - all
+priority: "critical"
+difficulty: "expert"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Are we profitable on the first order?"
+  - "What is our Payback Period?"
+  - "Model the new pricing tiers."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Generate cohort analysis."
+  - "Draft contribution margin report."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "marketing_spend"
+      type: "string"
+      description: "Total spend in a given month."
+    - name: "gross_margin"
+      type: "string"
+      description: "Revenue minus COGS."
+  optional:
+    - name: "churn_rate"
+      type: "string"
+      description: "Monthly churn percentage."
+      default: "5%"
+
+outputs:
+  files:
+    - path: "finance/unit_economics/q3_ltv_cac_ratio.md"
+      description: "The mathematical health of the business engine."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "N/A"
+manual:
+  - "The LTV:CAC ratio is maintained above 3:1, and the CAC Payback Period is reduced to under 12 months."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+safety_notes:
+  - "The 'Blended CAC' Illusion: Never report 'Blended CAC' (Total Marketing Spend / ALL New Customers) to the board as proof of marketing efficiency. This includes organic customers who cost $0. You must isolate 'Paid CAC' to know if your ad spend is actually profitable."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Excel / ChartMogul / ProfitWell"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Fully Loaded CAC Calculation"
+    tasks:
+      - "CAC is not just 'Ad Spend'. CAC = (Ad Spend + Marketing Software + Marketing Salaries + Sales Salaries + Sales Commissions) / New Customers. If you ignore salaries, your CAC is fake."
+  - step: "Contribution Margin (COGS)"
+    tasks:
+      - "LTV must be calculated on GROSS MARGIN, not Revenue. If a customer pays you $100 a month, but AWS costs $20 and Stripe takes $3, your Gross Margin is $77. Your LTV is based on $77. If you base it on $100, you will overspend on acquisition and go bankrupt."
+  - step: "The Payback Period Metric"
+    tasks:
+      - "Investors care about the Payback Period more than LTV. If it takes 24 months to earn back the CAC, but your runway is only 18 months, the company will run out of cash before the customers become profitable. Optimize for < 12 month payback."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Assuming infinite LTV. A customer will not stay for 10 years. Cap your LTV calculation at 3-5 years max. Any revenue beyond 5 years is too mathematically uncertain to use to justify marketing spend today."
+best_practices:
+  - "Cohort Analysis. Look at LTV by signup month. 'Customers who signed up in November (Black Friday) have a 50% higher churn rate than customers who signed up in October.' This tells you that heavy discounting attracts low-quality customers."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "a16z: 16 Startup Metrics"
+    url: "https://a16z.com/16-startup-metrics/"

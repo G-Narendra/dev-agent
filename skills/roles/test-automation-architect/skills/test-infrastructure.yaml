@@ -1,0 +1,113 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "test-infrastructure"
+display_name: "Test Database & Data Seeding Infrastructure"
+description: >
+  Builds the infrastructure to spin up isolated, ephemeral test databases 
+  for integration testing. Includes deterministic data seeding factories 
+  so tests always run against a known state.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "test-automation-architect"
+phase: "build"
+applicable_startups:
+  - all
+priority: "critical"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "How do we test against a real database?"
+  - "Set up test data factories."
+  - "Fix the database conflicts in tests."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Configure Docker Compose for test DB."
+  - "Implement Prisma/Sequelize seeding scripts."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "database_type"
+      type: "string"
+      description: "Postgres, MySQL, MongoDB."
+  optional:
+    - name: "orm"
+      type: "string"
+      description: "Prisma, TypeORM."
+      default: "Prisma"
+
+outputs:
+  files:
+    - path: "tests/utils/database.ts"
+      description: "Helper to reset the database between tests."
+    - path: "tests/factories/userFactory.ts"
+      description: "Data generator for tests."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "Tests can run in parallel without data collisions."
+manual:
+  - "Developers can run `npm run test:integration` and it automatically spins up a DB, runs tests, and tears it down."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+  - "network"
+
+safety_notes:
+  - "Never run tests against a staging or production database. Tests should truncate tables frequently, which will destroy shared environments."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Docker Compose / Testcontainers"
+      install: "npm install testcontainers"
+  alternatives:
+    - name: "Faker.js"
+      when: "Generating random names, emails, and data for the factories."
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Database Provisioning"
+    tasks:
+      - "Use `testcontainers` to automatically spin up an ephemeral PostgreSQL Docker container when the test suite starts, and destroy it when it finishes."
+  - step: "Schema Application"
+    tasks:
+      - "Run the database migrations (`prisma migrate deploy`) against the ephemeral container before any tests run."
+  - step: "State Reset Strategy"
+    tasks:
+      - "Between every single test, truncate all tables. Do NOT drop and recreate the tables (too slow). Use a fast `TRUNCATE TABLE ... CASCADE` script."
+  - step: "Data Factories"
+    tasks:
+      - "Create a `UserFactory` that inserts a valid user with default values, but allows the test to override specific fields: `UserFactory.create({ role: 'ADMIN' })`."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Hardcoding IDs in tests (e.g., `expect(user.id).toBe(1)`). The ID might be different if tests run in parallel or if the DB isn't reset perfectly. Check attributes, not auto-incrementing IDs."
+  - "Tests that depend on other tests (e.g., Test A creates a user, Test B logs in as that user). Tests must be 100% isolated."
+
+best_practices:
+  - "Use transactions for testing where possible. Start a transaction before the test, and ROLLBACK after the test. This is 10x faster than truncating tables."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Testcontainers: Database Testing"
+    url: "https://testcontainers.com/"

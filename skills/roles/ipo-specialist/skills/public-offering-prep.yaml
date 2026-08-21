@@ -1,0 +1,79 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "public-offering-prep"
+display_name: "Initial Public Offering (IPO) Preparation"
+description: >
+  Manage the transition from private to public markets by auditing financials, drafting 
+  the S-1 prospectus, and coordinating with investment banks for the roadshow.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "ipo-specialist"
+phase: "growth"
+applicable_startups: 
+  - enterprise
+priority: "mvp"
+difficulty: "expert"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Financial Audits"
+    tasks:
+      - "Transition accounting standards to fully compliant PCAOB audits (Public Company Accounting Oversight Board)."
+  - step: "The S-1 Filing"
+    tasks:
+      - "Draft the 'Risk Factors' section to legally insulate the company from future shareholder lawsuits."
+      - "Draft the 'Management's Discussion and Analysis (MD&A)' to narrate the financial trajectory."
+  - step: "The Roadshow"
+    tasks:
+      - "Build the investor deck and prepare the CEO/CFO for intense institutional Q&A."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Failing to establish a compliant insider trading policy before the IPO, exposing the executive team to SEC investigations."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Public Offering Prep process"
+  - "How do I handle public offering prep?"
+  - "Implement public offering prep"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the public offering prep process"
+  optional:
+    - name: "N/A"
+      type: "string"
+      description: "No optional inputs needed."
+
+outputs:
+  files:
+    - path: "outputs/public-offering-prep.md"
+      description: "Results of the public offering prep process"
+  artifacts:
+    - "Completed public offering prep deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

@@ -1,0 +1,80 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "gcp-infrastructure"
+display_name: "Google Cloud Platform (GCP) Infrastructure"
+description: >
+  Architect highly scalable infrastructure using GCP's specialized data and container 
+  offerings (BigQuery, Cloud Run, GKE, Spanner).
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "cloud-engineer"
+phase: "growth"
+applicable_startups: 
+  - ai
+  - data
+priority: "high"
+difficulty: "expert"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Serverless Containers"
+    tasks:
+      - "Deploy stateless microservices to Cloud Run, scaling to zero to save costs, while configuring minimum instances for critical low-latency APIs."
+  - step: "Data Warehousing"
+    tasks:
+      - "Stream application logs and analytical events directly into BigQuery for sub-second querying over terabytes of data."
+  - step: "IAM Configuration"
+    tasks:
+      - "Use Workload Identity instead of exporting long-lived Service Account JSON keys to grant pods access to GCP resources securely."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Downloading a GCP Service Account JSON key, committing it directly to a public GitHub repository, and getting the account hijacked by crypto miners within 10 minutes."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Gcp Infrastructure process"
+  - "How do I handle gcp infrastructure?"
+  - "Implement gcp infrastructure"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the gcp infrastructure process"
+  optional:
+    - name: "data_source"
+      type: "string"
+      description: "Source of data to analyze"
+      default: "Internal data"
+
+outputs:
+  files:
+    - path: "outputs/gcp-infrastructure.md"
+      description: "Results of the gcp infrastructure process"
+  artifacts:
+    - "Completed gcp infrastructure deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "AWS Documentation"
+    url: "https://docs.aws.amazon.com"
+  - title: "Terraform Documentation"
+    url: "https://developer.hashicorp.com/terraform/docs"

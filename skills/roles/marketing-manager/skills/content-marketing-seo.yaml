@@ -1,0 +1,115 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "content-marketing-seo"
+display_name: "Content Marketing & SEO Strategy"
+description: >
+  Drive organic, zero-CAC (Customer Acquisition Cost) traffic to the startup 
+  by creating high-value content that ranks on the first page of Google. 
+  Focuses on keyword intent, backlinking, and semantic authority.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "marketing-manager"
+phase: "growth"
+applicable_startups:
+  - b2b-saas
+  - media
+priority: "high"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "We need more organic traffic."
+  - "Write a blog post for SEO."
+  - "How do we rank on Google?"
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Create an SEO content brief."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "target_keyword"
+      type: "string"
+      description: "The primary search term (e.g., 'best CRM for startups')."
+    - name: "search_intent"
+      type: "string"
+      description: "Informational, Navigational, or Transactional."
+  optional:
+    - name: "domain_authority"
+      type: "string"
+      description: "Current Ahrefs/Moz DR of the company website."
+      default: "Low (0-20)"
+
+outputs:
+  files:
+    - path: "marketing/content/seo-brief-template.md"
+      description: "The structured outline given to a writer."
+  artifacts:
+    - "A list of long-tail keywords to target."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "N/A"
+manual:
+  - "The article reaches Page 1 of Google for the target keyword within 6 months."
+  - "The article generates at least 50 Marketing Qualified Leads (MQLs) per quarter."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+
+safety_notes:
+  - "Keyword Cannibalization: Do not publish 5 different articles targeting the exact same keyword. Google will not know which one to rank, and they will all fail. Consolidate them into one master guide."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Ahrefs / SEMrush"
+      install: "N/A"
+  alternatives:
+    - name: "Google Search Console"
+      when: "You have zero budget for expensive SEO tools."
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Keyword Research & Difficulty"
+    tasks:
+      - "If your startup's Domain Rating is 15, do not try to rank for 'Credit Cards' (DR 90+ required). Find long-tail keywords (e.g., 'Best credit card for SaaS founders in Europe') where the top ranking pages have a DR < 30."
+  - step: "Matching Search Intent"
+    tasks:
+      - "If someone searches 'What is a CRM?', they want a definition (Informational). If they search 'Salesforce vs HubSpot', they are ready to buy (Transactional). Ensure the content matches what the user is actually looking for."
+  - step: "On-Page SEO Optimization"
+    tasks:
+      - "Put the exact keyword in the URL slug, the H1 tag, and the first paragraph."
+      - "Use semantic variations (LSI keywords) throughout the H2s."
+  - step: "The 'Hub and Spoke' Model"
+    tasks:
+      - "Create one massive 'Pillar' page (e.g., 'The Ultimate Guide to Inbound Marketing'). Create 10 smaller 'Spoke' pages targeting specific sub-topics, and link them all back to the Pillar page to consolidate authority."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Writing purely for robots. Keyword stuffing ('If you want the best CRM, our best CRM is the best CRM') will get you penalized by Google's Helpful Content Update. Write for humans first."
+  - "Publishing without a distribution strategy. Hitting 'Publish' on WordPress is not marketing. You must share it on LinkedIn, Reddit, newsletters, and pitch it for backlinks."
+
+best_practices:
+  - "Update old content. Google loves fresh content. Taking a blog post from 2022 that ranks #15, updating the stats, adding a new section, and changing the title to '... in 2024' can easily push it to #3."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Ahrefs: SEO Basics"
+    url: "https://ahrefs.com/seo"

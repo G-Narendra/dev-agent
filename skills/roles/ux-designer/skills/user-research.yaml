@@ -1,0 +1,105 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "user-research"
+display_name: "Qualitative User Research"
+description: >
+  Validates product assumptions by talking directly to potential users before 
+  engineering writes a single line of code. Discovers the user's actual pain 
+  points rather than what the startup *thinks* they need.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "ux-designer"
+phase: "planning"
+applicable_startups:
+  - all
+priority: "critical"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Do users actually want this feature?"
+  - "Why is our churn rate so high?"
+  - "Write a user interview script."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Draft user interview questions."
+  - "Generate survey structure."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "target_persona"
+      type: "string"
+      description: "Who are we interviewing? (e.g., Freelance Designers)."
+    - name: "hypothesis"
+      type: "string"
+      description: "What assumption are we testing?"
+  optional:
+    - name: "research_method"
+      type: "string"
+      description: "1-on-1 Interviews, Surveys, Usability Testing."
+      default: "1-on-1 Interviews"
+
+outputs:
+  files:
+    - path: "design/research/interview_script_v1.md"
+      description: "The questions to ask during the interview."
+  artifacts:
+    - "A synthesis report of user findings."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "N/A"
+manual:
+  - "The product team kills a bad feature idea *before* spending 3 months building it, saving $100k in engineering costs."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "Leading Questions: Never ask a user 'Would you use a product that solves X?'. They will lie to be polite. Ask them 'How do you currently solve X today?'. If they don't have a current solution, it's not a real problem."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Google Forms / Zoom"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "The Mom Test"
+    tasks:
+      - "Follow the rules of 'The Mom Test'. Talk about their life, not your idea. Ask for specifics in the past, not generics or opinions about the future. Talk less, listen more."
+  - step: "Recruiting Users"
+    tasks:
+      - "Do not interview your friends or family. Go to Reddit, LinkedIn, or use UserTesting.com to find 5-10 completely unbiased people in your exact target demographic."
+  - step: "Synthesizing Data"
+    tasks:
+      - "After 5 interviews, group the feedback into common themes (Affinity Mapping). If 4 out of 5 users struggle with the exact same workflow, you have found a validated pain point."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Sending out a massive multiple-choice survey as your *only* form of research. Surveys tell you 'What' users do, but only 1-on-1 interviews tell you 'Why' they do it."
+best_practices:
+  - "Record the interviews (with permission) and show short, painful video clips of users struggling with the current product directly to the engineering team to build extreme empathy."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "The Mom Test (Rob Fitzpatrick)"
+    url: "http://momtestbook.com/"

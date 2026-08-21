@@ -1,0 +1,164 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "cli-tool-discovery"
+display_name: "CLI Tool Discovery & Evaluation"
+description: >
+  When faced with a task that could be done faster with a CLI tool, 
+  this skill systematically searches curated lists, GitHub topics, 
+  and package registries to find the right tool. Evaluates tools on 
+  maintenance, popularity, license, and fit before recommending 
+  installation. Prevents the AI from reimplementing functionality 
+  that already exists as a battle-tested terminal utility.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "utility"
+phase: "all"
+applicable_startups:
+  - all
+priority: "high"
+difficulty: "beginner"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Is there a CLI tool for this?"
+  - "Find a CLI tool that does X."
+  - "What's the best CLI tool for Y?"
+  - "Search for a terminal utility for this task."
+  - "I need a command-line version of Z."
+  - "Is there a TUI app for managing W?"
+  - "Find alternative to this CLI tool."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Search for CLI tools by use case."
+  - "Evaluate tool quality and maintenance."
+  - "Compare CLI tool alternatives."
+  - "Find modern replacement for classic command."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "task_description"
+      type: "string"
+      description: "What the tool should accomplish (e.g., 'Find duplicate files', 'Format JSON in terminal')."
+  optional:
+    - name: "preferred_language"
+      type: "string"
+      description: "Prefer tools written in a specific language (Rust, Go, Python)."
+      default: "Any (prefer Rust or Go for performance)"
+    - name: "platform"
+      type: "string"
+      description: "Target platform (linux, macos, windows, cross-platform)."
+      default: "cross-platform"
+    - name: "max_install_complexity"
+      type: "string"
+      description: "Maximum acceptable install complexity (single-binary, cargo/pip install, multi-dependency)."
+      default: "single-binary"
+
+outputs:
+  files:
+    - path: "docs/cli-tool-recommendation-{topic}.md"
+      description: "Research report comparing top 3 CLI tools for the task."
+  artifacts:
+    - "⚡ Top recommendation with install command."
+    - "Comparison table of features, stars, and license."
+    - "⚠️ Known issues or caveats."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "N/A"
+  manual:
+    - "The recommended tool is actively maintained (commits within 3 months)."
+    - "The tool installs without errors in a virtual environment."
+    - "The tool can be used in a shell pipeline (stdin/stdout)."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "network"
+  - "filesystem"
+
+safety_notes:
+  - "Always check for `brew install`, `apt install`, `cargo install`, or `pip install` (in a venv) — never `curl | bash`."
+  - "Before recommending a tool, verify: (1) Last commit date, (2) License, (3) Open issues count, (4) Security advisories."
+  - "Tools with fewer than 100 stars on GitHub may be abandoned — prefer widely-adopted tools."
+  - "For security-sensitive operations (network, file deletion), prefer tools from established authors/organizations."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "awesome-cli-apps (GitHub)"
+      install: "N/A (Web/Repo)"
+      url: "https://github.com/agarrharr/awesome-cli-apps"
+  alternatives:
+    - name: "awesome-shell (GitHub)"
+      url: "https://github.com/alebcay/awesome-shell"
+    - name: "awesome-command-line-tools (GitHub)"
+      url: "https://github.com/linsa-io/command-line-tools"
+    - name: "modern-unix (GitHub)"
+      url: "https://github.com/ibraheemdev/modern-unix"
+    - name: "GitHub Topics: cli, terminal, command-line"
+      url: "https://github.com/topics/cli"
+    - name: "crates.io (Rust CLI tools)"
+      url: "https://crates.io/search?q=cli"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Classify the Task Type"
+    tasks:
+      - "Is this file search/pattern matching? → Look for `rg` (ripgrep) first."
+      - "Is this data transformation? → Look for `jq` (JSON), `dasel` (YAML/TOML), `yq` (YAML)."
+      - "Is this file management? → Look for `fd` (find), `dust` (du), `ncdu` (interactive du)."
+      - "Is this an HTTP/API task? → Look for `HTTPie`, `curlie`, `xh`."
+      - "Is this text processing? → Look for `sd` (sed), `bat` (cat), `delta` (diff)."
+      - "Is this system monitoring? → Look for `bottom`, `procs`, `dog`."
+      - "Is this data analysis? → Look for `duckdb`, `visidata`, `q` (SQL on CSV)."
+      - "Is this database management? → Look for `usql`, `pgcli`, `mycli`, `litecli`."
+      - "Is this code quality? → Look for `tokei` (LOC), `loc` (alternative)."
+  - step: "Search for Options"
+    tasks:
+      - "Search the awesome-cli-apps repo for the category (e.g., 'Data Processing')."
+      - "Search GitHub with `topic:cli` and keywords for the task."
+      - "Search crates.io for Rust-based CLI tools (they tend to be fastest)."
+      - "Search `awesome-shell` for tools in the relevant category."
+      - "Ask: 'Is there a modern Rust/Go alternative to [classic UNIX tool]?'"
+  - step: "Evaluate Candidates"
+    tasks:
+      - "Compare GitHub stars — higher is usually better (but not always)."
+      - "Check the last commit date — must be within 3-6 months."
+      - "Check the license — prefer MIT, Apache 2.0, or BSD."
+      - "Check open issues and PRs — a healthy ratio means active maintenance."
+      - "Read the README — does it solve the exact problem?"
+  - step: "Verify Installation Method"
+    tasks:
+      - "Check if the tool provides a single binary (ideal for CI)."
+      - "Check if it can be installed via the platform package manager."
+      - "Ensure it works with stdin/stdout for pipeline compatibility."
+      - "Test the tool with a simple command before integrating into a workflow."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Writing a custom Python script for a task that has a dedicated CLI tool (e.g., writing a JSON parser when jq exists)."
+  - "Installing a tool recommended by a random blog post without checking maintenance status."
+  - "Choosing a tool with a viral license (GPL) for integration into proprietary software."
+  - "Installing tools globally — always use a virtual environment or a per-project `tools/` directory."
+
+best_practices:
+  - "The best CLI tool is one that: (1) Does one thing well, (2) Outputs structured data (JSON), (3) Works in pipelines, (4) Is actively maintained."
+  - "Prefer Rust-written CLI tools — they're typically faster, statically linked, and have fewer runtime dependencies."
+  - "Add discovered tools to a `TOOLS.md` in the project so the AI remembers them in future sessions."
+  - "When in doubt, search the awesome-cli-apps repo first — it's the most comprehensive curated list."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "awesome-cli-apps (Most Comprehensive CLI Tool List)"
+    url: "https://github.com/agarrharr/awesome-cli-apps"
+  - title: "awesome-shell (Shell Frameworks & Tools)"
+    url: "https://github.com/alebcay/awesome-shell"
+  - title: "modern-unix (Modern UNIX Command Alternatives)"
+    url: "https://github.com/ibraheemdev/modern-unix"
+  - title: "GitHub Topics — CLI"
+    url: "https://github.com/topics/cli"
+  - title: "GitHub Topics — Terminal"
+    url: "https://github.com/topics/terminal"
+  - title: "crates.io — Rust CLI Tools"
+    url: "https://crates.io/search?q=cli"

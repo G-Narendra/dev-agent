@@ -1,0 +1,118 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "crunchbase-free-research"
+display_name: "Crunchbase Free Tier Competitor & Market Research"
+description: >
+  Uses Crunchbase's free tier (Google search-based) to find real funding data,
+  competitor profiles, investor details, and market trends. Discovers who 
+  invested in which competitors, at what valuation, and who the key players 
+  are in any space. This is essential for understanding competitive positioning 
+  and market maturity.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "utility"
+phase: "ideation"
+applicable_startups:
+  - all
+priority: "high"
+difficulty: "beginner"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Who funded competitor X?"
+  - "Find investors in this space."
+  - "What's the funding landscape for this category?"
+  - "Analyze the competitive funding landscape."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Search Crunchbase via Google."
+  - "Extract funding rounds and investor names."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "industry_or_competitor"
+      type: "string"
+      description: "Company name or industry (e.g., 'Salesforce', 'AI note-taking apps')."
+  optional:
+    - name: "search_type"
+      type: "string"
+      description: "'companies' (find companies), 'funding' (funding history), 'investors' (active investors), 'people' (key executives)."
+      default: "companies"
+
+outputs:
+  files:
+    - path: "research/crunchbase-landscape-{topic}.md"
+      description: "A landscape analysis of funding and key players in the space."
+  artifacts:
+    - "List of competitors with funding amounts and stages (Series A/B/C)."
+    - "List of active investors in the space (potential investors for the startup)."
+    - "Market maturity assessment: Is this space pre-seed or saturated with Series C+ companies?"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "N/A"
+  manual:
+    - "Discovered at least 5 competitors with funding data and identified the active investors in the space."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "network"
+
+safety_notes:
+  - "Crunchbase free tier shows summarized data. Detailed financials require a paid plan. The Google search approach works for overview data."
+  - "Funding data may be self-reported or outdated. Cross-reference with press releases and news articles."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Google Search (site:crunchbase.com)"
+      install: "N/A"
+  alternatives:
+    - name: "PitchBook free tier"
+      when: "Needing more detailed financial data."
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Find Competitor Companies"
+    tasks:
+      - "Use Google: `site:crunchbase.com/organization {industry}`"
+      - "For a specific company: `site:crunchbase.com/organization {company_name}`"
+      - "Extract: founded date, headquarters, funding total, number of investors, latest round."
+  - step: "Map the Funding Landscape"
+    tasks:
+      - "Search: `site:crunchbase.com/organization {industry} funding` OR `site:crunchbase.com {industry} series`"
+      - "Create a table: Company | Total Funding | Latest Round | Lead Investors | Founded"
+      - "Identify patterns: Are most companies at Seed stage (early market)? Or Series C+ (mature market)?"
+  - step: "Identify Active Investors"
+    tasks:
+      - "For each competitor, note their investors."
+      - "Compile a list of investors that appear across multiple competitors — these are the 'domain experts' who understand the space."
+      - "Search: `site:crunchbase.com/person {investor_name}` to see their other investments."
+  - step: "Analyze Market Signals"
+    tasks:
+      - "If most competitors raised recently → hot market with investor interest."
+      - "If no competitors raised in 2+ years → stagnant market or market is dead."
+      - "If a major player just raised a large round → the market is consolidating."
+  - step: "Compile Report"
+    tasks:
+      - "Funding landscape table."
+      - "Investor shortlist (these are the investors to pitch)."
+      - "Market maturity assessment and strategic recommendations."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Assuming Crunchbase data is complete. Many early-stage companies don't update their profiles."
+  - "Relying only on funding data to judge competitors. A bootstrapped profitable company may not appear at all."
+
+best_practices:
+  - "Cross-reference Crunchbase data with news articles: `site:techcrunch.com OR site:techcrunch.com {company_name} funding`"
+  - "Check the 'Similar Companies' section on each Crunchbase profile — it's a ready-made competitor list."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Crunchbase"
+    url: "https://www.crunchbase.com/"
+  - title: "TechCrunch Startup News"
+    url: "https://techcrunch.com/"

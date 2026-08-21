@@ -1,0 +1,79 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "financial-modeling"
+display_name: "Financial Modeling & Forecasting"
+description: >
+  Build granular, dynamic financial models (3-statement models, cohort analysis) 
+  to project revenue, cash runway, and headcount requirements for VC fundraising.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "financial-analyst"
+phase: "growth"
+applicable_startups: 
+  - all
+priority: "high"
+difficulty: "expert"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Bottom-Up Revenue Build"
+    tasks:
+      - "Do not project 'We will capture 1% of a $10B market'. Model revenue based on specific funnel metrics: Ad Spend -> CPC -> Leads -> Conversion Rate -> ARPU."
+  - step: "Headcount Driver"
+    tasks:
+      - "Tie hiring directly to milestones. E.g., 'If we hit 100 enterprise clients, the model automatically triggers the hire of 2 more Account Executives and 1 Customer Success Rep'."
+  - step: "Scenario Analysis"
+    tasks:
+      - "Build three togglable scenarios (Base, Best, Worst). The Worst Case scenario must show exactly how the company survives 24 months with zero new revenue growth."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Presenting investors with a spreadsheet where the revenue magically hockey-sticks in Year 3 without any mathematical explanation of where the customers are coming from."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Financial Modeling process"
+  - "How do I handle financial modeling?"
+  - "Implement financial modeling"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the financial modeling process"
+  optional:
+    - name: "data_source"
+      type: "string"
+      description: "Source of data to analyze"
+      default: "Internal data"
+
+outputs:
+  files:
+    - path: "outputs/financial-modeling.md"
+      description: "Results of the financial modeling process"
+  artifacts:
+    - "Completed financial modeling deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

@@ -1,0 +1,111 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "company-incorporation-guide"
+display_name: "Startup Incorporation & Legal Setup Guide"
+description: >
+  Provides structured research, checklists, and documentation to guide a founder 
+  through incorporating a company (e.g., Delaware C-Corp), issuing founder equity, 
+  and setting up corporate bank accounts.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "founder-ceo"
+phase: "planning"
+applicable_startups:
+  - all
+priority: "critical"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "I want to register my startup."
+  - "How do I incorporate as a Delaware C-Corp?"
+  - "What do I need to open a startup bank account?"
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Generate incorporation checklist."
+  - "Research Stripe Atlas vs Clerky."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "startup_name"
+      type: "string"
+      description: "The intended legal name of the entity."
+  optional:
+    - name: "founder_count"
+      type: "string"
+      description: "Number of co-founders for equity splitting."
+      default: "1"
+
+outputs:
+  files:
+    - path: "business/legal/incorporation-checklist.md"
+      description: "A step-by-step to-do list."
+  artifacts:
+    - "Comparison matrix of incorporation services."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "N/A - Legal tasks require human execution."
+manual:
+  - "The founder successfully files for incorporation without paying $5,000 to a traditional law firm for standard boilerplate documents."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "network (Researching current legal service pricing)"
+
+safety_notes:
+  - "Disclaimer: This agent is not a lawyer. It provides structural and procedural guidance. The founder must review all legal documents before signing. Never provide explicit legal advice."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Stripe Atlas / Clerky"
+      install: "N/A"
+  alternatives:
+    - name: "LegalZoom"
+      when: "Forming an LLC instead of a venture-backed C-Corp."
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Entity Selection Research"
+    tasks:
+      - "Outline the differences between an LLC (good for lifestyle businesses) and a Delaware C-Corp (mandatory if raising venture capital)."
+  - step: "Service Selection"
+    tasks:
+      - "Compare Stripe Atlas, Clerky, and Gust Launch for standard Silicon Valley style incorporation."
+  - step: "Post-Incorporation Checklist Preparation"
+    tasks:
+      - "Remind the founder to file the 83(b) election with the IRS within 30 days of receiving founder shares. Missing this can cause a massive tax liability."
+      - "Provide the steps to obtain an EIN (Employer Identification Number)."
+  - step: "Banking Setup Guide"
+    tasks:
+      - "Provide the requirements to open a corporate bank account (Mercury, Brex), which usually requires the filed Articles of Incorporation and EIN."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Advising a founder to manually draft their own Articles of Incorporation to save money. This will result in an un-fundable entity. Use standardized services (Clerky/Atlas)."
+  - "Failing to mention the 83(b) election for US-based founders."
+
+best_practices:
+  - "Vesting: Always advise founders (even solo founders) to put their equity on a standard 4-year vesting schedule with a 1-year cliff to protect the company."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Y Combinator: How to split equity among co-founders"
+    url: "https://www.ycombinator.com/library/5x-how-to-split-equity-among-co-founders"

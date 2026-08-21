@@ -1,0 +1,109 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "aws-serverless"
+display_name: "AWS Serverless Architecture"
+description: >
+  Designs and implements serverless architectures using AWS Lambda, API Gateway,
+  EventBridge, Step Functions, and SQS/SNS. Builds event-driven systems that
+  auto-scale to zero when not in use.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "cloud-engineer-aws"
+phase: "build"
+applicable_startups:
+  - all
+priority: "growth"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Build a serverless architecture."
+  - "Set up event-driven workflows."
+  - "Use Lambda for background processing."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Design serverless workflow."
+  - "Configure Lambda + API Gateway."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "event_sources"
+      type: "string"
+      description: "What triggers the serverless functions (API calls, file uploads, schedules)."
+    - name: "workflow_logic"
+      type: "string"
+      description: "Description of the business logic to execute."
+  optional:
+    - name: "expected_volume"
+      type: "string"
+      description: "Expected invocations per day."
+      default: "Unknown — design for auto-scaling"
+
+outputs:
+  files:
+    - path: "infrastructure/aws/serverless-architecture.md"
+      description: "Serverless architecture design with workflow diagrams"
+  artifacts:
+    - "A deployed serverless application with monitoring and error handling"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Lambda Function Design"
+    tasks:
+      - "Choose appropriate memory (128MB-10GB) — more memory = more CPU, complex tasks need both."
+      - "Set timeouts: API handlers 30s max, background processing up to 15 min."
+      - "Use Lambda Power Tuning tool to find the optimal memory/cost balance."
+      - "Package functions using container images for dependencies >50MB (Lambda container support)."
+  - step: "API Gateway Configuration"
+    tasks:
+      - "REST API: full feature set, request validation, API keys, usage plans."
+      - "HTTP API: simpler, cheaper, faster — good for most use cases."
+      - "Enable API caching for frequently accessed endpoints (reduces Lambda invocations by 60-80%)."
+      - "Set throttling: 10,000 requests/sec per account to prevent abuse."
+  - step: "Event-Driven Architecture"
+    tasks:
+      - "Use EventBridge for event routing between services (decoupled architecture)."
+      - "Use SQS for message queuing between services (buffers and retries)."
+      - "Use SNS for pub/sub notifications to multiple subscribers."
+      - "Use Step Functions for orchestrating multi-step workflows with error handling."
+  - step: "Error Handling & Observability"
+    tasks:
+      - "Implement DLQ (Dead Letter Queue) for failed Lambda invocations."
+      - "Set up Lambda Destinations for success/failure event routing."
+      - "Enable X-Ray tracing for distributed tracing across serverless functions."
+      - "Configure CloudWatch alarms on Lambda error rates and throttles."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Lambda functions that are too large (>50MB zipped or >3 min execution)."
+  - "Tight coupling — Lambda functions calling each other directly instead of using SQS/EventBridge."
+  - "Cold start sensitivity — Lambda cold starts add 200ms-1s latency, use Provisioned Concurrency for critical paths."
+  - "No error handling — unhandled exceptions are silently lost."
+best_practices:
+  - "Design for eventual consistency — serverless systems are distributed by nature."
+  - "Use Powertools for AWS Lambda (Python/TypeScript/Java) for structured logging and tracing."
+  - "Set reserved concurrency on critical functions to prevent them from being throttled."
+  - "Monitor Lambda costs closely — high-throughput serverless can be more expensive than EC2."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "AWS Documentation"
+    url: "https://docs.aws.amazon.com"
+  - title: "AWS Well-Architected Framework"
+    url: "https://aws.amazon.com/architecture/well-architected/"

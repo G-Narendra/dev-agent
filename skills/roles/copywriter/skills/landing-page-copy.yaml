@@ -1,0 +1,114 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "landing-page-copy"
+display_name: "Direct Response Landing Page Copywriting"
+description: >
+  Writes persuasive, high-converting copy for landing pages. Focuses on 
+  benefits over features, handles psychological objections, and structures 
+  the page to drive one specific action (the CTA). Covers key patterns to avoid common pitfalls like writing documentation that describes what the code does inst, and provides actionable best practices for production-ready results.
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "copywriter"
+phase: "growth"
+applicable_startups:
+  - all
+priority: "critical"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Rewrite the homepage."
+  - "The conversion rate is too low."
+  - "Write the copy for the new feature launch."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Draft Above-the-Fold hero section."
+  - "Generate feature-to-benefit mapping."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "target_audience"
+      type: "string"
+      description: "Who is reading this page?"
+    - name: "core_offer"
+      type: "string"
+      description: "What are they getting if they click the CTA?"
+  optional:
+    - name: "framework"
+      type: "string"
+      description: "PAS (Problem-Agitate-Solve) or AIDA."
+      default: "PAS"
+
+outputs:
+  files:
+    - path: "marketing/copy/homepage_v2.md"
+      description: "The raw text document for the designer to implement."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "N/A"
+manual:
+  - "The A/B test of the new copy results in a >20% uplift in email signups."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "The Wall of Text: Do not write 6-sentence paragraphs. Users do not read on the internet; they skim. Use bullet points, bold text for emphasis, and keep paragraphs under 3 sentences."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Hemingway App"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "The Hero Section (Above the Fold)"
+    tasks:
+      - "The H1 must clearly state what the product is and who it's for. The sub-headline explains *how* it works. The CTA button must be high-contrast and action-oriented (e.g., 'Get Your Free Audit', not 'Submit')."
+  - step: "Feature to Benefit Translation"
+    tasks:
+      - "Nobody cares that your software has a '256-bit AES encryption layer' (Feature). They care that 'Your sensitive customer data can never be hacked' (Benefit). Always translate features into emotional benefits."
+      - "Add feature flags so the new code can be deployed dark and enabled via toggle."
+  - step: "The PAS Framework"
+    tasks:
+      - "Problem: 'Are you wasting 10 hours a week on manual data entry?' Agitate: 'That's 40 hours a month you could be spending closing deals.' Solve: 'Our tool automates data entry instantly.'"
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Writing documentation that describes what the code does instead of what problem it solves -- developers can read code, they need context."
+  - "Using jargon without defining it first -- new team members and external users get excluded."
+  - "Writing documentation only at the end of a project -- by then, critical context and decisions have been forgotten."
+  - "Treating all users as having the same expertise level -- beginners need tutorials, experts need API references."
+  - "Not maintaining a changelog -- users can't tell what broke when they upgrade."
+best_practices:
+  - "Use Voice-of-Customer (VoC) data. Pull exact phrases from your positive customer reviews or support tickets and use those exact words in your headlines."
+
+  - "Write documentation for the reader's context, not your knowledge — what does the reader need to accomplish right now?"
+  - "Use the 'README first' approach — write the documentation before the code, so the code follows the documented contract."
+  - "Include code examples for every API endpoint — developers learn by copying and pasting working examples."
+  - "Maintain a single source of truth — duplicating documentation across multiple locations guarantees inconsistency."
+  - "Version your documentation alongside your code — the docs for v1.0 should always be accessible when someone is on v1.0."
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Copyhackers: Ultimate Guide to Landing Pages"
+    url: "https://copyhackers.com/landing-pages/"

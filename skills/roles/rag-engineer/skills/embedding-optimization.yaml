@@ -1,0 +1,105 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "embedding-optimization"
+display_name: "Embedding & Chunking Optimization"
+description: >
+  Optimizes how raw text is broken down (chunked) and converted into numerical 
+  vectors (embeddings) for RAG pipelines. Solves the 'Garbage In, Garbage Out' 
+  problem of AI search by ensuring semantic completeness of chunks.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "rag-engineer"
+phase: "build"
+applicable_startups:
+  - all
+priority: "high"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "The RAG system is returning cut-off sentences."
+  - "Optimize the document ingestion pipeline."
+  - "Which embedding model should we use?"
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Draft chunking strategy script."
+  - "Generate text splitting configuration."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "document_types"
+      type: "string"
+      description: "PDFs, Markdown, Source Code."
+    - name: "chunk_size"
+      type: "string"
+      description: "Target tokens per chunk (e.g., 512)."
+  optional:
+    - name: "overlap"
+      type: "string"
+      description: "Number of tokens overlapping between chunks."
+      default: "50"
+
+outputs:
+  files:
+    - path: "ai/ingestion/text_splitter.py"
+      description: "The document processing script."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "N/A"
+manual:
+  - "Inspecting the database reveals clean, complete paragraphs rather than chunks starting mid-sentence or cutting off code blocks."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "Data Formatting: Embedding models process raw text. If you feed them PDFs with broken line breaks and weird Unicode characters, the resulting vectors will be useless. Clean the text thoroughly before embedding."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "LangChain (RecursiveCharacterTextSplitter)"
+      install: "pip install langchain"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Semantic Chunking over Fixed Size"
+    tasks:
+      - "Never chunk purely by a fixed number of characters (e.g., every 1,000 chars). Use a recursive splitter that tries to split on double-newlines (`\n\n`), then single newlines, then periods, preserving whole paragraphs."
+  - step: "Contextual Overlap"
+    tasks:
+      - "Always include a 10-15% overlap between chunks. If a critical concept starts at the end of Chunk 1 and finishes in Chunk 2, overlap ensures at least one chunk captures the full context."
+  - step: "Structure-Aware Splitting"
+    tasks:
+      - "If parsing code, use a language-aware splitter (like AST parsing) so functions and classes stay together. If parsing Markdown, split strictly by Headers (`#`, `##`)."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Using `text-embedding-ada-002` for everything without evaluating. Newer models (like OpenAI's `text-embedding-3` or Cohere V3) are cheaper, support more languages, and allow for dimension reduction."
+best_practices:
+  - "Append context to chunks before embedding. E.g., If Chunk 42 is just 'The feature was released', append the document title: 'Title: Q3 Product Roadmap. The feature was released.' This drastically improves searchability."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "LangChain: Text Splitters"
+    url: "https://python.langchain.com/docs/modules/data_connection/document_transformers/"

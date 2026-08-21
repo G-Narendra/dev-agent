@@ -1,0 +1,97 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "generative-asset-pipeline"
+display_name: "Generative AI Brand Asset Pipeline"
+description: >
+  Utilizes AI image generation models (Midjourney, Stable Diffusion, DALL-E) 
+  to rapidly produce high-quality, on-brand visual assets for marketing, 
+  blogs, and social media without the cost of a traditional photoshoot.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "utility"
+phase: "all"
+applicable_startups:
+  - all
+priority: "medium"
+difficulty: "intermediate"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Generate an image for this blog post."
+  - "We need hero assets for the landing page."
+  - "Create stock photos of our target audience."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Execute prompt generation."
+  - "Upscale and crop image."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "asset_description"
+      type: "string"
+      description: "What happens in the image? (e.g., 'A developer coding late at night')."
+    - name: "brand_style"
+      type: "string"
+      description: "The aesthetic (e.g., 'Cyberpunk', 'Corporate Minimalist', '3D Claymation')."
+  optional:
+    - name: "aspect_ratio"
+      type: "string"
+      description: "16:9, 1:1, 9:16."
+      default: "16:9"
+
+outputs:
+  files:
+    - path: "assets/marketing/generated-{topic}.png"
+      description: "The final, high-resolution image."
+  artifacts:
+    - "The exact prompt used to generate the image, saved for future consistency."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "N/A"
+  manual:
+    - "The generated image perfectly matches the startup's existing brand guidelines and color palette."
+    - "The image has no obvious 'AI hallucinations' (e.g., humans with 6 fingers, garbled text)."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "network"
+
+safety_notes:
+  - "Copyright & Trademark: Never prompt an AI to generate an image 'in the style of [Living Artist]' or including trademarked logos (like Nike or Apple). The startup does not own the copyright and could be sued."
+  - "Text in Images: Current generative AI is terrible at spelling. Never ask it to generate an image with specific text. Generate the base image and add the text manually in Figma."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Midjourney / DALL-E 3"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Prompt Engineering"
+    tasks:
+      - "Structure the prompt methodically: [Subject] + [Environment/Lighting] + [Style/Medium] + [Parameters]."
+      - "Example: `A sleek laptop on a concrete desk, moody cinematic lighting, neon blue accents, shot on 35mm film, photorealistic --ar 16:9`."
+  - step: "Generation and Curation"
+    tasks:
+      - "Generate at least 10 variations. AI art is a numbers game. Select the 1 image that has zero anatomical flaws."
+  - step: "Post-Processing"
+    tasks:
+      - "AI images are often low resolution. Run the winning image through an AI Upscaler (like Topaz Gigapixel or Real-ESRGAN)."
+      - "Use Photoshop/Figma to fix minor glitches or color-grade it to match the brand exactly."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Using hyper-realistic AI faces on a team 'About Us' page. It destroys trust instantly when users realize the company is faking its employees."
+  - "Inconsistent aesthetics. If the homepage uses 3D isometric vectors, do not use a moody cinematic photograph on the pricing page. Pick one style and lock the prompt."
+
+best_practices:
+  - "Use 'Style Reference' or 'Image Prompting' features (like `--sref` in Midjourney) to guarantee visual consistency across a batch of 50 images."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Midjourney Documentation"
+    url: "https://docs.midjourney.com/"

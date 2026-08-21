@@ -1,0 +1,115 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "vendor-negotiation"
+display_name: "SaaS Vendor Negotiation & Contract Management"
+description: >
+  Prevents the startup from bleeding cash on over-priced SaaS subscriptions 
+  (AWS, Datadog, Salesforce). Negotiates discounts, standardizes MSAs, and 
+  tracks renewal dates to prevent auto-renewing software no one uses. Covers key patterns to avoid common pitfalls like managing vendors without slas or defined kpis -- you can't h, and provides actionable best practices for production-ready results.
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "contract-manager"
+phase: "operations"
+applicable_startups:
+  - all
+priority: "high"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Datadog is up for renewal."
+  - "Review the Salesforce MSA."
+  - "Can we get a discount on this tool?"
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Generate vendor negotiation email."
+  - "Draft SaaS audit report."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "vendor_name"
+      type: "string"
+      description: "e.g., Datadog, Snowflake."
+    - name: "current_contract_value"
+      type: "string"
+      description: "How much are we paying now?"
+  optional:
+    - name: "competitor_quote"
+      type: "string"
+      description: "Do we have leverage?"
+      default: "None"
+
+outputs:
+  files:
+    - path: "finance/vendors/negotiation_strategy.md"
+      description: "The playbook to secure a 30% discount."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "N/A"
+manual:
+  - "SaaS expenditures are reduced by 20% year-over-year through aggressive negotiation and license consolidation."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "The Multi-Year Lock-In: Never sign a 3-year SaaS agreement for a tool the engineering team hasn't extensively tested in production. Startups pivot. If you pivot away from the tool in 6 months, you are legally bound to pay for 30 more."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Vendr / Tropic"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "The End-of-Quarter Squeeze"
+    tasks:
+      - "Never negotiate a major contract on the 1st of the month. Wait until the 28th of the quarter. The vendor's sales rep is desperate to hit their quota and will offer massive discounts to close it immediately."
+  - step: "Leverage Competitor Quotes"
+    tasks:
+      - "If you want to buy Mixpanel, you MUST get a formal quote from Amplitude. Send the Amplitude quote to the Mixpanel rep and say: 'We prefer your UI, but they are 30% cheaper. Match it and we sign today.'"
+  - step: "Opt-Out of Auto-Renewal"
+    tasks:
+      - "Always strike the 'Auto-Renewal' clause from the Master Service Agreement (MSA), or set a strict 90-day calendar reminder to formally send a cancellation notice before the window closes."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Managing vendors without SLAs or defined KPIs -- you can't hold them accountable if there's no contractually agreed standard."
+  - "Running a single-supplier strategy for critical components -- one factory shutdown halts your entire production line."
+  - "Not having a business continuity plan -- a natural disaster, cyberattack, or supplier failure becomes an existential crisis."
+  - "Tracking inventory manually instead of using an automated system -- human error in inventory leads to stockouts or overstock."
+  - "Optimizing for unit cost without considering total cost of ownership -- cheaper parts that fail 2x as often cost more overall."
+  - "Run a quarterly 'SaaS Audit'. Export all corporate credit card charges. Find the 10 tools that the team signed up for and abandoned. Cancel them immediately."
+
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Not defining clear success criteria before starting a task -- leads to ambiguous outcomes, endless revisions, and wasted effort."
+
+best_practices:
+  - "Document all configuration decisions in an Architecture Decision Record (ADR) so future team members understand why choices were made."
+  - "Implement comprehensive error handling with structured logging at every integration boundary to simplify debugging."
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Vendr: SaaS Negotiation Strategies"
+    url: "https://www.vendr.com/blog/saas-negotiation"

@@ -1,0 +1,87 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "usability-testing"
+display_name: "Usability Testing & UX Research"
+description: >
+  Conduct moderated testing sessions and analyze heatmaps (e.g., Hotjar) to identify friction 
+  points in the user interface and validate design changes.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "ui-researcher"
+phase: "build"
+applicable_startups: 
+  - saas
+  - consumer
+priority: "mvp"
+difficulty: "advanced"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Test Preparation"
+    tasks:
+      - "Write a script with a specific goal (e.g., 'Without using search, try to update your billing credit card.')."
+      - "Recruit 5 external participants who match the target demographic."
+  - step: "Moderation"
+    tasks:
+      - "Ask the user to 'think out loud' as they navigate the prototype."
+      - "Remain completely silent when the user gets stuck, allowing them to attempt recovery."
+  - step: "Analysis"
+    tasks:
+      - "Compile a highlight reel of users failing at the exact same step to force the product team to fix the UX."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Asking the user 'Do you like this design?' instead of asking them to 'Show me how you would accomplish [Task] using this design.'"
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Usability Testing process"
+  - "How do I handle usability testing?"
+  - "Implement usability testing"
+  - "Conduct moderated testing sessions and analyze heatmaps (e"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the usability testing process"
+  optional:
+    - name: "data_source"
+      type: "string"
+      description: "Source of data to analyze"
+      default: "Internal data"
+    - name: "target_audience"
+      type: "string"
+      description: "Target user or customer segment"
+      default: "Primary user persona"
+
+outputs:
+  files:
+    - path: "outputs/usability-testing.md"
+      description: "Results of the usability testing process"
+  artifacts:
+    - "Completed usability testing deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

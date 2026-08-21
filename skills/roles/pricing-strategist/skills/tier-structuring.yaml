@@ -1,0 +1,102 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "tier-structuring"
+display_name: "SaaS Pricing Tier & Value Metric Structuring"
+description: >
+  Designs the pricing architecture for SaaS products. Aligns the price the 
+  customer pays with the actual value they receive (Value Metric) to maximize 
+  revenue extraction while minimizing churn.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "pricing-strategist"
+phase: "growth"
+applicable_startups:
+  - SaaS, B2B
+priority: "critical"
+difficulty: "expert"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "How much should we charge for this?"
+  - "Our competitors are undercutting us."
+  - "Restructure the pricing tiers."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Generate pricing tier matrix."
+  - "Draft value metric analysis."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "product_value"
+      type: "string"
+      description: "How does the product save time or make money?"
+  optional:
+    - name: "target_market"
+      type: "string"
+      description: "SMB, Mid-Market, or Enterprise."
+      default: "SMB"
+
+outputs:
+  files:
+    - path: "business/strategy/pricing_model_2024.md"
+      description: "The finalized pricing architecture."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "N/A"
+manual:
+  - "Net Revenue Retention (NRR) exceeds 120% because existing customers are naturally upgraded to higher tiers as their usage grows."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "Grandfathering: When raising prices, never force your early, loyal startup adopters onto the new expensive pricing immediately. Grandfather them in for at least 12 months, or forever, to prevent a mass exodus."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Excel / Google Sheets"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Identify the Value Metric"
+    tasks:
+      - "Stop charging 'Per User/Seat' if the product's value isn't tied to humans using it. E.g., Charge per 'API Request' (AWS), per 'Video Processed', or per 'Active Contact' (Mailchimp)."
+  - step: "The 3-Tier Architecture"
+    tasks:
+      - "Create exactly 3 tiers: 'Good' (SMB, self-serve, basic features), 'Better' (The most profitable tier, heavily highlighted), and 'Best/Enterprise' ('Contact Sales', SSO, SLA)."
+  - step: "Feature Fencing"
+    tasks:
+      - "Gate features appropriately. Put 'SSO/SAML' and 'Audit Logs' exclusively in the Enterprise tier, because SMBs don't care about them, but large corporations legally require them and will pay 10x for them."
+      - "Add environment variable validation that crashes fast on missing required values."
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Basing your price purely on what it costs you to run the AWS servers (Cost-Plus Pricing). Price should be based entirely on the value the customer receives, completely disconnected from your costs."
+best_practices:
+  - "Implement the 'Decoy Effect'. If the Pro tier is $50 and the Enterprise tier is $99, add a decoy 'Pro+' tier at $89. Customers will see the Enterprise tier as a massive bargain for only $10 more."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "ProfitWell: Anatomy of SaaS Pricing Strategy"
+    url: "https://www.paddle.com/resources/saas-pricing-strategy"

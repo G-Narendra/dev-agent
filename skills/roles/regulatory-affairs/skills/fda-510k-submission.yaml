@@ -1,0 +1,78 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "fda-510k-submission"
+display_name: "FDA 510(k) Clearance Pathway"
+description: >
+  Draft the 510(k) premarket notification to prove the new medical software is 
+  substantially equivalent to an already legally marketed predicate device.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "regulatory-affairs"
+phase: "growth"
+applicable_startups: 
+  - healthtech
+priority: "critical"
+difficulty: "expert"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Predicate Identification"
+    tasks:
+      - "Find an existing FDA-cleared product with the exact same Intended Use. The predicate must be structurally and functionally similar to your software."
+  - step: "Substantial Equivalence Argument"
+    tasks:
+      - "Draft the comparison matrix. If your software uses AI and the predicate does not, you must scientifically prove that the AI introduces no new risks of safety or effectiveness."
+  - step: "Design Controls Validation"
+    tasks:
+      - "Include the complete traceability matrix linking User Needs -> System Requirements -> Verification Tests to prove the software was built under strict Design Controls (21 CFR 820.30)."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Marketing an AI tool that 'diagnoses skin cancer' directly to consumers without FDA clearance, resulting in a Cease & Desist from the federal government and massive fines."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Fda 510K Submission process"
+  - "How do I handle fda 510k submission?"
+  - "Implement fda 510k submission"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the fda 510k submission process"
+  optional:
+    - name: "N/A"
+      type: "string"
+      description: "No optional inputs needed."
+
+outputs:
+  files:
+    - path: "outputs/fda-510k-submission.md"
+      description: "Results of the fda 510k submission process"
+  artifacts:
+    - "Completed fda 510k submission deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

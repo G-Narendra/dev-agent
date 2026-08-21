@@ -1,0 +1,122 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "java-microservice"
+display_name: "Java Microservice Architecture"
+description: >
+  Design and implement microservices in Java using Spring Cloud, Spring
+  Cloud Gateway, and service mesh patterns. Covers service discovery,
+  circuit breakers, distributed configuration, and observability.
+role: "backend-engineer-java"
+phase: "build"
+applicable_startups:
+  - all
+priority: "high"
+difficulty: "advanced"
+trigger_phrases:
+  - "Design a Java microservice architecture for..."
+  - "Set up Spring Cloud Gateway for..."
+  - "Implement circuit breakers in Spring Boot for..."
+  - "Configure distributed tracing across Java services..."
+example_cli_actions:
+  - "./mvnw spring-boot:build-image"
+  - "docker compose up -d"
+  - "curl http://localhost:8761/eureka/apps"
+  - "java -jar --add-opens java.base/java.lang=ALL-UNNAMED service.jar"
+inputs:
+  required:
+    - name: "service_name"
+      type: "string"
+      description: "Name of the microservice."
+    - name: "service_dependencies"
+      type: "list"
+      description: "Other services it communicates with."
+  optional:
+    - name: "service_discovery"
+      type: "string"
+      description: "Eureka, Consul, or Kubernetes-native."
+      default: "Eureka (Spring Cloud Netflix)"
+    - name: "config_source"
+      type: "string"
+      description: "Spring Cloud Config Server, Vault, or Kubernetes ConfigMap."
+      default: "Spring Cloud Config Server with Git backend"
+outputs:
+  files:
+    - path: "src/main/java/com/app/config/ResilienceConfig.java"
+      description: "Resilience4j circuit breaker and retry configuration."
+    - path: "src/main/resources/bootstrap.yml"
+      description: "Spring Cloud Config bootstrap configuration."
+    - path: "docker-compose.yml"
+      description: "Docker Compose with service registry, config server, and observability."
+    - path: "Dockerfile"
+      description: "Multi-stage Docker build with layered JAR."
+  artifacts:
+    - "Spring Boot layered Docker image for optimized deployments."
+success_criteria:
+  automated:
+    - "Circuit breaker opens after configured failure threshold and recovers correctly."
+    - "Distributed trace spans show complete call graphs across all services."
+  manual:
+    - "A single service can be deployed independently without requiring other services to restart."
+    - "Configuration changes propagate without full application restart."
+permissions_needed:
+  - "filesystem"
+  - "container registry access"
+safety_notes:
+  - "Never use Spring Cloud Netflix components past 2024 they are in maintenance mode use Spring Cloud Circuit Breaker with Resilience4j."
+  - "Always set spring.cloud.config.fail-fast=true to prevent startup with stale configuration."
+  - "Use spring-boot:build-image with Paketo Buildpacks for reproducible container images."
+recommended_tools:
+  primary:
+    - name: "Spring Cloud Gateway + Resilience4j + Spring Cloud Config + Micrometer Tracing"
+      install: "spring-cloud-starter-gateway, spring-cloud-starter-circuitbreaker-reactor-resilience4j"
+  alternatives:
+    - name: "Quarkus + SmallRye"
+      when: "Need native compilation with GraalVM for faster startup in serverless environments."
+    - name: "Micronaut + Consul"
+      when: "Building polyglot microservices that share a service mesh."
+implementation_checklist:
+  - step: "Service Registry"
+    tasks:
+      - "Set up Eureka server or use Kubernetes-native service discovery."
+      - "Configure each service with eureka.client.serviceUrl.defaultZone."
+  - step: "Distributed Configuration"
+    tasks:
+      - "Set up Spring Cloud Config Server with Git-backed repository."
+      - "Configure bootstrap.yml with config server URI and profile-specific overrides."
+  - step: "Resilience"
+    tasks:
+      - "Configure Resilience4j circuit breaker with sliding window and failure rate threshold."
+      - "Add retry with exponential backoff for transient failures."
+      - "Implement @CircuitBreaker and @Retry annotations on Feign clients."
+  - step: "Observability"
+    tasks:
+      - "Add Micrometer Tracing with Brave for distributed tracing."
+      - "Export metrics to Prometheus via micrometer-registry-prometheus."
+      - "Export traces to Tempo via OpenTelemetry OTLP exporter."
+anti_patterns:
+  - "Sharing a single database across multiple microservices violating bounded context principles."
+  - "Using synchronous HTTP calls for critical path transactions that should be async events."
+  - "Hardcoding service URLs instead of using service discovery and client-side load balancing."
+best_practices:
+  - "Use Spring Cloud Bus with RabbitMQ or Kafka for broadcasting config changes."
+  - "Implement health check endpoints with custom indicators for database, cache, and downstream services."
+  - "Use Feign clients with Spring Cloud LoadBalancer for inter-service communication."
+references:
+  - title: "Spring Cloud Reference"
+    url: "https://docs.spring.io/spring-cloud/docs/current/reference/html/"
+  - title: "Resilience4j Documentation"
+    url: "https://resilience4j.readme.io/"
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."

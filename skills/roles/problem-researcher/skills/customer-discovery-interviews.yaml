@@ -1,0 +1,81 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "customer-discovery-interviews"
+display_name: "Unbiased Customer Problem Discovery"
+description: >
+  Conduct 1-on-1 interviews with target users to extract facts about their past behavior
+  and current workflows, proving or disproving the core startup hypothesis.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "problem-researcher"
+phase: "ideation"
+applicable_startups: 
+  - all
+priority: "mvp"
+difficulty: "advanced"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Target Recruitment"
+    tasks:
+      - "Identify and recruit 20 people who fit the exact target persona."
+  - step: "The Interview (The Mom Test)"
+    tasks:
+      - "Do NOT pitch the solution."
+      - "Ask: 'Talk me through the last time you experienced [Problem]. What was the hardest part?'"
+      - "Ask: 'What solutions have you paid for to try and fix this?'"
+  - step: "Synthesis"
+    tasks:
+      - "Identify patterns. If 15/20 people have tried to build an Excel macro to solve the problem, you have validated the pain."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Pitching the idea immediately and asking 'Would you pay $10/month for this?', which guarantees false-positive validation."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Customer Discovery Interviews process"
+  - "How do I handle customer discovery interviews?"
+  - "Implement customer discovery interviews"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the customer discovery interviews process"
+  optional:
+    - name: "target_audience"
+      type: "string"
+      description: "Target user or customer segment"
+      default: "Primary user persona"
+
+outputs:
+  files:
+    - path: "outputs/customer-discovery-interviews.md"
+      description: "Results of the customer discovery interviews process"
+  artifacts:
+    - "Completed customer discovery interviews deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

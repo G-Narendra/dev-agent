@@ -1,0 +1,111 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "offer-negotiation-closing"
+display_name: "Offer Negotiation & Candidate Closing"
+description: >
+  Manage the critical final stage of the hiring process. Structures the job 
+  offer (Base, Equity, Bonus), handles counter-offers from competitors, 
+  and successfully closes the candidate.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "recruiter"
+phase: "operations"
+applicable_startups:
+  - all
+priority: "high"
+difficulty: "expert"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Extend the offer."
+  - "They have a competing offer."
+  - "Negotiate the salary."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Draft a candidate offer letter."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "approved_budget"
+      type: "string"
+      description: "The max salary and equity bands approved by the CFO."
+    - name: "candidate_expectations"
+      type: "string"
+      description: "What they asked for in the initial screen."
+  optional:
+    - name: "competing_offers"
+      type: "string"
+      description: "Are we fighting Google/Meta for this person?"
+      default: "None"
+
+outputs:
+  files:
+    - path: "hr/offers/jane-doe-offer.md"
+      description: "The formal offer breakdown (Cash + Equity)."
+  artifacts:
+    - "An Equity/Options scenario calculator for the candidate."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "N/A"
+  manual:
+    - "The Offer Acceptance Rate (OAR) is > 85%."
+    - "Candidates do not feel 'lowballed', but the company remains within budget."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+
+safety_notes:
+  - "Equity Misrepresentation: Never promise 'This 0.1% equity will be worth $10 Million'. That is a legal liability. Present the equity mathematically based on current valuation and hypothetical, clearly marked exit scenarios."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Carta / Option Impact"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "The Pre-Close (Testing the Waters)"
+    tasks:
+      - "Never send a surprise written offer. Call them first: 'If we were to offer you $X base and Y equity, are you ready to sign today?' Uncover objections verbally before putting ink on paper."
+  - step: "Structuring the Equity Pitch"
+    tasks:
+      - "Engineers from FAANG do not understand startup equity. Do not just say 'You get 10,000 options'. You must explain: 1. Current Strike Price, 2. Preferred Price, 3. Vesting Schedule (1 year cliff, 4 year vest)."
+  - step: "Handling FAANG Counter-Offers"
+    tasks:
+      - "A Seed startup cannot beat Google on base salary. Do not try. Sell the 'Delta': 'Google will give you $300k to change button colors. We will give you $180k to build an entire infrastructure team from scratch. What do you want your career to look like?'"
+  - step: "The Exploding Offer (Use with Caution)"
+    tasks:
+      - "Give a reasonable deadline (e.g., 48 to 72 hours). 'Exploding' offers (24 hours) create resentment. But leaving an offer open for 2 weeks allows them to shop your offer around."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Lowballing. If the budget is $180k and the candidate expects $180k, do not offer $150k just to 'see if they take it'. You will insult a top-tier candidate and they will walk away."
+  - "The Recruiter acting as a wall. For executive or highly senior technical hires, the CEO or CTO must do the final closing call, not the recruiter."
+
+best_practices:
+  - "The 'Flex' Offer. Give the candidate a choice. Offer A: High Base Salary, Lower Equity (Risk Averse). Offer B: Lower Base Salary, Higher Equity (Risk Tolerant). This makes them feel in control of the negotiation."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Holloway: Guide to Equity Compensation"
+    url: "https://www.holloway.com/g/equity-compensation"

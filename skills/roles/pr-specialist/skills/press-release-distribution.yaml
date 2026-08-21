@@ -1,0 +1,111 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "press-release-distribution"
+display_name: "Press Release Drafting & Distribution"
+description: >
+  Drafts compelling, non-jargon press releases for major company milestones 
+  (Funding, M&A, Product Launch) and orchestrates the distribution strategy 
+  to secure exclusive coverage in Tier 1 tech media.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "pr-specialist"
+phase: "build"
+applicable_startups:
+  - all
+priority: "high"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "We just closed our Series A."
+  - "Draft a press release."
+  - "How do we get into TechCrunch?"
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Draft funding announcement."
+  - "Generate media pitch."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "announcement_type"
+      type: "string"
+      description: "Funding, Launch, Partnership."
+    - name: "key_facts"
+      type: "string"
+      description: "Amount raised, lead investor, core value prop."
+  optional:
+    - name: "target_publication"
+      type: "string"
+      description: "TechCrunch, Forbes, WSJ."
+      default: "TechCrunch"
+
+outputs:
+  files:
+    - path: "marketing/pr/press-release-draft.md"
+      description: "The official PR document."
+  artifacts:
+    - "A list of targeted journalists."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "N/A"
+manual:
+  - "The announcement is picked up by at least 2 major industry publications, driving a spike in inbound traffic."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "Embargoes: If you give a journalist a story 'Under Embargo', ensure the exact date and time (including timezone) is explicitly agreed upon in writing before sending the details."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "MuckRack / Cision"
+      install: "N/A"
+  alternatives:
+    - name: "PR Newswire"
+      when: "Doing a mass wire blast (less effective than targeted pitching)."
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "The 'So What?' Test"
+    tasks:
+      - "Journalists do not care that you added a new button to your app. The PR must tie the launch to a broader macroeconomic trend or industry shift."
+  - step: "Drafting the Release"
+    tasks:
+      - "Structure: Headline (Under 100 chars), Dateline (City, Date), The Lead (Who/What/When/Why in 1 sentence), Founder Quote, Investor Quote, Boilerplate (About the company)."
+  - step: "The Exclusive Pitch"
+    tasks:
+      - "Offer the story as an 'Exclusive' to ONE specific journalist at a Tier 1 publication 2 weeks before launch. If they pass, move to the next."
+  - step: "The Press Kit"
+    tasks:
+      - "Create a Dropbox folder containing: High-res founder headshots, transparent PNG logos, and product screenshots. Do not make the journalist hunt for these."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Sending a 'To whom it may concern' mass email to 500 journalists with a PDF attachment. They will delete it instantly."
+best_practices:
+  - "Pitch journalists who have recently written about your exact competitors. Reference their recent article in your subject line."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "First Round: How to do PR for Startups"
+    url: "https://review.firstround.com/the-startup-founders-guide-to-pr"

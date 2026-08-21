@@ -1,0 +1,78 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "token-economy-design"
+display_name: "Tokenomics & Macroeconomic Design"
+description: >
+  Design the complete token economy, including initial distribution (allocations), vesting
+  cliffs, emission schedules, and utility mechanisms (staking/burning).
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "tokenomics-expert"
+phase: "planning"
+applicable_startups: 
+  - web3
+priority: "mvp"
+difficulty: "advanced"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Allocation"
+    tasks:
+      - "Allocate the token supply (e.g., 20% Team, 15% Investors, 10% Airdrop, 55% Community Treasury)."
+  - step: "Vesting Strategy"
+    tasks:
+      - "Enforce a 12-month cliff and 36-month linear vesting for all team and investor tokens."
+  - step: "Utility Design"
+    tasks:
+      - "Design a 'sink' mechanism (e.g., using a portion of protocol revenue to buy back and burn the token from the open market)."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Designing a play-to-earn game token with infinite emissions and no sinks, guaranteeing the token price will approach zero as players constantly cash out."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Token Economy Design process"
+  - "How do I handle token economy design?"
+  - "Implement token economy design"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the token economy design process"
+  optional:
+    - name: "N/A"
+      type: "string"
+      description: "No optional inputs needed."
+
+outputs:
+  files:
+    - path: "outputs/token-economy-design.md"
+      description: "Results of the token economy design process"
+  artifacts:
+    - "Completed token economy design deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

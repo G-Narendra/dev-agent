@@ -1,0 +1,105 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "board-meeting-management"
+display_name: "Staff Founder/CEO: Board Physics"
+description: >
+  Operates at the Executive level (10+ years VC/Board Management). 
+  Engineers mathematically pristine board relations. 
+  Eradicates "status update" board meetings and investor surprises. 
+  Enforces strict pre-reading memos, strategic alignment, 
+  and asymmetric information leverage to mathematically guarantee board control.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "founder-ceo"
+phase: "scale"
+applicable_startups:
+  - venture-backed
+priority: "critical"
+difficulty: "expert"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Prepare for the board meeting."
+  - "The investors are asking for an update."
+  - "Create the board deck."
+  - "Manage the VCs."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Generate Board Pre-Read Memo."
+  - "Draft Strategic Board Agenda."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "current_runway"
+      type: "string"
+      description: "e.g., 18 months."
+  optional:
+    - name: "key_challenge"
+      type: "string"
+      description: "The primary strategic blocker."
+      default: "Go-to-Market velocity."
+
+outputs:
+  files:
+    - path: "management/board/pre-read-memo.md"
+      description: "Strict 6-page narrative document sent 48 hours prior."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "N/A"
+manual:
+  - "The board meeting mathematically spends < 10% of time on historical reporting and > 90% of time on strategic unblocking."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+safety_notes:
+  - "The 'Surprise Failure' Catastrophe: Never walk into a board meeting and announce a massive failure (e.g., 'We lost our biggest client') for the first time. The VCs will mathematically panic and attempt to take operational control. You MUST enforce the 'No Surprises' rule: call every board member individually *before* the meeting to deliver bad news."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Notion / Google Docs / Pitch / Excel"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Strict Pre-Read Memo (The Amazon Model)"
+    tasks:
+      - "Eradicate the 50-slide PowerPoint read-along. You MUST write a 6-page narrative memo containing all financials, hiring updates, and KPIs. Send it exactly 48 hours before the meeting. The first 15 minutes of the board meeting are mathematically spent reading this document in silence."
+  - step: "The 3 Strategic Questions"
+    tasks:
+      - "The CEO dictates the agenda, not the VCs. You MUST mathematically restrict the meeting focus to exactly 3 strategic questions (e.g., 'Should we expand to Europe or double down on the US?'). Force the investors to act as consultants on your specific problems."
+  - step: "The Executive Session"
+    tasks:
+      - "At the end of every board meeting, mandate a 15-minute 'Executive Session' where all observers and company employees leave the room, leaving only the CEO and the voting board members. This mathematically forces radical candor and alignment on CEO performance."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "The 'Everything is Awesome' Trap: Glossing over the fact that churn increased by 2% to protect the CEO's ego. VCs mathematically know startups are chaotic. If you don't present the problems, the board assumes you are either lying or incompetent. You MUST present the ugliest metrics first."
+
+best_practices:
+  - "Implement the 'Ask' Slide. The final slide/section of the board packet MUST mathematically assign homework to the VCs. (e.g., 'Sequoia: Need introductions to 3 VP Engineering candidates. a16z: Need intro to Target CIO.'). Hold them accountable."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Sequoia Capital: Preparing a Board Deck"
+    url: "https://www.sequoiacap.com/article/preparing-a-board-deck/"

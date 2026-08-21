@@ -1,0 +1,111 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "feature-prioritization"
+display_name: "Feature Prioritization & Opportunity Scoring"
+description: >
+  Apply rigorous frameworks (RICE, ICE, Opportunity-Solution Trees) to determine 
+  what the engineering team should build next. Kills the 'Loudest Customer' and 
+  'CEO's Pet Project' anti-patterns.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "cpo"
+phase: "growth"
+applicable_startups:
+  - all
+priority: "critical"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Prioritize the roadmap."
+  - "Should we build this feature?"
+  - "We have too many ideas, what's next?"
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Create a feature scoring matrix."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "feature_backlog"
+      type: "file"
+      description: "List of all requested features."
+    - name: "current_goal"
+      type: "string"
+      description: "Are we optimizing for Acquisition, Activation, Retention, or Revenue?"
+  optional:
+    - name: "framework"
+      type: "string"
+      description: "RICE vs ICE."
+      default: "RICE"
+
+outputs:
+  files:
+    - path: "product/roadmap-prioritization.csv"
+      description: "The mathematically scored backlog."
+  artifacts:
+    - "The final Top 3 features to hand to Engineering."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "N/A"
+  manual:
+    - "Engineering is always working on the highest leverage feature, and sales understands *why* their pet feature was delayed."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+
+safety_notes:
+  - "Do not let scoring frameworks replace product vision. If Steve Jobs used RICE scoring, the iPhone might never have been built because the 'Effort' score was too high."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Linear / Jira / Notion"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "RICE Scoring"
+    tasks:
+      - "Reach: How many users will this impact in a given quarter? (e.g., 1000)."
+      - "Impact: How much will this move the needle for those users? (3 = Massive, 2 = High, 1 = Medium, 0.25 = Minimal)."
+      - "Confidence: How confident are we in these estimates? (100% = High, 80% = Medium, 50% = Low)."
+      - "Effort: How many 'Person-Months' will this take to build? (e.g., 3)."
+      - "Score = (Reach x Impact x Confidence) / Effort."
+  - step: "The 'Strategic Goal' Filter"
+    tasks:
+      - "Even if a feature scores highly on RICE, if it targets 'Acquisition' but the company's current Q3 OKR is strictly 'Retention', discard the feature until Q4."
+  - step: "Opportunity-Solution Tree Mapping"
+    tasks:
+      - "Before prioritizing a *Solution* (e.g., 'Build a Referral Program'), prioritize the *Opportunity* (e.g., 'Users want to invite their coworkers'). This prevents the team from falling in love with a specific implementation."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Building a feature just because a large enterprise customer threatened to churn if you didn't. This turns a SaaS company into a custom dev agency."
+  - "Prioritizing only 'Quick Wins' (Low Effort, Low Impact). You will eventually need to build the massive, high-effort features to maintain a competitive moat."
+
+best_practices:
+  - "Allocate 20% of engineering bandwidth purely to technical debt and infrastructure. Do not put 'Refactor database' through the RICE framework against user-facing features, or it will never get done."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Intercom: RICE Framework"
+    url: "https://www.intercom.com/blog/rice-simple-prioritization-for-product-managers/"

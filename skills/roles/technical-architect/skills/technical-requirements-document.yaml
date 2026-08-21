@@ -1,0 +1,79 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "technical-requirements-document"
+display_name: "Technical Requirements Document (TRD)"
+description: >
+  Translate the Product Requirements Document (PRD) into strict, actionable engineering 
+  tasks, mapping out the data models, API endpoints, and infrastructure changes required.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "technical-architect"
+phase: "planning"
+applicable_startups: 
+  - all
+priority: "high"
+difficulty: "advanced"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Data Model Mapping"
+    tasks:
+      - "Explicitly define every new database table, column type, constraints, and foreign keys required to support the new feature."
+  - step: "API Endpoints"
+    tasks:
+      - "Write the exact HTTP methods, routes, request bodies, and JSON response payloads for every API required by the frontend."
+  - step: "Migration Strategy"
+    tasks:
+      - "If the TRD modifies an existing data structure, write the exact script logic required to backfill old records so they don't break the new system."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Starting to build a complex feature relying purely on verbal conversations with the PM, resulting in the backend building a completely different API than the frontend expected."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Technical Requirements Document process"
+  - "How do I handle technical requirements document?"
+  - "Implement technical requirements document"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the technical requirements document process"
+  optional:
+    - name: "data_source"
+      type: "string"
+      description: "Source of data to analyze"
+      default: "Internal data"
+
+outputs:
+  files:
+    - path: "outputs/technical-requirements-document.md"
+      description: "Results of the technical requirements document process"
+  artifacts:
+    - "Completed technical requirements document deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

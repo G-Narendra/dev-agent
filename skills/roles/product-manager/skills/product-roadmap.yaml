@@ -1,0 +1,79 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "product-roadmap"
+display_name: "Roadmap Prioritization & Planning"
+description: >
+  Prioritize the backlog ruthlessly, aligning engineering resources with the CEO's 
+  strategic OKRs and the most requested customer features.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "product-manager"
+phase: "planning"
+applicable_startups: 
+  - all
+priority: "high"
+difficulty: "advanced"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Prioritization Framework"
+    tasks:
+      - "Use the RICE framework (Reach, Impact, Confidence, Effort) to mathematically rank features, removing emotional bias from the decision."
+  - step: "Outcome over Output"
+    tasks:
+      - "Frame roadmap items as customer outcomes (e.g., 'Reduce checkout friction') rather than strict features (e.g., 'Add Apple Pay button')."
+  - step: "Stakeholder Alignment"
+    tasks:
+      - "Communicate the roadmap transparently to Sales and Marketing so they know exactly what they can (and cannot) promise to customers."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Changing the engineering roadmap every two days based on whatever feature a single enterprise prospect requested on a sales call."
+
+best_practices:
+  - "Write problem statements before solution descriptions."
+  - "Prioritize using a framework (RICE, MoSCoW) -- not gut feeling."
+  - "Validate assumptions with real user data before committing resources."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Product Roadmap process"
+  - "How do I handle product roadmap?"
+  - "Implement product roadmap"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the product roadmap process"
+  optional:
+    - name: "target_audience"
+      type: "string"
+      description: "Target user or customer segment"
+      default: "Primary user persona"
+
+outputs:
+  files:
+    - path: "outputs/product-roadmap.md"
+      description: "Results of the product roadmap process"
+  artifacts:
+    - "Completed product roadmap deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Intercom on Product Management"
+    url: "https://www.intercom.com/resources/books/intercom-on-product-management"
+  - title: "SVPG Product Management"
+    url: "https://www.svpg.com/articles/"

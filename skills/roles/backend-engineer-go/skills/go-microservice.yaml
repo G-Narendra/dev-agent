@@ -1,0 +1,97 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "go-microservice"
+display_name: "Go Microservice Architecture"
+description: >
+  Design and implement microservices in Go with gRPC, service discovery,
+  and observability. Covers protobuf definitions, inter-service communication,
+  and distributed tracing.
+role: "backend-engineer-go"
+phase: "build"
+applicable_startups:
+  - all
+priority: "high"
+difficulty: "advanced"
+trigger_phrases:
+  - "Design a Go microservice for..."
+  - "Set up gRPC communication between services..."
+  - "Implement distributed tracing across Go services..."
+example_cli_actions:
+  - "protoc --go_out=. --go-grpc_out=. proto/service.proto"
+  - "grpcurl -plaintext localhost:9000 list"
+inputs:
+  required:
+    - name: "service_name"
+      type: "string"
+      description: "Name of the microservice."
+    - name: "service_dependencies"
+      type: "list"
+      description: "Other services it communicates with."
+  optional:
+    - name: "communication_protocol"
+      type: "string"
+      description: "gRPC, REST, or NATS."
+      default: "gRPC for internal, REST for external"
+outputs:
+  files:
+    - path: "proto/service.proto"
+      description: "Protobuf service definition."
+    - path: "internal/grpc/server.go"
+      description: "gRPC server implementation."
+    - path: "internal/grpc/client.go"
+      description: "gRPC client implementation."
+  artifacts:
+    - "Generated protobuf Go code."
+success_criteria:
+  automated:
+    - "gRPC endpoints respond within 50ms p99 latency for internal calls."
+    - "Distributed trace spans show complete call graphs across services."
+  manual:
+    - "A new service can be added with minimal changes to existing code."
+permissions_needed:
+  - "filesystem"
+safety_notes:
+  - "Never expose gRPC services to the public internet use REST or GraphQL for external APIs."
+  - "Always set deadlines on gRPC client calls to prevent cascading failures."
+recommended_tools:
+  primary:
+    - name: "gRPC-Go + protoc + OpenTelemetry"
+      install: "go get google.golang.org/grpc go.opentelemetry.io/otel"
+  alternatives:
+    - name: "Connect-Go"
+      when: "Need a simpler alternative that supports both gRPC and HTTP/JSON."
+implementation_checklist:
+  - step: "Protobuf Definition"
+    tasks:
+      - "Define service RPCs and message types in .proto files."
+      - "Use buf lint and buf breaking for proto quality checks."
+  - step: "Service Implementation"
+    tasks:
+      - "Implement gRPC server with interceptor middleware (logging, auth, tracing)."
+      - "Implement client with connection pooling and retry logic."
+  - step: "Observability"
+    tasks:
+      - "Add OpenTelemetry instrumentation for distributed tracing."
+      - "Export traces to Jaeger or Grafana Tempo."
+anti_patterns:
+  - "Using protobuf as a database schema definition leading to migration issues."
+  - "Defining all service RPCs in a single monolithic proto file."
+best_practices:
+  - "Follow Google API Design Guide for proto naming conventions."
+references:
+  - title: "gRPC-Go Documentation"
+    url: "https://grpc.io/docs/languages/go/"
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."

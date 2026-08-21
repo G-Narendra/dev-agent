@@ -1,0 +1,113 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "technical-seo-audit"
+display_name: "SEO Specialist & Technical SEO"
+description: >
+  Masters the search engine algorithms. Optimizes site architecture, 
+  page speed, and content taxonomy to dominate organic search rankings, 
+  driving free, highly-qualified traffic to the startup's website. Covers key patterns to avoid common pitfalls like launching a campaign without utm parameters -- you won't kno, and provides actionable best practices for production-ready results.
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "seo-specialist"
+phase: "growth"
+applicable_startups:
+  - Content-Led, Marketplaces, B2B SaaS
+priority: "high"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Why is our organic traffic dropping?"
+  - "We need to rank for 'Best CRM'."
+  - "Run an SEO audit."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Generate XML Sitemap structure."
+  - "Draft core web vitals optimization plan."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "target_keyword"
+      type: "string"
+      description: "e.g., 'Enterprise CRM Software'."
+    - name: "website_url"
+      type: "string"
+      description: "The startup's domain."
+  optional:
+    - name: "competitor_url"
+      type: "string"
+      description: "Who is currently ranking #1?"
+      default: "Unknown"
+
+outputs:
+  files:
+    - path: "marketing/seo/q3_technical_audit.md"
+      description: "The prioritized list of technical fixes for Engineering."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "N/A"
+manual:
+  - "The startup's domain authority increases, and non-branded organic search traffic grows by >30% over a 6-month period."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+safety_notes:
+  - "The JS-Rendering Blackhole: Never build a heavily Javascript-dependent marketing site (like a pure React SPA) without implementing Server-Side Rendering (SSR) or Static Site Generation (SSG) via Next.js. If Googlebot cannot render the JS, your entire site is invisible to Google."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Ahrefs / Google Search Console / Screaming Frog"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Core Web Vitals Optimization"
+    tasks:
+      - "Google severely punishes slow sites. Compress all images to WebP format. Defer non-critical Javascript. Ensure the Largest Contentful Paint (LCP) happens in under 2.5 seconds, and Cumulative Layout Shift (CLS) is zero."
+  - step: "The Content Hub Architecture (Topic Clusters)"
+    tasks:
+      - "Do not write random blog posts. Build a 'Pillar Page' (e.g., 'The Ultimate Guide to Remote Work'). Then write 20 specific 'Cluster Pages' (e.g., 'Remote Work Taxes'). Ensure every Cluster Page has a highly relevant internal link pointing back to the Pillar Page."
+      - "Document the trade-offs made in a decision log (ADR) so future team members understand why."
+  - step: "Cannibalization Audit"
+    tasks:
+      - "If you write 5 different blog posts that all try to rank for 'Best CRM', Google will get confused and rank none of them (Keyword Cannibalization). Choose ONE canonical page for that keyword. Consolidate the other 4 pages into it, and set up 301 Redirects."
+      - "Create a test data factory/seeder so tests are deterministic and repeatable."
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Launching a campaign without UTM parameters -- you won't know which channel drove the conversions."
+  - "A/B testing with a sample size too small to reach statistical significance -- making decisions on noise rather than signal."
+  - "Optimizing for vanity metrics (impressions, page views) instead of actionable KPIs (conversion rate, revenue, retention)."
+  - "Running ads without conversion tracking pixel installed -- you're paying for clicks but can't measure ROI."
+  - "Ignoring mobile page speed for SEO -- Google's mobile-first indexing means a slow mobile site kills rankings."
+best_practices:
+  - "Implement Programmatic SEO. If you are a travel startup, do not manually write 500 pages for 'Flights to [City]'. Build a database of cities, and use a template to programmatically generate 500 highly-optimized, dynamic landing pages."
+
+  - "Set up end-to-end conversion tracking before launching any campaign — measure from impression to purchase."
+  - "Run A/B tests until they reach 95% statistical significance before making decisions — premature conclusions are worse than no test."
+  - "Build audience segments based on behavior, not just demographics — what users do is more predictive than who they are."
+  - "Test email deliverability (SPF, DKIM, DMARC) before sending any campaign — authentication failures land in spam folders."
+  - "Create a content calendar 30 days ahead and batch-create content — consistency beats intensity in content marketing."
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Ahrefs: Technical SEO Guide"
+    url: "https://ahrefs.com/blog/technical-seo/"

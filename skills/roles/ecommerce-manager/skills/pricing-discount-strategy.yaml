@@ -1,0 +1,111 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "pricing-discount-strategy"
+display_name: "Pricing & Discount Strategy"
+description: >
+  Determine the optimal price points for physical products to maximize total 
+  profit (not just revenue). Structures psychological pricing and governs 
+  discount campaigns (like Black Friday) without destroying brand equity.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "ecommerce-manager"
+phase: "operations"
+applicable_startups:
+  - e-commerce
+priority: "high"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "How much should we charge?"
+  - "Run a sale this weekend."
+  - "Set the pricing strategy."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Calculate profit margins."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "cogs"
+      type: "string"
+      description: "Cost of Goods Sold (Manufacturing + Shipping)."
+    - name: "target_margin"
+      type: "string"
+      description: "Desired Gross Margin percentage (e.g., 60%)."
+  optional:
+    - name: "pricing_model"
+      type: "string"
+      description: "Cost-plus vs Value-based vs Competitor-based."
+      default: "Value-based"
+
+outputs:
+  files:
+    - path: "ecommerce/pricing/q4-discount-schedule.md"
+      description: "The calendar of planned promotions."
+  artifacts:
+    - "A Pricing Elasticity calculator spreadsheet."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "N/A"
+  manual:
+    - "Gross Margins remain above 50% even during peak promotional periods."
+    - "Average Order Value (AOV) increases due to strategic bundling."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+
+safety_notes:
+  - "The Discount Drug: Never train your customers to expect a 30% discount every weekend. If you do, they will NEVER buy at full price. Use discounts sparingly (e.g., Black Friday, Cyber Monday, and one Summer Sale)."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Shopify / Excel"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Cost-Plus vs Value-Based"
+    tasks:
+      - "Do not just take COGS ($10) and add a 50% markup ($15). If the customer perceives the value as $50, charge $49. Price based on the customer's perceived value, not your manufacturing cost."
+  - step: "Psychological Pricing (Charm Pricing)"
+    tasks:
+      - "Humans read left-to-right. $19.99 feels significantly cheaper than $20.00 because the first digit they process is a '1' instead of a '2'. Use it."
+  - step: "Strategic Bundling (Increasing AOV)"
+    tasks:
+      - "Instead of offering a 20% discount on a single $50 item (losing $10 in profit), offer a 'Buy 2, Get 1 Free' bundle. You maintain the perceived value of the single item, but drastically increase the Average Order Value (AOV) and move more inventory."
+  - step: "The 'Anchor' Price"
+    tasks:
+      - "Always show the 'Compare At' price next to the selling price. (e.g., '~~$100~~ $69'). The $100 serves as a psychological anchor, making the $69 look like an incredible deal."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Slashing prices to compete with Amazon. You are a startup; you cannot win a price war with Amazon. They have infinite capital and zero margin requirements. Compete on Brand, Quality, and Customer Service, not Price."
+  - "Blanket discounts (e.g., '20% off everything'). This destroys margin on your best-selling items that would have sold anyway. Target discounts specifically to slow-moving 'C' tier inventory."
+
+best_practices:
+  - "Implement 'Tiered Thresholds' to push AOV. 'Free Shipping over $50' or 'Get a free gift when you spend $100'. Customers will actively add more items to their cart just to hit the threshold."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "ProfitWell: Pricing Strategy"
+    url: "https://www.profitwell.com/recur/all/pricing-strategy"

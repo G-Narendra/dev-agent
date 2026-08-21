@@ -1,0 +1,81 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "cloud-provisioning"
+display_name: "Infrastructure as Code & Cloud Provisioning"
+description: >
+  Use Terraform or Pulumi to script, version, and deploy secure, scalable cloud infrastructure 
+  (VPCs, databases, compute clusters) across AWS, GCP, or Azure.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "cloud-engineer"
+phase: "build"
+applicable_startups: 
+  - all
+priority: "mvp"
+difficulty: "advanced"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Network Architecture"
+    tasks:
+      - "Define a Virtual Private Cloud (VPC) with isolated public and private subnets."
+      - "Ensure databases are placed in private subnets with no direct internet access."
+  - step: "IaC Implementation"
+    tasks:
+      - "Write Terraform modules for core services (e.g., RDS, ECS/EKS, S3)."
+      - "Implement Terraform state locking using DynamoDB/S3 to prevent concurrent mutation."
+  - step: "Security & IAM"
+    tasks:
+      - "Create highly restricted IAM roles for application services instead of using long-lived access keys."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Manually spinning up a database via the AWS web console, resulting in it being untracked, unrepeatable, and accidentally left exposed to the public internet."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Cloud Provisioning process"
+  - "How do I handle cloud provisioning?"
+  - "Implement cloud provisioning"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the cloud provisioning process"
+  optional:
+    - name: "data_source"
+      type: "string"
+      description: "Source of data to analyze"
+      default: "Internal data"
+
+outputs:
+  files:
+    - path: "outputs/cloud-provisioning.md"
+      description: "Results of the cloud provisioning process"
+  artifacts:
+    - "Completed cloud provisioning deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "AWS Documentation"
+    url: "https://docs.aws.amazon.com"
+  - title: "Terraform Documentation"
+    url: "https://developer.hashicorp.com/terraform/docs"

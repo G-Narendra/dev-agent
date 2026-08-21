@@ -1,0 +1,96 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "service-mesh"
+display_name: "Service Mesh & Traffic Management"
+description: >
+  Implement service mesh for observability, traffic management, and security.
+  Covers Istio, Linkerd, mTLS, and canary deployments.
+role: "kubernetes-engineer"
+phase: "operations"
+applicable_startups:
+  - all
+priority: "medium"
+difficulty: "advanced"
+trigger_phrases:
+  - "Set up a service mesh for..."
+  - "Implement mTLS between services..."
+  - "Configure canary deployments with..."
+example_cli_actions:
+  - "istioctl install --set profile=demo"
+  - "linkerd check --pre"
+  - "kubectl get vs -n production"
+inputs:
+  required:
+    - name: "mesh_provider"
+      type: "string"
+      description: "Istio, Linkerd, or Consul Connect."
+    - name: "services_count"
+      type: "integer"
+      description: "Number of services in the mesh."
+  optional:
+    - name: "features"
+      type: "list"
+      description: "mTLS, canary, mirroring, circuit breaking."
+      default: "mTLS + canary deployments"
+outputs:
+  files:
+    - path: "mesh/istio-operator.yaml"
+      description: "Service mesh installation manifest."
+    - path: "mesh/virtual-services.yaml"
+      description: "Traffic routing rules."
+  artifacts:
+    - "Kiali dashboard URL for observability."
+success_criteria:
+  automated:
+    - "All pods show 2/2 containers (sidecar injected) after rollout."
+    - "mTLS enforcement shows 100% mutual TLS between mesh services."
+  manual:
+    - "Canary routing successfully shifts 10% of traffic to the new version."
+permissions_needed:
+  - "cluster admin access"
+  - "CRD installation permissions"
+safety_notes:
+  - "Never install a service mesh in production without first testing in staging."
+  - "Monitor sidecar resource usage sidecar proxies can consume significant CPU/memory."
+recommended_tools:
+  primary:
+    - name: "Istio"
+      install: "istioctl install --set profile=default"
+  alternatives:
+    - name: "Linkerd"
+      when: "Need a simpler, lower-resource mesh without Envoy complexity."
+implementation_checklist:
+  - step: "Mesh Installation"
+    tasks:
+      - "Install the service mesh operator with recommended defaults."
+      - "Label the namespace for automatic sidecar injection."
+  - step: "mTLS Configuration"
+    tasks:
+      - "Enable STRICT mTLS mode for all mesh services."
+      - "Configure certificate rotation with 24-hour validity."
+  - step: "Traffic Management"
+    tasks:
+      - "Create VirtualService and DestinationRule for canary deployments."
+      - "Set up circuit breakers for upstream services."
+anti_patterns:
+  - "Installing a full service mesh in a cluster with only 3 microservices overkill."
+  - "Enabling mTLS globally without having a certificate rotation strategy in place."
+best_practices:
+  - "Start with strict mTLS only then add traffic management features incrementally."
+references:
+  - title: "Istio Documentation"
+    url: "https://istio.io/latest/docs/"
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."

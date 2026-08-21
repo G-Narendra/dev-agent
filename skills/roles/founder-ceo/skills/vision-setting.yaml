@@ -1,0 +1,91 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "vision-setting"
+display_name: "Vision & OKR Setting"
+description: >
+  Define the startup's North Star metric, mission statement, and quarterly Objectives and Key Results (OKRs).
+  Ensures the entire simulated (or real) team is aligned toward a singular, measurable goal.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "founder-ceo"
+phase: "ideation"
+applicable_startups: 
+  - all
+priority: "mvp"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Help me define my startup's vision."
+  - "What should our OKRs be?"
+  - "Define the North Star metric."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Draft a 1-page Vision and Strategy document."
+  - "Extract measurable OKRs from a vague product idea."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  manual:
+    - "The North Star metric is quantifiable and directly correlates with customer value (e.g., 'Weekly Active Users' instead of 'Total Signups')."
+    - "OKRs follow the 'Objective (Qualitative) -> Key Result (Quantitative)' format."
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "North Star Definition"
+    tasks:
+      - "Identify the single action a user takes that indicates they received core value."
+      - "Formulate this into a trackable metric (e.g., 'Messages Sent', 'Nights Booked')."
+  - step: "OKR Drafting"
+    tasks:
+      - "Define 1-3 inspirational Objectives for the current phase."
+      - "Attach 3-5 measurable Key Results (KRs) to each Objective."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Choosing a vanity metric (e.g., 'Pageviews' or 'Total Registered Users') as the North Star."
+  - "Setting binary Key Results (e.g., 'Launch V1'). KRs must be numeric (e.g., 'Achieve 100 daily active users on V1')."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the vision setting process"
+  optional:
+    - name: "data_source"
+      type: "string"
+      description: "Source of data to analyze"
+      default: "Internal data"
+
+outputs:
+  files:
+    - path: "outputs/vision-setting.md"
+      description: "Results of the vision setting process"
+  artifacts:
+    - "Completed vision setting deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Y Combinator Startup Library"
+    url: "https://www.ycombinator.com/library"
+  - title: "First Round Review"
+    url: "https://review.firstround.com"

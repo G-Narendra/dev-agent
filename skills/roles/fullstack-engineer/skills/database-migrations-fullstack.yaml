@@ -1,0 +1,108 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "database-migrations-fullstack"
+display_name: "Zero-Downtime Database Migrations"
+description: >
+  Manage the lifecycle of database schema changes in a production environment 
+  where the frontend and backend are deploying simultaneously. Focuses on the 
+  'Expand and Contract' pattern to prevent application crashes during schema updates.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "fullstack-engineer"
+phase: "operations"
+applicable_startups:
+  - all
+priority: "critical"
+difficulty: "expert"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Rename a database column."
+  - "Deploy the database migration."
+  - "How do we update the schema without downtime?"
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "npx prisma migrate dev"
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "schema_change"
+      type: "string"
+      description: "What is changing? (e.g., 'Renaming User.name to User.first_name')."
+  optional:
+    - name: "orm"
+      type: "string"
+      description: "Prisma, TypeORM, Drizzle."
+      default: "Prisma"
+
+outputs:
+  files:
+    - path: "prisma/migrations/timestamp_rename_name.sql"
+      description: "The raw SQL migration."
+  artifacts:
+    - "A 3-step deployment plan."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "The migration runs in CI against a staging database without errors."
+  manual:
+    - "The production database schema is updated without the application returning a single HTTP 500 error to users."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+
+safety_notes:
+  - "NEVER rename or delete a column in a single deployment. If you deploy the DB change before the API code is fully rolled out, the API will crash because it's looking for a column that no longer exists."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Prisma Migrate / Flyway"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "The Expand Phase (Deployment 1)"
+    tasks:
+      - "Create the new column (e.g., `first_name`) in the database. Allow it to be NULL."
+      - "Update the application code to write to BOTH `name` and `first_name` simultaneously, but continue reading from `name`."
+  - step: "The Backfill Phase"
+    tasks:
+      - "Run a background script to copy all existing data from `name` to `first_name` for historical rows."
+  - step: "The Read Phase (Deployment 2)"
+    tasks:
+      - "Update the application code to read entirely from `first_name`. It no longer cares about `name`."
+  - step: "The Contract Phase (Deployment 3)"
+    tasks:
+      - "Run a final migration to drop the old `name` column from the database."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Running `ALTER TABLE ADD COLUMN` with a `DEFAULT` value on a table with 10 million rows in PostgreSQL. This locks the entire table while rewriting all 10 million rows, causing a massive outage."
+  - "Testing migrations on an empty database. You must test migrations on a staging database that has a sanitized copy of production data to verify execution time."
+
+best_practices:
+  - "Keep transactions small. If a migration takes longer than 2 seconds to run, it is highly likely to cause lock contention and block incoming user queries."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Prisma: Expand and Contract Pattern"
+    url: "https://www.prisma.io/dataguide/types/relational/expand-and-contract-pattern"

@@ -1,0 +1,109 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "quantitative-research"
+display_name: "Quantitative UX Research & Analytics"
+description: >
+  Conducts quantitative UX research using surveys, analytics data, A/B tests,
+  and behavioral metrics. Combines numerical data with qualitative insights
+  for a complete understanding of user behavior.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "ux-researcher"
+phase: "planning"
+applicable_startups:
+  - all
+priority: "mvp"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run a quantitative user survey."
+  - "Analyze user behavior data."
+  - "Measure UX performance metrics."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Design UX survey."
+  - "Analyze behavioral analytics."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "research_questions"
+      type: "string"
+      description: "What specific questions need numerical answers."
+    - name: "user_segment"
+      type: "string"
+      description: "Which user segment to study."
+  optional:
+    - name: "sample_size"
+      type: "string"
+      description: "Number of participants needed."
+      default: "384 (95% confidence, 5% margin of error)"
+
+outputs:
+  files:
+    - path: "product/research/quantitative-{topic}-report.md"
+      description: "Quantitative research findings and statistical analysis"
+  artifacts:
+    - "Statistically significant quantitative data to support design decisions"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Research Design"
+    tasks:
+      - "Define what you need to measure: satisfaction (CSAT/NPS), usability (SUS), task success rate, time on task."
+      - "Choose methodology: surveys (attitudinal), analytics (behavioral), or A/B tests (comparative)."
+      - "Calculate required sample size for statistical significance."
+      - "Form hypotheses before collecting data — 'We believe the new checkout flow will reduce drop-off by 15%.'"
+  - step: "Survey Design"
+    tasks:
+      - "Use validated questionnaires: SUS (System Usability Scale), NPS, UEQ (User Experience Questionnaire)."
+      - "Keep surveys under 5 minutes — completion rates drop dramatically after that."
+      - "Use Likert scales (1-5 or 1-7) for attitudinal questions."
+      - "Pilot test the survey with 5 people to catch confusing questions."
+  - step: "Behavioral Analytics Analysis"
+    tasks:
+      - "Define key metrics: DAU/MAU, retention rate, session duration, funnel conversion, feature adoption."
+      - "Segment users by behavior: power users, casual users, churned users, new users."
+      - "Look for statistically significant differences between segments."
+      - "Correlate behavioral data with survey data for richer insights."
+  - step: "Reporting & Recommendations"
+    tasks:
+      - "Present findings with confidence intervals and effect sizes — not just averages."
+      - "Use data visualizations: charts, heatmaps, funnel diagrams, scatter plots."
+      - "Prioritize findings by impact: high confidence + high impact = immediate action."
+      - "Combine quantitative findings with qualitative insights for the complete picture."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Confusing correlation with causation — just because two metrics move together doesn't mean one causes the other."
+  - "Small sample sizes with big claims — n<30 can't support statistically significant conclusions."
+  - "Survey fatigue — asking too many questions or surveying too frequently."
+  - "Cherry-picking data that supports your hypothesis while ignoring contradictory data."
+best_practices:
+  - "Triangulate: combine surveys, analytics, and user interviews for the most reliable insights."
+  - "Define success metrics before launching the research — don't decide what 'good' looks like after seeing the data."
+  - "Segment, segment, segment — averages hide critical differences between user groups."
+  - "Share raw data alongside conclusions so others can verify and explore."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

@@ -1,0 +1,179 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "ai-influencer-analysis"
+display_name: "AI Influencer & Community Trend Analysis"
+description: >
+  Analyzes the key voices, communities, and trends in the AI and 
+  startup ecosystem across Reddit, Instagram, Product Hunt, Hacker News, 
+  and X/Twitter. Extracts actionable recommendations: what tools are 
+  trending, what skills are being learned, what GitHub repos are being 
+  shared, and what startup strategies are working. Instagram influencers 
+  (Levelsio, Marc Lou, Theo, Sweaty Startup, Ship 30 for 30) are a 
+  distinct channel from Reddit — their recommendations are more 
+  product-focused and visual, less technical.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "utility"
+phase: "all"
+applicable_startups:
+  - all
+priority: "high"
+difficulty: "beginner"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "What are people using for AI coding right now?"
+  - "What's trending in the AI community?"
+  - "Find the latest AI influencer recommendations."
+  - "What are indie hackers building?"
+  - "What does the AI community recommend for X?"
+  - "Check Reddit for the latest AI tools."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Analyze AI community trends."
+  - "Find influencer-recommended tools."
+  - "Research indie hacker strategies."
+  - "Compile community sentiment analysis."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "research_topic"
+      type: "string"
+      description: "What to research (AI-coding-tools, startup-strategies, vibe-coding-practices, indie-hacker-stack, trending-repos)."
+  optional:
+    - name: "include_reddit"
+      type: "boolean"
+      description: "Include Reddit analysis."
+      default: true
+    - name: "include_producthunt"
+      type: "boolean"
+      description: "Include Product Hunt analysis."
+      default: true
+    - name: "include_hackernews"
+      type: "boolean"
+      description: "Include Hacker News analysis."
+      default: false
+    - name: "include_instagram"
+      type: "boolean"
+      description: "Include Instagram influencer analysis (requires manual curation — not API-searchable)."
+      default: true
+
+outputs:
+  files:
+    - path: "research/community-trends-{topic}-{date}.md"
+      description: "Compiled research report with community-sourced recommendations."
+  artifacts:
+    - "Top 5 recommended tools/strategies from the community."
+    - "Sentiment analysis (what's working vs what's hyped but failing)."
+    - "Links to the actual discussions and posts for reference."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "N/A"
+  manual:
+    - "Every recommendation is backed by a real community post or discussion."
+    - "The report distinguishes between genuine community endorsements vs marketing hype."
+    - "Actionable recommendations are extracted (not just summaries of what people said)."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "network"
+
+safety_notes:
+  - "AI influencers on social media may be sponsored or biased. Cross-reference recommendations with actual community discussions."
+  - "Reddit communities trend toward hype cycles. Check if a recommendation has staying power (mentioned multiple times over weeks/months)."
+  - "Instagram influencers show curated, highlight-reel content. Their tool recommendations are often sponsored or affiliate-linked."
+  - "Build-in-public posts often show only successes. Look for 'failed experiments' posts — they contain more honest lessons."
+  - "Distinguish between 'what people are talking about' (hype) and 'what people are actually using in production' (real adoption)."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Reddit Search (site:reddit.com)"
+      install: "N/A (Web search)"
+      url: "https://www.reddit.com/r/vibecoding/top/"
+  alternatives:
+    - name: "Instagram — AI/Startup Influencers"
+      install: "N/A (Manual curation)"
+      url: "https://www.instagram.com/levelsio/"
+    - name: "Product Hunt — Trending AI"
+      install: "N/A (Web)"
+      url: "https://www.producthunt.com/topics/artificial-intelligence"
+    - name: "Hacker News — New/Ask"
+      install: "N/A (Web)"
+      url: "https://news.ycombinator.com/newest"
+    - name: "DIY AI — Best AI Coding Tools Reddit"
+      install: "N/A (Web)"
+      url: "https://diyai.io/ai-tools/reddit/best-ai-coding-tools-on-reddit/"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Research Reddit Communities"
+    tasks:
+      - "Search r/vibecoding for tool recommendations and workflow discussions."
+      - "Search r/ClaudeCode for terminal AI agent tips, Claude Code workflows, and MCP configs."
+      - "Search r/cursor for IDE-specific tips, multi-file editing tricks, and model comparisons."
+      - "Search r/SideProject for indie hacker stacks, AI startup postmortems, and 'built with AI' success stories."
+      - "Search r/startups and r/buildinpublic for 'build in public' strategies, pricing models, and go-to-market advice."
+      - "Search r/artificial for broad AI discussions, ethical debates, and emerging trends."
+  - step: "Research Instagram Influencers (Manual Curation)"
+    tasks:
+      - "Instagram is NOT directly searchable by AI agents. You must manually curate or ask the user for their Instagram follows."
+      - "Key AI/startup influencers to check (ask the user which they follow): @levelsio (indie hacker income transparency), @marc_louvion (vibe coding/SaaS), @theo.gg (AI coding/developer culture), @sweatystartup (boring SaaS), @ship30for30 (writing/launching), @djess (design/AI)."
+      - "Instagram recommendations tend to be: tool names with demo videos, SaaS landing page designs, 'build in public' progress updates, and sponsored affiliate links."
+      - "Instagram content is less technical than Reddit. Focus on: what tools they SHOW (not just mention), what design patterns they use, what problems they're solving."
+      - "Cross-reference Instagram tool recommendations with Reddit/HN to filter out sponsored content."
+  - step: "Cross-Reference on Product Hunt"
+    tasks:
+      - "Check Product Hunt's AI topic for the week's top launches."
+      - "Read comments on top launches — they contain real user feedback, not just marketing."
+      - "Look for patterns: multiple launches solving similar problems = a validated market need."
+  - step: "Extract Actionable Recommendations"
+    tasks:
+      - "Identify the recommended tools and their use cases. Note: Cursor + Claude Code are the current community favorites for different workflows."
+      - "Extract startup strategies: 'Vertical-specific AI' (AI for law, construction, HVAC) is outperforming 'general AI tools' in 2026."
+      - "Note the indie hacker stack trend: Momen/Retool (builder) + Lemon Squeezy (payments) + Resend (email) + Plausible (analytics) = zero-cost before revenue."
+      - "Track 'build in public with purpose' shift: decision logs and failed experiments generate more engagement than shipping announcements."
+  - step: "Compile and Cite"
+    tasks:
+      - "For each recommendation, include the source URL so the user can verify independently."
+      - "Label recommendations as: ✅ Community Consensus (multiple sources), 🔍 Emerging Trend (mentioned but unproven), or ⚠️ Contested (significant disagreement in the community)."
+      - "Add a brief 'why this matters' for each recommendation to help the user prioritize."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Treating a single viral Reddit post as a trend — it may just be one person's opinion."
+  - "Recommending tools based on influencer hype without checking actual community adoption."
+  - "Confusing 'what people are building' (supply) with 'what people are buying' (demand) — they are often different."
+  - "Ignoring the 'failed experiments' posts — they contain the most honest lessons."
+
+best_practices:
+  - "The most reliable signal is a tool mentioned across MULTIPLE communities (Reddit + HN + PH) over TIME."
+  - "Current community consensus (2026): Claude Code for terminal/refactoring, Cursor for editor integration, Ollama for local LLMs."
+  - "Current indie hacker wisdom: verify market need before building. Use Reddit searches and Product Hunt comments as free market research."
+  - "The 'build in public' strategy that works: share decision logs and failed experiments, not just shipping announcements."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "r/vibecoding — Reddit"
+    url: "https://www.reddit.com/r/vibecoding/"
+  - title: "r/ClaudeCode — Reddit"
+    url: "https://www.reddit.com/r/ClaudeCode/"
+  - title: "r/cursor — Reddit"
+    url: "https://www.reddit.com/r/cursor/"
+  - title: "r/SideProject — Reddit"
+    url: "https://www.reddit.com/r/SideProject/"
+  - title: "r/buildinpublic — Reddit"
+    url: "https://www.reddit.com/r/buildinpublic/"
+  - title: "Product Hunt — AI Topic"
+    url: "https://www.producthunt.com/topics/artificial-intelligence"
+  - title: "DIY AI — AI Coding Tools Reddit Recommendations"
+    url: "https://diyai.io/ai-tools/reddit/best-ai-coding-tools-on-reddit/"
+  - title: "Levelsio — Indie Hacker Income Transparency"
+    url: "https://www.instagram.com/levelsio/"
+  - title: "Theo — AI Coding & Developer Culture"
+    url: "https://www.instagram.com/theo.gg/"
+  - title: "Marc Lou — Vibe Coding SaaS Builder"
+    url: "https://www.instagram.com/marc_louvion/"

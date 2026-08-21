@@ -1,0 +1,105 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "translation-memory"
+display_name: "Software Localization & Translation Memory"
+description: >
+  Prepares the startup for global scale. Ensures the application, marketing, 
+  and documentation are perfectly translated into multiple languages without 
+  breaking UI layouts or losing cultural nuances.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "localization-specialist"
+phase: "growth"
+applicable_startups:
+  - Consumer Apps, Global SaaS, E-commerce
+priority: "medium"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "We are launching in Germany."
+  - "Translate the app to Spanish."
+  - "The UI breaks when the text is in French."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Generate JSON i18n structure."
+  - "Draft translation glossary."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "target_language"
+      type: "string"
+      description: "e.g., German, Japanese, Spanish."
+    - name: "content_type"
+      type: "string"
+      description: "UI Strings vs Marketing Copy."
+  optional:
+    - name: "locale_variant"
+      type: "string"
+      description: "e.g., Mexican Spanish vs Spain Spanish."
+      default: "Standard"
+
+outputs:
+  files:
+    - path: "locales/de-DE/translation_glossary.md"
+      description: "The source-of-truth for translated terms."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "N/A"
+manual:
+  - "The application successfully supports 3+ languages, achieving a 99% translation accuracy rate without hardcoded string errors."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "The Hardcoded String Disaster: Never allow engineers to hardcode English text directly into the React/Vue components (e.g., `<button>Submit</button>`). All text must be wrapped in translation keys (e.g., `<button>{t('button.submit')}</button>`) or localization is impossible."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Phrase / Lokalise / i18next"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Establish the Translation Memory (TM)"
+    tasks:
+      - "Never pay to translate the same sentence twice. Set up a Translation Memory software (like Lokalise). When you translate 'Save Profile' once, the TM saves it. If that phrase appears on another page, the TM auto-fills it for free."
+  - step: "Create the Brand Glossary"
+    tasks:
+      - "Certain words should NEVER be translated (e.g., the company name 'Apple' shouldn't become 'Manzana' in Spanish). Create a Glossary of protected brand terms and technical jargon to give to the translators."
+  - step: "UI Expansion Testing (The German Test)"
+    tasks:
+      - "German text is on average 30% longer than English text. If a button is exactly 100px wide and 'Submit' fits perfectly in English, 'Einreichen' will break the layout. Ensure frontend components are flexible and fluid."
+      - "Create a test data factory/seeder so tests are deterministic and repeatable."
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Relying 100% on Google Translate / AI for Marketing Copy. AI is great for backend error messages, but terrible for cultural nuance. A joke or idiom in English will translate into complete nonsense in Japanese. Always use native human review for marketing copy."
+best_practices:
+  - "Support Right-to-Left (RTL) architecture early. If you plan to launch in Arabic or Hebrew, the entire UI must flip. Ensure the frontend framework supports CSS `direction: rtl` before writing a thousand lines of layout code."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "W3C: Internationalization (i18n) Best Practices"
+    url: "https://www.w3.org/International/"

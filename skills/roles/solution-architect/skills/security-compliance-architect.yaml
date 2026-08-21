@@ -1,0 +1,110 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "security-compliance-architect"
+display_name: "Enterprise Security & Compliance Architecture"
+description: >
+  Designs solutions that meet enterprise security and compliance requirements.
+  Covers SSO/SAML, encryption, audit logging, data residency, and passing
+  InfoSec reviews.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "solution-architect"
+phase: "growth"
+applicable_startups:
+  - all
+priority: "high"
+difficulty: "expert"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "The prospect needs SOC 2 compliance."
+  - "Design SSO integration."
+  - "Pass enterprise InfoSec review."
+  - "Meet data residency requirements."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Design SSO/SAML integration."
+  - "Draft security compliance response."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "prospect_requirements"
+      type: "string"
+      description: "Security and compliance requirements (SOC2, HIPAA, PCI, GDPR)."
+    - name: "current_compliance"
+      type: "string"
+      description: "Your product's current compliance posture."
+  optional:
+    - name: "identity_provider"
+      type: "string"
+      description: "Okta, Azure AD, OneLogin, or Google Workspace."
+      default: "Multi-provider support"
+
+outputs:
+  files:
+    - path: "sales/compliance/{prospect}-security-architecture.md"
+      description: "Security architecture design and compliance response"
+  artifacts:
+    - "A security architecture document that passes InfoSec review"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "SSO & Identity Federation"
+    tasks:
+      - "Support SAML 2.0 and OIDC for enterprise SSO — almost every company requires this."
+      - "Implement SCIM for user provisioning and de-provisioning (create/update/delete users)."
+      - "Support Just-In-Time (JIT) user provisioning for automatic account creation."
+      - "Test SSO integration with major providers: Okta, Azure AD, OneLogin, Google Workspace."
+  - step: "Data Security Architecture"
+    tasks:
+      - "Encryption at rest: AES-256 for all data stored in databases and object storage."
+      - "Encryption in transit: TLS 1.2+ for all traffic between client and server."
+      - "Encryption key management: support BYOK (Bring Your Own Key) for enterprise customers."
+      - "Data isolation: multi-tenant with logical isolation or dedicated instances for high-security clients."
+  - step: "Audit Logging & Compliance"
+    tasks:
+      - "Log all access to customer data: who accessed what, when, and from where."
+      - "Support immutable audit logs that cannot be tampered with."
+      - "Provide compliance reports: SOC 2 Type II, HIPAA BA, ISO 27001."
+      - "Support data retention and deletion policies per customer requirements."
+  - step: "InfoSec Review Preparation"
+    tasks:
+      - "Prepare a security architecture document covering: network security, access control, data protection, incident response."
+      - "Complete a standard security questionnaire (CAIQ, SIG, or custom)."
+      - "Provide penetration test results (conducted by a third party within the last 12 months)."
+      - "Create a shared responsibility matrix: what we secure vs. what the customer secures."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Treating security as an afterthought — enterprises will reject you immediately."
+  - "Not having SOC 2 Type II — it's table stakes for enterprise SaaS."
+  - "Downplaying security gaps — be transparent about what you do and don't support."
+  - "Overwhelming InfoSec with a 100-page document — keep it concise and visual."
+best_practices:
+  - "Start SOC 2 certification early — it takes 6-12 months to complete."
+  - "Create a public-facing compliance page showing your certifications and security practices."
+  - "The InfoSec team is your ally, not your enemy — help them do their job."
+  - "A pre-filled security questionnaire (CAIQ) saves weeks of back-and-forth with prospects."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

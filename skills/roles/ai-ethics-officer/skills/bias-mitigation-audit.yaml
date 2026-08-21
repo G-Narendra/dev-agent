@@ -1,0 +1,148 @@
+# â”€â”€ IDENTITY â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+name: "bias-mitigation-audit"
+display_name: "Algorithmic Bias & Fairness Audit"
+description: >
+  Systematically evaluate AI datasets and model outputs to detect disparate impact 
+  or unfair bias across protected classes (race, gender, age). Essential before deploying 
+  AI in hiring, lending, or healthcare.
+
+# â”€â”€ CLASSIFICATION â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+role: "ai-ethics-officer"
+phase: "growth"
+applicable_startups:
+  - ai
+priority: "critical"
+difficulty: "expert"
+
+# â”€â”€ TRIGGER â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+trigger_phrases:
+  - "Audit the model for bias."
+  - "Check the training data for fairness."
+  - "Does the AI discriminate?"
+
+# â”€â”€ ACTIONS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+example_cli_actions:
+  - "Run a fairness evaluation script."
+
+# â”€â”€ INPUTS / OUTPUTS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+inputs:
+  required:
+    - name: "model_predictions"
+      type: "file"
+      description: "CSV of the model's outputs alongside the demographic data of the subjects."
+    - name: "target_metric"
+      type: "string"
+      description: "What constitutes 'Fair'? (e.g., Demographic Parity, Equal Opportunity)."
+  optional:
+    - name: "protected_classes"
+      type: "string"
+      description: "Which attributes must not influence the decision."
+      default: "Race, Gender, Age"
+
+outputs:
+  files:
+    - path: "ai/bias-audit-report.md"
+      description: "The statistical analysis of the model's fairness."
+  artifacts:
+    - "A list of features that must be removed from the training set."
+
+# â”€â”€ SUCCESS CRITERIA â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+success_criteria:
+  automated:
+    - "The model achieves >80% on the selected fairness metric (e.g., The 4/5ths Rule for hiring)."
+  manual:
+    - "The company avoids shipping a model that systematically denies loans to a specific demographic."
+
+# â”€â”€ PERMISSIONS & SAFETY â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+permissions_needed:
+  - "filesystem"
+
+safety_notes:
+  - "Ironically, to test for bias, you often need to collect demographic data. Ensure this sensitive 'testing data' is strictly firewalled from the actual model training data."
+
+# â”€â”€ TOOLING â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+recommended_tools:
+  primary:
+    - name: "Aequitas / Fairlearn (Python)"
+      install: "pip install fairlearn"
+  alternatives:
+    - name: "IBM AI Fairness 360"
+      when: "Need a comprehensive suite of fairness metrics."
+
+# â”€â”€ IMPLEMENTATION CHECKLIST â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+implementation_checklist:
+  - step: "Proxy Variable Detection"
+    tasks:
+      - "Simply removing 'Race' from a dataset does not make it blind to race. You must also remove Proxy Variables (e.g., 'Zip Code' strongly correlates with race in many US cities)."
+  - step: "Select the Fairness Metric"
+    tasks:
+      - "Demographic Parity: The model accepts men and women at the exact same rate."
+      - "Equal Opportunity: The model has the same False Negative rate for both men and women. Choose the metric based on the legal context."
+  - step: "Dataset Rebalancing"
+    tasks:
+      - "If the training data is heavily skewed (e.g., 90% male resumes), synthetically oversample the minority class or undersample the majority class before training."
+
+# â”€â”€ QUALITY GATES â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+anti_patterns:
+  - "Believing an algorithm is inherently 'objective' because it's math. Math trained on historical human data will perfectly replicate historical human biases."
+  - "Testing for bias *after* the model is already in production. Bias audits must be a gating step in the CI/CD pipeline for the ML model."
+
+best_practices:
+  - "Document the 'Trade-offs'. Often, increasing mathematical 'fairness' slightly decreases overall model 'accuracy'. Have leadership officially sign off on this trade-off."
+
+# â”€â”€ REFERENCES â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+references:
+  - title: "Fairlearn User Guide"
+    url: "https://fairlearn.org/main/user_guide/index.html"
+
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Bias Mitigation Audit process"
+  - "How do I handle bias mitigation audit?"
+  - "Implement bias mitigation audit"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the bias mitigation audit process"
+  optional:
+    - name: "data_source"
+      type: "string"
+      description: "Source of data to analyze"
+      default: "Internal data"
+
+outputs:
+  files:
+    - path: "outputs/bias-mitigation-audit.md"
+      description: "Results of the bias mitigation audit process"
+  artifacts:
+    - "Completed bias mitigation audit deliverable"
+
+# ── QUALITY GATES ────────────────────────────────────────────
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start — retrofitting is expensive."
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

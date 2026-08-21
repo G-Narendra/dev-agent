@@ -1,0 +1,97 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "agent-framework"
+display_name: "AI Agent Framework Implementation"
+description: >
+  Build autonomous AI agents using modern frameworks. Covers tool use,
+  reasoning loops, memory systems, and LLM integration patterns.
+role: "ai-agents-engineer"
+phase: "build"
+applicable_startups:
+  - ai
+priority: "critical"
+difficulty: "advanced"
+trigger_phrases:
+  - "Build an AI agent that can..."
+  - "Implement tool use for the AI agent..."
+  - "Set up a reasoning loop for..."
+example_cli_actions:
+  - "python -m agent.run --task 'Research topic'"
+  - "python -m tests/test_agent_tools.py"
+inputs:
+  required:
+    - name: "agent_capability"
+      type: "string"
+      description: "What the agent should do (research, code, browse)."
+    - name: "llm_provider"
+      type: "string"
+      description: "OpenAI, Anthropic, or open-source model."
+  optional:
+    - name: "tools"
+      type: "list"
+      description: "Tools the agent can use."
+      default: "web_search, file_read, code_execute"
+outputs:
+  files:
+    - path: "agent/core.py"
+      description: "Agent loop and reasoning implementation."
+    - path: "agent/tools.py"
+      description: "Tool definitions and registrations."
+    - path: "agent/prompts.py"
+      description: "System prompts and instruction templates."
+  artifacts:
+    - "Agent can successfully complete a test task end-to-end."
+success_criteria:
+  automated:
+    - "Agent completes test tasks with >80% success rate."
+    - "All tool calls have proper error handling."
+  manual:
+    - "The agent's reasoning is interpretable by a human reviewer."
+permissions_needed:
+  - "filesystem"
+  - "network access (LLM API calls)"
+safety_notes:
+  - "Never give the agent access to destructive tools (DELETE, DROP, rm -rf) without human approval."
+  - "Always set a max_steps limit to prevent infinite loops and runaway costs."
+recommended_tools:
+  primary:
+    - name: "LangGraph / CrewAI / OpenAI Agents SDK"
+      install: "pip install langgraph"
+  alternatives:
+    - name: "custom implementation"
+      when: "Need full control over the reasoning loop without framework abstractions."
+implementation_checklist:
+  - step: "Tool Definition"
+    tasks:
+      - "Define each tool with name, description, and JSON schema for parameters."
+      - "Implement proper error handling and result formatting for each tool."
+  - step: "Rasoning Loop"
+    tasks:
+      - "Implement the ReAct (Reasoning + Acting) loop pattern."
+      - "Add max iterations, early stopping, and human-in-the-loop checkpoints."
+  - step: "Memory"
+    tasks:
+      - "Implement short-term (conversation history) and long-term (vector store) memory."
+      - "Set up memory summarization to stay within context window limits."
+anti_patterns:
+  - "Giving the agent too many tools at once causing decision paralysis and token waste."
+  - "Not validating tool outputs before passing them to the LLM hallucination injection risk."
+best_practices:
+  - "Start with minimal tools and add more as needed. Each tool doubles the decision space."
+references:
+  - title: "LangGraph Documentation"
+    url: "https://langchain-ai.github.io/langgraph/"
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."

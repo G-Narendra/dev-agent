@@ -1,0 +1,109 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "usability-testing-moderated"
+display_name: "Moderated Usability Testing"
+description: >
+  Plans and conducts moderated usability testing sessions to evaluate product
+  interfaces. Covers test script design, session moderation, data collection,
+  and reporting actionable findings.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "ux-researcher"
+phase: "planning"
+applicable_startups:
+  - all
+priority: "mvp"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run a usability test."
+  - "Test our prototype with users."
+  - "Moderate usability testing sessions."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Design usability test script."
+  - "Moderate test sessions."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "prototype_or_product"
+      type: "string"
+      description: "What to test (prototype link, staging URL, or production)."
+    - name: "test_objectives"
+      type: "string"
+      description: "What specific aspects of UX to evaluate."
+  optional:
+    - name: "participant_count"
+      type: "string"
+      description: "Number of test participants."
+      default: "5-8 (NN Group recommendation)"
+
+outputs:
+  files:
+    - path: "product/research/usability-testing-{feature}-report.md"
+      description: "Usability testing findings and recommendations"
+  artifacts:
+    - "A prioritized list of usability issues with severity ratings"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Test Design"
+    tasks:
+      - "Define 3-5 core tasks that cover the key user journeys."
+      - "Write tasks as scenarios, not instructions: 'You just signed up and want to invite your team.' not 'Click the 'Invite' button.'"
+      - "Prepare a discussion guide: pre-test questions, tasks with prompts, post-test debrief."
+      - "Set up recording (with consent) and note-taking tools."
+  - step: "Participant Recruitment"
+    tasks:
+      - "Recruit participants who match your target user profile — friends and family don't count."
+      - "Screen candidates: 'How often do you use similar products?' 'What's your role?'"
+      - "Schedule sessions: 45-60 min each, with 15 min between for notes."
+      - "Offer appropriate incentives: $50-100 gift card or equivalent."
+  - step: "Session Moderation"
+    tasks:
+      - "Use the think-aloud protocol: 'Please verbalize what you're thinking as you navigate.'"
+      - "Don't help or guide — if they're stuck, that's the finding."
+      - "Ask neutral follow-ups: 'What made you click there?' 'What did you expect to happen?'"
+      - "Stay quiet — silence gives the participant space to think and reveal their mental model."
+  - step: "Analysis & Reporting"
+    tasks:
+      - "Compile findings: task completion rate, time on task, errors, confusion points."
+      - "Rate severity: critical (blocks task), major (significant friction), minor (cosmetic)."
+      - "Look for patterns across participants — if 2+ people hit the same issue, it's a real problem."
+      - "Provide design recommendations for each identified issue, not just a list of problems."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Testing with too many participants — 5 users find 85% of issues, additional users return diminishing returns."
+  - "Leading participants with your expectations — 'Try clicking the button' instead of letting them explore."
+  - "Defending the design — if the user is confused, the design is wrong, not the user."
+  - "Making changes based on a single participant — look for patterns across multiple users."
+best_practices:
+  - "The best usability test is the one that reveals something you didn't expect."
+  - "Test early, test often — testing with paper prototypes is better than testing with production code."
+  - "Share raw session recordings with the team — nothing builds empathy like watching a real user struggle."
+  - "Fix the critical issues before running another round — don't waste participants on known problems."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

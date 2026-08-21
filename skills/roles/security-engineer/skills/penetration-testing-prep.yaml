@@ -1,0 +1,112 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "penetration-testing-prep"
+display_name: "Penetration Testing (Pentest) Preparation"
+description: >
+  Manage the lifecycle of a third-party penetration test. Covers scoping the 
+  engagement (White Box vs Grey Box), preparing the staging environment, 
+  and triaging the findings into engineering tickets based on CVSS scores.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "security-engineer"
+phase: "growth"
+applicable_startups:
+  - b2b-saas
+  - fintech
+  - healthtech
+priority: "critical"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "We need a pentest for SOC2."
+  - "Prepare for the security audit."
+  - "Triage the pentest report."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Create a pentest scope document."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "target_environment"
+      type: "string"
+      description: "The URL and IP range of the staging environment being tested."
+    - name: "pentest_firm"
+      type: "string"
+      description: "The third-party company conducting the test."
+  optional:
+    - name: "test_type"
+      type: "string"
+      description: "Black Box (No knowledge) vs Grey Box (Given credentials)."
+      default: "Grey Box"
+
+outputs:
+  files:
+    - path: "security/audits/pentest-scope.md"
+      description: "The formal Rules of Engagement (RoE)."
+  artifacts:
+    - "A mapped Jira board of remediations."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "N/A"
+  manual:
+    - "All 'Critical' and 'High' severity findings are patched and re-tested by the firm within 14 days."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+
+safety_notes:
+  - "NEVER run a penetration test against a Production database containing real customer PII unless absolutely necessary and legally cleared. Always use a Staging environment populated with synthetic data."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Jira / Linear"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Scope Definition (Rules of Engagement)"
+    tasks:
+      - "Define exactly what is IN scope (e.g., `api.example.com`, the iOS app)."
+      - "Define exactly what is OUT of scope (e.g., AWS underlying infrastructure, third-party Stripe integrations, Denial of Service attacks)."
+  - step: "Environment Preparation"
+    tasks:
+      - "Spin up a dedicated Staging environment that perfectly mirrors Production architecture."
+      - "Provide the testers with 2 separate test accounts with different permission levels to test for Privilege Escalation (BOLA/IDOR)."
+  - step: "Triage and Remediation"
+    tasks:
+      - "When the report arrives, do not blindly accept the CVSS score. A 'High' finding on an internal admin tool might actually be a 'Low' risk if the tool is locked behind a VPN and MFA."
+      - "Assign SLAs: Critical (Fix in 48h), High (14 days), Medium (30 days), Low (90 days)."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Treating the Pentest report as a personal attack on the engineering team. Security is collaborative. Do not punish developers for findings; fix the systemic issue that allowed the bug."
+  - "Paying $20,000 for an 'Automated Vulnerability Scan' masquerading as a Pentest. A real pentest involves human engineers chaining together complex logical flaws that automated scanners miss."
+
+best_practices:
+  - "Require a 'Retest Window' in the contract. Once you fix the bugs, the firm must re-verify the fixes (usually within 30 days) and issue a 'Clean' report for you to show customers."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "OWASP: Penetration Testing Methodologies"
+    url: "https://owasp.org/www-project-web-security-testing-guide/"

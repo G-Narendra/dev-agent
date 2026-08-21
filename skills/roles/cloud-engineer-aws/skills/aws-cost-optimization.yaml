@@ -1,0 +1,115 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "aws-cost-optimization"
+display_name: "AWS Cost Optimization & FinOps"
+description: >
+  Optimizes AWS costs through right-sizing, reserved instances, savings plans,
+  storage tiering, and cost monitoring. Implements FinOps practices to maintain
+  visibility and accountability for cloud spending.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "cloud-engineer-aws"
+phase: "growth"
+applicable_startups:
+  - all
+priority: "growth"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Our AWS bill is too high."
+  - "Optimize cloud costs."
+  - "Set up cost monitoring and budgets."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Analyze AWS spending patterns."
+  - "Recommend cost optimization strategy."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "monthly_spend"
+      type: "string"
+      description: "Current monthly AWS spend."
+    - name: "service_breakdown"
+      type: "file"
+      description: "Cost breakdown by AWS service."
+  optional:
+    - name: "optimization_target"
+      type: "string"
+      description: "Target cost reduction percentage."
+      default: "20%"
+
+outputs:
+  files:
+    - path: "infrastructure/aws/cost-optimization-plan.md"
+      description: "AWS cost optimization strategy with projected savings"
+  artifacts:
+    - "Cost monitoring dashboards with budget alerts and optimization recommendations"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Cost Visibility"
+    tasks:
+      - "Enable AWS Cost Explorer and set up monthly budgets."
+      - "Tag all resources with CostCenter, Environment, Project, and Team tags."
+      - "Create cost allocation reports segmented by tag for chargeback/showback."
+      - "Set up AWS Budgets with alerts at 50%, 80%, 100%, and 150% of budget."
+  - step: "Compute Optimization"
+    tasks:
+      - "Right-size EC2 instances using Compute Optimizer recommendations."
+      - "Use EC2 Spot Instances for non-critical, fault-tolerant workloads (60-90% discount)."
+      - "Purchase Savings Plans (compute) for predictable workloads (up to 72% discount)."
+      - "Consider Graviton (ARM) instances — up to 40% better price/performance for many workloads."
+  - step: "Storage & Data Transfer"
+    tasks:
+      - "Review S3 storage classes: transition infrequent access to S3 Standard-IA or Glacier."
+      - "Delete stale EBS snapshots and unattached volumes."
+      - "Use S3 Intelligent-Tiering for data with unknown or changing access patterns."
+      - "Minimize data transfer costs: use CloudFront for CDN, VPC endpoints for private connectivity."
+  - step: "Serverless & Database"
+    tasks:
+      - "Use Aurora Serverless v2 for variable workloads — auto-scales based on demand."
+      - "Use DynamoDB on-demand for unpredictable traffic, provisioned for steady-state workloads."
+      - "Right-size RDS instances and use reserved instances for 1-3 year commitments."
+      - "Enable memory reservations for Lambda functions to avoid over-provisioning."
+  - step: "Continuous Optimization"
+    tasks:
+      - "Review AWS Trusted Advisor cost recommendations monthly."
+      - "Use AWS Compute Optimizer for ongoing right-sizing recommendations."
+      - "Set up automatic cleanup of idle resources (unattached EIPs, old snapshots)."
+      - "Create a cross-team cloud cost review meeting monthly."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Not tagging resources — without tags you can't identify who's spending what."
+  - "Letting costs spiral before optimizing — set budgets from day one."
+  - "Deleting resources prematurely without checking if they're needed."
+  - "Over-provisioning 'just in case' — auto-scaling handles traffic spikes."
+best_practices:
+  - "The best time to start cost optimization is day one — it's harder to optimize after launch."
+  - "Use Savings Plans (not Reserved Instances) for more flexibility across instance families."
+  - "Tag everything — it's the foundation of all cost management."
+  - "Monitor cost per customer or cost per transaction, not just total spend."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "AWS Documentation"
+    url: "https://docs.aws.amazon.com"
+  - title: "AWS Well-Architected Framework"
+    url: "https://aws.amazon.com/architecture/well-architected/"

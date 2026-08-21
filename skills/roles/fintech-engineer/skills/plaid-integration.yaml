@@ -1,0 +1,79 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "plaid-integration"
+display_name: "Plaid & Open Banking Integration"
+description: >
+  Integrate Plaid to securely verify bank accounts, check real-time balances, and fetch 
+  transaction history without storing sensitive bank credentials.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "fintech-engineer"
+phase: "build"
+applicable_startups: 
+  - fintech
+priority: "mvp"
+difficulty: "advanced"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Link Token Generation"
+    tasks:
+      - "Create a secure backend endpoint to generate a Plaid `link_token` for the authenticated user."
+  - step: "Client Initialization"
+    tasks:
+      - "Implement Plaid Link on the frontend (React) to allow the user to authenticate with their bank."
+  - step: "Token Exchange & Data"
+    tasks:
+      - "Exchange the `public_token` for a permanent `access_token` on the backend."
+      - "Store the `access_token` securely and make API calls to `/accounts/balance/get`."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Storing the `access_token` in plain text in the database. It must be encrypted at rest."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Plaid Integration process"
+  - "How do I handle plaid integration?"
+  - "Implement plaid integration"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the plaid integration process"
+  optional:
+    - name: "N/A"
+      type: "string"
+      description: "No optional inputs needed."
+
+outputs:
+  files:
+    - path: "outputs/plaid-integration.md"
+      description: "Results of the plaid integration process"
+  artifacts:
+    - "Completed plaid integration deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

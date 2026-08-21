@@ -1,0 +1,108 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "model-evaluation-metrics"
+display_name: "AI Model Evaluation & Quality Assurance"
+description: >
+  Define the quantitative and qualitative metrics used to evaluate an LLM's output 
+  before it is pushed to production. Shifts AI testing away from 'vibes' (it looks good to me) 
+  to rigorous datasets (Golden Sets) evaluating precision, recall, and hallucination rates.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "ai-product-manager"
+phase: "build"
+applicable_startups:
+  - ai
+priority: "critical"
+difficulty: "expert"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "How do we know if the AI is good?"
+  - "Test the new prompt."
+  - "Measure the hallucination rate."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Create an eval dataset artifact."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "feature_spec"
+      type: "string"
+      description: "What the AI is supposed to do (e.g., 'Extract entities from medical records')."
+  optional:
+    - name: "baseline_model"
+      type: "string"
+      description: "The model currently in production (e.g., 'GPT-4o')."
+      default: "null"
+
+outputs:
+  files:
+    - path: "ai/eval-metrics.md"
+      description: "The grading criteria for the AI model."
+  artifacts:
+    - "A 'Golden Dataset' of 50-100 perfect examples to test against."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "Model passes 95% of the Golden Dataset tests on automated LLM-as-a-judge pipelines."
+  manual:
+    - "The PM clearly defines what an 'acceptable failure' looks like."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+
+safety_notes:
+  - "Do not use real PII in the Golden Dataset if the automated eval pipeline sends data to a third-party API without zero-retention agreements."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "LangSmith / Braintrust"
+      install: "N/A"
+  alternatives:
+    - name: "Custom Python scripts"
+      when: "Running simple exact-match evals locally."
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Build the Golden Dataset"
+    tasks:
+      - "Curate 50-100 real-world inputs and manually write the *perfect* expected output for each. This is tedious but mandatory. You cannot test an AI without a baseline."
+  - step: "Define the Grading Rubric"
+    tasks:
+      - "Is it a classification task? Measure Precision and Recall."
+      - "Is it a generative task (writing an email)? Use LLM-as-a-judge to score on Tone, Accuracy, and Conciseness (1-5 scale)."
+  - step: "Hallucination Tracking"
+    tasks:
+      - "Include 'Trick Questions' in the dataset (questions the AI should NOT be able to answer based on the provided context). Ensure the AI correctly says 'I don't know' instead of hallucinating."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "The 'Vibe Check': Changing a system prompt, running 3 queries manually, thinking 'this looks better', and shipping it to production. This almost always causes regressions on edge cases."
+  - "Aiming for 100% accuracy. LLMs are probabilistic. If the baseline human error rate is 5%, and the AI achieves 2% error, it is ready to ship."
+
+best_practices:
+  - "Continuously update the Golden Dataset. Every time a user reports a bad AI output in production, add that exact query to the dataset so the engineering team tests against it on the next deployment."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Hugging Face: Evaluation Metrics"
+    url: "https://huggingface.co/docs/evaluate/index"

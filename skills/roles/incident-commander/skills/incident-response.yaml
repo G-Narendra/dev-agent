@@ -1,0 +1,83 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "incident-response"
+display_name: "Sev-1 Incident Management"
+description: >
+  Execute a structured incident response protocol during a critical outage.
+  Covers triage, mitigation, stakeholder communication, and blameless post-mortem writing.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "incident-commander"
+phase: "ship"
+applicable_startups: 
+  - all
+priority: "mvp"
+difficulty: "advanced"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Triage & Mitigation"
+    tasks:
+      - "Establish a single source of truth (e.g., a dedicated Slack channel and Zoom bridge)."
+      - "Identify the immediate mitigation (Rollback, Feature Flag toggle, scale up)."
+  - step: "Communication"
+    tasks:
+      - "Update the public status page (e.g., 'Investigating elevated error rates on checkout')."
+      - "Provide internal updates every 30 minutes."
+  - step: "Blameless Post-Mortem"
+    tasks:
+      - "Hold a post-mortem meeting within 48 hours."
+      - "Document the timeline, root cause (using the 5 Whys), and action items."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "The IC diving into the logs to fix the bug themselves. The IC must delegate and maintain high-level situational awareness."
+  - "Using language like 'John accidentally pushed a bad config.' Use 'A bad config bypassed CI validation.'"
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Incident Response process"
+  - "How do I handle incident response?"
+  - "Implement incident response"
+  - "Execute a structured incident response protocol during a critical outage"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the incident response process"
+  optional:
+    - name: "N/A"
+      type: "string"
+      description: "No optional inputs needed."
+
+outputs:
+  files:
+    - path: "outputs/incident-response.md"
+      description: "Results of the incident response process"
+  artifacts:
+    - "Completed incident response deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

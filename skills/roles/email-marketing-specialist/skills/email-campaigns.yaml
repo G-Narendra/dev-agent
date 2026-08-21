@@ -1,0 +1,81 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "email-campaigns"
+display_name: "Lifecycle Email Campaigns"
+description: >
+  Design and automate highly personalized email sequences (welcome, activation, 
+  retention, and churn win-back) to maximize LTV and reduce churn.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "email-marketing-specialist"
+phase: "growth"
+applicable_startups: 
+  - saas
+  - ecommerce
+priority: "high"
+difficulty: "advanced"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "The 3-Part Welcome Sequence"
+    tasks:
+      - "Day 0: Send a highly personal, plain-text email from the CEO's actual email address asking 'What is the #1 problem you are trying to solve?'"
+      - "Day 2: Send a product activation email highlighting exactly one core feature."
+      - "Day 5: Send a case study email showing how a similar customer achieved ROI."
+  - step: "Behavioral Triggers"
+    tasks:
+      - "Stop sending 'How to use X' emails if the database shows the user has already successfully used feature X. Trigger emails based on *inaction*, not just time."
+  - step: "Deliverability Protection"
+    tasks:
+      - "Automatically purge inactive subscribers (no opens in 90 days) to protect domain reputation and prevent emails from landing in the spam folder."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Sending an automated 'Welcome' email from a generic 'noreply@company.com' address with 15 different links and a heavily branded HTML template that goes straight to the Promotions tab."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Email Campaigns process"
+  - "How do I handle email campaigns?"
+  - "Implement email campaigns"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the email campaigns process"
+  optional:
+    - name: "N/A"
+      type: "string"
+      description: "No optional inputs needed."
+
+outputs:
+  files:
+    - path: "outputs/email-campaigns.md"
+      description: "Results of the email campaigns process"
+  artifacts:
+    - "Completed email campaigns deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

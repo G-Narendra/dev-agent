@@ -1,0 +1,111 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "build-vs-buy-decisions"
+display_name: "Build vs. Buy Decision Framework"
+description: >
+  A systematic framework for deciding whether to build a feature internally 
+  or purchase a third-party SaaS solution. Evaluates core competencies, 
+  total cost of ownership (TCO), time-to-market, and strategic differentiation.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "cto"
+phase: "build"
+applicable_startups:
+  - all
+priority: "critical"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Should we build our own auth system?"
+  - "Do we buy this or build it?"
+  - "Evaluate the build vs buy tradeoff."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Create a build vs buy matrix artifact."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "feature_or_system"
+      type: "string"
+      description: "The capability in question (e.g., 'Payment Processing', 'Notification Engine')."
+    - name: "core_competency_check"
+      type: "string"
+      description: "Is this feature the primary reason customers buy our product? (Yes/No)."
+  optional:
+    - name: "engineering_capacity"
+      type: "string"
+      description: "Number of available engineers and their focus."
+      default: "Constrained"
+
+outputs:
+  files:
+    - path: "engineering/architecture/build-vs-buy-decision.md"
+      description: "The documented decision and rationale."
+  artifacts:
+    - "A Total Cost of Ownership (TCO) comparison over 3 years."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "N/A"
+  manual:
+    - "Engineering effort is strictly allocated to features that create unique competitive advantage."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+
+safety_notes:
+  - "Engineers inherently want to build. The CTO must actively fight 'Not Invented Here' syndrome to prevent the team from wasting months rebuilding commodity software."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Notion / Markdown"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "The Core Competency Test"
+    tasks:
+      - "If the feature is NOT your core product differentiator (e.g., Auth, Billing, Chat), BUY IT. If it IS your core differentiator, BUILD IT."
+  - step: "Total Cost of Ownership (TCO) Calculation"
+    tasks:
+      - "Calculate the 'Buy' cost: Monthly SaaS fee x 36 months + Integration time."
+      - "Calculate the 'Build' cost: (Engineer Salary / 12) x Months to Build + Maintenance Time. *Remember: Maintenance is forever. Code is a liability, not an asset.*"
+  - step: "Time-to-Market Analysis"
+    tasks:
+      - "If buying gets the feature to customers 6 months faster, calculate the opportunity cost of the lost revenue over those 6 months."
+  - step: "Vendor Lock-in Assessment"
+    tasks:
+      - "Assess the cost to migrate away if the vendor raises prices. Use abstractions (e.g., an internal interface over the vendor API) to reduce lock-in."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Building a custom CMS, Auth system, or billing engine because the third-party API is 'too expensive'. The engineering time spent maintaining it will cost 10x more than the SaaS fee."
+  - "Buying a 'black box' solution for a core algorithm that defines your company's value, rendering your startup easily replicable."
+
+best_practices:
+  - "The 'Buy to Learn' strategy: Buy a SaaS solution first to get to market immediately. If you outgrow it or it becomes a massive cost center in 2 years, *then* build it internally using the lessons learned."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Segment: Build vs. Buy"
+    url: "https://segment.com/blog/build-vs-buy/"

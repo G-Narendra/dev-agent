@@ -1,0 +1,79 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "fastapi-architecture"
+display_name: "Python FastAPI Architecture"
+description: >
+  Build high-performance, asynchronous Python backend services using FastAPI, Pydantic 
+  validation, and SQLAlchemy.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "backend-engineer"
+phase: "build"
+applicable_startups: 
+  - ai
+  - deeptech
+priority: "high"
+difficulty: "expert"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Pydantic Validation"
+    tasks:
+      - "Use Pydantic V2 models for all incoming request bodies and outgoing responses. Rely on strict type hinting to automatically generate Swagger docs and validate data."
+  - step: "Async/Await Database"
+    tasks:
+      - "Use `async def` for route handlers and use an asynchronous database driver (like `asyncpg` for Postgres) to prevent I/O blocking under heavy concurrent load."
+  - step: "Dependency Injection"
+    tasks:
+      - "Leverage FastAPI's `Depends()` system to inject database sessions, current user context, and configuration cleanly into route handlers without global state."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Writing an `async def` endpoint but making a synchronous `requests.get()` call inside it, completely blocking the entire Python event loop for all other users."
+
+best_practices:
+  - "Design APIs with idempotency in mind -- same request, same result."
+  - "Always validate inputs at the API boundary before processing."
+  - "Use database transactions for operations that modify multiple records."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Fastapi Architecture process"
+  - "How do I handle fastapi architecture?"
+  - "Implement fastapi architecture"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the fastapi architecture process"
+  optional:
+    - name: "N/A"
+      type: "string"
+      description: "No optional inputs needed."
+
+outputs:
+  files:
+    - path: "outputs/fastapi-architecture.md"
+      description: "Results of the fastapi architecture process"
+  artifacts:
+    - "Completed fastapi architecture deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "PostgreSQL Documentation"
+    url: "https://postgresql.org/docs"
+  - title: "Node.js Documentation"
+    url: "https://nodejs.org/en/docs/"

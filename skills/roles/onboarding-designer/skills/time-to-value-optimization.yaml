@@ -1,0 +1,111 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "time-to-value-optimization"
+display_name: "Time-to-Value (TTV) Optimization"
+description: >
+  Measure and aggressively compress the time it takes for a user to realize value 
+  from the product. Focuses on removing technical and cognitive blockers that delay activation.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "onboarding-designer"
+phase: "growth"
+applicable_startups:
+  - all
+priority: "growth"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Reduce our time to value."
+  - "Users are taking too long to activate."
+  - "Optimize our onboarding speed."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Create a TTV analysis report."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "current_ttv"
+      type: "string"
+      description: "Current average time from signup to Aha moment (e.g., '4 days')."
+    - name: "blockers"
+      type: "string"
+      description: "Known steps that delay value (e.g., 'Waiting for data sync', 'Waiting for admin approval')."
+  optional:
+    - name: "target_ttv"
+      type: "string"
+      description: "Goal TTV."
+      default: "< 5 minutes"
+
+outputs:
+  files:
+    - path: "design/ttv-optimization.md"
+      description: "Action plan for compressing TTV."
+  artifacts:
+    - "A list of engineering tickets to remove specific bottlenecks."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "Average TTV decreases by 50%."
+  manual:
+    - "Users express delight at how fast the product works during initial setup."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+
+safety_notes:
+  - "Do not compromise security (e.g., skipping KYC in fintech) just to reduce TTV."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Mixpanel / Amplitude"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Measurement"
+    tasks:
+      - "Create a funnel in analytics from `Signup Completed` -> `Aha Moment Achieved`."
+      - "Measure the median Time to Convert between these two steps."
+  - step: "Bottleneck Identification"
+    tasks:
+      - "Identify if the delay is Technical (e.g., waiting for a backend job to process their data) or Cognitive (e.g., they don't know what to click next)."
+  - step: "Compression Tactics"
+    tasks:
+      - "If Technical: Provide instant 'optimistic' UI feedback or pre-compute demo data so they don't stare at a loading spinner for 10 minutes."
+      - "If Cognitive: Introduce a template gallery. Don't make them start from a blank canvas; let them duplicate a working template in 1 click."
+  - step: "The 'Concierge' Approach (B2B)"
+    tasks:
+      - "If TTV is inherently long (e.g., enterprise integration), use human-assisted onboarding (White-glove service) where your team does the heavy lifting for them."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Assuming TTV doesn't matter because 'enterprise software takes time to set up'. Even enterprise buyers want instant gratification; show them a sandbox if the real integration takes weeks."
+  - "Optimizing for 'Time to First Login' instead of 'Time to Value'. Logging in provides zero value."
+
+best_practices:
+  - "Identify the 'Minimum Viable Setup'. What is the absolute bare minimum configuration required to show the user magic? Cut everything else."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Reforge: Time to Value"
+    url: "https://www.reforge.com/brief/time-to-value-is-the-most-important-metric"

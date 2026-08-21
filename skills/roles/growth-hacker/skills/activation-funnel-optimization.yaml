@@ -1,0 +1,110 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "activation-funnel-optimization"
+display_name: "Activation & Onboarding Funnel Optimization"
+description: >
+  Identify and eliminate friction in the user onboarding process. 
+  Focuses on getting users to the 'Aha!' moment as fast as physically 
+  possible before they abandon the app.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "growth-hacker"
+phase: "operations"
+applicable_startups:
+  - all
+priority: "critical"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Users are signing up but not doing anything."
+  - "Fix the onboarding flow."
+  - "Improve the activation rate."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Analyze Mixpanel funnel."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "funnel_data"
+      type: "string"
+      description: "The step-by-step drop-off metrics from Signup to Activation."
+    - name: "aha_moment"
+      type: "string"
+      description: "The specific action that proves value (e.g., 'User runs their first successful query')."
+  optional:
+    - name: "analytics_tool"
+      type: "string"
+      description: "Mixpanel, Amplitude, or PostHog."
+      default: "PostHog"
+
+outputs:
+  files:
+    - path: "growth/funnels/onboarding-improvements.md"
+      description: "The UX changes required to remove friction."
+  artifacts:
+    - "An A/B testing plan for the signup flow."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "N/A"
+  manual:
+    - "The percentage of users who complete the 'Aha!' action within 24 hours of signup increases from 15% to 30%."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+
+safety_notes:
+  - "Data Privacy: When using session recording tools (like LogRocket or PostHog) to watch users navigate the funnel, strictly ensure that all password fields and PII (credit cards) are masked on the frontend before being sent to the analytics server."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "PostHog / Mixpanel"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Map the Current Funnel"
+    tasks:
+      - "Map every single click. Signup Page -> Enter Email -> Verify Email -> Create Password -> Invite Team -> Create Project -> Run Query. Where is the massive drop-off?"
+  - step: "Ruthless Elimination"
+    tasks:
+      - "Do you *really* need them to verify their email before they can see the app? (No). Do you need their phone number? (No). Remove every single input field that is not strictly required to deliver the core value."
+  - step: "Deferred Account Creation (Lazy Registration)"
+    tasks:
+      - "Let the user play with the product *before* they create an account. Let them build the dashboard, and only ask for an email when they click 'Save'. This reverses the risk."
+  - step: "The Empty State Experience"
+    tasks:
+      - "A new account has no data. A blank white screen is intimidating. Pre-fill the account with dummy data, or provide 3 massive, obvious buttons explaining exactly what to do first."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "The 12-Step Product Tour. Forcing users to click 'Next' on 12 different tooltips pointing out every button in the UI. Users don't read them; they blindly click 'Skip' to get it off their screen. Use contextual onboarding instead."
+  - "Asking for a credit card up front for a 'Free Trial' when your brand has zero trust in the market. You will lose 90% of your top-of-funnel traffic."
+
+best_practices:
+  - "Gamify the onboarding. Give users a checklist (e.g., '1/4 tasks completed') and a progress bar. Humans have a psychological need to complete open loops."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Reforge: Retention & Activation"
+    url: "https://www.reforge.com/"

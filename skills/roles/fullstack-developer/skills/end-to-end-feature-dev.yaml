@@ -1,0 +1,86 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "end-to-end-feature-dev"
+display_name: "End-to-End Feature Development"
+description: >
+  Architect and implement complete features starting from the database schema migrations, 
+  through the backend REST/GraphQL APIs, and finishing with the frontend React UI.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "fullstack-developer"
+phase: "build"
+applicable_startups: 
+  - all
+priority: "mvp"
+difficulty: "advanced"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Data Layer"
+    tasks:
+      - "Write the Prisma schema or SQL migration for the new feature."
+      - "Ensure proper indexing on foreign keys for performance."
+  - step: "API Layer"
+    tasks:
+      - "Build the backend controller (e.g., Express/NestJS)."
+      - "Implement input validation using Zod to prevent malicious data injection."
+  - step: "UI Layer"
+    tasks:
+      - "Build the React components using the established Design System."
+      - "Handle loading states, empty states, and error boundaries."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Writing business logic in the React frontend instead of the backend, allowing users to easily bypass validation by modifying client-side code."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the End To End Feature Dev process"
+  - "How do I handle end to end feature dev?"
+  - "Implement end to end feature dev"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the end to end feature dev process"
+  optional:
+    - name: "data_source"
+      type: "string"
+      description: "Source of data to analyze"
+      default: "Internal data"
+    - name: "code_repository"
+      type: "string"
+      description: "Path to the code repository"
+      default: "./"
+
+outputs:
+  files:
+    - path: "outputs/end-to-end-feature-dev.md"
+      description: "Results of the end to end feature dev process"
+  artifacts:
+    - "Completed end to end feature dev deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

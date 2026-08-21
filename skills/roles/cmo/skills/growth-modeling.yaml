@@ -1,0 +1,105 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "growth-modeling"
+display_name: "Growth Modeling & Funnel Economics"
+description: >
+  Builds mathematical models of the marketing and sales funnel. Identifies 
+  the exact conversion rates required at each stage (Visitor -> Lead -> 
+  Opportunity -> Customer) to hit the company's revenue targets.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "cmo"
+phase: "planning"
+applicable_startups:
+  - all
+priority: "high"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "How many leads do we need to hit $1M?"
+  - "Where is the funnel leaking?"
+  - "Build the marketing capacity model."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Generate funnel conversion model."
+  - "Calculate required top-of-funnel traffic."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "revenue_target"
+      type: "string"
+      description: "E.g., $100k New MRR this quarter."
+    - name: "average_contract_value"
+      type: "string"
+      description: "How much does one customer pay?"
+  optional:
+    - name: "historical_conversion_rates"
+      type: "string"
+      description: "Lead to Close rate."
+      default: "Unknown (use industry benchmarks)"
+
+outputs:
+  files:
+    - path: "marketing/operations/funnel-model.xlsx"
+      description: "The mathematical breakdown of the required funnel."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "N/A"
+manual:
+  - "Marketing delivers the exact volume of high-quality leads required for the sales team to hit their quota, mathematically."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "The 'Junk Lead' Problem: Do not optimize for pure lead volume. If you lower the barrier to entry to get 10,000 leads but they all convert at 0.1%, you will burn out your sales team. Optimize for qualified opportunities."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Excel / Google Sheets"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Reverse Funnel Math"
+    tasks:
+      - "Start from the end. To hit $100k MRR at $1k ACV, you need 100 Customers. If your close rate is 20%, you need 500 Opportunities. If your lead-to-opp rate is 10%, you need 5,000 Leads. If your conversion rate is 5%, you need 100,000 Website Visitors."
+  - step: "Bottleneck Identification"
+    tasks:
+      - "Look at the current metrics. Is the problem Top of Funnel (no traffic) or Middle of Funnel (traffic isn't converting)? Focus 80% of marketing effort on fixing the single biggest bottleneck."
+  - step: "Sales Cycle Factoring"
+    tasks:
+      - "Factor in time. If the enterprise sales cycle is 90 days, the leads marketing generates in Q4 will not result in revenue until Q1 of the next year. You must market a quarter ahead."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Blaming the sales team for not closing leads without looking at the lead quality metrics. The CMO and Sales VP must agree on the definition of a Marketing Qualified Lead (MQL)."
+best_practices:
+  - "Create a Service Level Agreement (SLA) between Marketing and Sales. Marketing agrees to deliver 500 MQLs; Sales agrees to call every MQL within 5 minutes of form submission."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "HubSpot: How to Build a Marketing Funnel"
+    url: "https://blog.hubspot.com/marketing/build-a-marketing-funnel"

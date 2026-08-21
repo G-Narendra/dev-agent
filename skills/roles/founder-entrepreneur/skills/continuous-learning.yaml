@@ -1,0 +1,79 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "continuous-learning"
+display_name: "Continuous Learning & Market Adaptation"
+description: >
+  Establish systems for founders to rapidly ingest market data, learn new technologies, 
+  and adapt the startup's thesis before competitors out-innovate them.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "founder-entrepreneur"
+phase: "ideation"
+applicable_startups: 
+  - all
+priority: "high"
+difficulty: "advanced"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Information Diet"
+    tasks:
+      - "Curate a strict information diet of primary sources (talking to customers, reading API docs) rather than secondary sources (reading tech blogs about other startups)."
+  - step: "Post-Mortem Analysis"
+    tasks:
+      - "Conduct a personal post-mortem after every failed sales call or feature flop to extract the exact learning required to avoid it next time."
+  - step: "Skill Acquisition"
+    tasks:
+      - "Identify the single biggest bottleneck in the company (e.g., lack of SEO knowledge) and dedicate 10 hours a week to mastering it until a hire can be made."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Reading 5 books a week on 'management theory' but refusing to spend 1 hour actually calling the 5 customers who churned yesterday."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Continuous Learning process"
+  - "How do I handle continuous learning?"
+  - "Implement continuous learning"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the continuous learning process"
+  optional:
+    - name: "data_source"
+      type: "string"
+      description: "Source of data to analyze"
+      default: "Internal data"
+
+outputs:
+  files:
+    - path: "outputs/continuous-learning.md"
+      description: "Results of the continuous learning process"
+  artifacts:
+    - "Completed continuous learning deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

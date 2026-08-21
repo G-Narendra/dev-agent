@@ -1,0 +1,110 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "vendor-evaluation"
+display_name: "Cloud & SaaS Vendor Evaluation"
+description: >
+  A rigorous methodology for comparing and selecting major technology vendors 
+  (e.g., AWS vs GCP, Datadog vs New Relic, Stripe vs Adyen). Evaluates pricing, 
+  developer experience, SLA guarantees, and long-term lock-in risks.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "cto"
+phase: "build"
+applicable_startups:
+  - all
+priority: "critical"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Which cloud provider should we use?"
+  - "Evaluate Datadog vs New Relic."
+  - "We need a vendor selection matrix."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Create a vendor comparison artifact."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "vendor_category"
+      type: "string"
+      description: "The type of service (e.g., 'APM Tools', 'Payment Gateways')."
+    - name: "critical_requirements"
+      type: "string"
+      description: "Must-have features (e.g., 'Must support HIPAA compliance')."
+  optional:
+    - name: "budget_constraint"
+      type: "string"
+      description: "Maximum budget per month."
+      default: "Unknown"
+
+outputs:
+  files:
+    - path: "engineering/architecture/vendor-evaluation.md"
+      description: "The comparison matrix and final recommendation."
+  artifacts:
+    - "A list of negotiation points for the sales contract."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "N/A"
+  manual:
+    - "The chosen vendor aligns with the engineering team's skills and scales cost-effectively for the next 2-3 years."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+
+safety_notes:
+  - "Beware of 'freemium' traps. A vendor offering $100k in free credits for Year 1 might lock you into an architecture that costs $500k in Year 2."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Spreadsheet / Notion"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Define the Scorecard"
+    tasks:
+      - "Create a matrix scoring vendors 1-5 on: Feature Completeness, Developer Experience (API Quality), Pricing at Scale, Security/Compliance, and Support Quality."
+  - step: "The 'Hello World' Test"
+    tasks:
+      - "Do not rely on sales demos. Assign an engineer to spend 4 hours building a 'Hello World' integration using the vendor's actual API and documentation. This reveals the truth instantly."
+  - step: "Pricing Scalability Check"
+    tasks:
+      - "Calculate the cost at 10x your current volume. A vendor that charges 'per seat' is great for a team of 5, but ruinous for a team of 500."
+  - step: "Lock-in Mitigation"
+    tasks:
+      - "Assess the exit cost. (e.g., 'If we use AWS Lambda, we are locked in. If we use Docker containers on AWS ECS, we can move to GCP easily')."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Choosing a vendor solely because 'everyone else uses them' (Resume Driven Development) without evaluating if their enterprise-tier pricing fits a startup budget."
+  - "Letting a junior engineer sign a 3-year commitment because they liked the UI. Vendor contracts must go through the CTO."
+
+best_practices:
+  - "Always negotiate. SaaS vendors usually have 20-40% margin flexibility on their 'Enterprise' pricing tiers if you commit to an annual contract."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Gergely Orosz: How to Evaluate Software Vendors"
+    url: "https://blog.pragmaticengineer.com/software-architecture-is-overrated/"

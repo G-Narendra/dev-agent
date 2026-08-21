@@ -1,0 +1,108 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "design-review"
+display_name: "Product Design & UX Review"
+description: >
+  Vets high-fidelity UI/UX designs before they are handed off to engineering. 
+  Ensures the product is intuitive, solves the core user problem, and adheres 
+  to the company's established design system.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "cpo"
+phase: "build"
+applicable_startups:
+  - all
+priority: "high"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Review the Figma files."
+  - "Does this UI make sense?"
+  - "Approve the design handoff."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Generate UX heuristic evaluation."
+  - "Draft design feedback."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "design_artifact"
+      type: "string"
+      description: "Link to Figma or prototype."
+    - name: "user_problem"
+      type: "string"
+      description: "What is this specific screen trying to solve?"
+  optional:
+    - name: "platform"
+      type: "string"
+      description: "Web, iOS, Android."
+      default: "Web"
+
+outputs:
+  files:
+    - path: "product/design/ux-review-notes.md"
+      description: "Feedback and approval status."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "N/A"
+manual:
+  - "User testing shows a 90%+ task completion rate on the first attempt without requesting help from support."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "Scope Creep: Do not let designers add complex, non-essential animations or 3D elements that will take engineering 3 extra weeks to build unless it is core to the value prop."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Figma Comments"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "The 'Don't Make Me Think' Test"
+    tasks:
+      - "Look at the screen for 3 seconds. Is it immediately obvious what the primary Call to Action (CTA) is? If not, the visual hierarchy is broken. Fix it."
+  - step: "Edge Case Verification"
+    tasks:
+      - "Designers love designing the 'Happy Path'. Ask: What does this screen look like when the user has 0 items? What does it look like with 10,000 items? What does the error state look like?"
+  - step: "Design System Compliance"
+    tasks:
+      - "Ensure the designer didn't invent a new type of dropdown menu. Force them to use the existing components from the UI library to save engineering time."
+  - step: "Accessibility Check"
+    tasks:
+      - "Check color contrast ratios (aim for WCAG AA). Ensure touch targets on mobile are at least 44x44px."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "The 'Swoosh' Feedback. Giving vague feedback like 'Make it pop more' or 'It feels a bit heavy.' Give actionable, precise feedback: 'Increase the contrast on the secondary buttons'."
+best_practices:
+  - "Always review designs on the actual device they will be used on. Do not review a mobile app design on a 32-inch 4K monitor. Open the Figma mirror app on your phone."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Nielsen Norman Group: 10 Usability Heuristics"
+    url: "https://www.nngroup.com/articles/ten-usability-heuristics/"

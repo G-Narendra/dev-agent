@@ -1,0 +1,79 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "database-maintenance"
+display_name: "Database Administration & Maintenance"
+description: >
+  Maintain the health, performance, and recoverability of the production database 
+  through automated backups, vacuuming, and connection pooling.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "database-administrator"
+phase: "operations"
+applicable_startups: 
+  - all
+priority: "high"
+difficulty: "expert"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Automated Backups"
+    tasks:
+      - "Configure Point-In-Time-Recovery (PITR) allowing the database to be restored to any exact minute in the last 7 days."
+  - step: "Connection Pooling"
+    tasks:
+      - "Implement PgBouncer (or equivalent) so that thousands of serverless functions don't exhaust the database's max connection limit."
+  - step: "Vacuuming & Bloat"
+    tasks:
+      - "Configure autovacuum settings aggressively to prevent transaction ID wraparound and table bloat on high-update tables."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Having daily backups configured but never once actually running a test restoration to verify the backups are valid and uncorrupted."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Database Maintenance process"
+  - "How do I handle database maintenance?"
+  - "Implement database maintenance"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the database maintenance process"
+  optional:
+    - name: "data_source"
+      type: "string"
+      description: "Source of data to analyze"
+      default: "Internal data"
+
+outputs:
+  files:
+    - path: "outputs/database-maintenance.md"
+      description: "Results of the database maintenance process"
+  artifacts:
+    - "Completed database maintenance deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

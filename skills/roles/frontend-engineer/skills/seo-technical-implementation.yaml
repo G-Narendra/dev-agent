@@ -1,0 +1,112 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "seo-technical-implementation"
+display_name: "Technical SEO & Metadata Implementation"
+description: >
+  Ensure the web application is indexable and understandable by search engine bots. 
+  Covers Dynamic Meta Tags, JSON-LD Structured Data, Sitemap generation, and 
+  Server-Side Rendering (SSR) for SEO performance.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "frontend-engineer"
+phase: "growth"
+applicable_startups:
+  - all
+priority: "growth"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Improve our SEO."
+  - "Add meta tags."
+  - "Why isn't Google indexing us?"
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "npm install next-seo"
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "page_types"
+      type: "string"
+      description: "Static pages vs Dynamic content (e.g., Blog posts, E-commerce products)."
+  optional:
+    - name: "framework"
+      type: "string"
+      description: "Next.js vs Remix vs Vite/React."
+      default: "Next.js"
+
+outputs:
+  files:
+    - path: "src/components/SEO.tsx"
+      description: "A reusable component for injecting meta tags into the document head."
+  artifacts:
+    - "An automated `sitemap.xml` generation script."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "Lighthouse SEO score is 100/100."
+  manual:
+    - "Pasting a link into Twitter/Slack renders a beautiful preview card with an image and description (Open Graph)."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+
+safety_notes:
+  - "Do not accidentally leave `<meta name=\"robots\" content=\"noindex\">` on the production site after moving from a staging environment. This will delete your company from Google overnight."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Next.js Metadata API"
+      install: "N/A"
+  alternatives:
+    - name: "React Helmet"
+      when: "Working in a legacy Single Page Application (SPA)."
+
+implementation_checklist:
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+  - step: "Open Graph & Twitter Cards"
+    tasks:
+      - "Implement `og:title`, `og:description`, and `og:image` tags. This is critical for social sharing."
+      - "Set up an edge function (e.g., Vercel /og) to dynamically generate images with the article title for blog posts."
+  - step: "JSON-LD Structured Data"
+    tasks:
+      - "Inject a `<script type=\"application/ld+json\">` block for entities like 'Product', 'Article', or 'Organization'. This enables Google Rich Snippets (e.g., showing star ratings directly in search results)."
+  - step: "Canonical URLs"
+    tasks:
+      - "If a product can be reached at `/shoes/nike` and `/brand/nike/shoes`, add a `<link rel=\"canonical\" href=\"...\">` tag to tell Google which one is the master copy. This prevents 'Duplicate Content' penalties."
+  - step: "Sitemaps and Robots.txt"
+    tasks:
+      - "Create a dynamic `sitemap.xml` that automatically updates when the database adds a new public record."
+      - "Ensure `robots.txt` points directly to the sitemap URL."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Relying on Google to execute complex client-side JavaScript to render the page title. While Googlebot *can* execute JS, it is slow and unreliable. Critical SEO tags must be rendered Server-Side (SSR) or Statically Generated (SSG)."
+  - "Keyword stuffing the `<title>` tag (e.g., `Buy Shoes | Cheap Shoes | Best Shoes`). Google will penalize this. Write titles for humans."
+
+best_practices:
+  - "Keep the `<title>` under 60 characters and the `<meta name=\"description\">` under 155 characters, or Google will truncate them with an ellipsis (...)."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Next.js: Metadata Object"
+    url: "https://nextjs.org/docs/app/building-your-application/optimizing/metadata"

@@ -1,0 +1,105 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "test-automation-strategy"
+display_name: "QA Management & Test Automation Strategy"
+description: >
+  Protects the user experience. Transitions the engineering team from 
+  slow, manual 'click-testing' to a robust, automated CI/CD testing 
+  pipeline that catches critical bugs before they ever reach production.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "quality-assurance-manager"
+phase: "growth"
+applicable_startups:
+  - SaaS, E-commerce, Mobile Apps
+priority: "high"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Production went down again."
+  - "QA is slowing down deployments."
+  - "Automate the regression suite."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Generate Playwright E2E spec."
+  - "Draft QA release criteria."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "critical_user_flow"
+      type: "string"
+      description: "e.g., Checkout, Login, Data Export."
+    - name: "current_test_coverage"
+      type: "string"
+      description: "What percentage of code is tested?"
+  optional:
+    - name: "testing_framework"
+      type: "string"
+      description: "Cypress, Playwright, Selenium."
+      default: "Playwright"
+
+outputs:
+  files:
+    - path: "engineering/qa/automated_regression_suite.md"
+      description: "The architecture of the automated safety net."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "N/A"
+manual:
+  - "The time required to run a full regression suite drops from 3 days to 15 minutes, and Sev-1 production incidents decrease by 80%."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "The Flaky Test Sabotage: Never allow a 'Flaky' test (a test that fails 10% of the time for no reason) to remain in the CI/CD pipeline. Developers will start ignoring ALL failing tests, completely destroying the culture of quality. Quarantine flaky tests immediately."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Playwright / Cypress / Datadog Synthetics"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "The Testing Pyramid"
+    tasks:
+      - "Enforce the pyramid: 70% Unit Tests (fast, cheap), 20% Integration Tests (APIs), 10% End-to-End Tests (UI). Do not try to test every single edge case via the UI (End-to-End). UI tests are slow and brittle."
+  - step: "Shift-Left QA"
+    tasks:
+      - "QA should not be a 'phase' at the end of a sprint. The QA Manager must sit in the initial Product Requirements meeting and ask: 'How are we going to test this?'. Write the tests BEFORE the engineers write the code (TDD)."
+  - step: "The 'Golden Path' Automation"
+    tasks:
+      - "Identify the 5 things the startup MUST do to make money (e.g., 'User logs in, adds item to cart, pays with Stripe'). Automate those 5 flows immediately. Run them on every PR. If they break, the PR cannot be merged."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Measuring QA success by 'Bugs Found'. If you reward QA for finding bugs, they will log 500 trivial CSS alignment issues while missing the fact that the payment gateway crashes. Measure success by 'Critical Bugs Prevented in Production'."
+best_practices:
+  - "Implement 'Chaos Engineering' principles on staging. Randomly kill the database container or introduce 500ms of latency to the API, and write tests to ensure the frontend displays a graceful error message instead of a blank white screen."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Martin Fowler: The Practical Test Pyramid"
+    url: "https://martinfowler.com/articles/practical-test-pyramid.html"

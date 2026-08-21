@@ -1,0 +1,81 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "hubspot-administration"
+display_name: "HubSpot / Salesforce Architecture"
+description: >
+  Design the sales pipelines, implement automated workflows, and build executive 
+  dashboards in the CRM to provide complete visibility into the revenue funnel.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "crm-specialist"
+phase: "growth"
+applicable_startups: 
+  - b2b
+priority: "mvp"
+difficulty: "advanced"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Pipeline Architecture"
+    tasks:
+      - "Define distinct deal stages (e.g., Discovery, Demo, Proposal, Negotiation, Closed Won) with clear entry/exit criteria."
+      - "Implement validation rules (e.g., 'Close Date cannot be in the past')."
+  - step: "Automation"
+    tasks:
+      - "Create automated workflows to assign incoming leads to reps based on territory or round-robin."
+      - "Automate follow-up tasks if a deal sits in 'Proposal' for more than 7 days."
+  - step: "Reporting"
+    tasks:
+      - "Build a dashboard showing Win Rate, Average Deal Size, and Sales Cycle Length by Rep."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Adding 50 mandatory custom fields that sales reps must fill out for every deal, causing them to stop using the CRM entirely."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Hubspot Administration process"
+  - "How do I handle hubspot administration?"
+  - "Implement hubspot administration"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the hubspot administration process"
+  optional:
+    - name: "code_repository"
+      type: "string"
+      description: "Path to the code repository"
+      default: "./"
+
+outputs:
+  files:
+    - path: "outputs/hubspot-administration.md"
+      description: "Results of the hubspot administration process"
+  artifacts:
+    - "Completed hubspot administration deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

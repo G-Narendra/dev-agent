@@ -1,0 +1,84 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "technical-art-production"
+display_name: "Technical Art & Asset Pipeline"
+description: >
+  Bridges the gap between artists and engineers. Builds asset pipelines, 
+  shaders, materials, rigging systems, and optimization tools. Ensures 
+  art assets perform well within engine constraints.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "technical-artist"
+phase: "build"
+applicable_startups:
+  - gaming
+priority: "high"
+difficulty: "advanced"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Asset Pipeline"
+    tasks:
+      - "Build automated asset import and optimization pipeline."
+      - "Set up LOD generation and texture atlas creation."
+  - step: "Shader Development"
+    tasks:
+      - "Write custom shaders for visual effects and stylized rendering."
+      - "Optimize shader complexity for target platform performance."
+  - step: "Rigging & Animation"
+    tasks:
+      - "Build character rigs that support required animation systems."
+      - "Set up blend shapes, IK systems, and animation blueprints."
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Technical Art Production process"
+  - "How do I handle technical art production?"
+  - "Implement technical art production"
+  - "Bridges the gap between artists and engineers"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the technical art production process"
+  optional:
+    - name: "N/A"
+      type: "string"
+      description: "No optional inputs needed."
+
+outputs:
+  files:
+    - path: "outputs/technical-art-production.md"
+      description: "Results of the technical art production process"
+  artifacts:
+    - "Completed technical art production deliverable"
+# ── QUALITY GATES ────────────────────────────────────────────
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start — retrofitting is expensive."
+anti_patterns:
+  - "Writing shaders that look amazing on desktop but tank framerate on mobile."
+  - "Building the asset pipeline last — artists will waste weeks doing manual exports."
+  - "Optimizing art assets before the art style is finalized — rework multiplies."
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

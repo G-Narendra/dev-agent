@@ -1,0 +1,109 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "board-management"
+display_name: "Board of Directors Management"
+description: >
+  Manage the Board of Directors effectively. Includes setting the cadence, 
+  preparing the investor update decks, standardizing board packages, and 
+  running effective board meetings that leverage investor expertise rather 
+  than just reporting to them.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "ceo"
+phase: "growth"
+applicable_startups:
+  - all
+priority: "critical"
+difficulty: "expert"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Prepare for the board meeting."
+  - "Draft the investor update."
+  - "Create the board deck."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Create a board deck template artifact."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "financial_metrics"
+      type: "file"
+      description: "Current MRR, burn rate, runway, CAC/LTV metrics."
+    - name: "strategic_challenges"
+      type: "string"
+      description: "Top 3 problems keeping the CEO up at night."
+  optional:
+    - name: "board_composition"
+      type: "string"
+      description: "List of board members and their specific expertise."
+      default: "null"
+
+outputs:
+  files:
+    - path: "operations/board/board-deck-template.md"
+      description: "Standardized outline for the board presentation."
+  artifacts:
+    - "A monthly investor update email template."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "N/A"
+  manual:
+    - "Board meetings end with actionable advice on strategic challenges, not just a recap of the past quarter."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+
+safety_notes:
+  - "Never surprise the board at a board meeting. If you are missing revenue targets or a key executive is leaving, call the board members individually *before* the meeting."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Pitch / Google Slides"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "The Pre-Read (72 Hours Before)"
+    tasks:
+      - "Send a 5-page memo or detailed Notion doc with all the financial metrics and historical reporting 72 hours before the meeting."
+      - "Mandate that board members read the memo before the meeting. The actual meeting should not be a read-out of numbers."
+  - step: "The 'Meat' of the Meeting"
+    tasks:
+      - "Spend 10% of the meeting on Admin/Approvals, 20% on Performance Review, and 70% on Strategic Discussion (e.g., 'Should we expand to Europe?', 'How do we combat Competitor X?')."
+  - step: "The Ask"
+    tasks:
+      - "Every board meeting must have specific 'Asks' for the investors (e.g., 'I need introductions to VP Engineering candidates', 'I need warm intros to target accounts'). Put them to work."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Spending a 3-hour board meeting clicking through 80 slides of vanity metrics."
+  - "Hiding bad news. Board members are there to help solve problems. If you pretend everything is perfect, they can't help you, and they will fire you when the truth comes out."
+
+best_practices:
+  - "Send a concise, honest 'Monthly Investor Update' email on the 1st of every month to keep all stakeholders aligned between formal board meetings."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Sequoia Capital: Preparing a Board Deck"
+    url: "https://www.sequoiacap.com/article/preparing-a-board-deck/"

@@ -1,0 +1,109 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "information-architecture"
+display_name: "Information Architecture & Content Strategy"
+description: >
+  Designs the structural organization of content and features within a product.
+  Creates intuitive navigation, clear labeling systems, and search strategies
+  that help users find what they need quickly.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "product-designer-ux"
+phase: "planning"
+applicable_startups:
+  - all
+priority: "mvp"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Organize our product's navigation."
+  - "Design the information architecture."
+  - "Structure our content hierarchy."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Create site map."
+  - "Design navigation structure."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "content_inventory"
+      type: "file"
+      description: "List of all content, features, and pages in the product."
+    - name: "user_goals"
+      type: "string"
+      description: "What users need to accomplish with the product."
+  optional:
+    - name: "existing_ia"
+      type: "file"
+      description: "Current IA if redesigning."
+      default: "New product — no existing IA"
+
+outputs:
+  files:
+    - path: "design/ia/site-map-and-navigation.md"
+      description: "Information architecture documentation with sitemap"
+  artifacts:
+    - "A validated navigation structure with card-sorting results"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Content Audit & Inventory"
+    tasks:
+      - "Inventory all content types, features, and pages the product needs."
+      - "Group content into logical categories based on user needs, not internal org structure."
+      - "Identify content gaps or redundancies that need resolution."
+      - "Analyze competitors' IA patterns for convention validation."
+  - step: "Structural Design"
+    tasks:
+      - "Design the primary navigation: what lives in the top nav, sidebar, or footer."
+      - "Define the hierarchy (depth): users should reach any page in 3 clicks or fewer."
+      - "Create clear, user-friendly labels for navigation items (avoid jargon)."
+      - "Design IA for mobile-first: hamburger menu, bottom nav, or tab bar."
+  - step: "Validation with Users"
+    tasks:
+      - "Run a card sorting exercise (open or closed) to validate categories."
+      - "Conduct tree testing to see if users can find items in the proposed structure."
+      - "Test navigation labels — do users understand what 'Workspace Settings' means?"
+      - "Iterate based on findings — if 30%+ of users can't find something, restructure."
+  - step: "Documentation & Handoff"
+    tasks:
+      - "Create a visual sitemap showing page hierarchy and relationships."
+      - "Document navigation patterns, breadcrumb strategy, and search functionality."
+      - "Define content rules: page titles, meta descriptions, URL structure, SEO considerations."
+      - "Create an IA governance guide for how to add new content without breaking the structure."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Mirroring the org chart in the IA (users don't care about your internal departments)."
+  - "Deep navigation structures (5+ levels deep) — users can't remember where they are."
+  - "Using internal jargon instead of user-friendly labels."
+  - "Overwhelming users with too many navigation options at once."
+best_practices:
+  - "The best IA is invisible — users find what they need without thinking about it."
+  - "Follow platform conventions — don't reinvent navigation patterns users already know."
+  - "Test IA early with card sorting — fixing structure is cheap before UI design begins."
+  - "IA is never done — as the product grows, the IA needs to evolve."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

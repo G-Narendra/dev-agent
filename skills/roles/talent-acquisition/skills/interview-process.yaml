@@ -1,0 +1,120 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "interview-process"
+display_name: "Interview Architecture & Candidate Evaluation"
+description: >
+  Designs a rigorous, unbiased interview loop. Replaces generic 'tell me 
+  about a time' questions with practical, role-specific assessments to 
+  determine if a candidate can actually do the job. Covers key patterns to avoid common pitfalls like writing job descriptions that focus entirely on requirements, and provides actionable best practices for production-ready results.
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "talent-acquisition"
+phase: "growth"
+applicable_startups:
+  - all
+priority: "critical"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "How should we interview this candidate?"
+  - "Draft a technical assessment."
+  - "The candidate failed the whiteboard test."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Generate structured interview rubric."
+  - "Draft take-home assignment."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "job_role"
+      type: "string"
+      description: "e.g., Frontend Developer."
+    - name: "core_competencies"
+      type: "string"
+      description: "React, State Management, Culture Fit."
+  optional:
+    - name: "interview_stage"
+      type: "string"
+      description: "Screening, Technical, Culture, Final."
+      default: "Full Loop"
+
+outputs:
+  files:
+    - path: "hr/recruiting/interview_rubric_frontend.md"
+      description: "The scoring scorecard for the interviewers."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "N/A"
+manual:
+  - "100% of interviewers submit written, standardized feedback via a scorecard *before* discussing the candidate with each other."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "Illegal Questions: Never ask questions related to age, marital status, religion, pregnancy plans, or health. It exposes the startup to immediate and severe legal liability."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Greenhouse / Lever"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Structured Interviewing"
+    tasks:
+      - "Ask every candidate interviewing for the same role the exact same set of questions in the exact same order. This is the only way to reduce bias and accurately compare candidates."
+  - step: "The Anti-Whiteboard Rule"
+    tasks:
+      - "Do not ask a senior web developer to invert a binary tree on a whiteboard in 20 minutes while you stare at them. It tests anxiety, not coding ability. Give them a realistic Pull Request to review instead."
+  - step: "The 'Bar Raiser' (Amazon Method)"
+    tasks:
+      - "Assign one interviewer as the 'Bar Raiser'. Their only job is to determine: 'Is this person better than 50% of the people currently in this role?' If no, do not hire."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Writing job descriptions that focus entirely on requirements and nothing on company culture or mission -- candidates self-select out."
+  - "Using unstructured interviews where each candidate gets different questions -- makes fair comparison impossible."
+  - "Relying solely on resume screening without skills-based assessments -- introduces unconscious bias and misses great candidates."
+  - "Delaying feedback to candidates for more than a week -- top talent accepts other offers while waiting."
+  - "Ignoring internal mobility -- hiring externally for every role demotivates existing employees and increases turnover."
+  - "Keep the interview loop tight. If your process requires 7 rounds of interviews over 5 weeks, the best candidates will accept an offer from a competitor before you make a decision. 3 to 4 rounds max."
+
+  - "Structured interviews with consistent rubrics produce 2x better hiring outcomes than unstructured conversations."
+  - "Track source-of-hire data — without it, you're guessing which channels actually produce quality candidates."
+  - "Set up an employee referral program with meaningful rewards — referred hires have higher retention and faster ramp time."
+  - "Conduct stay interviews (not just exit interviews) to proactively address what makes employees consider leaving."
+  - "Benchmark compensation against market data annually — losing a key hire over 10% below-market pay is expensive."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Not defining clear success criteria before starting a task -- leads to ambiguous outcomes, endless revisions, and wasted effort."
+
+best_practices:
+  - "Document all configuration decisions in an Architecture Decision Record (ADR) so future team members understand why choices were made."
+  - "Implement comprehensive error handling with structured logging at every integration boundary to simplify debugging."
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Google: Structured Interviewing"
+    url: "https://rework.withgoogle.com/guides/hiring-use-structured-interviewing/"

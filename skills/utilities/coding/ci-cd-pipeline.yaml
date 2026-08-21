@@ -1,0 +1,169 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "ci-cd-pipeline"
+display_name: "CI/CD Pipeline Automation"
+description: >
+  Configure and optimize CI/CD pipelines across GitHub Actions, GitLab CI,
+  and Jenkins. Covers caching strategies, parallel job execution, matrix
+  builds, deployment gates, and artifact management. Ensures every commit
+  is built, tested, and deployed with minimal friction and maximum reliability.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "utility"
+phase: "all"
+applicable_startups:
+  - all
+priority: "critical"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Set up CI/CD for this project"
+  - "Create a GitHub Actions workflow for..."
+  - "Configure automated testing in CI..."
+  - "Set up deployment pipeline for..."
+  - "Optimize CI pipeline speed..."
+  - "Add staging auto-deploy..."
+  - "Configure matrix builds for..."
+  - "Set up caching for faster CI runs..."
+  - "Create a release pipeline with version tags..."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "gh workflow run deploy.yml --ref main"
+  - "act --job test --reuse"
+  - "pipeline validate .github/workflows/deploy.yml"
+  - "yq eval '.jobs.build.strategy.matrix.node' .github/workflows/ci.yml"
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "platform"
+      type: "string"
+      description: "GitHub Actions, GitLab CI, Jenkins, or CircleCI."
+    - name: "project_language"
+      type: "string"
+      description: "Node.js, Python, Go, Rust, Java, or polyglot."
+  optional:
+    - name: "environments"
+      type: "list"
+      description: "Target deployment environments."
+      default: "staging, production"
+    - name: "test_command"
+      type: "string"
+      description: "Command to run tests."
+      default: "Auto-detected from project type"
+    - name: "build_command"
+      type: "string"
+      description: "Command to build the project."
+      default: "Auto-detected from project type"
+
+outputs:
+  files:
+    - path: ".github/workflows/ci.yml"
+      description: "GitHub Actions CI workflow."
+    - path: ".github/workflows/deploy.yml"
+      description: "GitHub Actions deployment workflow."
+    - path: ".gitlab-ci.yml"
+      description: "GitLab CI/CD configuration."
+    - path: "Jenkinsfile"
+      description: "Jenkins pipeline definition."
+  artifacts:
+    - "CI status badge for the project README."
+    - "Deployment pipeline passing end-to-end."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "CI pipeline completes from trigger to finish in under 10 minutes."
+    - "All matrix builds pass without flaky test failures."
+    - "Deployment to staging succeeds without manual intervention."
+  manual:
+    - "A developer can see build/test/deploy status from the PR page."
+    - "Rollback procedure is documented and testable."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+  - "repository admin access (for setting secrets)"
+
+safety_notes:
+  - "Never hardcode deployment credentials, API keys, or tokens in workflow files — use repository secrets or OIDC."
+  - "Always pin action versions by commit SHA (e.g., actions/checkout@v4) instead of major version tags to prevent supply-chain attacks."
+  - "Never run production deployments automatically on push to main — use manual approval gates."
+  - "CI pipelines with destructive database operations (migrations, seeds) should always run against an ephemeral/staging environment first."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "GitHub Actions"
+      install: "gh extension install actions/gh-actions-cache"
+      url: "https://docs.github.com/en/actions"
+    - name: "act (Test GitHub Actions locally)"
+      install: "scoop install act OR brew install act"
+      url: "https://github.com/nektos/act"
+  alternatives:
+    - name: "GitLab CI"
+      install: "N/A (native to GitLab)"
+      url: "https://docs.gitlab.com/ee/ci/"
+    - name: "Jenkins"
+      install: "docker run -p 8080:8080 jenkins/jenkins:lts"
+      url: "https://www.jenkins.io/doc/"
+    - name: "CircleCI"
+      install: "N/A (cloud-native)"
+      url: "https://circleci.com/docs/"
+    - name: "dagger.io (DAG-based CI engine)"
+      install: "curl -L https://dl.dagger.io/dagger/install.sh | sh"
+      url: "https://dagger.io/"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "CI Pipeline Setup"
+    tasks:
+      - "Create a CI workflow that runs on push and pull_request to main."
+      - "Configure matrix builds for multiple language versions (Node 18/20/22, Python 3.10/3.11/3.12)."
+      - "Set up dependency caching (node_modules, pip cache, cargo registry) to reduce install time."
+      - "Add lint, type-check, test, and build stages with fail-fast strategy."
+  - step: "Caching Strategy"
+    tasks:
+      - "Cache package manager files with hash-based keys: `npm cache`, `pip cache`, `cargo registry`, `go mod`."
+      - "Restore cache on clean runs, save on main branch builds."
+      - "Set cache size limits to prevent unbounded growth."
+  - step: "Deployment Pipeline"
+    tasks:
+      - "Create separate deploy workflow triggered by tag or manual dispatch."
+      - "Add environment protection rules with required reviewers for production."
+      - "Configure OIDC or short-lived credentials for cloud provider access."
+  - step: "Quality Gates"
+    tasks:
+      - "Add required status checks in branch protection rules."
+      - "Enforce that CI passes before merge via repository settings."
+      - "Set up code coverage thresholds — fail the build if coverage drops below 80%."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Running production database migrations as part of the deploy step without a rollback script."
+  - "Using `latest` tag for actions or containers in CI — pin exact versions to prevent supply-chain attacks."
+  - "Having a 30-minute CI pipeline that runs the entire test suite on every commit with no parallelism."
+  - "Committing sensitive files like `.env` or service account keys to the repository."
+  - "Mixing infrastructure deployment and application deployment in the same workflow without separation."
+
+best_practices:
+  - "Use a monorepo CI strategy with path filters to only run workflows for changed projects."
+  - "Separate CI (build + test) from CD (deploy) — they have different trigger conditions and approval requirements."
+  - "Set up branch-specific CI: PR builds are fast (lint + unit tests), main builds are thorough (all tests + integration)."
+  - "Use GitHub Actions composite actions or reusable workflows to avoid copying pipeline YAML across repos."
+  - "Add a `ci: skip` commit message convention so trivial doc changes don't trigger a full pipeline."
+  - "Test your CI pipeline locally with `act` before committing — a broken CI wastes the whole team's time."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "GitHub Actions Documentation"
+    url: "https://docs.github.com/en/actions"
+  - title: "GitLab CI/CD Documentation"
+    url: "https://docs.gitlab.com/ee/ci/"
+  - title: "Act — Run GitHub Actions Locally"
+    url: "https://github.com/nektos/act"
+  - title: "Dagger.io — CI/CD as Code"
+    url: "https://dagger.io/"
+  - title: "Security Hardening for GitHub Actions"
+    url: "https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions"

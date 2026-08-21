@@ -1,0 +1,119 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "advanced-debugging"
+display_name: "Advanced Distributed Debugging"
+description: >
+  Diagnoses and resolves complex, intermittent bugs across multiple microservices. 
+  Uses distributed tracing, core dumps, and flame graphs to find the root cause 
+  of failures that cannot be reproduced locally. Covers key patterns to avoid common pitfalls like exposing internal stack traces or debug output in production, and provides actionable best practices for production-ready results.
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "backend-engineer"
+phase: "operations"
+applicable_startups:
+  - all
+priority: "high"
+difficulty: "expert"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "The server crashed but there's no error log."
+  - "This bug only happens in production."
+  - "Trace the memory leak."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Generate flame graph for CPU profiling."
+  - "Analyze OpenTelemetry traces."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "incident_description"
+      type: "string"
+      description: "What is the exact symptom?"
+    - name: "timestamp"
+      type: "string"
+      description: "When exactly did the failure occur?"
+  optional:
+    - name: "trace_id"
+      type: "string"
+      description: "The distributed trace identifier."
+      default: "None"
+
+outputs:
+  files:
+    - path: "engineering/debugging/root-cause-analysis.md"
+      description: "The RCA detailing the exact lines of code that failed."
+  artifacts:
+    - "A patched PR fixing the bug."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "The failing integration test passes after the patch is applied."
+manual:
+  - "The memory usage graph stabilizes and stops growing infinitely."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "cloud_read"
+  - "log_access"
+
+safety_notes:
+  - "Production Disruption: Never attach a live debugger (like `gdb` or Node inspector) to a production process serving live traffic, as it freezes the event loop and drops user requests."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Datadog / Honeycomb"
+      install: "N/A"
+  alternatives:
+    - name: "Jaeger"
+      when: "Running an open-source tracing stack."
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Distributed Tracing"
+    tasks:
+      - "Implement OpenTelemetry and pass a `trace_id` header across every microservice boundary so a single request can be tracked end-to-end."
+      - "Add environment variable validation that crashes fast on missing required values."
+  - step: "Reproducibility"
+    tasks:
+      - "Write a failing integration test that perfectly reproduces the production bug BEFORE attempting to change any application code to fix it."
+      - "Add environment variable validation that crashes fast on missing required values."
+  - step: "Memory Profiling"
+    tasks:
+      - "Generate a heap snapshot or flame graph to identify memory leaks caused by unbounded caching arrays or unclosed database connections."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Exposing internal stack traces or debug output in production error responses -- leak sensitive infrastructure details."
+  - "Using synchronous database queries inside a high-throughput API handler -- blocks the event loop and tanks throughput."
+  - "Ignoring database connection pool limits -- starving the pool causes cascading failures across all endpoints."
+  - "Hardcoding pagination limits or skipping pagination entirely -- unbounded result sets crash the API server."
+  - "Omitting request timeout middleware -- slow clients can hold connections open indefinitely, exhausting server resources."
+best_practices:
+  - "Use structured JSON logging. `logger.info('User failed to login', { userId: 123 })` is searchable. `console.log('User 123 failed to login')` is not."
+
+  - "Implement comprehensive input validation at the API boundary using a schema validator (Zod, Pydantic, Joi)."
+  - "Use structured logging with correlation IDs across all services to trace a single request end-to-end."
+  - "Design for graceful degradation — when a downstream dependency fails, return degraded data rather than a 500 error."
+  - "Implement health check endpoints (/health, /ready) for every service so orchestrators know when to restart or drain traffic."
+  - "Use database connection pooling with proper min/max bounds to handle traffic spikes without overwhelming the database."
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Brendan Gregg: Flame Graphs"
+    url: "https://www.brendangregg.com/flamegraphs.html"

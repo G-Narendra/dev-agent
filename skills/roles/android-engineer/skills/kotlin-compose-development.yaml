@@ -1,0 +1,105 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "kotlin-compose-development"
+display_name: "Staff Android Engineer: Kotlin & Jetpack Compose"
+description: >
+  Operates at the Principal/Staff level (10+ years FAANG/Android). 
+  Engineers 60fps, memory-safe Android applications using Kotlin 
+  Coroutines and strict Jetpack Compose MVI (Model-View-Intent) 
+  architectures. Eradicates memory leaks, enforces strict background 
+  execution limits, and mathematically optimizes APK payload sizes.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "android-engineer"
+phase: "build"
+applicable_startups:
+  - all
+priority: "high"
+difficulty: "expert"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Build the Android app."
+  - "Design the Kotlin architecture."
+  - "The app is crashing on older devices."
+  - "Write the Compose UI."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Generate Jetpack Compose UI."
+  - "Draft Kotlin Coroutine Flow."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "target_api"
+      type: "string"
+      description: "Minimum SDK version (e.g., 24)."
+  optional:
+    - name: "architecture"
+      type: "string"
+      description: "MVVM, MVI."
+      default: "MVI"
+
+outputs:
+  files:
+    - path: "app/src/main/java/MainActivity.kt"
+      description: "Strictly typed Kotlin entry point."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "LeakCanary reports exactly 0 memory leaks across all navigation graph transitions."
+manual:
+  - "The application maintains 60fps scrolling on a 5-year-old budget Android device."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+safety_notes:
+  - "The 'Context Leak' Liability: Never pass an `Activity` context into a ViewModel or a background Singleton thread. When the user rotates their phone, the Activity is destroyed. If the ViewModel holds the context, the old Activity cannot be garbage collected, instantly causing an OutOfMemoryError."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Android Studio / Kotlin / Jetpack Compose"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Jetpack Compose Strict State"
+    tasks:
+      - "Never mutate state directly inside a Compose function. State flows down, events flow up. Expose a mathematically immutable `StateFlow` from the ViewModel and use `collectAsStateWithLifecycle()` to prevent UI re-renders when the app is in the background."
+  - step: "Coroutine Thread Confinement"
+    tasks:
+      - "Never execute network or database calls on the Main (UI) thread. Use `viewModelScope.launch(Dispatchers.IO)` for heavy I/O. The Main thread must mathematically execute in under 16ms per frame to maintain 60fps."
+  - step: "APK Optimization (ProGuard/R8)"
+    tasks:
+      - "Enable R8 shrinking and obfuscation. Remove unused resources. A 50MB APK will lose 30% of its conversions in emerging markets. Target < 15MB for the initial App Bundle."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "God ViewModels: Putting 2,000 lines of business logic, network requests, and database mapping into a single ViewModel. Enforce Clean Architecture: ViewModels should ONLY map UI State to Use Cases (Domain layer)."
+
+best_practices:
+  - "Use `WorkManager` for all guaranteed background execution. If a user posts a photo and instantly closes the app, `WorkManager` mathematically guarantees the upload will complete, even if the OS kills the app process."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Android Architecture Guide"
+    url: "https://developer.android.com/topic/architecture"

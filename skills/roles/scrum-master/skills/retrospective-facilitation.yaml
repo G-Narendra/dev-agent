@@ -1,0 +1,108 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "retrospective-facilitation"
+display_name: "Blameless Sprint Retrospectives"
+description: >
+  Facilitates the end-of-sprint retrospective to continuously improve team 
+  processes. Creates a psychologically safe environment where engineers can 
+  openly discuss failures without fear of punishment.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "scrum-master"
+phase: "growth"
+applicable_startups:
+  - all
+priority: "high"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "The sprint was a disaster."
+  - "Run the retro."
+  - "Why is the team unhappy?"
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Generate retro board."
+  - "Draft action items."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "sprint_name"
+      type: "string"
+      description: "E.g., Sprint 42."
+  optional:
+    - name: "format"
+      type: "string"
+      description: "Start/Stop/Continue vs Mad/Sad/Glad."
+      default: "Start/Stop/Continue"
+
+outputs:
+  files:
+    - path: "engineering/agile/retro-notes.md"
+      description: "The synthesis of the meeting."
+  artifacts:
+    - "A list of 2 actionable improvements for the next sprint."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "N/A"
+manual:
+  - "The team actually implements the action items in the next sprint, leading to a measurable decrease in process friction."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "Blame Culture: If a developer broke production, the retro should focus on 'Why did the CI/CD pipeline allow broken code to deploy?', NOT 'Why is John a bad coder?'."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Miro / FigJam"
+      install: "N/A"
+  alternatives:
+    - name: "Parabol"
+      when: "Need structured, anonymous voting."
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Set the Stage"
+    tasks:
+      - "Read the Prime Directive: 'Regardless of what we discover, we understand and truly believe that everyone did the best job they could, given what they knew at the time.'"
+  - step: "Gather Data"
+    tasks:
+      - "Give the team 5 minutes of silence to write sticky notes on the Miro board: What went well? What didn't go well?"
+  - step: "Group & Vote"
+    tasks:
+      - "Group duplicate sticky notes together. Give everyone 3 'Dot Votes' to vote on the most critical issues they want to discuss."
+  - step: "Action Items (Crucial)"
+    tasks:
+      - "Do NOT end the meeting with just complaints. Create 1-2 concrete action items. E.g., 'To fix slow PR reviews, we will mandate reviewing PRs as the first task every morning.' Assign an owner."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Turning the Retro into a venting session where nothing actually changes. If the same complaint comes up 3 sprints in a row, the Scrum Master is failing."
+best_practices:
+  - "If the team is bored of the standard format, switch it up. Try the 'Sailboat' format (What is the wind in our sails? What are the anchors holding us back?)."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Martin Fowler: Agile Retrospectives"
+    url: "https://martinfowler.com/articles/agile-retrospectives.html"

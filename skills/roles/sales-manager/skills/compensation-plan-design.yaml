@@ -1,0 +1,110 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "compensation-plan-design"
+display_name: "Sales Compensation & OTE Design"
+description: >
+  Design the On-Target Earnings (OTE), base salary, and commission structures 
+  for the sales team. Balances the need to aggressively incentivize closing 
+  new revenue while protecting the startup's cash flow.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "sales-manager"
+phase: "growth"
+applicable_startups:
+  - b2b-saas
+priority: "high"
+difficulty: "expert"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Design the sales comp plan."
+  - "What should the commission rate be?"
+  - "Set the quotas for next year."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Create a comp plan spreadsheet."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "target_ote"
+      type: "string"
+      description: "Total expected pay if the rep hits 100% of quota (e.g., '$150k')."
+    - name: "average_deal_size"
+      type: "string"
+      description: "ACV (Annual Contract Value) (e.g., '$10,000')."
+  optional:
+    - name: "sales_cycle_length"
+      type: "string"
+      description: "How long does a deal take to close?"
+      default: "3 Months"
+
+outputs:
+  files:
+    - path: "sales/operations/compensation-plan-2024.md"
+      description: "The official contract detailing how reps are paid."
+  artifacts:
+    - "An Excel calculator modeling the payout at 50%, 100%, and 150% of quota."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "N/A"
+  manual:
+    - "The compensation plan mathematically guarantees that Customer Acquisition Cost (CAC) remains profitable, while top reps earn enough to stay at the company."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+
+safety_notes:
+  - "Clawbacks: The plan MUST include a clawback clause. If an AE closes a deal, gets paid commission, and the customer churns 30 days later, the AE must return that commission. Otherwise, reps will sell to terrible customers just to get the bonus."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Excel / Spiff"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "The 50/50 Split (Standard SaaS)"
+    tasks:
+      - "Set On-Target Earnings (OTE). If OTE is $120k, it should be a $60k Base Salary and a $60k Variable Commission."
+  - step: "Setting the Quota"
+    tasks:
+      - "Standard SaaS multiplier: A rep's annual quota should be 4x to 5x their OTE. If OTE is $120k, their quota must be $480k - $600k in closed-won ARR."
+  - step: "Commission Rate Calculation"
+    tasks:
+      - "Formula: Variable Pay / Quota. ($60k / $600k = 10% commission rate on every deal)."
+  - step: "Accelerators and Decelerators"
+    tasks:
+      - "If a rep hits 101% to 150% of their quota, increase the commission rate to 15% (Accelerator). This prevents reps from 'sandbagging' (holding deals until next quarter once they hit their target)."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Capping commissions. Never put a ceiling on what a salesperson can earn. If they sell $10 Million and earn $1 Million in commission, you just made $9 Million. Pay them with a smile."
+  - "Changing the comp plan mid-year because reps are making 'too much money'. This will destroy trust instantly and your entire sales team will quit within a month."
+
+best_practices:
+  - "Keep it stupid simple (KISS). If a rep needs a Ph.D. in mathematics to calculate their monthly commission check, the plan is too complex to motivate them on a daily basis."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "a16z: Sales Compensation"
+    url: "https://a16z.com/2020/09/24/sales-compensation-plans/"

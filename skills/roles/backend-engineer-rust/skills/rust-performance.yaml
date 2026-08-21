@@ -1,0 +1,93 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "rust-performance"
+display_name: "Rust Systems Performance Optimization"
+description: >
+  Optimize Rust backend services for maximum throughput and minimal latency.
+  Covers profiling, benchmarking, memory optimization, and unsafe code patterns.
+role: "backend-engineer-rust"
+phase: "operations"
+applicable_startups:
+  - all
+priority: "high"
+difficulty: "advanced"
+trigger_phrases:
+  - "Profile the Rust service for performance..."
+  - "Optimize memory allocation in this Rust code..."
+  - "Benchmark the Rust endpoint..."
+example_cli_actions:
+  - "cargo bench"
+  - "perf record --call-graph dwarf ./target/release/server"
+  - "flamegraph -- ./target/release/server"
+inputs:
+  required:
+    - name: "code_module"
+      type: "string"
+      description: "Module or function to optimize."
+    - name: "current_bottleneck"
+      type: "string"
+      description: "CPU, memory, or I/O bound."
+  optional:
+    - name: "target_latency"
+      type: "string"
+      description: "Target p99 latency."
+      default: "50% improvement over current baseline"
+outputs:
+  files:
+    - path: "performance/benchmark-results.md"
+      description: "Benchmark analysis and optimization report."
+  artifacts:
+    - "Flamegraph SVG showing hot paths."
+success_criteria:
+  automated:
+    - "Criterion benchmarks show statistically significant improvement."
+    - "Memory allocations reduced by at least 40% in hot paths."
+  manual:
+    - "The optimization is understandable and maintainable for the team."
+permissions_needed:
+  - "filesystem"
+safety_notes:
+  - "Never submit unsafe code optimizations without a safety comment and MIRI check."
+  - "Always benchmark before and after changes never optimize blind."
+recommended_tools:
+  primary:
+    - name: "Criterion.rs + perf + flamegraph"
+      install: "cargo add --dev criterion"
+  alternatives:
+    - name: "FlameGraph (perf scripts)"
+      when: "Need system-level profiling of the entire application."
+implementation_checklist:
+  - step: "Profiling Setup"
+    tasks:
+      - "Add criterion benchmarks for hot functions."
+      - "Generate baseline measurements with statistical analysis."
+  - step: "Allocation Analysis"
+    tasks:
+      - "Use dhat-rs or heaptrack to find allocation-heavy code paths."
+      - "Replace Vec/Box allocations with stack-allocated alternatives where possible."
+  - step: "Optimization"
+    tasks:
+      - "Profile-guided optimization (PGO) for release builds."
+      - "Use #[inline] attributes judiciously based on profiler data."
+anti_patterns:
+  - "Premature optimization without profiling data."
+  - "Using unsafe code to bypass bounds checking without safety proof."
+best_practices:
+  - "File issues or add comments for every optimization explaining the trade-off."
+references:
+  - title: "The Rust Performance Book"
+    url: "https://nnethercote.github.io/perf-book/"
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."

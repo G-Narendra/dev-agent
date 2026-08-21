@@ -1,0 +1,105 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "loyalty-program-design"
+display_name: "Retention Marketing & Loyalty Architecture"
+description: >
+  Fights churn with incentives. Designs VIP tiers, point systems, and 
+  referral mechanics that lock users into the ecosystem, making it 
+  psychologically and financially painful for them to switch to a competitor.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "retention-marketing-manager"
+phase: "growth"
+applicable_startups:
+  - D2C, Consumer Subscriptions, Marketplaces
+priority: "high"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Users buy once and never come back."
+  - "How do we increase LTV?"
+  - "Design a VIP rewards program."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Generate loyalty point economics."
+  - "Draft VIP tier unlock logic."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "business_model"
+      type: "string"
+      description: "D2C E-commerce, SaaS, Marketplace."
+    - name: "average_order_value"
+      type: "string"
+      description: "How much do they spend per transaction?"
+  optional:
+    - name: "current_repeat_rate"
+      type: "string"
+      description: "What percentage buy a second time?"
+      default: "Unknown"
+
+outputs:
+  files:
+    - path: "marketing/retention/loyalty_program_spec.md"
+      description: "The mathematical and psychological structure of the rewards."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "N/A"
+manual:
+  - "The Repeat Purchase Rate increases by 25%, and the 12-month Customer Lifetime Value (LTV) expands significantly without eroding gross margins."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "The Margin Destruction Trap: Never design a points system without modeling the financial liability. If you give users '$10 in points' for every '$50 spent', you are destroying 20% of your gross margin. Points must be a virtual currency that costs you very little to fulfill (e.g., exclusive access, digital goods, or heavily margined physical items)."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Yotpo / Smile.io / Klaviyo"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "The 'Endowed Progress' Effect"
+    tasks:
+      - "Do not start users at 0 points. Start them at 200 points ('Welcome Bonus!'), and set the first reward at 500 points. Psychologically, humans are much more likely to complete a goal if they feel they are already almost halfway there."
+  - step: "Experiential Rewards > Discount Rewards"
+    tasks:
+      - "Stop giving away 10% discount codes; they train users to only buy on sale. Offer 'Experiential' rewards. 'Spend $500 this year to unlock Gold Tier: Free Expedited Shipping and Early Access to New Products.' Free shipping costs you $5, but feels like a massive VIP perk."
+  - step: "The Subscription 'Save' Flow"
+    tasks:
+      - "If a user clicks 'Cancel Subscription', do not just let them go. Intercept them. 'Before you go, would you rather skip this month's delivery? Or take 20% off your next order?' Save the recurring revenue at all costs."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Making the rewards impossible to reach. If a user has to spend $5,000 over 2 years just to get a $10 coupon, they will ignore the program entirely. The first reward must be achievable within their first two transactions."
+best_practices:
+  - "Gamify the un-gamifiable. Reward users for non-purchase actions that help the brand. Give them 50 points for leaving a photo review, 20 points for following on Instagram, and 100 points for filling out their birthdate (so you can send a birthday promo)."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Smile.io: How to Build a Loyalty Program"
+    url: "https://smile.io/blog/"

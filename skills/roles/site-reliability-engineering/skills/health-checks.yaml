@@ -1,0 +1,79 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "health-checks"
+display_name: "Application Health Checks & Probes"
+description: >
+  Implement robust liveness and readiness probes so load balancers and orchestrators 
+  can automatically restart dead services and stop routing traffic to failing nodes.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "site-reliability-engineering"
+phase: "growth"
+applicable_startups: 
+  - all
+priority: "high"
+difficulty: "advanced"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Liveness vs Readiness"
+    tasks:
+      - "Separate Liveness (`/health/live`, just checking if the process is running) from Readiness (`/health/ready`, checking if it can connect to the DB)."
+  - step: "Deep Health Checks"
+    tasks:
+      - "In the Readiness probe, perform a fast `SELECT 1` query to the database and ping the Redis cache to ensure all downstream dependencies are up."
+  - step: "Kubernetes Integration"
+    tasks:
+      - "Configure Kubernetes `readinessProbe` and `livenessProbe` in the Helm chart with appropriate `initialDelaySeconds` to prevent killing booting pods."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Having a single `/health` endpoint that just returns `200 OK` instantly, masking the fact that the database connection has been dead for an hour."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Health Checks process"
+  - "How do I handle health checks?"
+  - "Implement health checks"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the health checks process"
+  optional:
+    - name: "code_repository"
+      type: "string"
+      description: "Path to the code repository"
+      default: "./"
+
+outputs:
+  files:
+    - path: "outputs/health-checks.md"
+      description: "Results of the health checks process"
+  artifacts:
+    - "Completed health checks deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

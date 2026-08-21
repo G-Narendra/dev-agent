@@ -1,0 +1,115 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "email-deliverability"
+display_name: "Email Deliverability & Inbox Placement"
+description: >
+  Ensures emails actually reach the inbox instead of landing in spam. Covers
+  sender reputation management, authentication (SPF, DKIM, DMARC), list
+  hygiene, and engagement-based sender scoring.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "email-marketing-manager"
+phase: "growth"
+applicable_startups:
+  - all
+priority: "critical"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Our emails are going to spam."
+  - "Improve email deliverability."
+  - "Set up email authentication."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Audit email deliverability."
+  - "Configure SPF/DKIM/DMARC."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "sending_domain"
+      type: "string"
+      description: "Domain you send emails from."
+    - name: "email_volume"
+      type: "string"
+      description: "Monthly email send volume."
+  optional:
+    - name: "email_provider"
+      type: "string"
+      description: "Klaviyo, SendGrid, AWS SES, Mailgun."
+      default: "Based on volume and requirements"
+
+outputs:
+  files:
+    - path: "marketing/email/deliverability-audit.md"
+      description: "Deliverability audit with configuration guide"
+  artifacts:
+    - "Configured email authentication and optimized deliverability"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Authentication Setup"
+    tasks:
+      - "Set up SPF record: which servers are authorized to send email for your domain."
+      - "Set up DKIM: sign all outgoing emails with a cryptographic signature."
+      - "Set up DMARC: tell receiving servers what to do if authentication fails (p=none → p=quarantine → p=reject)."
+      - "Set up BIMI: display your brand logo next to emails in supported email clients."
+  - step: "Reputation Management"
+    tasks:
+      - "Monitor sender reputation using Google Postmaster Tools and Microsoft SNDS."
+      - "Keep bounce rate below 2% — remove hard bounces immediately."
+      - "Keep spam complaint rate below 0.1% — if it exceeds, take corrective action."
+      - "Set up feedback loops with major ISPs (Gmail, Outlook, Yahoo) to receive complaint data."
+  - step: "List Hygiene"
+    tasks:
+      - "Remove inactive subscribers who haven't opened in 60 days."
+      - "Use double opt-in to ensure subscribers actually want your emails."
+      - "Implement a sunset policy: after 6 months of inactivity, stop sending."
+      - "Validate email addresses at signup to prevent typos and invalid addresses."
+  - step: "Content & Sending Best Practices"
+    tasks:
+      - "Avoid spam trigger words: 'free', 'guaranteed', 'act now' in subject lines."
+      - "Maintain a good text-to-image ratio (60:40 minimum)."
+      - "Warm up new sending domains gradually — start with 50/day, ramp up over 2-4 weeks."
+      - "Send consistently at the same time/day to establish sending patterns."
+  - step: "Monitoring & Troubleshooting"
+    tasks:
+      - "Track key metrics: inbox placement rate, open rate, click rate, bounce rate, complaint rate."
+      - "Set up deliverability alerts: sudden drop in open rate or spike in bounce rate."
+      - "Use seed testing (Litmus, Email on Acid) to check inbox placement across providers."
+      - "Investigate deliverability drops by checking blacklists and authentication errors."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Buying email lists — high bounce rates destroy sender reputation immediately."
+  - "Sending to inactive subscribers — engagement matters more than list size."
+  - "Hiding the unsubscribe button — users will click 'spam' instead."
+  - "Sending too frequently after a domain warm-up period."
+best_practices:
+  - "Inbox placement is more important than open rate — email that goes to spam is worthless."
+  - "Gmail's algorithm evaluates engagement: sends to those who open get whitelisted."
+  - "A clean list of 10,000 engaged subscribers is worth more than 100,000 unengaged ones."
+  - "DMARC enforcement (p=reject) takes time — start with p=none, monitor, then escalate."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

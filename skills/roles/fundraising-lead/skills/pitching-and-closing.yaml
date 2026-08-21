@@ -1,0 +1,81 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "pitching-and-closing"
+display_name: "Venture Capital Fundraising Process"
+description: >
+  Manage the end-to-end fundraising sprint: build the pitch deck, secure warm introductions,
+  deliver the pitch, and negotiate the final term sheet.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "fundraising-lead"
+phase: "planning"
+applicable_startups: 
+  - all
+priority: "mvp"
+difficulty: "expert"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Preparation"
+    tasks:
+      - "Build a 10-12 slide Pitch Deck focusing on Problem, Solution, Traction, TAM, and Team."
+      - "Build a target list of 50-80 relevant VCs (right stage, right sector, right geography)."
+  - step: "The Process"
+    tasks:
+      - "Secure warm introductions via current angels, founders, or lawyers."
+      - "Batch all initial partner meetings into a compressed 2-week window to artificially create momentum."
+  - step: "Closing"
+    tasks:
+      - "Leverage a soft commitment from one firm to force a 'Term Sheet' from another."
+      - "Negotiate valuation, board seats, and protective provisions with the lead investor."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Taking investor coffee chats randomly over a 6-month period, looking 'stale' to the market because the round isn't closing."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Pitching And Closing process"
+  - "How do I handle pitching and closing?"
+  - "Implement pitching and closing"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the pitching and closing process"
+  optional:
+    - name: "N/A"
+      type: "string"
+      description: "No optional inputs needed."
+
+outputs:
+  files:
+    - path: "outputs/pitching-and-closing.md"
+      description: "Results of the pitching and closing process"
+  artifacts:
+    - "Completed pitching and closing deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

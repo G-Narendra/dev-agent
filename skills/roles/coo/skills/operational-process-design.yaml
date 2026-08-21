@@ -1,0 +1,111 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "operational-process-design"
+display_name: "Operational Process & Workflow Design"
+description: >
+  Maps and optimizes the internal machinery of the startup. Eliminates 
+  manual, error-prone tasks by designing scalable standard operating 
+  procedures (SOPs) and automating handoffs between departments.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "coo"
+phase: "operations"
+applicable_startups:
+  - all
+priority: "high"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Things are falling through the cracks."
+  - "We need a process for onboarding clients."
+  - "Map out the fulfillment workflow."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Generate process flowchart."
+  - "Draft Standard Operating Procedure (SOP)."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "process_name"
+      type: "string"
+      description: "E.g., Client Onboarding, Employee Offboarding."
+    - name: "current_bottleneck"
+      type: "string"
+      description: "Where is the process currently breaking?"
+  optional:
+    - name: "departments_involved"
+      type: "string"
+      description: "Sales, Success, Engineering."
+      default: "All"
+
+outputs:
+  files:
+    - path: "operations/sops/client-onboarding.md"
+      description: "The step-by-step SOP document."
+  artifacts:
+    - "A Zapier/Make automation blueprint."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "N/A"
+manual:
+  - "A brand new employee can successfully execute the complex process on their first day simply by following the documented SOP."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "Process for Process's Sake: Do not introduce a 10-step approval matrix for ordering a $50 software license. Process should accelerate the company, not strangle it in bureaucracy."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Lucidchart / Miro (for mapping)"
+      install: "N/A"
+  alternatives:
+    - name: "Zapier / Make"
+      when: "Automating the handoffs between SaaS tools."
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Process Mapping (Current State)"
+    tasks:
+      - "Interview the people actually doing the work. Map the 'As-Is' process on a whiteboard. Identify every manual data entry point and every 'waiting for approval' step."
+  - step: "Waste Elimination"
+    tasks:
+      - "Apply Lean principles. If Sales is manually copying data from HubSpot into a Google Sheet for Customer Success, eliminate that step. Automate it."
+  - step: "SOP Documentation"
+    tasks:
+      - "Write the SOP. Use checklists, not paragraphs. Include screenshots. Explicitly define WHO owns each step (the DRI - Directly Responsible Individual)."
+  - step: "Exception Handling"
+    tasks:
+      - "A process only works if it defines what happens when things go wrong. Add an 'Escalation Path' section to every SOP."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Creating a beautiful process diagram in Lucidchart, saving it to a Google Drive folder, and never training the team on it. It will be abandoned in 3 days."
+best_practices:
+  - "Embed the process into the tools. Instead of a Word doc telling people to check a box, build a mandatory dropdown field directly into Salesforce."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "The Checklist Manifesto (Atul Gawande)"
+    url: "http://atulgawande.com/book/the-checklist-manifesto/"

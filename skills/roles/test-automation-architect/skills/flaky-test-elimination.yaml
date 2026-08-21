@@ -1,0 +1,112 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "flaky-test-elimination"
+display_name: "Flaky Test Eradication & Determinism"
+description: >
+  Identifies, quarantines, and fixes non-deterministic (flaky) tests. 
+  Targets race conditions, timezone issues, external API unreliability, 
+  and async rendering timings in E2E tests.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "test-automation-architect"
+phase: "growth"
+applicable_startups:
+  - all
+priority: "high"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "The CI pipeline failed randomly again."
+  - "Fix the flaky tests."
+  - "Why does this test only pass locally?"
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Run tests with `--repeat-each 50` in Playwright."
+  - "Quarantine failing test with `.skip`."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "failing_test_path"
+      type: "string"
+      description: "Path to the test file that randomly fails."
+  optional:
+    - name: "ci_logs"
+      type: "string"
+      description: "The stack trace from the failed CI run."
+      default: "None"
+
+outputs:
+  files:
+    - path: "tests/failing_test.spec.ts"
+      description: "The fixed, deterministic test."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "The test passes 100 times sequentially without a single failure."
+manual:
+  - "Developers trust the CI pipeline again and stop clicking 'Re-run failed jobs'."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+
+safety_notes:
+  - "Never ignore a flaky test. A flaky test is often hiding a real race condition in the production application code."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Playwright / Cypress"
+      install: "N/A"
+  alternatives:
+    - name: "MockDate"
+      when: "Fixing tests that fail depending on the current time or timezone."
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Quarantine"
+    tasks:
+      - "Immediately skip the flaky test (`test.skip()`) in the main branch so it stops blocking other developers' PRs while you investigate."
+  - step: "Identify the Cause"
+    tasks:
+      - "Is it a timing issue? (e.g., checking for a DOM element before the animation finishes)."
+      - "Is it data pollution? (e.g., running tests in parallel causing database collisions)."
+      - "Is it external? (e.g., calling the real Stripe API which rate limits the CI server)."
+  - step: "Fixing Async UI Issues"
+    tasks:
+      - "Do NOT use hardcoded sleeps (`await sleep(2000)`). Use framework auto-waiting (`await expect(locator).toBeVisible()`)."
+  - step: "Fixing Time/Date Issues"
+    tasks:
+      - "If a test checks `createdAt`, mock the system clock so the test runs exactly the same at 11:59 PM as it does at 12:01 AM."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Using `setTimeout` or `sleep` in a test. This guarantees the test will be too slow on fast machines, and still flaky on slow CI servers."
+  - "Clicking 'Re-run' in GitHub Actions until it passes. You are training the team to ignore failures."
+
+best_practices:
+  - "Configure CI to automatically retry failing tests 2 times. If it passes on the retry, tag it as 'Flaky' and open a Jira ticket automatically."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Martin Fowler: Eradicating Non-Determinism in Tests"
+    url: "https://martinfowler.com/articles/nonDeterminism.html"

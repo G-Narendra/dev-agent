@@ -1,0 +1,114 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "design-token-management"
+display_name: "Design Token Pipeline"
+description: >
+  Establish a synchronized pipeline that translates Figma design decisions 
+  (colors, typography, spacing) into code-readable formats (CSS variables, JSON, Tailwind config). 
+  Ensures a single source of truth for the entire visual identity.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "design-system-engineer"
+phase: "build"
+applicable_startups:
+  - all
+priority: "critical"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Sync Figma to code."
+  - "Update our design tokens."
+  - "Set up the Tailwind theme config."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "npx style-dictionary build"
+  - "node scripts/sync-figma-tokens.js"
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "figma_token_file"
+      type: "file"
+      description: "JSON file exported from Figma (e.g., via Tokens Studio plugin)."
+  optional:
+    - name: "output_format"
+      type: "string"
+      description: "CSS Variables, SCSS, or Tailwind JS."
+      default: "Tailwind Config"
+
+outputs:
+  files:
+    - path: "tailwind.config.js"
+      description: "The generated Tailwind theme extending the tokens."
+  artifacts:
+    - "A CSS file containing native variables for global use."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "Style Dictionary successfully builds the output files without schema errors."
+  manual:
+    - "A designer changing the primary brand color in Figma automatically creates a Pull Request in GitHub to update the CSS."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+  - "api_key (for Figma API)"
+
+safety_notes:
+  - "Ensure token names do not inadvertently overwrite default CSS or Tailwind variables."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Tokens Studio (Figma) + Style Dictionary"
+      install: "npm i -D style-dictionary"
+  alternatives:
+    - name: "Tailwind Config (Manual)"
+      when: "The team is small enough that manual updates to tailwind.config.js are faster than maintaining a sync pipeline."
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Semantic Naming Strategy"
+    tasks:
+      - "Level 1 (Global): Name literal values (e.g., `color.blue.500 = #3b82f6`)."
+      - "Level 2 (Semantic): Name intent (e.g., `color.primary = {color.blue.500}`)."
+      - "Level 3 (Component): Name specific usage (e.g., `button.bg.hover = {color.primary}`)."
+      - "Only export Semantic and Component tokens to the codebase."
+  - step: "Pipeline Construction"
+    tasks:
+      - "Configure Style Dictionary to ingest the raw JSON from Figma."
+      - "Create build steps to output `variables.css` and a `tailwind.theme.js` object."
+  - step: "Dark Mode Mapping"
+    tasks:
+      - "Define two token sets in Figma (Light/Dark)."
+      - "Map them to CSS variables nested under `@media (prefers-color-scheme: dark)` or `.dark` class."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Hardcoding HEX values in React components (`<div style={{ color: '#FF0000' }}>`). If the brand color changes, 500 files need to be updated."
+  - "Naming tokens after their visual appearance (e.g., `color-red` used for errors). If the error color changes to orange, the variable name makes no sense. Use semantic names like `color-danger`."
+
+best_practices:
+  - "Spacing should be defined in 'rems' (e.g., `spacing-4 = 1rem`) to ensure the entire layout scales fluidly if the user changes their browser's root font size for accessibility."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Style Dictionary"
+    url: "https://amzn.github.io/style-dictionary/"

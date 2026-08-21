@@ -1,0 +1,111 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "vector-logo-drafting"
+display_name: "Vector Logo Drafting & Ideation"
+description: >
+  The core process of translating a brand's concept into a scalable vector 
+  graphic. Focuses on drafting multiple concepts (wordmarks, lettermarks, 
+  pictorial marks) that capture the essence of the startup.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "logo-designer"
+phase: "build"
+applicable_startups:
+  - all
+priority: "high"
+difficulty: "expert"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "We need a logo."
+  - "Design the company mark."
+  - "Create a vector graphic."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Export SVG logo assets."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "company_name"
+      type: "string"
+      description: "The exact text to be included (if it's a wordmark)."
+    - name: "core_metaphor"
+      type: "string"
+      description: "The feeling or object that represents the company (e.g., 'Speed', 'A Shield')."
+  optional:
+    - name: "logo_type"
+      type: "string"
+      description: "Wordmark vs Abstract Mark vs Mascot."
+      default: "Combination Mark"
+
+outputs:
+  files:
+    - path: "design/logo/v1-concepts.pdf"
+      description: "The initial 3 distinct logo directions."
+  artifacts:
+    - "A finalized, perfectly kerned Adobe Illustrator (.ai) file."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "N/A"
+  manual:
+    - "The logo is highly memorable and instantly recognizable even when stripped of all color (pure black and white)."
+    - "The founders choose one of the initial 3 directions without requesting a complete restart."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+
+safety_notes:
+  - "Stock Vectors: NEVER use a modified stock vector (from Shutterstock or Freepik) as a startup's primary logo. The startup cannot trademark a stock vector, and if they try, they will be sued by the original artist. A logo must be 100% original IP."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Adobe Illustrator / Figma"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "The Black and White Test"
+    tasks:
+      - "Always design the first draft in pure black and white. If a logo relies on a complex gradient to look good, it is a weak logo. It must work as a solid shape first."
+  - step: "Silhouette and Recognition"
+    tasks:
+      - "The shape must be instantly recognizable in a fraction of a second. (Think of the Nike Swoosh or the Apple logo). Avoid overly complex, highly detailed illustrations."
+  - step: "Typography Integration (Kerning)"
+    tasks:
+      - "If the logo includes text, you MUST manually kern the letters. Never rely on the font's default spacing, especially for massive headlines. The space between 'A' and 'V' must be optically adjusted to match the space between 'H' and 'I'."
+  - step: "The Concept Presentation"
+    tasks:
+      - "Do not just email a PNG to the CEO. Present the logo in context. Photoshop it onto a business card, a T-shirt, and a mobile app header. Clients cannot visualize how it will look in the real world."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Designing in Photoshop (Raster). A logo must NEVER be a PNG or JPG as its source file. It must be a Vector (SVG, AI, EPS) so it can be scaled up to the size of a billboard without losing resolution."
+  - "Literal interpretations. If the startup sells airplane parts, the logo does not have to be a literal airplane. It can be an abstract shape representing 'lift' or 'forward motion'."
+
+best_practices:
+  - "The 'Squint' and 'Blur' tests. Shrink the logo down to 10 pixels. If it turns into a muddy blob, simplify it."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Paul Rand: A Designer's Art"
+    url: "https://www.paul-rand.com/"

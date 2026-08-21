@@ -1,0 +1,111 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "llm-safety-guardrails"
+display_name: "LLM Safety, Guardrails & Responsible AI"
+description: >
+  Implements safety guardrails, content filtering, prompt injection defense,
+  and responsible AI practices for LLM-powered applications. Covers input
+  validation, output filtering, rate limiting, and compliance with AI safety
+  regulations.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "llm-engineer"
+phase: "build"
+applicable_startups:
+  - ai
+priority: "critical"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "We need safety guardrails for our LLM."
+  - "Prevent prompt injection attacks."
+  - "Filter harmful content from LLM outputs."
+  - "Make our AI application safe and responsible."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Implement guardrails."
+  - "Set up content filtering."
+  - "Test for prompt injection vulnerabilities."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "llm_use_case"
+      type: "string"
+      description: "What the LLM is being used for (chat, content generation, code, etc.)."
+    - name: "safety_requirements"
+      type: "string"
+      description: "Specific safety requirements (industry, audience, jurisdiction)."
+  optional:
+    - name: "guardrail_framework"
+      type: "string"
+      description: "Guardrails framework to use."
+      default: "Guardrails AI or NVIDIA NeMo Guardrails"
+
+outputs:
+  files:
+    - path: "ai/llm/safety-architecture.md"
+      description: "Safety system design and guardrail documentation"
+  artifacts:
+    - "A production-ready guardrail system with monitoring dashboards"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Threat Modeling"
+    tasks:
+      - "Identify attack vectors: prompt injection, jailbreaking, data extraction, denial of service."
+      - "Map safety requirements based on users (adults, minors) and jurisdiction (EU AI Act, GDPR)."
+      - "Document acceptable use policy and content moderation guidelines."
+  - step: "Input Guardrails"
+    tasks:
+      - "Implement input validation to detect and block prompt injection attempts."
+      - "Set up rate limiting and token budgets per user/session."
+      - "Add PII detection to prevent sensitive data from being sent to the LLM."
+      - "Classify inputs by risk level and route to appropriate moderation."
+  - step: "Output Guardrails"
+    tasks:
+      - "Implement output filtering for harmful content (hate, violence, sexual, self-harm)."
+      - "Add factual grounding checks — flag statements not supported by provided context."
+      - "Set up output length limits and format enforcement."
+      - "Implement refusal tracking to detect when the model should have declined but didn't."
+  - step: "Monitoring & Incident Response"
+    tasks:
+      - "Log all LLM interactions with safety classifications for audit trails."
+      - "Set up real-time dashboards for safety violations and refusal rates."
+      - "Define incident response playbook for AI safety breaches."
+      - "Conduct regular red-teaming exercises to find vulnerabilities."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Relying solely on the LLM's built-in safety training — it's not enough."
+  - "Applying overly aggressive filtering that breaks legitimate use cases."
+  - "Not logging safety events — you can't improve what you don't measure."
+  - "Treating safety as a one-time setup rather than continuous improvement."
+best_practices:
+  - "Use layered defense: input filtering + guardrails framework + output filtering + human review."
+  - "Test with adversarial inputs (red-teaming) before going to production."
+  - "Be transparent with users about AI safety measures and limitations."
+  - "Keep up with evolving AI safety regulations (EU AI Act, Executive Order)."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "NVIDIA NeMo Guardrails"
+    url: "https://github.com/NVIDIA/NeMo-Guardrails"
+  - title: "OWASP Top 10 for LLM Applications"
+    url: "https://owasp.org/www-project-top-10-for-llm-applications/"

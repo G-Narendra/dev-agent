@@ -1,0 +1,82 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "churn-prevention"
+display_name: "Churn Risk Identification & Prevention"
+description: >
+  Analyze usage data to identify 'at-risk' accounts before they cancel, and execute
+  proactive outreach to re-engage them and demonstrate value.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "customer-success-manager"
+phase: "operations"
+applicable_startups: 
+  - saas
+  - enterprise
+priority: "mvp"
+difficulty: "advanced"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Risk Identification"
+    tasks:
+      - "Define 'At Risk' (e.g., login frequency drops by 50% over 30 days)."
+      - "Set up an automated alert (e.g., Slack notification) when a high-value account hits the risk threshold."
+  - step: "Rescue Playbook"
+    tasks:
+      - "Draft a personalized outreach email offering a free 'account optimization' review."
+      - "During the call, identify the friction point (e.g., 'We don't know how to integrate the API')."
+  - step: "Resolution"
+    tasks:
+      - "Assign an onboarding specialist to hand-hold the customer through the friction point."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Offering massive discounts to save a churning customer. If they aren't getting value, a cheaper price won't fix it; it just delays the inevitable."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Churn Prevention process"
+  - "How do I handle churn prevention?"
+  - "Implement churn prevention"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the churn prevention process"
+  optional:
+    - name: "data_source"
+      type: "string"
+      description: "Source of data to analyze"
+      default: "Internal data"
+
+outputs:
+  files:
+    - path: "outputs/churn-prevention.md"
+      description: "Results of the churn prevention process"
+  artifacts:
+    - "Completed churn prevention deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

@@ -1,0 +1,115 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "stackoverflow-research"
+display_name: "Stack Overflow Technical Pain Point Mining"
+description: >
+  Mines Stack Overflow and Stack Exchange for real technical pain points,
+  unanswered questions, and recurring problems. Every unanswered or highly-viewed
+  question represents a product opportunity. Stack Overflow's voting system
+  naturally prioritizes the problems developers care about most.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "utility"
+phase: "all"
+applicable_startups:
+  - developer-tools
+  - saas
+  - all
+priority: "high"
+difficulty: "intermediate"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "What are developers struggling with?"
+  - "Find unanswered questions about X."
+  - "Search Stack Overflow for this problem."
+  - "What's the most common question about this tech?"
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Search Stack Overflow via Google or API."
+  - "Extract high-value unanswered questions."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "technology_or_problem"
+      type: "string"
+      description: "The tech or domain (e.g., 'Docker networking', 'React state management')."
+  optional:
+    - name: "search_focus"
+      type: "string"
+      description: "'unanswered' (product opportunities), 'most-viewed' (common pain), 'recent' (emerging issues)."
+      default: "unanswered"
+
+outputs:
+  files:
+    - path: "research/stackoverflow-pain-points-{topic}.md"
+      description: "A categorized report of real technical pain points."
+  artifacts:
+    - "Top 10 unanswered questions with view counts (market demand indicators)."
+    - "Direct quotes from developers describing their frustration."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "N/A"
+  manual:
+    - "Found at least 5 high-view-count unanswered questions that validate a product opportunity."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "network"
+
+safety_notes:
+  - "Stack Exchange API has rate limits (300 per day per IP without a key). Use Google search as a primary method for speed."
+  - "Stack Overflow skews toward beginner/intermediate problems. Advanced users often use mailing lists or Discord instead."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Google Search (site:stackoverflow.com)"
+      install: "N/A"
+  alternatives:
+    - name: "Stack Exchange API"
+      when: "Automated large-scale analysis."
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Find Unanswered Questions (Product Goldmine)"
+    tasks:
+      - "Use Google: `site:stackoverflow.com {technology} unanswered views:1000`"
+      - "Stack Exchange API: `api.stackexchange.com/2.3/questions/unanswered?order=desc&sort=votes&tagged={tag}`"
+      - "Focus on questions with 1000+ views and 0 answers. These are validated unmet needs."
+  - step: "Find Most-Viewed Questions (Common Pain)"
+    tasks:
+      - "Search: `site:stackoverflow.com/questions {technology} top`"
+      - "The most-viewed questions reveal the most common use cases and pain points."
+      - "Read the answers too — if the accepted answer is a hack/workaround, there's a product opportunity."
+  - step: "Analyze Related Tags"
+    tasks:
+      - "Check what tags are commonly paired with the main topic (e.g., 'react' + 'performance')."
+      - "A rising tag with few answers is an emerging market signal."
+  - step: "Check Other Stack Exchange Sites"
+    tasks:
+      - "Don't limit to Stack Overflow. Check ServerFault (ops), SuperUser (power users), and domain-specific Stack Exchanges."
+      - "Use: `site:serverfault.com {technology}` or `site:softwareengineering.stackexchange.com {topic}`"
+  - step: "Compile Report"
+    tasks:
+      - "Group findings by: Unanswered (opportunity), Workaround-needed (product gap), Emerging (new trend)."
+      - "Include view counts, vote counts, and direct quotes for each finding."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Assuming all unanswered questions are good products. Some are just impossible or niche."
+  - "Looking only at the top-voted questions. The 'newest' tab reveals emerging problems before they hit the top."
+
+best_practices:
+  - "The best product signals are questions with: (1) 1000+ views, (2) 0 answers, (3) A 'bounty' offered. That means someone literally put money on the table for a solution."
+  - "Check the 'related' sidebar on each question — it shows variations of the same problem."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Stack Exchange API Documentation"
+    url: "https://api.stackexchange.com/docs"
+  - title: "Google Search Operators for Stack Overflow"
+    url: "https://support.google.com/websearch/answer/2466433"

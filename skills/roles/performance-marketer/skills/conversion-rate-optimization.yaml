@@ -1,0 +1,115 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "conversion-rate-optimization"
+display_name: "Conversion Rate Optimization (CRO)"
+description: >
+  Systematically improves website and landing page conversion rates through
+  data-driven experimentation. Covers funnel analysis, A/B testing, user
+  behavior analysis, and iterative improvements.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "performance-marketer"
+phase: "growth"
+applicable_startups:
+  - all
+priority: "mvp"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Improve our conversion rates."
+  - "Optimize the purchase funnel."
+  - "Run CRO experiments."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Analyze conversion funnel."
+  - "Design CRO experiment."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "conversion_funnel"
+      type: "file"
+      description: "Current conversion funnel with drop-off points."
+    - name: "traffic_sources"
+      type: "string"
+      description: "Where traffic comes from (paid, organic, direct)."
+  optional:
+    - name: "cro_tool"
+      type: "string"
+      description: "Optimizely, VWO, Google Optimize, or custom."
+      default: "VWO or Google Optimize"
+
+outputs:
+  files:
+    - path: "marketing/cro/cro-experiment-plan.md"
+      description: "CRO experiment design and tracking plan"
+  artifacts:
+    - "Statistically significant CRO improvements with validated changes"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Funnel Analysis"
+    tasks:
+      - "Map the complete conversion funnel: visit → landing page → signup/CTA → activation/purchase."
+      - "Identify the biggest drop-off point — the one improvement that will have the most impact."
+      - "Segment funnel by traffic source: are some sources converting better than others?"
+      - "Check for technical issues: page load speed, mobile rendering, broken links, form errors."
+  - step: "User Behavior Analysis"
+    tasks:
+      - "Install session recording (Hotjar, FullStory, Clarity) to watch real user behavior."
+      - "Analyze heatmaps: where are users clicking, scrolling, and hesitating?"
+      - "Look for 'rage clicks' and 'dead clicks' — users trying to interact with non-interactive elements."
+      - "Run on-page surveys to understand why users aren't converting."
+  - step: "Experiment Design"
+    tasks:
+      - "Form hypotheses based on data: 'Changing the CTA from green to blue will increase clicks by 10%.'"
+      - "Prioritize experiments using ICE score: Impact × Confidence × Ease."
+      - "Design experiment variants: control (current) vs. treatment (new version)."
+      - "Define success metrics: primary (conversion rate), secondary (engagement, quality), guardrail (revenue)."
+  - step: "Testing & Validation"
+    tasks:
+      - "Run A/B tests until statistical significance (95% confidence, minimum 1 full business cycle)."
+      - "Monitor for novelty effects — users may behave differently with a new design initially."
+      - "Segment results by device, traffic source, and user type for deeper insights."
+      - "Document every experiment: hypothesis, results, decisions, and learnings."
+  - step: "Iterate & Scale"
+    tasks:
+      - "Implement winning variations site-wide."
+      - "Build on learnings: iterate further on areas with the most potential."
+      - "Create a CRO roadmap: planned experiments for the next quarter."
+      - "Share learnings across marketing, product, and design teams."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Testing changes that are too small to matter (e.g., changing a button by 2px)."
+  - "Making decisions based on non-statistically significant results."
+  - "Testing without a hypothesis — just guessing what might work."
+  - "Only testing copy and design, never testing pricing or value proposition."
+best_practices:
+  - "The biggest CRO gains come from removing friction, not adding persuasion."
+  - "Start with pages that have the most traffic so you can reach significance faster."
+  - "A bad test that kills conversion is still valuable — you learned what not to do."
+  - "CRO is a continuous process, not a one-time project."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

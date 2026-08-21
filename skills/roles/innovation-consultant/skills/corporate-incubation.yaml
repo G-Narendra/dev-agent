@@ -1,0 +1,79 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "corporate-incubation"
+display_name: "Internal Skunkworks & Incubation"
+description: >
+  Design and launch an internal incubator that operates with startup velocity, insulated 
+  from corporate bureaucracy, to build the company's next horizon products.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "innovation-consultant"
+phase: "growth"
+applicable_startups: 
+  - enterprise
+priority: "mvp"
+difficulty: "expert"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Structure Setup"
+    tasks:
+      - "Secure ring-fenced funding from the CEO that cannot be reallocated by middle management."
+      - "Exempt the incubation team from standard corporate IT and HR policies to maximize speed."
+  - step: "Team Selection"
+    tasks:
+      - "Recruit entrepreneurial 'intrapreneurs' from within the company who are frustrated by red tape."
+  - step: "Execution Metrics"
+    tasks:
+      - "Measure success using startup metrics (Customer Interviews, Prototype Iterations) rather than standard corporate ROI models."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Requiring the innovation team to get a 10-page legal approval to launch a simple landing page, instantly destroying the agility you were hired to create."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Corporate Incubation process"
+  - "How do I handle corporate incubation?"
+  - "Implement corporate incubation"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the corporate incubation process"
+  optional:
+    - name: "N/A"
+      type: "string"
+      description: "No optional inputs needed."
+
+outputs:
+  files:
+    - path: "outputs/corporate-incubation.md"
+      description: "Results of the corporate incubation process"
+  artifacts:
+    - "Completed corporate incubation deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

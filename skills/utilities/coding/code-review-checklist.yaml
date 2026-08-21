@@ -1,0 +1,94 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "code-review-checklist"
+display_name: "Universal Code Review & Security Gate"
+description: >
+  A universal pre-commit checklist that enforces security, performance, 
+  and maintainability standards across any language. Acts as an automated 
+  Principal Engineer reviewing a junior's Pull Request.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "utility"
+phase: "all"
+applicable_startups:
+  - all
+priority: "critical"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Review this PR."
+  - "Check this code for security issues."
+  - "Are there any performance bottlenecks?"
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Run static analysis."
+  - "Generate review comments."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "diff"
+      type: "string"
+      description: "The code changes being proposed."
+  optional:
+    - name: "framework"
+      type: "string"
+      description: "React, Express, Django, etc."
+      default: "General"
+
+outputs:
+  files:
+    - path: "review/PR-123-comments.md"
+      description: "Actionable items for the developer to fix."
+  artifacts:
+    - "A Pass/Fail grade for the PR."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "N/A"
+  manual:
+    - "The review catches an N+1 query or a potential SQL injection that automated linters missed."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+
+safety_notes:
+  - "Do not merge code containing hardcoded secrets (API keys, passwords, private SSH keys) under ANY circumstances."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "SonarQube / Semgrep"
+      install: "brew install semgrep"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Security Check"
+    tasks:
+      - "Are inputs validated and sanitized before hitting the database?"
+      - "Are there any hardcoded secrets?"
+      - "Is authorization checked, not just authentication?"
+  - step: "Performance Check"
+    tasks:
+      - "Is this making an API call or database query inside a loop (N+1 problem)?"
+      - "Are large datasets being loaded entirely into memory instead of paginated or streamed?"
+  - step: "Resilience Check"
+    tasks:
+      - "What happens if the third-party API is down? Is there a timeout and fallback?"
+      - "Are exceptions caught and logged with enough context to debug?"
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Nitpicking over code style (spaces vs tabs) instead of catching architectural flaws. Let Prettier/Linters handle style."
+  - "Approving a massive 2,000-line PR with 'Looks good to me'. Massive PRs must be broken down."
+
+best_practices:
+  - "Frame review comments as questions ('What happens if `user` is null here?') rather than demands, to foster psychological safety."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Google Engineering Practices: Code Review"
+    url: "https://google.github.io/eng-practices/review/"

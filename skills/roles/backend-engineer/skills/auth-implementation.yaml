@@ -1,0 +1,114 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "auth-implementation"
+display_name: "Secure Authentication & Authorization Implementation"
+description: >
+  Implements end-to-end user authentication (JWT or Sessions), OAuth2 flows, 
+  and Role-Based Access Control (RBAC). Secures cookies against XSS/CSRF and 
+  prevents brute force attacks.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "backend-engineer"
+phase: "build"
+applicable_startups:
+  - all
+priority: "critical"
+difficulty: "expert"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Set up user login."
+  - "Implement authentication."
+  - "Secure the API routes."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Generate JWT secret."
+  - "Configure Passport.js or NextAuth."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "auth_strategy"
+      type: "string"
+      description: "JWT vs Session cookies."
+  optional:
+    - name: "auth_provider"
+      type: "string"
+      description: "Custom built, Auth0, Supabase Auth, NextAuth."
+      default: "NextAuth"
+
+outputs:
+  files:
+    - path: "src/middleware/auth.ts"
+      description: "Route protection middleware."
+    - path: "src/controllers/authController.ts"
+      description: "Login/Register logic."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "Attempting to access a protected route without a token returns HTTP 401 Unauthorized."
+  - "Attempting to access an admin route as a normal user returns HTTP 403 Forbidden."
+manual:
+  - "Authentication cookies cannot be accessed via JavaScript in the browser."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+  - "environment_variable"
+
+safety_notes:
+  - "Password Hashing: Never store plaintext passwords. Always use Argon2 or bcrypt with a salt factor of at least 12."
+  - "Token Storage: Never store JWTs in localStorage. They are vulnerable to XSS. Store them in HTTP-only, Secure cookies."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Auth0 / Supabase / Clerk"
+      install: "N/A"
+  alternatives:
+    - name: "Passport.js / NextAuth"
+      when: "Building custom authentication tied to your own database."
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Cookie Configuration"
+    tasks:
+      - "Set cookies to `HttpOnly: true` (prevents XSS), `Secure: true` (HTTPS only), and `SameSite: Lax` or `Strict` (prevents CSRF)."
+  - step: "JWT Strategy (If not using sessions)"
+    tasks:
+      - "Issue short-lived Access Tokens (e.g., 15 mins) and long-lived, rotatable Refresh Tokens (e.g., 7 days)."
+      - "Store the Refresh Token in the database so it can be revoked remotely."
+  - step: "Middleware Protection"
+    tasks:
+      - "Write an `isAuthenticated` middleware that verifies the token signature and injects `req.user`."
+      - "Write a `hasRole(role)` middleware for authorization (HTTP 403)."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Using a weak, hardcoded JWT secret in code. It must be a cryptographically secure random string loaded from environment variables."
+  - "Returning 'User not found' on a failed login. This enables user enumeration. Always return 'Invalid email or password'."
+
+best_practices:
+  - "Offload Auth: Unless you are an identity company, use a managed provider like Supabase Auth, Clerk, or Auth0. Building auth from scratch is a massive liability."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "OWASP Authentication Cheat Sheet"
+    url: "https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html"

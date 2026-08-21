@@ -1,0 +1,104 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "quote-to-cash-optimization"
+display_name: "Revenue Operations (RevOps) & Quote-to-Cash"
+description: >
+  Fixes the leaks in the revenue funnel. Aligns Marketing, Sales, and CS 
+  tooling so that data flows perfectly from the first website click to 
+  the signed contract and the final invoice payment.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "revenue-operations-manager"
+phase: "growth"
+applicable_startups:
+  - SaaS, Enterprise, B2B
+priority: "critical"
+difficulty: "expert"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Salesforce is a mess."
+  - "How do we generate quotes faster?"
+  - "Marketing leads aren't reaching Sales."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Generate lead routing rules."
+  - "Draft CPQ (Configure, Price, Quote) logic."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "funnel_bottleneck"
+      type: "string"
+      description: "Where is the data breaking?"
+    - name: "current_tech_stack"
+      type: "string"
+      description: "e.g., Marketo -> Salesforce -> Stripe."
+  optional:
+    - name: "sales_team_size"
+      type: "string"
+      description: "How many reps are in the CRM?"
+      default: "10"
+
+outputs:
+  files:
+    - path: "sales/ops/revops_architecture.md"
+      description: "The systemic blueprint for the revenue engine."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "N/A"
+manual:
+  - "The time required to generate an Enterprise contract drops from 3 days to 10 minutes, and CRM data accuracy reaches 99%."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+safety_notes:
+  - "The Dirty Data Cascade: Never allow Sales reps to enter free-text into critical CRM fields (e.g., typing 'Manufacturing', 'mfg', 'Factory' into the Industry field). This destroys all downstream marketing automation and financial reporting. Force strict dropdown menus."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Salesforce / Hubspot / Stripe CPQ"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "The 'Quote to Cash' Pipeline (CPQ)"
+    tasks:
+      - "If an AE has to manually copy/paste prices from an Excel sheet into a Word document to send a contract, mistakes will be made, and deals will stall. Implement a CPQ tool inside Salesforce. Click button -> Auto-generate PDF -> Send via DocuSign."
+  - step: "Strict Lead Routing SLAs"
+    tasks:
+      - "A hot lead goes cold in 5 minutes. Implement automated routing (e.g., LeanData). If a lead matches an existing Enterprise account, route it directly to the assigned AE instantly. If it's a net-new SMB, round-robin it to the SDR team."
+  - step: "Standardize the Sales Stages"
+    tasks:
+      - "Eliminate subjective stages like 'Feeling Good About It'. Define strict exit criteria. Stage 2 (Discovery) CANNOT move to Stage 3 (Demo) unless the 'Economic Buyer' field is filled out. Use Validation Rules in the CRM to physically block reps from advancing."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Creating 50 mandatory fields for Sales reps to fill out. Sales reps are hired to sell, not to do data entry. If you make them fill out 50 fields, they will just type 'N/A' into all of them. Keep mandatory fields under 5, and automate the rest via tools like Clearbit."
+best_practices:
+  - "Establish a 'RevOps Council'. Meet bi-weekly with the VP of Sales, VP of Marketing, and VP of CS. RevOps is the referee. Bring the data: 'Marketing, your MQLs are up 20%, but Sales, your close rate dropped 10%. Why?'"
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "HubSpot: What is Revenue Operations?"
+    url: "https://blog.hubspot.com/sales/revenue-operations"

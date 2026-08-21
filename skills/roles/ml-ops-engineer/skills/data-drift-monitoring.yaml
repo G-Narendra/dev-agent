@@ -1,0 +1,111 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "data-drift-monitoring"
+display_name: "Data Drift & Concept Drift Monitoring"
+description: >
+  Implements monitoring to detect when the statistical properties of the 
+  live production data drift away from the data the model was originally 
+  trained on, causing silent degradation in prediction accuracy.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "ml-ops-engineer"
+phase: "growth"
+applicable_startups:
+  - ai-startups
+priority: "high"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "The model is making weird predictions."
+  - "How do we know if the model is still accurate?"
+  - "Set up Evidently."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Generate drift report."
+  - "Configure KS-test alerts."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "baseline_data"
+      type: "file"
+      description: "The CSV/Parquet file used for training."
+    - name: "current_data"
+      type: "file"
+      description: "The live data collected over the last 7 days."
+  optional:
+    - name: "drift_threshold"
+      type: "string"
+      description: "P-value threshold for alerts."
+      default: "0.05"
+
+outputs:
+  files:
+    - path: "mlops/monitoring/drift-report.html"
+      description: "Visual dashboard of feature drift."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "An alert fires in Slack if the Kolmogorov-Smirnov (KS) test detects significant drift in any of the top 3 most important features."
+manual:
+  - "Data scientists are alerted to retrain the model *before* the business notices a drop in revenue."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+
+safety_notes:
+  - "Do not set the alert sensitivity too high, or you will cause alert fatigue. Focus on 'Concept Drift' (the relationship between features and target changed) rather than harmless covariate drift."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Evidently AI / NannyML"
+      install: "pip install evidently"
+  alternatives:
+    - name: "Custom Prometheus Metrics"
+      when: "Integrating deeply with existing DevOps monitoring."
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Feature Importance Mapping"
+    tasks:
+      - "Identify the top 5 most important features in the model (e.g., using SHAP values). Only set up strict drift alerts for these critical features."
+  - step: "Data Collection (Logging)"
+    tasks:
+      - "Modify the inference API to asynchronously log every incoming request payload (the features) and the model's prediction to a Data Warehouse (e.g., Snowflake)."
+  - step: "Statistical Testing Setup"
+    tasks:
+      - "Run a daily cron job that compares the distribution of the last 7 days of live data against the training dataset baseline using a KS-test or Wasserstein distance."
+  - step: "Alerting"
+    tasks:
+      - "If the P-value drops below 0.05 on a critical feature, trigger a PagerDuty/Slack alert indicating that 'Model Retraining is Required'."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Assuming that a high accuracy score during training means the model will be accurate forever. The real world changes; models degrade instantly."
+best_practices:
+  - "Track 'Ground Truth' if possible. If predicting credit card fraud, you eventually find out if it was actually fraud 30 days later. Join this ground truth back to the predictions to measure actual real-world accuracy."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Evidently AI Documentation"
+    url: "https://docs.evidentlyai.com/"

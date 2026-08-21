@@ -1,0 +1,115 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "docker-containerization"
+display_name: "Docker Containerization & Image Optimization"
+description: >
+  Writes multi-stage Dockerfiles that result in highly optimized, secure, 
+  and minimal production images. Prevents 'works on my machine' issues 
+  by containerizing the entire application environment.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "devops-engineer"
+phase: "build"
+applicable_startups:
+  - all
+priority: "critical"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Containerize the app."
+  - "Write the Dockerfile."
+  - "Why is our Docker image 2GB?"
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "docker build -t myapp:latest ."
+  - "docker-compose up -d"
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "tech_stack"
+      type: "string"
+      description: "Node.js, Python, Go, Java."
+  optional:
+    - name: "base_image"
+      type: "string"
+      description: "Alpine, Debian slim, Distroless."
+      default: "Alpine"
+
+outputs:
+  files:
+    - path: "Dockerfile"
+      description: "The production multi-stage build instructions."
+    - path: ".dockerignore"
+      description: "Files excluded from the build context."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "The final image size is under 300MB."
+  - "Trivy container scan reports 0 critical vulnerabilities."
+manual:
+  - "Developers can build and run the app locally with zero local host dependencies installed (except Docker)."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+  - "network"
+
+safety_notes:
+  - "Never run the application as the `root` user inside the container. Always create a dedicated non-root user (e.g., `node` or `appuser`) in the Dockerfile."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Docker"
+      install: "N/A"
+  alternatives:
+    - name: "Podman"
+      when: "Running in highly secure, daemonless environments."
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: ".dockerignore"
+    tasks:
+      - "Create a `.dockerignore` file. Crucial exclusions: `node_modules`, `.git`, `.env`, and `dist`. This speeds up the build context transfer by 10x."
+  - step: "Multi-Stage Build"
+    tasks:
+      - "Stage 1 (Builder): Install ALL dependencies (including devDependencies), compile TypeScript/Go/Java to binaries or pure JS."
+      - "Stage 2 (Runner): Start from a fresh, minimal base image (e.g., `alpine` or `distroless`). Copy ONLY the compiled artifacts and production dependencies from Stage 1."
+  - step: "Layer Caching Optimization"
+    tasks:
+      - "Copy `package.json` and run `npm install` BEFORE copying the rest of the source code. This ensures the dependency installation step is cached even if source files change."
+  - step: "Security and User"
+    tasks:
+      - "Add `USER node` (or equivalent) before the `CMD` instruction to drop root privileges."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Using `ubuntu:latest` as a base image. It is massive (hundreds of MBs) and contains huge attack surfaces. Use `alpine` or language-specific `-slim` variants."
+  - "Copying `.env` files into the Docker image. Secrets must be injected at runtime via the environment, never baked into the immutable image."
+
+best_practices:
+  - "Pin base images to specific SHAs, not just tags. `node:18-alpine` can still change underneath you. Use `node:18-alpine@sha256:...` for absolute determinism."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Docker Multi-Stage Builds"
+    url: "https://docs.docker.com/build/building/multi-stage/"

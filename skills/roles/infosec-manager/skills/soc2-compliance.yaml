@@ -1,0 +1,80 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "soc2-compliance"
+display_name: "SOC 2 Type II Compliance & Auditing"
+description: >
+  Design and implement the technical and organizational controls required to pass a 
+  SOC 2 Type II audit, enabling enterprise sales.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "infosec-manager"
+phase: "growth"
+applicable_startups: 
+  - b2b
+  - enterprise
+priority: "high"
+difficulty: "expert"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Access Controls"
+    tasks:
+      - "Implement Single Sign-On (SSO) and mandatory MFA for every single tool the company uses (GitHub, AWS, Slack). No exceptions."
+  - step: "Change Management"
+    tasks:
+      - "Enforce Branch Protection rules in GitHub: Require at least 1 approving review and passing CI tests before any code can be merged to main."
+  - step: "Continuous Auditing"
+    tasks:
+      - "Use a platform like Vanta or Drata to continuously monitor infrastructure compliance in real-time, instantly flagging if an S3 bucket becomes public."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Manually taking screenshots of AWS settings the night before the auditor arrives, hoping they don't notice that the database was publicly accessible all year."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Soc2 Compliance process"
+  - "How do I handle soc2 compliance?"
+  - "Implement soc2 compliance"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the soc2 compliance process"
+  optional:
+    - name: "code_repository"
+      type: "string"
+      description: "Path to the code repository"
+      default: "./"
+
+outputs:
+  files:
+    - path: "outputs/soc2-compliance.md"
+      description: "Results of the soc2 compliance process"
+  artifacts:
+    - "Completed soc2 compliance deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

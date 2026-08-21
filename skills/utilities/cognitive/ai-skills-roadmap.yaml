@@ -1,0 +1,172 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "ai-skills-roadmap"
+display_name: "AI Skills Roadmap for the Vibe Coding Era"
+description: >
+  Maps the complete learning path a developer needs to thrive in the 
+  2025-2026 AI-assisted development paradigm. The bottleneck has shifted 
+  from "can you write code" to "can you communicate intent, review AI 
+  output, and orchestrate agent workflows." This skill defines the 6 
+  progressive skill levels: from Prompt Engineering fundamentals to 
+  Agent Orchestration mastery, with concrete checkpoints at each level.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "utility"
+phase: "all"
+applicable_startups:
+  - all
+priority: "high"
+difficulty: "intermediate"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "What skills do I need for AI development?"
+  - "Map my AI development learning path."
+  - "What should I learn to be an AI engineer?"
+  - "Skills roadmap for vibe coding."
+  - "How do I level up my AI development skills?"
+  - "What comes after prompt engineering?"
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Generate AI skills roadmap."
+  - "Assess current skill level."
+  - "Recommend next skill to learn."
+  - "Create learning plan for AI development."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "current_level"
+      type: "string"
+      description: "Current skill level (beginner, prompt-engineer, context-engineer, ai-code-reviewer, security-auditor, agent-orchestrator)."
+  optional:
+    - name: "target_role"
+      type: "string"
+      description: "Target role (solo-founder, ai-engineer, fullstack-dev, technical-lead)."
+      default: "solo-founder"
+    - name: "time_investment"
+      type: "string"
+      description: "Time available per day (1-hour, 3-hours, full-time)."
+      default: "3-hours"
+
+outputs:
+  files:
+    - path: "docs/ai-skills-roadmap.md"
+      description: "Personalized learning roadmap with estimated time to each level."
+  artifacts:
+    - "Current skill level assessment."
+    - "Next 3 skills to learn with concrete resources."
+    - "Estimated time to reach each milestone."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "N/A"
+  manual:
+    - "The developer can communicate intent to an AI agent and get the expected output 80% of the time."
+    - "The developer can identify security vulnerabilities in AI-generated code."
+    - "The developer can orchestrate multiple AI agents for complex multi-step workflows."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "Skill levels are directional, not prescriptive. Every developer's path is different."
+  - "The most dangerous skill gap is between Level 2 and Level 3: developers start trusting AI output too much before they learn to review it."
+  - "Context Engineering (Level 2) is the most leveraged skill — improving context quality improves ALL AI interactions."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Cursor (AI-Native IDE)"
+      install: "Download from cursor.com"
+      url: "https://cursor.com"
+  alternatives:
+    - name: "Claude Code (Terminal Agent)"
+      install: "npx @anthropic/claude-code"
+      url: "https://docs.anthropic.com/en/docs/claude-code"
+    - name: "Aider (AI Pair Programming)"
+      install: "pip install aider-chat (in venv)"
+      url: "https://github.com/Aider-AI/aider"
+    - name: "Promptfoo (Prompt Testing)"
+      install: "npx promptfoo"
+      url: "https://github.com/promptfoo/promptfoo"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Level 0 — Begin Prompt Engineering Fundamentals"
+    tasks:
+      - "Learn the structure of a good prompt: Role + Task + Context + Format + Constraints."
+      - "Practice the RTF framework (Role, Task, Format) — the minimum viable prompt structure."
+      - "Learn to iterate: never accept the first output. Refine by adding missing context or constraints."
+      - "Learn to use negatives: 'Don't use X. Don't do Y.' is more effective than 'Do X correctly.'"
+      - "Checkpoint: You can get a simple function generated with one prompt refinement."
+  - step: "Level 1 — Master Context Engineering"
+    tasks:
+      - "Read `utilities/cognitive/context-engineering.yaml` — this is THE meta-skill."
+      - "Learn to write a CONTEXT.md file for a project: security rules first, then tech stack, then conventions, then negative examples."
+      - "Practice: Create a context file for a simple project (e.g., a TODO API). Generate code with and without context. Compare quality."
+      - "Learn to use project-level AI configuration: Cursor's .cursorrules, Claude Code's CLAUDE.md."
+      - "Checkpoint: AI-generated code matches your project conventions >80% of the time."
+  - step: "Level 2 — Become an AI Code Reviewer"
+    tasks:
+      - "Learn to spot common AI-generated code issues: hardcoded secrets, SQL injection patterns, missing error handling, over-engineering."
+      - "Run automated checks after every AI generation: `rg 'password|secret|api_key'`, `npm audit`, linters."
+      - "Learn to read AI-generated diffs critically — the AI may add unnecessary abstractions or delete working code."
+      - "Practice the review loop: Generate → Lint → Review → Refine → Re-lint."
+      - "Learn to switch models for review: the model that wrote the code is worst at reviewing it."
+      - "Checkpoint: You catch >90% of security issues and >80% of logic errors in AI-generated code."
+  - step: "Level 3 — Master AI Security Auditing"
+    tasks:
+      - "Learn OWASP Top 10 and how AI-generated code commonly violates each one."
+      - "Learn to audit AI-generated authentication systems, payment flows, and database access layers."
+      - "Practice: Generate a 'payment processing' feature with AI. Find all security flaws manually."
+      - "Set up automated security scanning in CI/CD: SAST tools, dependency scanning, secret detection."
+      - "Learn to write 'security-first' context files that prevent the AI from generating vulnerable code."
+      - "Checkpoint: You can deploy AI-generated code to production with confidence in its security."
+  - step: "Level 4 — Learn Agent Orchestration"
+    tasks:
+      - "Learn to design multi-agent workflows: Planner agent → Coder agent → Reviewer agent → Deployer agent."
+      - "Learn to use agent frameworks: LangGraph (most mature), CrewAI (simplest), or AutoGen (Microsoft)."
+      - "Learn MCP server configuration: give agents access to databases, browsers, filesystems via MCP."
+      - "Practice: Build a 3-agent system that plans, codes, and reviews a full-stack feature."
+      - "Learn to set up agent observability: logging, monitoring, and debugging agent decision chains."
+      - "Checkpoint: You can design and deploy a multi-agent system that autonomously builds features."
+  - step: "Level 5 — Master the Full Stack (Prompt → Production)"
+    tasks:
+      - "Integrate ALL skills: Context Engineering + Code Review + Security Audit + Agent Orchestration."
+      - "Build a complete 'AI development pipeline' that takes a feature request → reviewed code → deployed."
+      - "Learn to evaluate and choose between AI tools for different tasks (Claude Code vs Cursor vs Aider vs Cline)."
+      - "Develop 'intuition' for when to use AI and when to write code manually (AI excels at patterns, humans excel at novel problems)."
+      - "Teach others: the best way to master a skill is to explain it."
+      - "Checkpoint: You can build and ship a production application 10x faster than without AI, with equal or better quality."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Skipping directly to agent orchestration (Level 4) without mastering context engineering (Level 1) — your agents will produce garbage."
+  - "Trusting AI-generated code without review at any level — even Level 5 masters never skip code review."
+  - "Learning skills in isolation — context engineering without security auditing is dangerous."
+  - "Assuming 'prompt engineering' is the only skill needed — it's just the first level of 6."
+
+best_practices:
+  - "Progress through levels sequentially — each level builds on the previous one."
+  - "The highest-leverage skill for a solo founder: Context Engineering (Level 1). It improves ALL your AI interactions."
+  - "The highest-leverage skill for a team lead: AI Code Review (Level 2). It prevents your team from shipping bad AI-generated code."
+  - "The most underrated skill: AI Security Auditing (Level 3). Most developers never learn this and pay for it later."
+  - "Practice every day. AI tools evolve fast, but the meta-skills (communication, review, security, orchestration) are permanent."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Andrej Karpathy — Vibe Coding Origin"
+    url: "https://x.com/karpathy/status/1886192184808149383"
+  - title: "IBM — What is Vibe Coding?"
+    url: "https://www.ibm.com/think/topics/vibe-coding"
+  - title: "OWASP Top 10 — Web Security Risks"
+    url: "https://owasp.org/www-project-top-ten/"
+  - title: "Promptfoo — Evaluate AI Prompts"
+    url: "https://github.com/promptfoo/promptfoo"
+  - title: "LangGraph — Multi-Agent Orchestration"
+    url: "https://github.com/langchain-ai/langgraph"
+  - title: "Best AI Coding Tools Reddit Recommends (2026)"
+    url: "https://diyai.io/ai-tools/reddit/best-ai-coding-tools-on-reddit/"

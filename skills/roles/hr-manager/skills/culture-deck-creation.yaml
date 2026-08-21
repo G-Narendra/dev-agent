@@ -1,0 +1,105 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "culture-deck-creation"
+display_name: "Culture Deck & Core Values Definition"
+description: >
+  Drafts the foundational Culture Deck (inspired by Netflix). Translates vague 
+  platitudes like 'Integrity' into concrete, actionable behaviors that guide 
+  hiring, firing, and daily decision-making.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "hr-manager"
+phase: "planning"
+applicable_startups:
+  - all
+priority: "high"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "We need to define our culture."
+  - "Write our core values."
+  - "Create the company handbook."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Draft core values."
+  - "Generate interview questions for culture fit."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "founder_vision"
+      type: "string"
+      description: "The raw vision from the founders."
+  optional:
+    - name: "work_environment"
+      type: "string"
+      description: "Remote, Hybrid, In-Office."
+      default: "Remote"
+
+outputs:
+  files:
+    - path: "hr/culture/core-values.md"
+      description: "The documented company values."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "N/A"
+manual:
+  - "Employees actively use the core values in daily meetings to settle debates (e.g., 'Let's use our *Bias for Action* value and just ship it')."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "Do not copy another company's culture deck. If you write 'We only hire A-players' but refuse to pay A-player salaries, the culture deck becomes a joke."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Notion / Google Slides"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Ditch the Platitudes"
+    tasks:
+      - "Remove words like 'Integrity' or 'Excellence'. Enron had 'Integrity' chiseled in marble in their lobby. Replace them with actionable behaviors."
+  - step: "Define the Behaviors"
+    tasks:
+      - "Example: Instead of 'Honesty', use 'Radical Candor: We give constructive feedback directly to each other, never behind backs.'"
+  - step: "The Anti-Values"
+    tasks:
+      - "Define what the company is explicitly NOT. E.g., 'We are a sports team, not a family. We cut underperformers to win championships.'"
+  - step: "Interview Integration"
+    tasks:
+      - "For each value, draft a specific interview question to test for it. E.g., for 'Bias for Action', ask: 'Tell me about a time you made a decision without waiting for your manager's approval.'"
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Thinking that ping-pong tables and free snacks are 'Culture'. Culture is how the company behaves when a crisis hits."
+best_practices:
+  - "Have the CEO present the Culture Deck to every single new hire during their first week. It must come from the top."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Netflix Culture Deck"
+    url: "https://jobs.netflix.com/culture"

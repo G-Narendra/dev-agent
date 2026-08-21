@@ -1,0 +1,111 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "contract-auditing"
+display_name: "Smart Contract Security Auditing"
+description: >
+  Performs rigorous security reviews of smart contracts before they are 
+  deployed to Mainnet. Identifies Reentrancy, Front-Running (MEV), and 
+  Integer Overflow vulnerabilities that could result in millions of dollars lost. Covers key patterns to avoid common pitfalls like documenting compliance controls only at audit time -- contin, and provides actionable best practices for production-ready results.
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "smart-contract-engineer"
+phase: "operations"
+applicable_startups:
+  - Web3, Crypto, DeFi
+priority: "critical"
+difficulty: "expert"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Audit this staking contract."
+  - "Are we safe from flash loans?"
+  - "Run Slither on the codebase."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Run static analysis."
+  - "Draft vulnerability report."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "contract_files"
+      type: "string"
+      description: "Path to the .sol files."
+  optional:
+    - name: "tvl_estimate"
+      type: "string"
+      description: "How much money will this contract hold?"
+      default: "$1M+"
+
+outputs:
+  files:
+    - path: "audits/internal_audit_v1.md"
+      description: "The prioritized list of vulnerabilities found."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "Slither and Mythril static analysis tools return zero high-severity warnings."
+manual:
+  - "No funds are lost or stolen after 12 months of live production on Mainnet."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "The Price Oracle Trap: Never rely on a decentralized exchange (like Uniswap) to determine the price of an asset within a single block. A hacker can use a Flash Loan to manipulate the price, trick your contract, and drain the funds. Use Chainlink."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Slither / Echidna"
+      install: "pip3 install slither-analyzer"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Static Analysis"
+    tasks:
+      - "Run automated tools like Slither to instantly catch common flaws like unprotected `selfdestruct`, uninitialized state variables, and shadowing."
+  - step: "Access Control Review"
+    tasks:
+      - "Verify that critical functions (like `withdrawAdminFunds()` or `upgradeContract()`) are strictly protected by `onlyOwner` modifiers and cannot be called by regular users."
+      - "Implement rate limiting with exponential backoff for all authentication endpoints."
+  - step: "Front-Running Analysis (MEV)"
+    tasks:
+      - "Assume that miners/validators can see every transaction in the mempool before it executes. Ensure the contract logic cannot be exploited if an attacker inserts their transaction *before* a user's transaction."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Documenting compliance controls only at audit time -- continuous monitoring is cheaper and less stressful than point-in-time fire drills."
+  - "Storing user data indefinitely without a retention policy -- violating 'data minimization' principles of GDPR and CCPA."
+  - "Using the same security controls for all data classifications -- PII, PHI, and public data need different access tiers."
+  - "Writing policies without testing them against real scenarios -- a policy that no one can follow is worse than no policy."
+  - "Failing to log access to sensitive data -- without an audit trail, you can't prove compliance during an investigation."
+best_practices:
+  - "Implement an emergency 'Pause' function (Circuit Breaker) controlled by a Multi-Sig wallet. If a hack is detected, the founders can instantly pause all withdrawals while they investigate."
+
+  - "Always run both static analysis (Slither) and formal verification before deploying any contract with real funds."
+  - "Use a proxy upgrade pattern (UUPS or transparent) with timelock and multi-sig for any contract holding >$100K."
+  - "Audit the order of operations in every function — check-effects-interactions pattern prevents reentrancy."
+  - "Write comprehensive fuzz tests using Echidna or Foundry for every public/external function."
+  - "Document the economic security assumptions — what would it cost an attacker to break the system?"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Consensys: Smart Contract Security Best Practices"
+    url: "https://consensys.github.io/smart-contract-best-practices/"

@@ -1,0 +1,79 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "marketing-automation"
+display_name: "MarTech Automation & Lead Scoring"
+description: >
+  Architect the Marketing Automation Platform (Marketo, Pardot, HubSpot) to nurture leads
+  via email, score their intent, and route MQLs to the sales team.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "marketing-ops-manager"
+phase: "growth"
+applicable_startups: 
+  - b2b
+priority: "mvp"
+difficulty: "advanced"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Lead Scoring Model"
+    tasks:
+      - "Assign points for demographic fit (e.g., Title = VP gets +20 pts)."
+      - "Assign points for behavioral intent (e.g., Visited Pricing Page gets +10 pts)."
+  - step: "Nurture Streams"
+    tasks:
+      - "Build automated email drip campaigns that educate cold leads over a 6-week period until they cross the scoring threshold to become an MQL (Marketing Qualified Lead)."
+  - step: "Attribution"
+    tasks:
+      - "Implement UTM tracking parameters across all campaigns to build a multi-touch attribution report."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Setting up an automation rule that instantly blasts 5 sales emails to a person who just downloaded a single top-of-funnel ebook, resulting in massive unsubscribes."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Marketing Automation process"
+  - "How do I handle marketing automation?"
+  - "Implement marketing automation"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the marketing automation process"
+  optional:
+    - name: "N/A"
+      type: "string"
+      description: "No optional inputs needed."
+
+outputs:
+  files:
+    - path: "outputs/marketing-automation.md"
+      description: "Results of the marketing automation process"
+  artifacts:
+    - "Completed marketing automation deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

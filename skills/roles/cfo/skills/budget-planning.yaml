@@ -1,0 +1,116 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "budget-planning"
+display_name: "Department Budget & Resource Allocation"
+description: >
+  Establish and manage the process for allocating capital across different 
+  departments (Engineering, Sales, Marketing). Balances the need for aggressive 
+  growth with the strict constraints of the startup's cash runway.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "cfo"
+phase: "growth"
+applicable_startups:
+  - all
+priority: "critical"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Create the annual budget."
+  - "How much can marketing spend?"
+  - "Approve the headcount request."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Create a departmental budget template."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "total_operating_capital"
+      type: "string"
+      description: "Total money allowed to be burned for the year."
+    - name: "department_requests"
+      type: "string"
+      description: "The wishlist of headcount and software from department heads."
+  optional:
+    - name: "growth_target"
+      type: "string"
+      description: "Target YoY revenue growth (e.g., 200%)."
+      default: "100%"
+
+outputs:
+  files:
+    - path: "finance/annual-operating-plan.csv"
+      description: "The approved budget for the fiscal year."
+  artifacts:
+    - "A dashboard tracking 'Budget vs Actuals' (BvA) variance."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "N/A"
+  manual:
+    - "Departments stay within 5% of their allocated budget, and the company hits its growth targets without running out of cash."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+
+safety_notes:
+  - "Software capitalization. Understand the tax implications of whether engineering salaries are classed as operating expenses (OpEx) or capitalized as R&D assets (CapEx). This significantly impacts tax liabilities."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Excel / Google Sheets"
+      install: "N/A"
+  alternatives:
+    - name: "Mosaic / Cube"
+      when: "Need FP&A software that integrates directly with the ERP and CRM for real-time BvA tracking."
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Top-Down Constraints"
+    tasks:
+      - "The CEO and CFO dictate the high-level constraint based on runway: 'We can burn $2M this year while growing revenue by 150%'."
+  - step: "Bottom-Up Requests"
+    tasks:
+      - "Have department heads submit their ideal budget. (Warning: These will usually total 2x the allowed constraint)."
+  - step: "Zero-Based Budgeting for Marketing"
+    tasks:
+      - "Do not automatically give marketing last year's budget + 10%. Force them to justify every dollar based on projected CAC and pipeline generation."
+  - step: "Headcount Planning (The 70% Rule)"
+    tasks:
+      - "In software startups, 70%+ of the budget is payroll. Treat every headcount request as a multi-year commitment, not a one-time purchase."
+  - step: "Budget vs Actuals (BvA) Review"
+    tasks:
+      - "Hold a monthly meeting with department heads. If engineering is 20% over budget on AWS costs, they must explain why and how they will bring it down next month."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "The 'Use It or Lose It' mentality. If a department is under budget in Q4, they shouldn't rush to buy useless software just to preserve their budget allocation for next year."
+  - "Failing to budget for fully-loaded employee costs. A $100k salary actually costs the company $120k-$130k when factoring in taxes, benefits, and equipment."
+
+best_practices:
+  - "Maintain a 'Slush Fund' or contingency buffer of 10% of the total budget. Unforeseen expenses (legal disputes, sudden server costs) *will* happen."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "a16z: The Annual Planning Process"
+    url: "https://a16z.com/2020/01/24/the-annual-planning-process/"

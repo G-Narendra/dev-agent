@@ -1,0 +1,115 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "incident-response"
+display_name: "Incident Response & On-Call Management"
+description: >
+  Designs and operates incident response processes for production outages.
+  Covers on-call rotations, incident severity classification, response
+  runbooks, post-mortems, and blameless culture.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "sre-engineer"
+phase: "ship"
+applicable_startups:
+  - all
+priority: "mvp"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Set up incident response."
+  - "Design on-call process."
+  - "Handle production outages better."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Design incident response process."
+  - "Create on-call schedule."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "team_size"
+      type: "string"
+      description: "Number of engineers available for on-call."
+    - name: "service_criticality"
+      type: "string"
+      description: "What happens when each service goes down."
+  optional:
+    - name: "on_call_tool"
+      type: "string"
+      description: "PagerDuty, Opsgenie, or Grafana On-Call."
+      default: "PagerDuty"
+
+outputs:
+  files:
+    - path: "devops/incident/incident-response-plan.md"
+      description: "Incident response process and runbooks"
+  artifacts:
+    - "A fully operational incident response system with runbooks"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Severity Classification"
+    tasks:
+      - "Define severity levels: SEV1 (complete outage, users impacted), SEV2 (partial outage, degraded), SEV3 (minor issue, no user impact), SEV4 (cosmetic)."
+      - "Set response SLAs: SEV1 = respond within 5 min, SEV2 = 15 min, SEV3 = 1 hour, SEV4 = next business day."
+      - "Define escalation paths: on-call engineer → senior engineer → engineering manager."
+      - "Document what constitutes each severity level with concrete examples."
+  - step: "On-Call Setup"
+    tasks:
+      - "Create on-call rotation schedule with primary and secondary engineers."
+      - "Primary handles alerts first; secondary is backup if primary doesn't respond."
+      - "Ensure on-call engineers have production access and can run rollbacks."
+      - "Set up on-call compensation or time-off-in-lieu policy."
+  - step: "Incident Response Runbooks"
+    tasks:
+      - "Create a generic 'Incident Response' runbook: acknowledge → assess → mitigate → resolve → post-mortem."
+      - "Create service-specific runbooks for common failure scenarios (DB down, high latency, queue backup)."
+      - "Include exact commands to check service health, view logs, and trigger rollbacks."
+      - "Store runbooks alongside the codebase in a /runbooks directory."
+  - step: "Communication During Incidents"
+    tasks:
+      - "Set up an internal status channel for incident communication."
+      - "Create a 'Declare Incident' Slack command that creates a war room channel."
+      - "Set up status page integration (e.g., Statuspage) for user-facing updates."
+      - "Draft communication templates: 'Investigating', 'Identified cause', 'Mitigating', 'Resolved'."
+  - step: "Post-Mortem Culture"
+    tasks:
+      - "Conduct a post-mortem for every SEV1 and SEV2 within 48 hours."
+      - "Use blameless language — focus on system failures, not individual mistakes."
+      - "Document timeline of events, root cause, what went well, and action items."
+      - "Track post-mortem action items as tickets and follow up until resolved."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Not having a clear escalation path — silence during incidents is dangerous."
+  - "Blaming individuals during post-mortems — creates fear and hides problems."
+  - "On-call burnout — 24/7 on-call without rotation or compensation."
+  - "No runbooks — relying on 'tribal knowledge' that's unavailable at 3 AM."
+best_practices:
+  - "The goal of incident response is to restore service, not find the root cause."
+  - "Automate everything possible: alert acknowledgment, war room creation, status page updates."
+  - "Post-mortems should produce actionable improvements, not blame."
+  - "Practice incident response with regular 'fire drills' in staging."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

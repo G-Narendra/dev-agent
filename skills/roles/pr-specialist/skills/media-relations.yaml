@@ -1,0 +1,80 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "media-relations"
+display_name: "Press Release & Media Pitching"
+description: >
+  Draft compelling press releases for funding announcements or major product launches, and
+  execute targeted outreach to journalists to secure earned media coverage.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "pr-specialist"
+phase: "growth"
+applicable_startups: 
+  - all
+priority: "mvp"
+difficulty: "advanced"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "The Angle"
+    tasks:
+      - "Identify the 'hook' for the story (e.g., 'Ex-SpaceX engineers raise $10M to automate farming')."
+  - step: "Asset Creation"
+    tasks:
+      - "Draft the Press Release including quotes from the CEO and lead investors."
+      - "Prepare a Media Kit (high-res logos, founder headshots, product screenshots)."
+  - step: "Outreach"
+    tasks:
+      - "Identify 10 specific journalists who have recently covered exact competitors or adjacent spaces."
+      - "Send a personalized, exclusive pitch under embargo 1 week before the announcement."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Sending a generic 'To whom it may concern' press release to 5,000 journalists simultaneously via a wire service, which yields zero high-quality coverage."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Media Relations process"
+  - "How do I handle media relations?"
+  - "Implement media relations"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the media relations process"
+  optional:
+    - name: "N/A"
+      type: "string"
+      description: "No optional inputs needed."
+
+outputs:
+  files:
+    - path: "outputs/media-relations.md"
+      description: "Results of the media relations process"
+  artifacts:
+    - "Completed media relations deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

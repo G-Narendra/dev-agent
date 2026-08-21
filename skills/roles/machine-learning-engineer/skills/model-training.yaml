@@ -1,0 +1,131 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "model-training"
+display_name: "ML Model Training & Experimentation"
+description: >
+  Design and execute machine learning model training pipelines using modern
+  frameworks. Covers experiment tracking, hyperparameter optimization,
+  distributed training, and reproducible ML workflows.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "machine-learning-engineer"
+phase: "build"
+applicable_startups:
+  - ai
+  - all
+priority: "critical"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Train a machine learning model for..."
+  - "Set up experiment tracking with MLflow for..."
+  - "Optimize hyperparameters for the model"
+  - "Implement distributed training for..."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "mlflow run . --entry-point train"
+  - "python -m torch.distributed.run --nproc_per_node=4 train.py"
+  - "optuna create-study --direction minimize"
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "dataset_path"
+      type: "string"
+      description: "Path to the prepared training dataset."
+    - name: "model_architecture"
+      type: "string"
+      description: "The model architecture to train (e.g., transformer, resnet, xgboost)."
+  optional:
+    - name: "hyperparameters"
+      type: "dict"
+      description: "Hyperparameter configuration override."
+      default: "Defaults from config.yaml"
+
+outputs:
+  files:
+    - path: "models/model.pt"
+      description: "The trained model checkpoint."
+    - path: "mlruns/"
+      description: "MLflow experiment tracking artifacts."
+  artifacts:
+    - "Training metrics and loss curves logged to experiment tracker."
+    - "Model registry entry with version tag."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "Training loss converges below the target threshold defined in the experiment config."
+    - "Evaluation metrics (accuracy, F1, RMSE) meet or exceed the baseline."
+  manual:
+    - "Model passes a smoke test on a holdout validation set before promotion."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+  - "GPU compute access"
+
+safety_notes:
+  - "Never train on datasets containing PII without explicit data governance approval and de-identification."
+  - "Always pin framework versions (torch, tensorflow, sklearn) to ensure reproducibility of training runs."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "MLflow"
+      install: "pip install mlflow"
+  alternatives:
+    - name: "Weights & Biases (wandb)"
+      when: "Need advanced experiment dashboards and team collaboration features."
+    - name: "Neptune.ai"
+      when: "Enterprise-grade experiment management with RBAC."
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Environment Setup"
+    tasks:
+      - "Create a reproducible Conda/Poetry environment with pinned ML framework versions."
+      - "Configure MLflow tracking URI to point to a persistent backend store."
+  - step: "Training Pipeline"
+    tasks:
+      - "Implement the training loop with gradient accumulation, learning rate scheduling, and early stopping."
+      - "Log all metrics (loss, accuracy, learning rate) to the experiment tracker every N steps."
+  - step: "Hyperparameter Tuning"
+    tasks:
+      - "Define a hyperparameter search space using Optuna or Ray Tune."
+      - "Run the search with at least 20 trials to identify optimal parameters."
+  - step: "Model Registration"
+    tasks:
+      - "Register the best-performing model in the model registry with a meaningful version tag."
+      - "Attach the experiment config, dataset hash, and evaluation results as model metadata."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Training models on the entire dataset without reserving a holdout validation set, leading to overfitting without detection."
+  - "Hardcoding hyperparameters that only work on a specific machine's GPU memory, making the training script non-portable."
+best_practices:
+  - "Use a seed for all random operations (numpy, torch, random) to ensure bitwise reproducibility across runs."
+  - "Log both training and validation metrics every step so you can detect overfitting the moment it starts."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "MLflow Documentation"
+    url: "https://mlflow.org/docs/latest/index.html"
+  - title: "PyTorch Distributed Training Guide"
+    url: "https://pytorch.org/tutorials/intermediate/ddp_tutorial.html"

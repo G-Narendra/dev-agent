@@ -1,0 +1,115 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "feasibility-analysis"
+display_name: "Feasibility Analysis & Build/Buy/Partner Assessment"
+description: >
+  Analyzes whether an idea is technically and operationally feasible to
+  build with the available resources. Covers technical feasibility,
+  operational feasibility, timeline feasibility, and resource assessment.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "idea-critic"
+phase: "ideation"
+applicable_startups:
+  - all
+priority: "mvp"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Is this idea technically feasible?"
+  - "Can we build this with our resources?"
+  - "Assess the feasibility of this project."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Assess technical feasibility."
+  - "Analyze build vs. buy."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "product_spec"
+      type: "string"
+      description: "What you're trying to build."
+    - name: "team_capabilities"
+      type: "string"
+      description: "Team skills, size, and experience."
+  optional:
+    - name: "budget_and_timeline"
+      type: "string"
+      description: "Available budget and desired timeline."
+      default: "Unknown — will estimate"
+
+outputs:
+  files:
+    - path: "strategy/feasibility/feasibility-analysis.md"
+      description: "Feasibility analysis with build/buy/partner recommendations"
+  artifacts:
+    - "A feasibility assessment with clear go/no-go criteria"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Technical Feasibility"
+    tasks:
+      - "Identify the hardest technical challenges the product requires."
+      - "Assess if the required technology exists and is mature enough."
+      - "Check for existing solutions: libraries, APIs, open-source that solve these challenges."
+      - "Identify technical risks: scaling requirements, data volume, real-time processing needs."
+  - step: "Build vs. Buy vs. Partner Analysis"
+    tasks:
+      - "For each major component, assess: build from scratch, buy existing solution, or partner with provider."
+      - "Score each option on: cost (build + maintain), time to market, differentiation, and control."
+      - "Core differentiators = build. Commodity features = buy. Complex integrations = partner."
+      - "Total cost of ownership: build has higher upfront cost, buy has ongoing license fees."
+  - step: "Resource & Timeline Assessment"
+    tasks:
+      - "Map the team's capabilities against the technical requirements — what skills are missing?"
+      - "Estimate effort: best case (40% probability), expected (60%), worst case (80%)."
+      - "Identify critical path: what needs to happen first before everything else?"
+      - "Check for resource constraints: budget, time, headcount, infrastructure."
+  - step: "Risk-Adjusted Go/No-Go Decision"
+    tasks:
+      - "List the top 3 things that could prevent successful delivery."
+      - "Score overall feasibility: highly feasible (1-2/10 risk), moderately feasible (3-5/10), risky (6-8/10), not feasible (9-10/10)."
+      - "Define go criteria: 'We proceed if we can secure X resource or overcome Y risk.'"
+      - "Provide a clear recommendation: go, no-go, or go with specific risk mitigations."
+  - step: "Feasibility of Alternative Approaches"
+    tasks:
+      - "Identify simpler alternatives that achieve the same goal with less technical risk."
+      - "Consider progressive enhancement: launch with a simpler version and add complexity later."
+      - "Consider manual vs. automated: can a human-powered process substitute for a complex feature?"
+      - "Assess offshore/hire vs. founders building: what's the feasibility multiplier with more resources?"
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Assuming everything is buildable because 'it's just software.'"
+  - "Only considering the build option and ignoring buy/partner alternatives."
+  - "Underestimating effort by 2-3x (the standard software estimation error)."
+  - "Ignoring non-technical feasibility: compliance, hiring, operations, support."
+best_practices:
+  - "If a large company hasn't built it, there's usually a technical or market reason."
+  - "Full-stack is feasible for most web apps; hard tech (AI/ML, hardware, biotech) is not."
+  - "The simplest version of the product that delivers value is usually the most feasible."
+  - "Be honest if the idea requires skills the team doesn't have — hiring for that is a risk."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

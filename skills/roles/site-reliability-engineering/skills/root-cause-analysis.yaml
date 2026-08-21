@@ -1,0 +1,78 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "root-cause-analysis"
+display_name: "Root Cause Analysis (RCA)"
+description: >
+  Investigate major production incidents using the '5 Whys' technique to identify the 
+  fundamental systemic failure, not just the surface-level symptom.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "site-reliability-engineering"
+phase: "operations"
+applicable_startups: 
+  - all
+priority: "high"
+difficulty: "advanced"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "The 5 Whys"
+    tasks:
+      - "Ask 'Why' iteratively until you reach a systemic process failure (e.g., 'Why did the DB crash? Bad query.' -> 'Why did it deploy? No load test.')."
+  - step: "Blameless Documentation"
+    tasks:
+      - "Write the RCA document focusing on the systems that allowed a human to make an error, rather than blaming the human who pushed the code."
+  - step: "Actionable Prevention"
+    tasks:
+      - "Create specific Jira tickets linked to the RCA (e.g., 'Implement database query timeout limits') to ensure the exact same outage can never happen again."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Concluding an RCA with 'The developer made a mistake, we told them to be more careful next time', implementing zero systemic safeguards."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Root Cause Analysis process"
+  - "How do I handle root cause analysis?"
+  - "Implement root cause analysis"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the root cause analysis process"
+  optional:
+    - name: "N/A"
+      type: "string"
+      description: "No optional inputs needed."
+
+outputs:
+  files:
+    - path: "outputs/root-cause-analysis.md"
+      description: "Results of the root cause analysis process"
+  artifacts:
+    - "Completed root cause analysis deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

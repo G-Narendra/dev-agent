@@ -1,0 +1,84 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "game-mechanics-design"
+display_name: "Game Mechanics & Systems Design"
+description: >
+  Designs core game loops, progression systems, reward structures, and 
+  player engagement mechanics. Creates Game Design Documents (GDDs), 
+  balancing spreadsheets, and prototyping specs for development teams.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "game-designer"
+phase: "planning"
+applicable_startups:
+  - gaming
+priority: "critical"
+difficulty: "advanced"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Core Loop Definition"
+    tasks:
+      - "Define the primary gameplay loop (action → reward → progression)."
+      - "Design secondary loops for retention and monetization."
+  - step: "Game Balancing"
+    tasks:
+      - "Create balancing spreadsheets for stats, economy, difficulty curves."
+      - "Simulate progression to identify pacing issues."
+  - step: "Game Design Document"
+    tasks:
+      - "Write a comprehensive GDD covering all game systems."
+      - "Include wireframes, flowcharts, and technical specs."
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Game Mechanics Design process"
+  - "How do I handle game mechanics design?"
+  - "Implement game mechanics design"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the game mechanics design process"
+  optional:
+    - name: "code_repository"
+      type: "string"
+      description: "Path to the code repository"
+      default: "./"
+
+outputs:
+  files:
+    - path: "outputs/game-mechanics-design.md"
+      description: "Results of the game mechanics design process"
+  artifacts:
+    - "Completed game mechanics design deliverable"
+# ── QUALITY GATES ────────────────────────────────────────────
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start — retrofitting is expensive."
+anti_patterns:
+  - "Designing complex progression systems before validating the core gameplay loop is fun."
+  - "Balancing the game economy on spreadsheets alone without real playtester data."
+  - "Adding monetization mechanics that feel punishing rather than rewarding to players."
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

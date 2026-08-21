@@ -1,0 +1,113 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "upsell-cross-sell-playbook"
+display_name: "Upsell, Cross-sell & Expansion Revenue"
+description: >
+  Turn the Customer Success team from a 'Cost Center' (support) into a 
+  'Profit Center' (sales). Trains CSMs to identify moments when a client 
+  has outgrown their current plan and successfully pitch an upgrade.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "customer-success-manager"
+phase: "growth"
+applicable_startups:
+  - b2b-saas
+priority: "high"
+difficulty: "expert"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "How do we increase Net Revenue Retention (NRR)?"
+  - "Upsell this account."
+  - "They need the enterprise plan."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Create an expansion revenue playbook."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "pricing_tiers"
+      type: "string"
+      description: "The limits of the Pro plan vs the Enterprise plan."
+    - name: "usage_data"
+      type: "string"
+      description: "Are they hitting their limits (e.g., 9,500/10,000 API calls)?"
+  optional:
+    - name: "sales_model"
+      type: "string"
+      description: "Does the CSM close the deal, or hand it back to an AE?"
+      default: "CSM closes"
+
+outputs:
+  files:
+    - path: "cs/playbooks/expansion-revenue-guide.md"
+      description: "The script and triggers for upselling."
+  artifacts:
+    - "An automated email warning users they are nearing their limit."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "N/A"
+  manual:
+    - "Net Revenue Retention (NRR) exceeds 120% (meaning upgrades completely outpace churn)."
+    - "The CS team generates enough expansion revenue to completely cover their own salaries."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+
+safety_notes:
+  - "Aggressive Sales Tactics: CSMs are the trusted advisors. If they start acting like aggressive used-car salesmen, the client will stop answering their calls. Upsells must be positioned strictly as 'Value realization', not a cash grab."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Salesforce / Stripe"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Identify the 'Upsell Triggers'"
+    tasks:
+      - "Volume Limits: They are at 95% of their storage/API capacity."
+      - "Feature Walls: They frequently click on a feature that is greyed out (requires Enterprise)."
+      - "Company Growth: They just announced a Series B funding round or hired 50 new people."
+  - step: "The 'Give-to-Get' Pitch"
+    tasks:
+      - "Do not just ask for more money. 'I noticed you hit your 50-user limit. I can give you 5 extra seats for free right now so your team isn't blocked, but we should schedule a call to discuss moving to the Unlimited tier'."
+  - step: "Cross-Selling New Products"
+    tasks:
+      - "If you release a new Add-on product, the CSM should identify the top 20% of power users. Script: 'Based on how heavily you use Feature X, our new Add-on Y will save you another 10 hours a week. Can I give you a 30-day free trial?'"
+  - step: "CSM Compensation Alignment"
+    tasks:
+      - "If you want CSMs to sell, you must pay them to sell. Ensure they receive a commission (e.g., 5-10%) on all expansion revenue they generate."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Trying to upsell a 'Red' account. If the customer is angry because the software is buggy, asking them to pay 50% more for the Enterprise tier will result in an instant cancellation."
+  - "The 'Hard Wall' limit. If a customer hits their API limit at 2:00 AM on a Saturday, do not instantly shut down their production app. Let them go over the limit, send an alert, and have the CSM call them on Monday to negotiate the true-up."
+
+best_practices:
+  - "Use 'White-Glove' Onboarding as an upsell. 'Our basic plan is $100/mo. But for $2,000 upfront, our engineers will migrate all your legacy data for you and train your team over 3 weeks'."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Lincoln Murphy: Customer Success Driven Growth"
+    url: "https://sixteenventures.com/"

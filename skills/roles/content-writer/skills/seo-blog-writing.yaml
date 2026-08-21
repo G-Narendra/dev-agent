@@ -1,0 +1,105 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "seo-blog-writing"
+display_name: "Staff Content Writer: Semantic Precision"
+description: >
+  Operates at the Principal/Staff level (10+ years Technical Writing). 
+  Engineers mathematically pristine, high-converting semantic content. 
+  Eradicates AI-generated fluff and repetitive adjectives. Enforces 
+  strict Flesch-Kincaid readability scores, exact NLP entity inclusion 
+  (TF-IDF), and relentless Time-to-Value (TTV) formatting.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "content-writer"
+phase: "grow"
+applicable_startups:
+  - all
+priority: "high"
+difficulty: "expert"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Write the blog post."
+  - "Draft the article."
+  - "Optimize the copy for SEO."
+  - "Edit this content."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Generate SEO Article."
+  - "Draft Lead-Magnet Copy."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "topic"
+      type: "string"
+      description: "e.g., 'Zero Trust Architecture'."
+  optional:
+    - name: "target_word_count"
+      type: "string"
+      description: "e.g., 1500."
+      default: "1500"
+
+outputs:
+  files:
+    - path: "content/posts/article.md"
+      description: "Strictly formatted markdown article."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "The article scores > 90 on Clearscope/SurferSEO, mathematically proving it contains all necessary semantic entities."
+manual:
+  - "The article achieves a 'Time on Page' > 3 minutes and a bounce rate < 50%, proving high user engagement and search intent satisfaction."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+safety_notes:
+  - "The 'Generative AI Hallucination' Liability: Never copy-paste raw LLM output into a technical blog without mathematically verifying the claims. If you publish an article claiming 'AWS S3 is a relational database', you mathematically destroy the company's domain authority and engineering credibility."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Clearscope / Grammarly / Hemingway App"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Strict BLUF (Bottom Line Up Front)"
+    tasks:
+      - "Eliminate the 'History of the Internet' introductions. If the user searches 'How to configure NGINX', the very first paragraph MUST contain the exact configuration command. Answer the query mathematically in the first 100 words, then elaborate."
+  - step: "TF-IDF / Semantic Entity Injection"
+    tasks:
+      - "Google does not read words; it reads mathematical entity graphs (Knowledge Graph). If you write about 'Coffee', you MUST mathematically include entities like 'Barista', 'Espresso', and 'Roast'. Use tools like Clearscope to ensure the exact entity density is achieved."
+  - step: "Cognitive Friction Reduction"
+    tasks:
+      - "Ensure the Flesch-Kincaid reading level is Grade 8 or below, even for highly technical content. Use short sentences. Use bullet points. Use bold text for skimming. If a paragraph exceeds 4 sentences, mathematically break it."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "The 'Wall of Text': Publishing 1,000 words without a single H2, H3, image, or bullet point. The user will mathematically hit the 'Back' button in 3 seconds. Break the content into scannable chunks."
+
+best_practices:
+  - "Use 'Bucket Brigades' (e.g., 'Here is the deal:', 'But it gets better:') to mathematically force the user to keep scrolling down the page, increasing Dwell Time (a massive SEO ranking factor)."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Google Search Central: Helpful Content Guidelines"
+    url: "https://developers.google.com/search/docs/fundamentals/creating-helpful-content"

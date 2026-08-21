@@ -1,0 +1,109 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "technology-landscape-analysis"
+display_name: "Technology Landscape & Trend Analysis"
+description: >
+  Analyzes the technology landscape within a market to identify emerging
+  trends, dominant architectures, tooling choices, and platform shifts.
+  Helps startups make informed technology decisions by understanding what
+  the ecosystem looks like and where it's heading.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "deep-researcher"
+phase: "ideation"
+applicable_startups:
+  - all
+priority: "medium"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Map the technology landscape."
+  - "What technologies are being used in this space?"
+  - "Analyze tech trends in this market."
+  - "What should we build with?"
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Analyze technology trends."
+  - "Map ecosystem tooling."
+  - "Track emerging technologies."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "market_segment"
+      type: "string"
+      description: "The technology space or market segment to analyze."
+  optional:
+    - name: "time_horizon"
+      type: "string"
+      description: "Short-term (1yr), medium (3yr), or long-term (5yr) analysis."
+      default: "medium"
+
+outputs:
+  files:
+    - path: "research/technology/{segment}-tech-landscape.md"
+      description: "Technology landscape analysis report"
+  artifacts:
+    - "A strategic technology recommendation with ecosystem map"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Ecosystem Mapping"
+    tasks:
+      - "Identify the major technology categories in the space (infrastructure, tooling, platforms, applications)."
+      - "Map the dominant solutions in each category with their market share or adoption."
+      - "Identify open-source vs. proprietary splits and community health."
+      - "Use GitHub stars, package downloads, Stack Overflow questions, and job postings as signals."
+  - step: "Trend Identification"
+    tasks:
+      - "Track venture capital investment flows into technology categories."
+      - "Analyze conference agendas, research papers, and thought leader content for emerging themes."
+      - "Identify platform shifts (e.g., cloud→edge, centralized→decentralized, SaaS→embedded)."
+      - "Use Google Trends, Gartner Hype Cycle, and HN/Reddit sentiment for adoption curves."
+  - step: "Competing Approaches Analysis"
+    tasks:
+      - "Identify different architectural approaches to solving the same problem."
+      - "Compare trade-offs: performance vs. simplicity, flexibility vs. convention."
+      - "Analyze migration patterns: what are people moving FROM and TO?"
+      - "Interview practitioners to understand why they chose their current stack."
+  - step: "Strategic Recommendations"
+    tasks:
+      - "Synthesize findings into a clear technology recommendation for the startup."
+      - "Identify 'bet on the right horse' decisions (e.g., Kubernetes vs. serverless)."
+      - "Provide a phased adoption timeline based on market maturity."
+      - "Flag technology risks: vendor lock-in, community decline, regulatory threats."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Chasing the hottest new technology without understanding adoption maturity."
+  - "Assuming open-source popularity equals production readiness."
+  - "Ignoring the 'boring technology' advantage — mature tools have fewer surprises."
+  - "Analyzing technology in isolation from the business context."
+best_practices:
+  - "Prefer technologies with strong community health over corporate-backed alternatives."
+  - "Consider the talent pool — can you hire engineers who know this technology?"
+  - "The best technology choice is often the one your team already knows."
+  - "Track 'technology debt cycles' — when to invest in modernizing vs. staying put."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Gartner Hype Cycle Methodology"
+    url: "https://www.gartner.com/en/research/methodologies/gartner-hype-cycle"
+  - title: "Stack Overflow Developer Survey — Technology Trends"
+    url: "https://survey.stackoverflow.co/"

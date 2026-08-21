@@ -1,0 +1,79 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "reseller-management"
+display_name: "Channel Partner Recruitment & Management"
+description: >
+  Identify high-value agency partners, negotiate reseller margins, and manage the 
+  deal registration pipeline to prevent channel conflict.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "channel-sales-manager"
+phase: "growth"
+applicable_startups: 
+  - b2b
+priority: "mvp"
+difficulty: "advanced"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Partner Recruitment"
+    tasks:
+      - "Identify agencies that sell complementary (but not competing) services to the exact same ICP."
+      - "Pitch the financial ROI of adding your software to their service offering."
+  - step: "Deal Registration"
+    tasks:
+      - "Set up a portal where partners can 'register' a lead, guaranteeing they get commission if the deal closes within 90 days."
+  - step: "Pipeline Reviews"
+    tasks:
+      - "Hold bi-weekly pipeline reviews with Top Tier partners to unblock stalled deals."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Allowing the internal direct sales team to undercut the pricing of a channel partner on a registered deal, instantly destroying trust."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Reseller Management process"
+  - "How do I handle reseller management?"
+  - "Implement reseller management"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the reseller management process"
+  optional:
+    - name: "N/A"
+      type: "string"
+      description: "No optional inputs needed."
+
+outputs:
+  files:
+    - path: "outputs/reseller-management.md"
+      description: "Results of the reseller management process"
+  artifacts:
+    - "Completed reseller management deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

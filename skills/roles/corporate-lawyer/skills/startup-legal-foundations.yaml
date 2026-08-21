@@ -1,0 +1,78 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "startup-legal-foundations"
+display_name: "Startup Corporate Law & Foundations"
+description: >
+  Establish the correct legal entity, manage the cap table, and draft standard 
+  commercial agreements to protect the founders from personal liability.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "corporate-lawyer"
+phase: "planning"
+applicable_startups: 
+  - all
+priority: "critical"
+difficulty: "expert"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Entity Formation"
+    tasks:
+      - "Incorporate as a Delaware C-Corporation if the goal is to raise venture capital. Ensure an 83(b) election is filed with the IRS within 30 days of issuing founder shares."
+  - step: "Founder Vesting"
+    tasks:
+      - "Implement standard 4-year vesting with a 1-year cliff for all founders. Never issue equity upfront with no strings attached."
+  - step: "Commercial Contracts"
+    tasks:
+      - "Draft a robust Master Services Agreement (MSA) and Terms of Service (ToS) that explicitly limits the startup's liability to the amount paid by the customer in the last 12 months."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Starting a software company as an equal 50/50 partnership without vesting, where one co-founder quits after 2 months and walks away owning half the company forever."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Startup Legal Foundations process"
+  - "How do I handle startup legal foundations?"
+  - "Implement startup legal foundations"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the startup legal foundations process"
+  optional:
+    - name: "N/A"
+      type: "string"
+      description: "No optional inputs needed."
+
+outputs:
+  files:
+    - path: "outputs/startup-legal-foundations.md"
+      description: "Results of the startup legal foundations process"
+  artifacts:
+    - "Completed startup legal foundations deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

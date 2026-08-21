@@ -1,0 +1,112 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "marketing-attribution-modeling"
+display_name: "Multi-Touch Attribution & ROI Modeling"
+description: >
+  Set up the tracking systems to understand exactly which marketing channels 
+  (Ads, SEO, Events) are actually driving revenue. Stops the company from 
+  wasting money on 'Brand Awareness' campaigns that don't convert.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "cmo"
+phase: "growth"
+applicable_startups:
+  - all
+priority: "critical"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Where are our customers coming from?"
+  - "Set up attribution tracking."
+  - "Calculate marketing ROI."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Create an attribution tracking script."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "marketing_channels"
+      type: "string"
+      description: "List of all active paid and organic channels."
+    - name: "crm_tool"
+      type: "string"
+      description: "HubSpot, Salesforce, etc."
+  optional:
+    - name: "attribution_model"
+      type: "string"
+      description: "First-Touch vs Last-Touch vs W-Shaped."
+      default: "W-Shaped"
+
+outputs:
+  files:
+    - path: "marketing/attribution-setup.md"
+      description: "The technical requirements for tracking."
+  artifacts:
+    - "A UTM parameter standardization document."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "Every new lead in the CRM has a 'Source' and 'Medium' attached to their record."
+  manual:
+    - "The CMO can confidently say: 'If we spend $1 on LinkedIn ads, we get $3 back in 6 months'."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+
+safety_notes:
+  - "GDPR/CCPA Compliance. Ensure that attribution tracking pixels (Meta, Google) respect the user's cookie consent choices. Do not fire trackers before consent."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Google Analytics 4 / HubSpot"
+      install: "N/A"
+  alternatives:
+    - name: "Dreamdata / Segment"
+      when: "B2B Enterprise with complex, 6-month sales cycles and multiple stakeholders."
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "UTM Parameter Discipline"
+    tasks:
+      - "Create a strict UTM generator spreadsheet for the team. No one is allowed to post a link without standard `utm_source`, `utm_medium`, and `utm_campaign` tags."
+  - step: "First-Party Data Capture"
+    tasks:
+      - "Because iOS 14 and Ad-Blockers destroy pixel tracking, capture attribution directly from the user. Add a 'How did you hear about us?' dropdown to the signup form."
+  - step: "Select the Model"
+    tasks:
+      - "First-Touch: Gives 100% credit to the first ad they clicked. Good for optimizing top-of-funnel."
+      - "Last-Touch: Gives 100% credit to the last email they clicked before buying. Good for optimizing bottom-of-funnel."
+      - "W-Shaped (Recommended for B2B): Gives 30% to first touch, 30% to lead creation, 30% to opportunity creation, and 10% to the rest."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Trusting Facebook's or Google's native 'Conversion' dashboard blindly. Ad platforms will inherently claim credit for every sale possible. You must have a neutral source of truth (e.g., your own database or a tool like TripleWhale)."
+  - "Over-rotating on perfect attribution. 'Dark Social' (Slack channels, text messages, word of mouth) drives massive growth but is impossible to track with pixels. Do not kill a channel just because the software can't track it perfectly."
+
+best_practices:
+  - "Pass the UTM parameters from the website session into hidden fields on your signup forms. This ensures the data makes it all the way into the CRM attached to the user record."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Reforge: Marketing Attribution"
+    url: "https://www.reforge.com/blog/marketing-attribution"

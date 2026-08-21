@@ -1,0 +1,105 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "brand-positioning"
+display_name: "Brand Positioning & Market Narrative"
+description: >
+  Defines how the company is perceived in the market relative to competitors. 
+  Creates the core messaging framework, value propositions, and the distinct 
+  'voice' of the company that makes it memorable to the target ICP.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "cmo"
+phase: "planning"
+applicable_startups:
+  - all
+priority: "high"
+difficulty: "expert"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "How are we different from our competitors?"
+  - "Define the brand voice."
+  - "Customers don't understand what we do."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Draft brand messaging matrix."
+  - "Generate competitor positioning map."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "ideal_customer_profile"
+      type: "string"
+      description: "Who exactly is the product for?"
+    - name: "competitors"
+      type: "string"
+      description: "The top 3 direct alternatives in the market."
+  optional:
+    - name: "category_creation"
+      type: "string"
+      description: "Are we entering an existing category or creating a new one?"
+      default: "Existing category disruption"
+
+outputs:
+  files:
+    - path: "marketing/brand/messaging-framework.md"
+      description: "The official guide on how to talk about the company."
+  artifacts:
+    - "A 2x2 positioning matrix."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "N/A"
+manual:
+  - "Sales reps, marketing copywriters, and the CEO all describe the company using the exact same three core pillars."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "The 'We are everything to everyone' trap: Brand positioning requires sacrifice. If you try to position yourself as the cheapest AND the highest quality AND the fastest, no one will believe you."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Miro / Figma"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "The April Dunford Framework"
+    tasks:
+      - "Follow the 5 steps of positioning: 1. Competitive Alternatives. 2. Unique Attributes. 3. Value (and proof). 4. Target Market Characteristics. 5. Market Category."
+  - step: "The 'Only We' Statement"
+    tasks:
+      - "Write a statement that your competitors cannot legally or factually claim. E.g., 'We are the ONLY platform that natively integrates with X without requiring a third-party bridge.'"
+  - step: "Brand Voice Definition"
+    tasks:
+      - "Define the tone using 'This, but not That' statements. E.g., 'We are authoritative, but not arrogant.' 'We are playful, but not childish.'"
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Using generic adjectives like 'innovative', 'next-generation', or 'disruptive'. Customers are blind to these words. Use concrete nouns and verbs."
+best_practices:
+  - "Positioning is not a marketing exercise, it is a business strategy. If the product lacks unique attributes, the CMO must go back to the CPO to change the product, not just write better copy."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "April Dunford: Obviously Awesome"
+    url: "https://www.aprildunford.com/obviously-awesome"

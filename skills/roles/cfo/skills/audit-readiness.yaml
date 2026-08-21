@@ -1,0 +1,111 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "audit-readiness"
+display_name: "Financial Audit & Compliance Readiness"
+description: >
+  Ensure the startup's financial records, accounting practices, and internal controls 
+  are rigorous enough to pass a formal audit by a Big 4 accounting firm. 
+  Essential for Series B+ fundraising or an eventual IPO.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "cfo"
+phase: "operations"
+applicable_startups:
+  - all
+priority: "growth"
+difficulty: "expert"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Prepare for the financial audit."
+  - "Implement internal financial controls."
+  - "Get our books audit-ready."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Create an audit checklist artifact."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "accounting_standard"
+      type: "string"
+      description: "GAAP (US) or IFRS (International)."
+    - name: "financial_system"
+      type: "string"
+      description: "The ERP being used (e.g., Quickbooks, NetSuite)."
+  optional:
+    - name: "audit_firm"
+      type: "string"
+      description: "Who is conducting the audit?"
+      default: "Unknown"
+
+outputs:
+  files:
+    - path: "finance/compliance/audit-readiness-checklist.md"
+      description: "The internal checklist for the finance team."
+  artifacts:
+    - "A documented Revenue Recognition Policy (ASC 606)."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "N/A"
+  manual:
+    - "The auditors issue an 'Unqualified Opinion' (a clean bill of health) with no material weaknesses found."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+
+safety_notes:
+  - "Segregation of Duties is a strict legal requirement. The person who approves a vendor invoice cannot be the same person who signs the checks. Failure here is an automatic audit failure (and a fraud risk)."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "NetSuite / FloQast"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Transition to Accrual Accounting"
+    tasks:
+      - "If the startup is still doing Cash Basis accounting (recording revenue when cash hits the bank), switch to Accrual Basis immediately. GAAP requires Accrual."
+  - step: "Revenue Recognition (ASC 606)"
+    tasks:
+      - "If a customer pays $12,000 upfront for an annual subscription, you cannot recognize $12,000 in revenue in month 1. You must recognize $1,000 per month over 12 months. Ensure this is automated in the ERP."
+  - step: "Internal Controls (Segregation of Duties)"
+    tasks:
+      - "Implement approval workflows. Any expense over $5,000 requires CFO approval. Any expense over $50,000 requires CEO approval."
+      - "Ensure IT has a process to immediately revoke financial system access when an employee is terminated."
+  - step: "Month-End Close Process"
+    tasks:
+      - "Establish a strict timeline to 'close the books' within 5-10 days of the month ending. A sloppy 30-day close process is a red flag to auditors."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Commingling personal and business expenses. Using the corporate card for personal expenses, even if 'reimbursed later', destroys the corporate veil and causes massive audit headaches."
+  - "Waiting for the auditors to arrive before documenting accounting policies. Policies must be written and followed *before* the period being audited."
+
+best_practices:
+  - "Conduct a 'Mock Audit' (Readiness Assessment) using a smaller regional accounting firm 6 months before you hire a Big 4 firm for the real audit."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Deloitte: Preparing for your first audit"
+    url: "https://www2.deloitte.com/us/en/pages/audit/articles/preparing-for-first-financial-statement-audit.html"

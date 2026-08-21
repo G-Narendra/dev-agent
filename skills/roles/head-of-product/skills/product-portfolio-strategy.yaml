@@ -1,0 +1,105 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "product-portfolio-strategy"
+display_name: "Product Portfolio Strategy"
+description: >
+  Determines what the company builds, and more importantly, what it kills. 
+  Aligns the product roadmap with the overarching business goals to ensure 
+  engineering resources are spent on high-ROI, market-moving features.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "head-of-product"
+phase: "growth"
+applicable_startups:
+  - all
+priority: "critical"
+difficulty: "expert"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "What are we building next quarter?"
+  - "Sales is demanding this feature."
+  - "We have too many products."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Generate RICE prioritization matrix."
+  - "Draft Product Requirements Document (PRD)."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "business_objective"
+      type: "string"
+      description: "Increase ARR, Reduce Churn, Enter New Market."
+    - name: "engineering_capacity"
+      type: "string"
+      description: "How many sprints do we have?"
+  optional:
+    - name: "feature_requests"
+      type: "string"
+      description: "List of top 3 requested features."
+      default: "None"
+
+outputs:
+  files:
+    - path: "product/strategy/q3_product_roadmap.md"
+      description: "The prioritized list of what gets built and when."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "N/A"
+manual:
+  - "The product roadmap accurately predicts delivery dates with 90% confidence, and new feature launches drive measurable increases in core business metrics."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "The Sales-Led Roadmap Trap: Never let the loudest Account Executive dictate the product roadmap to save one deal. If you build custom features to close single deals, you stop being a scalable SaaS company and become a low-margin dev agency."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Linear / Jira / Productboard"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "The RICE Prioritization Framework"
+    tasks:
+      - "Score every feature request: Reach (how many users), Impact (how much will it help), Confidence (how sure are we), divided by Effort (how long will it take). Build the features with the highest RICE score, mathematically."
+  - step: "The 'Kill List'"
+    tasks:
+      - "Products have a carrying cost. If you built a feature 2 years ago that only 1% of users use, but it requires 10 hours a month of engineering maintenance, kill it. Remove it from the codebase to speed up future development."
+  - step: "The PRD (Product Requirements Document)"
+    tasks:
+      - "Never let engineering write code without a PRD. The PRD must define the problem, the target user, the success metric, and the 'Out of Scope' features. If it's not in the PRD, engineering does not build it."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Building 'Me Too' features. Just because a competitor launched a feature does not mean you should copy it. They might have built it for a totally different ICP, or it might be failing miserably for them. Validate before you build."
+best_practices:
+  - "Implement the 'Painted Door' test. Before spending 2 months building a complex AI feature, put a button in the UI that says 'Try AI'. If they click it, show a pop-up: 'Coming soon!' Measure the clicks. If nobody clicks, don't build it."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Intercom: RICE Prioritization"
+    url: "https://www.intercom.com/blog/rice-simple-prioritization-for-product-managers/"

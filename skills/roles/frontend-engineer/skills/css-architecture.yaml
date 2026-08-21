@@ -1,0 +1,111 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "css-architecture"
+display_name: "Scalable CSS Architecture"
+description: >
+  Designs the global styling system for the application. Ensures that CSS 
+  remains maintainable, avoids specificity wars, and supports modern features 
+  like Dark Mode and dynamic theming without degrading performance. Covers key patterns to avoid common pitfalls like loading the entire javascript bundle on initial page load --, and provides actionable best practices for production-ready results.
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "frontend-engineer"
+phase: "build"
+applicable_startups:
+  - all
+priority: "high"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Set up Tailwind."
+  - "Implement dark mode."
+  - "The CSS is overriding itself."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Generate Tailwind configuration."
+  - "Draft CSS variable token system."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "design_system"
+      type: "string"
+      description: "Link to the Figma design tokens."
+  optional:
+    - name: "css_framework"
+      type: "string"
+      description: "Tailwind, CSS Modules, Vanilla Extract."
+      default: "Tailwind"
+
+outputs:
+  files:
+    - path: "tailwind.config.js"
+      description: "The global design token mapping."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "The final CSS bundle size remains strictly under 15kb (gzipped) due to aggressive purging."
+manual:
+  - "Developers never use `!important` to force a style to apply."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "Specificity Hell: Never style generic tags globally (e.g., `h1 { color: blue; }`). It will inevitably break a specific component elsewhere that requires a white `h1`."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Tailwind CSS"
+      install: "npm i -D tailwindcss"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Design Token Mapping"
+    tasks:
+      - "Extract all hex codes, font sizes, and spacing from Figma and map them exactly into `tailwind.config.js` or CSS Custom Properties. Developers must use `text-brand-blue`, not `#1DA1F2`."
+      - "Document the trade-offs made in a decision log (ADR) so future team members understand why."
+  - step: "Dark Mode Strategy"
+    tasks:
+      - "Implement Dark Mode using CSS variables. Do not write duplicate CSS blocks. Set `--bg-primary` to white in the `:root`, and to black in the `.dark` class."
+  - step: "Utility-First Styling"
+    tasks:
+      - "Adopt a utility-first approach (like Tailwind) to completely eliminate CSS naming debates (BEM, OOCSS) and prevent the CSS bundle from growing linearly as new pages are added."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Loading the entire JavaScript bundle on initial page load -- split code by route using dynamic imports."
+  - "Ignoring Cumulative Layout Shift by omitting explicit width/height attributes on images -- causes jarring layout jumps."
+  - "Using inline styles instead of a CSS architecture (utility classes, CSS modules, styled-components) -- leads to specificity war spaghetti."
+  - "Forgetting to set `loading=\"lazy\"` on below-the-fold images -- wastes bandwidth on images the user may never scroll to."
+  - "Bundling large libraries like moment.js or lodash for a single trivial function -- use native APIs or tree-shakeable alternatives."
+best_practices:
+  - "Use a tool like `clsx` or `tailwind-merge` to handle dynamic class string concatenation safely without overriding conflicts."
+
+  - "Implement code splitting at the route level using dynamic imports so users only load code for the page they visit."
+  - "Optimize Core Web Vitals: LCP under 2.5s, FID under 100ms, CLS under 0.1 — these directly impact SEO ranking."
+  - "Serve images in next-gen formats (WebP, AVIF) with responsive srcset for different viewport sizes."
+  - "Use semantic HTML elements (nav, main, article, section) — screen readers and SEO bots rely on document structure."
+  - "Implement proper error boundaries in React that catch render errors and show a fallback UI instead of a white screen."
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Adam Wathan: CSS Utility Classes and Separation of Concerns"
+    url: "https://adamwathan.me/css-utility-classes-and-separation-of-concerns/"

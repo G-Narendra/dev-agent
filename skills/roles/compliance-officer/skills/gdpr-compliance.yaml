@@ -1,0 +1,114 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "gdpr-compliance"
+display_name: "GDPR & Data Privacy Compliance"
+description: >
+  Ensures the startup legally processes and stores user data. Implements 
+  cookie consent, handles 'Right to be Forgotten' data deletion requests, 
+  and prevents massive European Union fines for data mishandling. Covers key patterns to avoid common pitfalls like documenting compliance controls only at audit time -- contin, and provides actionable best practices for production-ready results.
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "compliance-officer"
+phase: "growth"
+applicable_startups:
+  - all
+priority: "critical"
+difficulty: "expert"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "We have users in Europe now."
+  - "A user requested we delete their data."
+  - "Do we need a cookie banner?"
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Draft Data Processing Agreement (DPA)."
+  - "Generate Privacy Policy."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "data_collection"
+      type: "string"
+      description: "What PII (Personally Identifiable Information) are we collecting?"
+    - name: "third_party_tools"
+      type: "string"
+      description: "e.g., Google Analytics, Stripe, Intercom."
+  optional:
+    - name: "user_location"
+      type: "string"
+      description: "EU (GDPR) vs California (CCPA)."
+      default: "Global"
+
+outputs:
+  files:
+    - path: "legal/compliance/privacy_policy.md"
+      description: "The official external privacy policy."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "N/A"
+manual:
+  - "When a user clicks 'Delete My Account', their PII is hard-deleted from the primary database, all backups, and all third-party marketing tools within 30 days."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "The Fake Cookie Banner: Do not install a cookie banner that simply says 'We use cookies, OK' but loads the tracking scripts *before* the user clicks OK. Under GDPR, you must block Analytics/Marketing scripts entirely until explicit consent is granted."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "OneTrust / Termly"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Data Mapping"
+    tasks:
+      - "Create a strict inventory of exactly what data you collect, why you collect it, where it lives (AWS us-east-1 vs eu-central-1), and when it gets deleted. You cannot protect data if you don't know where it is."
+      - "Add database migration testing -- test both up and down migrations in CI."
+  - step: "The Right to Erasure (RTBF)"
+    tasks:
+      - "Build an automated, engineering-level script to handle deletion requests. If a user requests deletion, you cannot just set `is_deleted = true` in the DB. You must scrub the PII entirely (or anonymize it so it cannot be traced back)."
+  - step: "Data Processing Agreements (DPAs)"
+    tasks:
+      - "If you pass user data to a third party (like sending email addresses to Mailchimp), you MUST sign a DPA with Mailchimp to legally ensure they protect the data to the same standard you do."
+      - "Add database migration testing -- test both up and down migrations in CI."
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Documenting compliance controls only at audit time -- continuous monitoring is cheaper and less stressful than point-in-time fire drills."
+  - "Storing user data indefinitely without a retention policy -- violating 'data minimization' principles of GDPR and CCPA."
+  - "Using the same security controls for all data classifications -- PII, PHI, and public data need different access tiers."
+  - "Writing policies without testing them against real scenarios -- a policy that no one can follow is worse than no policy."
+  - "Failing to log access to sensitive data -- without an audit trail, you can't prove compliance during an investigation."
+best_practices:
+  - "Minimize data collection. If you are building a simple To-Do list app, do not ask the user for their Date of Birth or Phone Number. If you don't collect the data, you don't have to secure it."
+
+  - "Map all data flows from collection through processing to deletion before implementing any compliance program."
+  - "Implement data retention and deletion schedules from day one — deleting old data on request is harder than auto-expiring it."
+  - "Document security controls continuously, not just before an audit — the evidence you need is fresh when captured in real-time."
+  - "Conduct tabletop incident response exercises quarterly — the first time you test your IR plan should not be during a real breach."
+  - "Use automated compliance monitoring tools (Vanta, Drata, Secureframe) instead of manual spreadsheets."
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "GDPR.eu: Compliance Checklist"
+    url: "https://gdpr.eu/checklist/"

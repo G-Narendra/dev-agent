@@ -1,0 +1,111 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "feature-engineering"
+display_name: "Feature Engineering & Data Preparation"
+description: >
+  Transform raw data into meaningful inputs for machine learning models. 
+  Focuses on handling missing values, encoding categorical variables, 
+  and creating domain-specific composite features to increase model accuracy.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "data-scientist"
+phase: "ideation"
+applicable_startups:
+  - all
+priority: "high"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Improve the model accuracy."
+  - "Extract features from the dataset."
+  - "Clean the training data."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "python scripts/feature_extraction.py"
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "raw_dataset"
+      type: "string"
+      description: "Path to the raw CSV or database table."
+  optional:
+    - name: "target_variable"
+      type: "string"
+      description: "What the model is trying to predict (e.g., `churned`)."
+      default: "null"
+
+outputs:
+  files:
+    - path: "data/processed/training_matrix.csv"
+      description: "The finalized numerical matrix ready for Scikit-Learn."
+  artifacts:
+    - "A Feature Importance report."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "The transformed dataset contains 0 null values and 0 non-numerical columns."
+  manual:
+    - "The newly engineered features increase the model's AUC/ROC score by at least 5%."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+
+safety_notes:
+  - "Data Leakage: NEVER engineer features using data from the 'future' that the model won't have at prediction time. For example, using 'Total Support Tickets' over the user's lifetime to predict Day 30 churn."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Pandas / Scikit-Learn"
+      install: "pip install pandas scikit-learn"
+  alternatives:
+    - name: "Featuretools"
+      when: "Automating deep feature synthesis across highly relational databases."
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Handling Missing Data"
+    tasks:
+      - "Do not blindly drop rows with NaNs if it removes 40% of your data. Impute missing values (e.g., use the median for numericals, or 'Unknown' for categoricals)."
+  - step: "Encoding Categoricals"
+    tasks:
+      - "Use One-Hot Encoding for categories with no inherent order (e.g., `Color = Red/Blue/Green`)."
+      - "Use Target Encoding for high-cardinality features (e.g., `Zip Code`) to avoid creating 10,000 new columns."
+  - step: "Domain-Specific Engineering"
+    tasks:
+      - "Combine raw columns to create meaningful ratios. Example: Instead of just `Total_Spend` and `Account_Age`, create `Spend_Per_Month`."
+  - step: "Scaling and Normalization"
+    tasks:
+      - "Algorithms like SVMs and Neural Networks require features to be on the same scale. Apply `StandardScaler` (Z-score) or `MinMaxScaler`."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "The 'Kitchen Sink' approach. Throwing 5,000 raw, uncurated features into an XGBoost model and hoping it figures it out. This leads to massive overfitting and slow inference times."
+  - "Applying `StandardScaler` to the entire dataset *before* performing the Train/Test split. This causes data leakage from the test set into the training set."
+
+best_practices:
+  - "Use a `sklearn.pipeline.Pipeline`. Bundle your imputing, encoding, and scaling steps into a single object so you can apply the exact same transformations to the live production data during inference."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Scikit-Learn: Preprocessing Data"
+    url: "https://scikit-learn.org/stable/modules/preprocessing.html"

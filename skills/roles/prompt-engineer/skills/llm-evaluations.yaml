@@ -1,0 +1,115 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "llm-evaluations"
+display_name: "LLM Evaluation Frameworks (Evals)"
+description: >
+  Build the system to objectively measure LLM performance. Replaces 'vibes-based' 
+  testing with quantitative metrics (Similarity, Faithfulness, Answer Relevance) 
+  using 'LLM-as-a-Judge' methodologies.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "prompt-engineer"
+phase: "operations"
+applicable_startups:
+  - ai-startups
+priority: "critical"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Is GPT-4 better than Claude here?"
+  - "Evaluate the new prompt."
+  - "Set up LLM testing."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "npm install langsmith"
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "test_dataset"
+      type: "string"
+      description: "A golden dataset of 100+ inputs and expected outputs."
+    - name: "prompt_variants"
+      type: "string"
+      description: "The different system prompts being tested against each other."
+  optional:
+    - name: "evaluation_metric"
+      type: "string"
+      description: "Exact Match vs Semantic Similarity vs LLM-as-a-Judge."
+      default: "LLM-as-a-Judge"
+
+outputs:
+  files:
+    - path: "ai/evals/evaluation-report.md"
+      description: "The quantitative comparison of the prompts/models."
+  artifacts:
+    - "An automated CI pipeline that runs the evals on PR."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "A pull request that degrades the LLM's 'Answer Faithfulness' score by >5% is automatically blocked."
+  manual:
+    - "The team can safely migrate from OpenAI to an open-source Llama-3 model because the Evals prove the performance is identical."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+
+safety_notes:
+  - "The 'Judge' Model Bias: If you use GPT-4 as the judge to evaluate GPT-4 vs Claude-3 outputs, it has a known bias towards preferring its own outputs. Always use a neutral or superior model (if available) as the judge, or use human-in-the-loop spot checks."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "LangSmith / Ragas"
+      install: "pip install ragas"
+  alternatives:
+    - name: "TruEra / Arize Phoenix"
+      when: "Need heavy enterprise observability and compliance."
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "The Golden Dataset"
+    tasks:
+      - "You cannot evaluate anything without a benchmark. Curate a dataset of 100 highly diverse real-world inputs and the 'perfect' human-written answer for each."
+  - step: "Defining the Metrics"
+    tasks:
+      - "Faithfulness (RAG): Did the LLM invent facts not present in the retrieved context?"
+      - "Answer Relevance: Did the LLM actually answer the user's question, or did it go on a tangent?"
+      - "Tone/Style: Did it adhere to the brand guidelines (e.g., 'no apologizing')?"
+  - step: "LLM-as-a-Judge Setup"
+    tasks:
+      - "Write an evaluation prompt: 'You are an impartial judge. Grade this Output against this Expected Answer on a scale of 1-5 for Accuracy. Output JSON: {score: 4, reasoning: \"...\"}'."
+  - step: "Continuous Evaluation"
+    tasks:
+      - "Do not just run evals once. Integrate them into CI/CD. Treat prompt changes exactly like code changes."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Vibes-based Engineering. Changing a prompt, testing it manually 3 times, deciding it 'feels better', and pushing to production. You probably fixed those 3 edge cases and broke 30 others."
+  - "Using 'Exact String Match' to evaluate generation. LLMs are non-deterministic. If the expected answer is 'Yes' and the model outputs 'Yes.', an exact match test will fail it. Use semantic similarity."
+
+best_practices:
+  - "Implement 'Assertions'. Sometimes you don't need a heavy LLM judge. If the output MUST be valid JSON, or MUST contain the word 'Error', just write a simple regex or parsing test."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "LangSmith: Evaluation Metrics"
+    url: "https://docs.smith.langchain.com/evaluation"

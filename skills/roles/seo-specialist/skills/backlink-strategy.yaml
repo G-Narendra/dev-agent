@@ -1,0 +1,115 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "backlink-strategy"
+display_name: "Off-Page SEO & Backlink Building"
+description: >
+  Increases the Domain Authority (DA) of the startup's website by acquiring 
+  high-quality inbound links from other reputable websites. Signals trust 
+  and relevance to search engine algorithms. Covers key patterns to avoid common pitfalls like launching a campaign without utm parameters -- you won't kno, and provides actionable best practices for production-ready results.
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "seo-specialist"
+phase: "growth"
+applicable_startups:
+  - all
+priority: "high"
+difficulty: "expert"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "How do we get a higher Domain Authority?"
+  - "Our competitors outrank us on everything."
+  - "Build a backlink campaign."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Draft outreach email for guest posting."
+  - "Generate list of target domains."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "target_metric"
+      type: "string"
+      description: "e.g., Increase DA from 20 to 30."
+    - name: "link_building_tactic"
+      type: "string"
+      description: "Guest Posting, Broken Link Building, Digital PR."
+  optional:
+    - name: "niche"
+      type: "string"
+      description: "Industry for relevance targeting."
+      default: "SaaS"
+
+outputs:
+  files:
+    - path: "marketing/seo/outreach_campaign_01.md"
+      description: "The link building strategy and scripts."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "N/A"
+manual:
+  - "The website acquires 10 new 'DoFollow' backlinks from domains with a DA > 50 in a single quarter."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "PBNs and Link Buying: Never buy cheap links in bulk from Fiverr or use Private Blog Networks (PBNs). Google's Penguin algorithm will eventually catch it and permanently blacklist the startup's domain."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Ahrefs / Semrush"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Digital PR (Data Studies)"
+    tasks:
+      - "The best way to get links from massive news sites (NYT, TechCrunch) is to publish original, surprising data. E.g., 'We analyzed 1M cold emails, here's what works'. Journalists will cite and link to the study."
+      - "Add database migration testing -- test both up and down migrations in CI."
+  - step: "Competitor Backlink Intercept"
+    tasks:
+      - "Use Ahrefs to find which websites are linking to your competitor's outdated blog post. Reach out to those websites and offer your vastly superior, updated guide as a replacement."
+      - "Add integration tests that verify the contract between services, not just unit tests."
+  - step: "Anchor Text Diversity"
+    tasks:
+      - "Ensure that not every inbound link uses the exact same anchor text (e.g., 'Best CRM Software'). It looks unnatural. Mix in branded terms ('Acme Corp') and generic terms ('click here')."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Launching a campaign without UTM parameters -- you won't know which channel drove the conversions."
+  - "A/B testing with a sample size too small to reach statistical significance -- making decisions on noise rather than signal."
+  - "Optimizing for vanity metrics (impressions, page views) instead of actionable KPIs (conversion rate, revenue, retention)."
+  - "Running ads without conversion tracking pixel installed -- you're paying for clicks but can't measure ROI."
+  - "Ignoring mobile page speed for SEO -- Google's mobile-first indexing means a slow mobile site kills rankings."
+best_practices:
+  - "Relevance > Authority. A backlink from a DA 40 blog specifically about your niche is much more valuable than a backlink from a DA 80 generic coupon site."
+
+  - "Set up end-to-end conversion tracking before launching any campaign — measure from impression to purchase."
+  - "Run A/B tests until they reach 95% statistical significance before making decisions — premature conclusions are worse than no test."
+  - "Build audience segments based on behavior, not just demographics — what users do is more predictive than who they are."
+  - "Test email deliverability (SPF, DKIM, DMARC) before sending any campaign — authentication failures land in spam folders."
+  - "Create a content calendar 30 days ahead and batch-create content — consistency beats intensity in content marketing."
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Ahrefs: Link Building for SEO"
+    url: "https://ahrefs.com/blog/link-building/"

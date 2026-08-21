@@ -1,0 +1,120 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "financial-modeling"
+display_name: "Startup Financial Modeling & Forecasting"
+description: >
+  Builds the 3-statement operating model. Projects revenue growth, headcount 
+  expenses, and cash burn to ensure the startup never accidentally hits a wall 
+  and runs out of money. Covers key patterns to avoid common pitfalls like training on the full dataset without a holdout test set -- m, and provides actionable best practices for production-ready results.
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "cfo"
+phase: "growth"
+applicable_startups:
+  - all
+priority: "critical"
+difficulty: "expert"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "When will we run out of money?"
+  - "Can we afford to hire 3 more engineers?"
+  - "Build the financial model for the Series A."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Generate runway calculation."
+  - "Draft hiring plan budget."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "current_cash"
+      type: "string"
+      description: "Cash in bank today."
+    - name: "monthly_burn"
+      type: "string"
+      description: "Net cash out the door per month."
+  optional:
+    - name: "revenue_growth_rate"
+      type: "string"
+      description: "Month-over-month growth."
+      default: "0%"
+
+outputs:
+  files:
+    - path: "finance/models/operating_model_v1.md"
+      description: "The projected financial state for the next 24 months."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "N/A"
+manual:
+  - "The financial forecast remains within 5% variance of actual bank balances over a 6-month period."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "The Optimism Trap: Founders naturally forecast 'Hockey Stick' revenue growth. The CFO MUST build a 'Base Case' and a 'Worst Case' scenario. You hire based on the Worst Case, not the Hockey Stick."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Excel / Pry"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Bottom-Up Forecasting"
+    tasks:
+      - "Never build a 'Top-Down' model ('If we capture 1% of this $10B market...'). Build 'Bottom-Up': 'We have 2 salespeople, they each make 50 calls a day, converting at 2%. That equals X revenue.'"
+  - step: "Headcount Driver"
+    tasks:
+      - "Headcount is 80% of a startup's expense. Link every single future hire to a specific date or revenue trigger in the model. Include a 20% buffer for taxes, benefits, and software licenses per employee."
+  - step: "Gross Margin Focus"
+    tasks:
+      - "Separate COGS (AWS, OpenAI API costs, Stripe fees) from Operating Expenses (Rent, Payroll). VCs want to see Software Gross Margins > 80%. If it's below 60%, the business model is broken."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Training on the full dataset without a holdout test set -- model performance metrics will be unrealistically optimistic."
+  - "Serving an ML model without input validation -- adversarial inputs can cause silent incorrect predictions."
+  - "Not monitoring for data drift in production -- a model that was 95% accurate at launch can degrade to 60% as real-world data shifts."
+  - "Using default hyperparameters without any tuning -- can leave 10-30% performance on the table."
+  - "Deploying a model to production without a rollback plan -- a bad model can degrade user experience until manually caught."
+  - "Always add a 'Misc / Oh Shit' buffer of 10% to all projected expenses. Things will break, servers will spike, and lawsuits will happen."
+
+  - "Split data into train/validation/test sets before any exploration — data leakage from test set inflates accuracy metrics."
+  - "Log model inputs, outputs, and predictions in production for debugging regressions and data drift detection."
+  - "Implement canary deployments for model updates — serve the new model to 5% of traffic first and monitor for regressions."
+  - "Pin dependencies and model versions in production builds — an unexpected library update can silently change model behavior."
+  - "Add input validation that rejects out-of-distribution samples — the model was not trained on data outside its domain."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Not defining clear success criteria before starting a task -- leads to ambiguous outcomes, endless revisions, and wasted effort."
+
+best_practices:
+  - "Document all configuration decisions in an Architecture Decision Record (ADR) so future team members understand why choices were made."
+  - "Implement comprehensive error handling with structured logging at every integration boundary to simplify debugging."
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "a16z: Startup Metrics"
+    url: "https://a16z.com/2015/08/21/16-metrics/"

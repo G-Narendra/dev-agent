@@ -1,0 +1,114 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "predictive-modeling"
+display_name: "Machine Learning & Predictive Modeling"
+description: >
+  Finds hidden patterns in massive datasets. Builds ML models (XGBoost, 
+  Random Forest) to predict future outcomes like customer churn, lifetime 
+  value, or fraudulent transactions before they happen. Covers key patterns to avoid common pitfalls like running select * on tables with hundreds of columns -- waste, and provides actionable best practices for production-ready results.
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "data-scientist"
+phase: "growth"
+applicable_startups:
+  - AI, FinTech, E-commerce
+priority: "high"
+difficulty: "expert"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Can we predict which users will upgrade?"
+  - "Build a fraud detection model."
+  - "Train a classifier on this dataset."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Generate Scikit-Learn training pipeline."
+  - "Draft feature engineering script."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "target_variable"
+      type: "string"
+      description: "What are we trying to predict? (e.g., is_fraud)"
+    - name: "dataset_path"
+      type: "string"
+      description: "Where is the historical training data?"
+  optional:
+    - name: "algorithm_preference"
+      type: "string"
+      description: "Random Forest, XGBoost, Neural Net."
+      default: "XGBoost"
+
+outputs:
+  files:
+    - path: "ml/models/train_classifier.py"
+      description: "The script that cleans data and trains the model."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "The model achieves an F1-score > 0.85 on the holdout validation set."
+manual:
+  - "The model's predictions generate actionable business value (e.g., blocking 90% of fraudulent credit card charges)."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "Target Leakage: Never include a feature in your training data that would not be available at the moment of prediction. (e.g., If predicting 'Will they renew?', you cannot include the 'months_since_last_renewal' feature. The model will cheat and get 100% accuracy, but fail completely in production)."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Scikit-Learn / XGBoost / Pandas"
+      install: "pip install scikit-learn xgboost pandas"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Feature Engineering"
+    tasks:
+      - "Algorithms don't win Kaggle competitions, features do. Do not just throw raw dates into a model. Extract features like `days_since_signup`, `is_weekend`, or `transactions_last_7_days`."
+      - "Add feature flags so the new code can be deployed dark and enabled via toggle."
+  - step: "Class Imbalance Handling"
+    tasks:
+      - "If you are predicting fraud, 99.9% of transactions are legitimate. A model that just guesses 'Not Fraud' every time will be 99.9% accurate, but completely useless. Use SMOTE, downsampling, or optimize for the PR-AUC metric, not plain accuracy."
+  - step: "Cross-Validation"
+    tasks:
+      - "Never evaluate a model on the data it was trained on. Always use K-Fold Cross Validation. Create a strict 'Holdout Set' that the model never sees until the very final evaluation."
+      - "Create a test data factory/seeder so tests are deterministic and repeatable."
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Running SELECT * on tables with hundreds of columns -- wastes network bandwidth and memory."
+  - "Omitting WHERE clauses on large table queries -- accidentally scanning millions of rows causes database CPU spikes."
+  - "Scheduling ETL jobs without monitoring -- a silent failure can corrupt an entire data warehouse before anyone notices."
+  - "Using row-by-row processing (N+1 queries) instead of batch operations in data pipelines -- 100x slower."
+  - "Not partitioning large tables -- queries against unpartitioned tables scan all data even when only last month is needed."
+best_practices:
+  - "Establish a Naive Baseline. Before building ML, ask: 'What if we just predicted the historical average every time?' If your complex AI only beats the Naive Baseline by 1%, throw away the AI."
+
+  - "Always deduplicate data at the source or in the ingestion layer before loading into the warehouse."
+  - "Implement data quality checks at every stage of the pipeline: source validation, transformation validation, and destination reconciliation."
+  - "Use incremental processing instead of full refreshes for large datasets — reduces compute cost by 80%+."
+  - "Document data lineage: where each column comes from, what transformations were applied, and who owns the data."
+  - "Set up monitoring on data freshness — alert if the pipeline hasn't produced new data in the expected time window."
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Google Machine Learning Crash Course"
+    url: "https://developers.google.com/machine-learning/crash-course"

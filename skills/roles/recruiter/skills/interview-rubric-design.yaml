@@ -1,0 +1,109 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "interview-rubric-design"
+display_name: "Structured Interview & Rubric Design"
+description: >
+  Eliminate hiring bias and 'gut-feeling' decisions by creating highly 
+  structured interview panels with strict scoring rubrics. Ensures every 
+  candidate is evaluated objectively against the exact same criteria.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "recruiter"
+phase: "growth"
+applicable_startups:
+  - all
+priority: "high"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "How do we interview this person?"
+  - "Standardize the hiring process."
+  - "Create an interview scorecard."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Create an interview rubric template."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "job_description"
+      type: "string"
+      description: "The core responsibilities of the role."
+    - name: "company_values"
+      type: "string"
+      description: "The 3-5 core cultural traits of the startup."
+  optional:
+    - name: "interview_stages"
+      type: "string"
+      description: "How many rounds? (e.g., Recruiter, Technical, Cultural, CEO)."
+      default: "4 Stages"
+
+outputs:
+  files:
+    - path: "hr/interviews/frontend-engineer-rubric.csv"
+      description: "The scoring matrix for the interviewers."
+  artifacts:
+    - "A structured question bank mapped to specific competencies."
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+success_criteria:
+  automated:
+    - "N/A"
+  manual:
+    - "Post-interview debriefs take 10 minutes instead of 60 minutes because the data clearly dictates a 'Strong Hire' or 'No Hire'."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "filesystem"
+
+safety_notes:
+  - "Compliance: Ensure interviewers know exactly what questions are illegal to ask (e.g., marital status, age, religion, pregnancy plans). Provide explicit 'Do Not Ask' lists."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Greenhouse / Lever"
+      install: "N/A"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Competency Mapping"
+    tasks:
+      - "Do not have 4 interviewers ask the exact same 'Tell me about yourself' question. Assign competencies. Interviewer A tests System Design. Interviewer B tests Database Architecture. Interviewer C tests Conflict Resolution."
+  - step: "The Scoring Rubric (1-4 Scale)"
+    tasks:
+      - "Never use a 1-5 scale. People default to 3 (neutral) to avoid making a hard decision. Force a 1-4 scale (1=Strong No, 2=No, 3=Yes, 4=Strong Yes)."
+      - "Define exactly what a '4' looks like. (e.g., '4 = Candidate identified the race condition immediately and wrote a thread-safe solution without hints')."
+  - step: "Behavioral Questions (STAR Method)"
+    tasks:
+      - "Avoid hypothetical questions ('What would you do if...'). People will just give the politically correct answer."
+      - "Ask behavioral questions ('Tell me about a specific time you disagreed with the CEO. How did you resolve it?'). Demand the Situation, Task, Action, and Result (STAR)."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "The 'Beer Test'. Hiring someone because 'I'd like to have a beer with them' is a massive source of unconscious bias and leads to a homogenous, monoculture team. Hire for value alignment and skill, not friendship."
+  - "Brain-teaser questions ('How many golf balls fit in a 747?'). They do not predict job performance; they only predict a candidate's tolerance for nonsense. Use real-world technical problems from your own backlog."
+
+best_practices:
+  - "Blind Debriefs. Force interviewers to submit their written scores *before* they are allowed to talk to each other. This prevents the most senior person in the room from influencing everyone else's opinion."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Google re:Work: Structured Interviewing"
+    url: "https://rework.withgoogle.com/guides/hiring-use-structured-interviewing/"

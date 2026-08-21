@@ -1,0 +1,78 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "incident-management"
+display_name: "Incident Command & Resolution"
+description: >
+  Establish the protocols for coordinating engineering teams during a critical Sev-1 
+  outage to restore service as rapidly as possible.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "incident-commander"
+phase: "operations"
+applicable_startups: 
+  - all
+priority: "critical"
+difficulty: "expert"
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Establish Command"
+    tasks:
+      - "The Incident Commander (IC) does NOT write code or fix the bug. The IC's sole job is to delegate tasks, keep time, and ensure communication flows between engineers."
+  - step: "War Room Discipline"
+    tasks:
+      - "Move all communication to a dedicated #incident-1234 Slack channel or Zoom bridge. Enforce the rule: 'If it is not relevant to mitigating the outage, do not say it'."
+  - step: "Mitigate, Don't Fix"
+    tasks:
+      - "During an outage, the goal is mitigation, not root cause analysis. If reverting a commit brings the site back up, revert it immediately. Fix the bug tomorrow."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Having 5 senior engineers all independently modifying production database tables during an outage without communicating, causing irrecoverable data loss."
+
+best_practices:
+  - "Document decisions and rationale for future reference."
+  - "Test assumptions early and iterate based on feedback."
+  - "Keep security and compliance in mind from the start -- retrofitting is expensive."
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "Run the Incident Management process"
+  - "How do I handle incident management?"
+  - "Implement incident management"
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "context"
+      type: "string"
+      description: "Context for the incident management process"
+  optional:
+    - name: "N/A"
+      type: "string"
+      description: "No optional inputs needed."
+
+outputs:
+  files:
+    - path: "outputs/incident-management.md"
+      description: "Results of the incident management process"
+  artifacts:
+    - "Completed incident management deliverable"
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Industry Best Practices"
+    path: "."
+  - title: "Relevant Documentation"
+    path: "."

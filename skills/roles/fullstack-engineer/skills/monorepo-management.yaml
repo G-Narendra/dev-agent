@@ -1,0 +1,107 @@
+# ── IDENTITY ─────────────────────────────────────────────────
+name: "monorepo-management"
+display_name: "Monorepo Architecture & Tooling"
+description: >
+  Sets up and maintains a monorepo structure containing both the frontend and 
+  backend code. Configures shared types, efficient build caching, and strict 
+  boundary rules to prevent spaghetti dependencies across applications.
+
+# ── CLASSIFICATION ───────────────────────────────────────────
+role: "fullstack-engineer"
+phase: "build"
+applicable_startups:
+  - all
+priority: "high"
+difficulty: "advanced"
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger_phrases:
+  - "We are duplicating TS types everywhere."
+  - "Set up a Turborepo."
+  - "Combine the frontend and backend repos."
+
+# ── ACTIONS ──────────────────────────────────────────────────
+example_cli_actions:
+  - "Initialize Turborepo workspace."
+  - "Generate shared package."
+
+# ── INPUTS / OUTPUTS ────────────────────────────────────────
+inputs:
+  required:
+    - name: "frameworks"
+      type: "string"
+      description: "E.g., Next.js frontend, Express backend."
+  optional:
+    - name: "monorepo_tool"
+      type: "string"
+      description: "Turborepo, Nx, Lerna."
+      default: "Turborepo"
+
+outputs:
+  files:
+    - path: "turbo.json"
+      description: "The pipeline configuration file."
+    - path: "packages/shared-types/package.json"
+      description: "The internal shared library."
+  artifacts:
+    - "N/A"
+
+# ── SUCCESS CRITERIA ─────────────────────────────────────────
+automated:
+  - "CI build times drop by 50% due to remote build caching."
+manual:
+  - "A developer changes a database model in the backend, and the frontend TypeScript compiler immediately catches the type error before deployment."
+
+# ── PERMISSIONS & SAFETY ─────────────────────────────────────
+permissions_needed:
+  - "none"
+
+safety_notes:
+  - "Circular Dependencies: Carefully define package boundaries. The frontend can import from `shared-ui`, but `shared-ui` must never import from the frontend application."
+
+# ── TOOLING ──────────────────────────────────────────────────
+recommended_tools:
+  primary:
+    - name: "Turborepo"
+      install: "npx create-turbo@latest"
+  alternatives:
+    - name: "Nx"
+      when: "Managing massive enterprise monorepos with Angular."
+
+# ── IMPLEMENTATION CHECKLIST ─────────────────────────────────
+implementation_checklist:
+  - step: "Workspace Configuration"
+    tasks:
+      - "Set up npm/pnpm/yarn workspaces. Define `apps/` (deployable services like web and api) and `packages/` (shared internal libraries like ui, config, typescript-config)."
+  - step: "Type Sharing"
+    tasks:
+      - "Create a `packages/types` package. Export your Prisma schema or Zod validators here. Import this package in both the API and the React frontend to guarantee contract alignment."
+  - step: "Build Pipeline Caching"
+    tasks:
+      - "Configure `turbo.json` to cache the outputs of the `build` and `test` scripts. If a developer runs tests on a package that hasn't changed, it should return in 100ms from the cache."
+
+# ── QUALITY GATES ────────────────────────────────────────────
+anti_patterns:
+  - "Publishing internal monorepo packages to npm. You don't need to publish them. Link them locally using `workspace:*` versions."
+best_practices:
+  - "Use a strict package manager like pnpm to prevent 'phantom dependencies' where an app accidentally relies on a dependency installed by a different app."
+
+# ── UNIVERSAL INDUSTRIAL APPLICABILITY ──────────────────────
+applicable_industries:
+  - SaaS & Cloud Infrastructure
+  - FinTech & DeFi
+  - HealthTech & BioTech
+  - DefenseTech & Aerospace
+  - E-Commerce & Logistics
+  - AI & Machine Learning
+industrial_readiness:
+  - "The role MUST dynamically adapt its FAANG-scale physics to the user's specific industry."
+  - "If the user is building FinTech, enforce PCI-DSS, ACID transactions, and idempotency."
+  - "If the user is building HealthTech, enforce HIPAA and zero-trust data privacy."
+  - "If the user is building DefenseTech, enforce air-gapped security and extreme redundancy."
+  - "Always output production-ready, highly scalable, and mathematically verified architectures regardless of the startup's domain."
+
+# ── REFERENCES ───────────────────────────────────────────────
+references:
+  - title: "Turborepo Documentation"
+    url: "https://turbo.build/repo/docs"
