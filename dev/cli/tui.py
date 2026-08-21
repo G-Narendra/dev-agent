@@ -14,6 +14,7 @@ from __future__ import annotations
 
 import asyncio
 import os
+import sys
 import time
 from typing import AsyncIterator, Optional
 
@@ -47,7 +48,6 @@ class DevTUI:
     """
     
     def __init__(self):
-        import sys
         # Force UTF-8 on Windows to prevent cp1252 encoding errors
         if sys.platform == "win32":
             try:
@@ -67,7 +67,7 @@ class DevTUI:
             "[bold blue]Dev[/bold blue] - Free 24/7 AI Coding Agent\n"
             "[dim]Powered by NVIDIA NIMs free tier (no local GPU required)[/dim]\n\n"
             "Type your request. Use /help for commands.",
-            title="🤖 Welcome",
+            title="[bold]Dev[/bold]",
             border_style="blue",
         ))
     
@@ -82,9 +82,6 @@ class DevTUI:
             ("/clear", "Clear screen"),
             ("/status", "Show session status"),
             ("/cost", "Show cost/token usage"),
-            ("/files", "List files in chat"),
-            ("/drop <file>", "Remove file from chat"),
-            ("/add <file>", "Add file to chat"),
             ("/undo", "Undo last edit"),
             ("/diff", "Show last diff"),
             ("/quit", "Exit"),
@@ -116,55 +113,26 @@ class DevTUI:
     
     def show_tool_call(self, tool_name: str, args: dict):
         """Show tool call."""
+        self.console.print(f"  [bold cyan]  -> {tool_name}[/bold cyan] [dim]{str(args)[:120]}[/dim]")
         self._tool_count += 1
-        
-        # Format args nicely
-        if len(str(args)) > 100:
-            args_str = str(args)[:100] + "..."
-        else:
-            args_str = str(args)
-        
-        self.console.print(
-            f"  [tool]🔧 {tool_name}[/tool] [dim]{args_str}[/dim]"
-        )
     
-    def show_tool_result(self, result: dict, success: bool = True):
+    def show_tool_result(self, tool_name: str, result: Any):
         """Show tool result."""
-        if success:
-            if "diff" in result and result["diff"]:
-                self.console.print(f"  [success]✓[/success]")
-                self.console.print(f"  [dim]{result['diff'][:500]}[/dim]")
-            elif "content" in result and len(str(result["content"])) > 200:
-                self.console.print(f"  [success]✓[/success] [dim]{len(str(result['content']))} chars[/dim]")
-            else:
-                self.console.print(f"  [success]✓[/success]")
+        if isinstance(result, dict) and "error" in result:
+            self.console.print(f"  [red]  <- {tool_name}: ERROR {result['error'][:100]}[/red]")
+        elif isinstance(result, dict) and "blocked" in result:
+            self.console.print(f"  [yellow]  <- {tool_name}: BLOCKED - {result['blocked'][:100]}[/yellow]")
         else:
-            error = result.get("error", "Unknown error")
-            self.console.print(f"  [error]✗ {error[:200]}[/error]")
-    
-    def show_response(self, content: str):
-        """Show agent response."""
-        self._message_count += 1
-        self.console.print()
-        self.console.print(Panel(
-            Markdown(content),
-            title="[agent]Dev[/agent]",
-            border_style="blue",
-            padding=(0, 1),
-        ))
+            result_str = str(result)[:200] if result else "ok"
+            self.console.print(f"  [dim]  <- {tool_name}: {result_str}[/dim]")
     
     def show_error(self, message: str):
-        """Show error."""
+        """Show error message."""
         self.console.print(f"[error]Error: {message}[/error]")
     
-    def show_warning(self, message: str):
-        """Show warning."""
-        self.console.print(f"[warning]Warning: {message}[/warning]")
-    
     def show_streaming_start(self):
-        """Start streaming display."""
-        self.console.print()
-        self.console.print("[agent]Dev:[/agent] ", end="")
+        """Show streaming start."""
+        self.console.print("Dev: ", end="")
     
     def show_streaming_chunk(self, chunk: str):
         """Show streaming chunk."""
@@ -173,28 +141,6 @@ class DevTUI:
     def show_streaming_end(self):
         """End streaming display."""
         self.console.print()
-    
-    def get_input(self) -> str | None:
-        """Get user input."""
-        try:
-            user_input = self.console.input("[user]You:[/user] ")
-            return user_input.strip() if user_input.strip() else None
-        except (EOFError, KeyboardInterrupt):
-            return None
-    
-    def show_quit(self):
-        """Show quit message."""
-        self.console.print("[dim]Goodbye![/dim]")
-    
-    def clear(self):
-        """Clear screen."""
-        self.console.clear()
-    
-    def show_model_info(self, model: str, provider: str):
-        """Show model information."""
-        self.console.print(
-            f"[dim]Model: {model} | Provider: {provider}[/dim]"
-        )
     
     def show_token_usage(self, tokens_in: int, tokens_out: int):
         """Show token usage."""
@@ -207,13 +153,20 @@ class DevTUI:
         self._session_cost += cost
         if cost > 0:
             self.console.print(f"[dim]Cost: ${cost:.4f} (total: ${self._session_cost:.4f})[/dim]")
+    
+    def render_markdown(self, text: str):
+        """Render text as markdown."""
+        try:
+            self.console.print(Markdown(text))
+        except Exception:
+            self.console.print(text)
 
 
 class StreamingDisplay:
     """
     Live streaming display for agent responses.
     
-    From Freebuff's streaming pattern.
+    Uses Rich Live for real-time token-by-token display.
     """
     
     def __init__(self, tui: DevTUI):
@@ -223,28 +176,20 @@ class StreamingDisplay:
     
     def start(self):
         """Start streaming display."""
-        self.tui.show_streaming_start()
         self._buffer = ""
+        self.tui.console.print("Dev: ", end="", highlight=False)
     
     def update(self, chunk: str):
-        """Update with a new chunk with live panel."""
+        """Update with a new chunk — stream token by token."""
         self._buffer += chunk
-        from rich.text import Text as RichText
-        if self._live is None:
-            self._live = Live(RichText(self._buffer), console=self.tui.console, refresh_per_second=10, transient=True)
-            self._live.start()
-        else:
-            self._live.update(RichText(self._buffer))
+        # Print each chunk immediately for real streaming feel
+        try:
+            self.tui.console.out(chunk, end="", highlight=False)
+        except UnicodeEncodeError:
+            safe = chunk.encode("ascii", errors="replace").decode("ascii")
+            self.tui.console.out(safe, end="", highlight=False)
     
     def end(self):
         """End streaming display."""
-        if self._live is not None:
-            self._live.stop()
-            self._live = None
-            # Print final buffered text (safe encoding for Windows)
-            try:
-                self.tui.console.print(self._buffer, highlight=False)
-            except UnicodeEncodeError:
-                safe = self._buffer.encode('ascii', errors='replace').decode('ascii')
-                self.tui.console.print(safe, highlight=False)
         self._buffer = ""
+        self.tui.console.print()  # Final newline

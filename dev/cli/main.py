@@ -736,12 +736,14 @@ def chat(
         mode_label = f"[bold yellow]{approval_mode}[/bold yellow]"
         if plan:
             mode_label += " + [bold cyan]plan mode[/bold cyan]"
+        # Get model display name
+        from dev.providers.nim_provider import NimProvider
+        model_display = NimProvider.MODELS.get(model, model)
         console.print(Panel(
-            f"[bold]Dev Interactive Mode[/bold]\n"
-            f"Model: {model} | Effort: {effort}\n"
-            f"Approval: {mode_label}\n"
-            f"Type /help for commands.",
-            title="Dev Chat",
+            f"[bold green]Dev[/bold green] - Free 24/7 AI Coding Agent\n"
+            f"[dim]Model: {model_display} ({model}) | Approval: {mode_label}[/dim]\n"
+            f"[dim]Type your request. Use [bold]/help[/bold] for commands.[/dim]",
+            title="[bold green]Dev Chat[/bold green]",
             border_style="green",
         ))
 

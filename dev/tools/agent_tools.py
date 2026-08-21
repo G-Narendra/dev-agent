@@ -41,7 +41,16 @@ class WriteTodosTool(Tool):
     }
     
     async def execute(self, input_data: dict, state: Any, project_path: str) -> dict:
-        todos = input_data["todos"]
+        import json as _json
+        todos = input_data.get("todos", [])
+        # LLM may send todos as a JSON string instead of a list
+        if isinstance(todos, str):
+            try:
+                todos = _json.loads(todos)
+            except (_json.JSONDecodeError, TypeError):
+                todos = []
+        if not isinstance(todos, list):
+            todos = []
         
         # Store in agent state
         if state and hasattr(state, "output"):

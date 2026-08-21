@@ -58,7 +58,7 @@ class NimProvider:
         "reasoning": "meta/llama-3.1-70b-instruct",
         "fast": "meta/llama-3.1-8b-instruct",
         "vision": "meta/llama-3.2-11b-vision-instruct",
-        "default": "meta/llama-3.1-8b-instruct",
+        "default": "meta/llama-3.1-70b-instruct",
     }
     
     def __init__(
@@ -358,9 +358,14 @@ class NimProvider:
                 message = choice.get("message", {})
                 finish_reason = choice.get("finish_reason", "stop")
                 content = message.get("content") or ""
-                if content:
-                    yield {"type": "text", "content": content}
                 tool_calls = message.get("tool_calls", [])
+                # If no tool calls, simulate streaming by chunking text
+                if content and not tool_calls:
+                    chunk_size = 20
+                    for i in range(0, len(content), chunk_size):
+                        yield {"type": "text", "content": content[i:i+chunk_size]}
+                elif content:
+                    yield {"type": "text", "content": content}
                 for tc in tool_calls:
                     yield {"type": "tool_call", "tool_call": tc}
                 yield {"type": "finish", "reason": finish_reason}
