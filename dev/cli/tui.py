@@ -159,12 +159,28 @@ class DevTUI:
         self.console.print("[agent]Dev:[/agent] ", end="")
     
     def show_streaming_chunk(self, chunk: str):
-        """Show streaming chunk."""
-        self.console.print(chunk, end="", highlight=False)
+        """Show streaming chunk with live panel."""
+        if not hasattr(self, '_streaming_buffer'):
+            self._streaming_buffer = ""
+            self._streaming_live = None
+        self._streaming_buffer += chunk
+        # Use Rich Live for real-time updates
+        from rich.text import Text as RichText
+        if self._streaming_live is None:
+            from rich.live import Live
+            self._streaming_live = Live(RichText(self._streaming_buffer), console=self.console, refresh_per_second=10, transient=True)
+            self._streaming_live.start()
+        else:
+            self._streaming_live.update(RichText(self._streaming_buffer))
     
     def show_streaming_end(self):
         """End streaming display."""
-        self.console.print()
+        if hasattr(self, '_streaming_live') and self._streaming_live is not None:
+            self._streaming_live.stop()
+            self._streaming_live = None
+            # Print final text
+            self.console.print(self._streaming_buffer, highlight=False)
+        self._streaming_buffer = ""
     
     def get_input(self) -> str | None:
         """Get user input."""

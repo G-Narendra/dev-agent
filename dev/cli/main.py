@@ -477,6 +477,7 @@ def chat(
     system_prompt_override: str = typer.Option("", "--system-prompt", help="Full system prompt override"),
     system_prompt_file: str = typer.Option("", "--system-prompt-file", help="Load system prompt from file"),
     tools_restrict: list[str] = typer.Option([], "--tools", help="Restrict available tools to these names"),
+    diff_preview: bool = typer.Option(False, "--diff", help="Show diff before applying edits"),
     # --- Tier 2: Medium flags ---
     json_schema: str = typer.Option("", "--json-schema", help="Validate output against JSON schema"),
     input_format: str = typer.Option("text", "--input-format", help="Input format: text, stream-json"),
@@ -664,6 +665,7 @@ def chat(
             verbose=verbose,
             approval_mode=approval,
             enforce_plan_mode=plan,
+            diff_preview=diff_preview,
         )
         agent_loop = ProductionAgentLoop(
             provider=provider,
@@ -940,6 +942,104 @@ def chat(
                     after = agent_loop._count_tokens(state.done_messages + state.cur_messages)
                     console.print(f"[green]Compacted: {before:,} -> {after:,} tokens[/green]")
                     continue
+                elif cmd == "/redo":
+                    result = agent_loop.redo_last()
+                    if result["success"]:
+                        console.print(f"[green]Redone: {result.get('restored', '')}[/green]")
+                    else:
+                        console.print(f"[yellow]{result['message']}[/yellow]")
+                    continue
+                elif cmd == "/diff":
+                    _show_colored_diff(abs_project)
+                    continue
+                elif cmd == "/commit":
+                    msg = console.input("  Commit message: ").strip()
+                    if msg:
+                        import subprocess as _sp
+                        _sp.run(["git", "add", "-A"], cwd=abs_project, capture_output=True)
+                        result = _sp.run(["git", "commit", "-m", msg], cwd=abs_project, capture_output=True, text=True)
+                        if result.returncode == 0:
+                            console.print(f"[green]Committed: {msg}[/green]")
+                        else:
+                            console.print(f"[red]{result.stderr}[/red]")
+                    continue
+                elif cmd == "/branch":
+                    import subprocess as _sp
+                    parts = cmd.split()
+                    if len(parts) > 1:
+                        branch_name = parts[1]
+                        result = _sp.run(["git", "checkout", "-b", branch_name], cwd=abs_project, capture_output=True, text=True)
+                        if result.returncode == 0:
+                            console.print(f"[green]Switched to branch: {branch_name}[/green]")
+                        else:
+                            console.print(f"[red]{result.stderr}[/red]")
+                    else:
+                        result = _sp.run(["git", "branch"], cwd=abs_project, capture_output=True, text=True)
+                        console.print(result.stdout)
+                    continue
+                elif cmd == "/test":
+                    import subprocess as _sp
+                    console.print("[dim]Running tests...[/dim]")
+                    # Auto-detect test runner
+                    if os.path.exists("pytest.ini") or os.path.exists("pyproject.toml"):
+                        result = _sp.run([".venv/Scripts/python", "-m", "pytest", "--tb=short", "-q"], cwd=abs_project, capture_output=True, text=True, timeout=120)
+                    elif os.path.exists("package.json"):
+                        result = _sp.run(["npm", "test"], cwd=abs_project, capture_output=True, text=True, timeout=120)
+                    else:
+                        result = _sp.run([".venv/Scripts/python", "-m", "pytest"], cwd=abs_project, capture_output=True, text=True, timeout=120)
+                    console.print(result.stdout)
+                    if result.stderr:
+                        console.print(f"[red]{result.stderr}[/red]")
+                    continue
+                elif cmd == "/lint":
+                    import subprocess as _sp
+                    console.print("[dim]Running linter...[/dim]")
+                    if os.path.exists("ruff.toml") or os.path.exists(".ruff.toml"):
+                        result = _sp.run([".venv/Scripts/python", "-m", "ruff", "check", "."], cwd=abs_project, capture_output=True, text=True, timeout=60)
+                    else:
+                        result = _sp.run([".venv/Scripts/python", "-m", "py_compile", "dev/__init__.py"], cwd=abs_project, capture_output=True, text=True, timeout=60)
+                    console.print(result.stdout)
+                    if result.stderr:
+                        console.print(f"[red]{result.stderr}[/red]")
+                    continue
+                elif cmd == "/config":
+                    console.print(f"  Model: {agent_loop.config.model}")
+                    console.print(f"  Approval: {agent_loop.config.approval_mode}")
+                    console.print(f"  Plan mode: {agent_loop.config.enforce_plan_mode}")
+                    console.print(f"  Auto-lint: {agent_loop.config.auto_lint}")
+                    console.print(f"  Auto-commit: {agent_loop.config.auto_commit}")
+                    console.print(f"  Max context: {agent_loop.config.max_context_tokens:,} tokens")
+                    console.print(f"  Max steps: {agent_loop.config.max_retries}")
+                    console.print(f"  Temperature: {agent_loop.config.temperature}")
+                    console.print(f"  Diff preview: {agent_loop.config.diff_preview}")
+                    continue
+                elif cmd.startswith("/worktree"):
+                    import subprocess as _sp
+                    parts = cmd.split()
+                    if len(parts) > 1 and parts[1] == "list":
+                        result = _sp.run(["git", "worktree", "list"], cwd=abs_project, capture_output=True, text=True)
+                        console.print(result.stdout)
+                    elif len(parts) > 1 and parts[1] == "add":
+                        branch = parts[2] if len(parts) > 2 else f"experiment-{int(time.time())}"
+                        wt_path = os.path.join(os.path.dirname(abs_project), f"dev-{branch}")
+                        result = _sp.run(["git", "worktree", "add", "-b", branch, wt_path], cwd=abs_project, capture_output=True, text=True)
+                        if result.returncode == 0:
+                            console.print(f"[green]Worktree created: {wt_path} (branch: {branch})[/green]")
+                        else:
+                            console.print(f"[red]{result.stderr}[/red]")
+                    elif len(parts) > 1 and parts[1] == "remove":
+                        wt_path = parts[2] if len(parts) > 2 else ""
+                        if wt_path:
+                            result = _sp.run(["git", "worktree", "remove", wt_path], cwd=abs_project, capture_output=True, text=True)
+                            if result.returncode == 0:
+                                console.print(f"[green]Worktree removed: {wt_path}[/green]")
+                            else:
+                                console.print(f"[red]{result.stderr}[/red]")
+                        else:
+                            console.print("[yellow]Usage: /worktree remove <path>[/yellow]")
+                    else:
+                        console.print("[dim]Usage: /worktree list|add [branch]|remove <path>[/dim]")
+                    continue
                 else:
                     console.print(f"[yellow]Unknown command: {cmd}[/yellow]")
                     console.print("[dim]Type /help for available commands[/dim]")
@@ -952,10 +1052,12 @@ def chat(
             tui = DevTUI()
             display = StreamingDisplay(tui)
             full_response = []
+            stream_tokens = [0]
 
             def on_text(chunk):
                 display.update(chunk)
                 full_response.append(chunk)
+                stream_tokens[0] += len(chunk) // 3
 
             def on_tool_call(name, args):
                 display.end()
@@ -1016,6 +1118,12 @@ def chat(
                 tool_calls = result.get("tool_calls", [])
                 if tool_calls:
                     console.print(f"[dim]Used {len(tool_calls)} tool(s) in {result.get('steps', 0)} step(s)[/dim]")
+
+                # Show real-time token/cost summary
+                tokens_sent = result.get("tokens_sent", 0)
+                tokens_recv = result.get("tokens_received", 0)
+                if tokens_sent or tokens_recv:
+                    console.print(f"[dim]  Tokens: {tokens_sent:,} sent + {tokens_recv:,} received = {tokens_sent + tokens_recv:,} total[/dim]")
 
                 # Show colored diff after edits
                 if tool_calls and agent_loop.config.show_diffs:
@@ -1134,17 +1242,32 @@ def _show_help():
 - `/verbose` - Toggle verbose mode
 - `/compact` - Manually compact conversation context
 
+## File Operations
+- `/undo` - Undo last file change
+- `/redo` - Redo last undone change
+- `/diff` - Show colored git diff
+- `/commit` - Commit all changes with a message
+
+## Git
+- `/branch [name]` - List or create/switch branches
+- `/worktree list|add|remove` - Manage git worktrees for experiments
+
+## Code Quality
+- `/test` - Run project tests
+- `/lint` - Run linter
+
 ## Project
 - `/detect` - Detect project type
-- `/git` - Show colored git diff
 - `/rules` - Show project rules
 - `/doctor` - Run diagnostics
+- `/config` - Show current configuration
 
 ## Information
 - `/stats` - Show token/request stats
 - `/cost` - Show cost dashboard
 - `/agents` - List available agents
 - `/templates` - List workflow templates
+- `/memory` - Show auto-learned rules
 """))
 
 

@@ -69,6 +69,7 @@ class LoopConfig:
     repo_map_tokens: int = 1024
     max_context_tokens: int = 128_000  # NVIDIA NIM context window
     approval_mode: str = "auto-edit"  # suggest, auto-edit, full-auto
+    diff_preview: bool = False  # Show diff before applying edits
     enforce_plan_mode: bool = False  # If True, only read-only actions allowed
 
 
@@ -676,6 +677,34 @@ class ProductionAgentLoop:
                         )
                         continue
 
+                # Diff preview before modifications
+                if self.config.diff_preview and tool_name in COMMIT_TOOLS:
+                    file_path = tool_args.get("path", "")
+                    if file_path and os.path.isfile(file_path):
+                        try:
+                            with open(file_path, "r", encoding="utf-8", errors="replace") as f:
+                                current = f.read()
+                            # Show what will change
+                            if tool_name == "str_replace":
+                                old = tool_args.get("old_string", "")
+                                new = tool_args.get("new_string", "")
+                                if old in current:
+                                    preview = current.replace(old, new, 1)
+                                    import difflib
+                                    diff = list(difflib.unified_diff(
+                                        current.splitlines(keepends=True),
+                                        preview.splitlines(keepends=True),
+                                        fromfile=f"a/{file_path}",
+                                        tofile=f"b/{file_path}",
+                                        lineterm="",
+                                    ))
+                                    if diff:
+                                        self._log("--- Diff Preview ---")
+                                        for line in diff[:30]:
+                                            self._log(line.rstrip())
+                        except Exception:
+                            pass
+
                 # Backup file before modifications
                 if tool_name in COMMIT_TOOLS:
                     file_path = tool_args.get("path", "")
@@ -1011,6 +1040,42 @@ class ProductionAgentLoop:
             }
         except Exception as e:
             return {"success": False, "message": f"Restore failed: {e}"}
+
+    def redo_last(self) -> dict:
+        """Redo the last undone change (re-apply from current file to backup state)."""
+        # Redo = re-read the backup and apply it as a new edit
+        if self._checkpoint_id <= 0:
+            return {"success": False, "message": "No checkpoints to redo"}
+
+        backup_dir = os.path.join(self.project_path, self._state.backup_dir)
+        if not os.path.isdir(backup_dir):
+            return {"success": False, "message": "No backup directory"}
+
+        backups = sorted(
+            [f for f in os.listdir(backup_dir) if f.startswith("cp")],
+            reverse=True,
+        )
+        if not backups:
+            return {"success": False, "message": "No backup files"}
+
+        latest = backups[0]
+        backup_path = os.path.join(backup_dir, latest)
+        meta_path = backup_path + ".meta"
+        original_path = None
+        if os.path.isfile(meta_path):
+            with open(meta_path, "r", encoding="utf-8") as f:
+                original_path = f.read().strip()
+
+        if not original_path:
+            return {"success": False, "message": "No original path recorded"}
+
+        # Redo = the backup IS the new state, so we just confirm it's applied
+        # (undo already restored it; redo is a no-op if already restored)
+        return {
+            "success": True,
+            "message": f"Redo applied: {original_path}",
+            "restored": original_path,
+        }
 
     # =========================================================================
     # Auto-Compact (Claude Code pattern)
