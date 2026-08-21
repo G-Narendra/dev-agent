@@ -32,16 +32,11 @@ console = Console()
 CONFIG_DIR = Path.home() / ".dev"
 CONFIG_FILE = CONFIG_DIR / "config.json"
 
-# NVIDIA NIMs free-tier models
+# NVIDIA NIMs free-tier models (verified working)
 FREE_MODELS = {
-    "nvidia/llama-3.1-nemotron-70b-instruct": "Coding & reasoning (128K context)",
-    "nvidia/llama-3.1-8b-instruct": "Fast responses (128K context)",
-    "nvidia/llama-3.3-70b-instruct": "Advanced reasoning (128K context)",
-    "deepseek-ai/deepseek-r1": "Deep reasoning & math (128K context)",
-    "qwen/qwen2.5-coder-32b-instruct": "Code generation (128K context)",
-    "qwen/qwen2.5-72b-instruct": "General purpose (128K context)",
-    "meta/llama-3.1-405b-instruct": "Largest free model (128K context)",
-    "google/gemma-2-27b-it": "Google's free model (8K context)",
+    "meta/llama-3.1-8b-instruct": "Fast responses (128K context)",
+    "meta/llama-3.1-70b-instruct": "Coding & reasoning (128K context)",
+    "meta/llama-3.2-11b-vision-instruct": "Vision + text (128K context)",
 }
 
 NIM_BASE_URL = "https://integrate.api.nvidia.com/v1"
@@ -66,7 +61,7 @@ async def verify_key(api_key: str) -> dict:
     """
     try:
         async with httpx.AsyncClient(timeout=30.0) as client:
-            # Test with a simple chat completion
+            # Test with a simple chat completion using a known working model
             response = await client.post(
                 f"{NIM_BASE_URL}/chat/completions",
                 headers={
@@ -74,7 +69,7 @@ async def verify_key(api_key: str) -> dict:
                     "Content-Type": "application/json",
                 },
                 json={
-                    "model": "nvidia/llama-3.1-8b-instruct",
+                    "model": "meta/llama-3.1-8b-instruct",
                     "messages": [{"role": "user", "content": "Say OK"}],
                     "max_tokens": 5,
                     "temperature": 0.1,

@@ -43,8 +43,7 @@ class TestNimProvider:
         assert "coding" in NimProvider.MODELS
         assert "reasoning" in NimProvider.MODELS
         assert "fast" in NimProvider.MODELS
-        assert "deepseek" in NimProvider.MODELS
-        assert "qwen" in NimProvider.MODELS
+        assert "default" in NimProvider.MODELS
         print("  OK: NIM models defined")
 
     def test_key_rotation(self):

@@ -52,14 +52,13 @@ class NimProvider:
     
     BASE_URL = "https://integrate.api.nvidia.com/v1"
     
-    # Available models on NVIDIA NIMs free tier
+    # Available models on NVIDIA NIMs free tier (verified working)
     MODELS = {
-        "coding": "nvidia/llama-3.1-nemotron-70b-instruct",
-        "reasoning": "nvidia/llama-3.1-nemotron-70b-instruct",
-        "fast": "nvidia/llama-3.1-8b-instruct",
-        "deepseek": "deepseek-ai/deepseek-r1",
-        "qwen": "qwen/qwen2.5-coder-32b-instruct",
-        "default": "nvidia/llama-3.1-nemotron-70b-instruct",
+        "coding": "meta/llama-3.1-70b-instruct",
+        "reasoning": "meta/llama-3.1-70b-instruct",
+        "fast": "meta/llama-3.1-8b-instruct",
+        "vision": "meta/llama-3.2-11b-vision-instruct",
+        "default": "meta/llama-3.1-8b-instruct",
     }
     
     def __init__(
