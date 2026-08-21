@@ -370,7 +370,7 @@ def run(
                 auto_commit=True,
                 auto_test=False,
                 verbose=verbose,
-                approval_mode=approval,
+                approval_mode=approval_mode,
             )
             agent_loop = ProductionAgentLoop(
                 provider=provider,
@@ -495,6 +495,9 @@ def chat(
 ):
     """Interactive chat with streaming, tools, approval modes, context pruning."""
     async def _chat():
+        # Initialize local approval_mode from the chat() parameter
+        approval_mode = approval
+
         # --init-only: run setup hooks then exit
         if init_only:
             console.print("[dim]Running setup hooks...[/dim]")
@@ -563,7 +566,7 @@ def chat(
 
         # --permission-mode: override approval mode
         if permission_mode:
-            approval = permission_mode
+            approval_mode = permission_mode
 
         # --agents: parse custom subagents JSON
         custom_agents = {}
@@ -624,7 +627,7 @@ def chat(
 
         # Wire dangerously-skip-permissions
         if dangerously_skip:
-            approval = "full-auto"
+            approval_mode = "full-auto"
 
         # --print mode: non-interactive, print response and exit
         if print_mode:
@@ -728,7 +731,7 @@ def chat(
             console.print(f"[dim]Detected: {info.language}/{info.framework}[/dim]")
 
         # Show welcome
-        mode_label = f"[bold yellow]{approval}[/bold yellow]"
+        mode_label = f"[bold yellow]{approval_mode}[/bold yellow]"
         if plan:
             mode_label += " + [bold cyan]plan mode[/bold cyan]"
         console.print(Panel(
