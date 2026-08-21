@@ -505,7 +505,15 @@ class RealRunTerminalCommand(Tool):
     async def execute(self, input_data: dict, state: Any, project_path: str) -> dict:
         command = input_data.get("command", "")
         cwd = input_data.get("cwd", project_path)
+        if not cwd or not os.path.isdir(cwd):
+            cwd = project_path
         timeout = input_data.get("timeout_seconds", 30)
+        # LLM may send timeout as string
+        if isinstance(timeout, str):
+            try:
+                timeout = int(timeout)
+            except (ValueError, TypeError):
+                timeout = 30
 
         import signal as _signal
         is_windows = os.name == 'nt'
@@ -515,14 +523,12 @@ class RealRunTerminalCommand(Tool):
                 "stderr": asyncio.subprocess.PIPE,
                 "cwd": cwd,
             }
-            if is_windows:
-                kwargs["creationflags"] = subprocess.CREATE_NEW_PROCESS_GROUP
-            else:
+            if not is_windows:
                 kwargs["preexec_fn"] = os.setsid
 
-            # On Windows, detect if bash is available and use it for shell scripts
+            # On Windows, use cmd /c for complex commands
             effective_command = command
-            if os.name == 'nt':
+            if is_windows:
                 import shlex
                 # If command starts with ./ or uses bash syntax, try to use bash
                 if command.startswith('./') or command.startswith('bash '):
