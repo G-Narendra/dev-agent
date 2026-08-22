@@ -644,19 +644,30 @@ class ProductionAgentLoop:
                 if truncated:
                     # Re-request WITHOUT tools — model generates full code as text
                     self._log("Retrying without tools for full code generation")
+                    # Extract the folder prefix from the original request if present
+                    folder_prefix = ""
+                    for tc in tool_calls_data:
+                        try:
+                            args = json.loads(tc["function"]["arguments"])
+                            p = args.get("path", "")
+                            if "/" in p:
+                                folder_prefix = p.split("/")[0] + "/"
+                                break
+                        except Exception:
+                            pass
                     retry_prompt = (
-                        "You are building a project. Generate the COMPLETE code for ALL files.\n"
-                        "Do NOT use any tools. Write EVERY file as a fenced code block.\n\n"
+                        "Generate COMPLETE code for ALL files. Write EVERY file as a fenced code block.\n\n"
+                        f"IMPORTANT: All file paths must start with '{folder_prefix}' prefix.\n\n"
                         "FORMAT — follow EXACTLY:\n"
-                        "```filename: path/to/file.ext\n"
-                        "<complete file content>\n"
+                        "```filename: folder/file.ext\n"
+                        "<complete file content with REAL newlines, not escaped>\n"
                         "```\n\n"
                         "Rules:\n"
+                        f"- All paths MUST start with '{folder_prefix}' (e.g. {folder_prefix}server.js, {folder_prefix}views/index.ejs)\n"
                         "- Use the format: ```filename: path/to/file\n"
                         "- Each file gets its own fenced code block\n"
-                        "- Write COMPLETE files — no placeholders, no truncation\n"
+                        "- Write COMPLETE files with REAL newlines — no placeholders, no truncation\n"
                         "- Create ALL files needed for the project\n"
-                        "- Include package.json, server files, HTML, CSS, JS — everything\n"
                     )
                     retry_msg_dicts = [
                         {"role": "system", "content": retry_prompt},
@@ -1287,6 +1298,14 @@ class ProductionAgentLoop:
                 return line
             return None
 
+        def _unescape_content(s: str) -> str:
+            """Fix escaped newlines and quotes that the model outputs literally."""
+            s = s.replace('\\n', '\n')
+            s = s.replace('\\t', '\t')
+            s = s.replace('\\"', '"')
+            s = s.replace("\\'", "'")
+            return s
+
         # --- Approach 1: ```path/to/file.js\n<code>\n``` (path as lang tag) ---
         fence_inline = re.compile(
             r'(?:^|\n)```((?:[a-zA-Z0-9_\-]+/)*[a-zA-Z0-9_\-]+\.[a-zA-Z0-9]{1,10})\s*\n(.*?)```',
@@ -1294,7 +1313,7 @@ class ProductionAgentLoop:
         )
         for m in fence_inline.finditer(text):
             path = m.group(1).strip()
-            code = m.group(2).strip()
+            code = _unescape_content(m.group(2).strip())
             if path and code and path not in seen_paths:
                 seen_paths.add(path)
                 calls.append({
@@ -1561,6 +1580,8 @@ class ProductionAgentLoop:
 When creating files, use the write_file tool ONE FILE AT A TIME with COMPLETE content.
 Do NOT describe what you will create — just create it.
 Do NOT use code blocks or text descriptions — use the write_file tool directly.
+Do NOT overwrite or modify files in the skills/ folder.
+Each file must be PRODUCTION-QUALITY code, not placeholders.
 
 ### Multi-File Projects
 When building a project with multiple files:
@@ -1573,9 +1594,10 @@ When building a project with multiple files:
 ### Step-by-Step
 - Create ONE file per tool call — complete, production-quality code
 - Never truncate, never use placeholders, never say "similar to above"
-- After creating server.js, create index.html, then CSS, then JS, etc.
 - Keep creating files until your todo list is fully checked off
 - You MUST keep working — do not stop until every file is created
+- Run npm install after package.json is created
+- Test the server starts correctly after all files are created
 """)
 
         return "\n".join(parts)
