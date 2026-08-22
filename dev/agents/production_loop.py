@@ -555,7 +555,7 @@ class ProductionAgentLoop:
 
                     is_retryable = any(
                         kw in last_error.lower()
-                        for kw in ["rate", "timeout", "502", "503", "504",
+                        for kw in ["rate", "timeout", "500", "502", "503", "504",
                                    "overloaded", "econnrefused", "econnreset",
                                    "connection", "network", "reset"]
                     )
@@ -563,6 +563,15 @@ class ProductionAgentLoop:
                     if not is_retryable:
                         self._log(f"Non-retryable error: {last_error}")
                         break
+
+                    # On server errors, prune context to reduce payload size
+                    if '500' in last_error:
+                        old_limit = self.config.max_context_tokens
+                        self.config.max_context_tokens = int(old_limit * 0.7)
+                        self._log(f"Server error — reducing context from {old_limit:,} to {self.config.max_context_tokens:,}")
+                        self._state.cur_messages = self._state.cur_messages[-6:]
+                        if self._state.done_messages:
+                            self._state.done_messages = self._state.done_messages[-3:]
 
                     retry_delay = min(
                         self.config.retry_delay * (2 ** attempt),
@@ -592,6 +601,65 @@ class ProductionAgentLoop:
             self._state.cur_messages.append(
                 Message(role="assistant", content=full_content, tool_calls=tool_calls_data)
             )
+
+            # If no tool calls from API, try to extract from text output
+            if not tool_calls_data and full_content:
+                parsed_calls = self._parse_text_tool_calls(full_content)
+                if parsed_calls:
+                    tool_calls_data = parsed_calls
+                    self._log(f"Extracted {len(parsed_calls)} tool calls from text output")
+
+            # Detect truncated write_file tool calls (NIM free tier limits tool arg tokens)
+            if tool_calls_data:
+                truncated = False
+                for tc in tool_calls_data:
+                    tn = tc.get("function", {}).get("name", "")
+                    if tn == "write_file":
+                        try:
+                            args = json.loads(tc["function"]["arguments"])
+                            ct = args.get("content", "")
+                            # Detect truncation: content is short AND ends mid-expression
+                            if ct and len(ct) < 30:
+                                # Check if content looks truncated (ends mid-string, mid-paren, etc.)
+                                stripped = ct.rstrip()
+                                if stripped and stripped[-1] in ('(', '[', '{', ',', ':', '=', '+', ' ', '\\'):
+                                    truncated = True
+                                    self._log(f"Detected truncated write_file content ({len(ct)} chars) — will retry as text")
+                                    break
+                        except Exception:
+                            pass
+
+                if truncated:
+                    # Re-request WITHOUT tools — model generates full code as text
+                    self._log("Retrying without tools for full code generation")
+                    retry_msg_dicts = [
+                        {"role": "system", "content": "Generate the complete code as text. Do NOT use any tools. Output each file in a fenced code block with the filename as a comment on the first line: // filename: path/to/file\n<code>"},
+                        msg_dicts[1],  # Original user message
+                    ]
+                    try:
+                        retry_content = ""
+                        async for event in self.provider.chat_completion_stream_events(
+                            messages=retry_msg_dicts,
+                            model=self.config.model,
+                            temperature=self.config.temperature,
+                            max_tokens=8192,
+                            tools=None,
+                        ):
+                            if event.get("type") == "text":
+                                retry_content += event.get("content", "")
+
+                        if retry_content:
+                            # Parse code blocks into write_file calls
+                            parsed = self._parse_code_blocks(retry_content)
+                            if parsed:
+                                tool_calls_data = parsed
+                                self._log(f"Parsed {len(parsed)} file(s) from code blocks")
+                                # Update the assistant message with the full content
+                                self._state.cur_messages[-1] = Message(
+                                    role="assistant", content=retry_content, tool_calls=tool_calls_data
+                                )
+                    except Exception as e:
+                        self._log(f"Retry without tools failed: {e}")
 
             # No tool calls = done
             if not tool_calls_data:
@@ -974,6 +1042,183 @@ class ProductionAgentLoop:
         except Exception:
             pass
 
+    def _parse_text_tool_calls(self, text: str) -> list[dict]:
+        """Extract tool calls from text when model outputs code instead of API tool calls.
+        
+        Handles Meta <|python_tag|> format, raw Python calls, and code-fenced output.
+        """
+        import re, sys
+        calls = []
+        Q = r'["\x27]'  # quote char class
+        
+        # Strip Meta model artifacts and code fences
+        clean = text
+        clean = re.sub(r'<\|python_tag\|>', '', clean)
+        clean = re.sub(r'```\w*', '', clean)
+        clean = clean.strip()
+        
+        # Helper: extract string value from kwarg
+        def _kw_val(block, key):
+            m = re.search(key + r'\s*=\s*"([^"]+)"', block)
+            if m:
+                return m.group(1)
+            m = re.search(key + r"\s*=\s*'([^']+)'", block)
+            if m:
+                return m.group(1)
+            return ''
+        
+        # --- write_file with kwargs ---
+        for m in re.finditer(r'write_file\s*\((.+?)\n\s*\)', clean, re.DOTALL):
+            block = m.group(1)
+            p = _kw_val(block, 'path')
+            if not p:
+                continue
+            ct = _kw_val(block, 'content')
+            # Try triple quotes
+            tq = re.search(r'content\s*=\s*"""(.+?)"""', block, re.DOTALL)
+            if tq:
+                ct = tq.group(1)
+            calls.append({
+                'id': f'parsed-{len(calls)}', 'type': 'function',
+                'function': {'name': 'write_file',
+                             'arguments': json.dumps({'path': p, 'content': ct})},
+            })
+        
+        # --- write_file positional: write_file("path", "content") ---
+        if not calls:
+            for m in re.finditer(r'write_file\s*\(\s*"([^"]+)"\s*,\s*"(.+?)"\s*\)', clean, re.DOTALL):
+                calls.append({
+                    'id': f'parsed-{len(calls)}', 'type': 'function',
+                    'function': {'name': 'write_file',
+                                 'arguments': json.dumps({'path': m.group(1), 'content': m.group(2)})},
+                })
+            for m in re.finditer(r"write_file\s*\(\s*'([^']+)'\s*,\s*'(.+?)'\s*\)", clean, re.DOTALL):
+                calls.append({
+                    'id': f'parsed-{len(calls)}', 'type': 'function',
+                    'function': {'name': 'write_file',
+                                 'arguments': json.dumps({'path': m.group(1), 'content': m.group(2)})},
+                })
+        
+        # --- run_terminal_command ---
+        for m in re.finditer(r'run_terminal_command\s*\(\s*"([^"]+)"', clean):
+            calls.append({
+                'id': f'parsed-{len(calls)}', 'type': 'function',
+                'function': {'name': 'run_terminal_command',
+                             'arguments': json.dumps({'command': m.group(1)})},
+            })
+        for m in re.finditer(r"run_terminal_command\s*\(\s*'([^']+)'", clean):
+            calls.append({
+                'id': f'parsed-{len(calls)}', 'type': 'function',
+                'function': {'name': 'run_terminal_command',
+                             'arguments': json.dumps({'command': m.group(1)})},
+            })
+        
+        # --- read_files ---
+        for m in re.finditer(r'read_files\s*\(\s*\[(.+?)\]', clean, re.DOTALL):
+            paths = re.findall(r'"([^"]+)"', m.group(1))
+            if not paths:
+                paths = re.findall(r"'([^']+)'", m.group(1))
+            if paths:
+                calls.append({
+                    'id': f'parsed-{len(calls)}', 'type': 'function',
+                    'function': {'name': 'read_files',
+                                 'arguments': json.dumps({'paths': paths})},
+                })
+        
+        # --- list_directory ---
+        for m in re.finditer(r'list_directory\s*\(\s*"([^"]+)"', clean):
+            calls.append({
+                'id': f'parsed-{len(calls)}', 'type': 'function',
+                'function': {'name': 'list_directory',
+                             'arguments': json.dumps({'path': m.group(1)})},
+            })
+        
+        # --- Python with open(...) patterns ---
+        # Instead of parsing Python string concat (fragile), execute the code directly
+        if 'with open(' in clean or 'os.system(' in clean:
+            # Extract the Python code block (everything after <|python_tag|>)
+            code = clean
+            # Find where actual code starts (after import os or similar)
+            code_match = re.search(r'(import\s+os.*)', code, re.DOTALL)
+            if code_match:
+                code = code_match.group(1)
+            # Remove find/cat commands (read-only) and replace with no-ops
+            code = re.sub(r'os\.system\s*\(\s*["\x27]find\s+[^"\x27]*["\x27]\s*\)', 'pass', code)
+            code = re.sub(r'os\.system\s*\(\s*["\x27]cat\s+[^"\x27]*["\x27]\s*\)', 'pass', code)
+            try:
+                # Execute the Python code in a subprocess for safety
+                import subprocess as _sp
+                result = _sp.run(
+                    [sys.executable, '-c', code],
+                    capture_output=True, text=True, timeout=30,
+                    cwd=os.path.abspath(self.project_path) if hasattr(self, 'project_path') else '.',
+                    env={**os.environ, 'PYTHONUTF8': '1'},
+                )
+                if result.returncode == 0:
+                    self._log(f'Executed Python code block successfully')
+                    # Return a synthetic success for all file writes
+                    files_written = re.findall(r'open\s*\(\s*"([^"]+)"', code)
+                    for fw in files_written:
+                        calls.append({
+                            'id': f'parsed-{len(calls)}', 'type': 'function',
+                            'function': {'name': 'write_file',
+                                         'arguments': json.dumps({'path': fw, 'content': '[executed via python]'})},
+                        })
+                    # Also catch os.system commands
+                    for cmd in re.findall(r'os\.system\s*\(\s*"([^"]+)"', code):
+                        if 'find ' not in cmd and 'cat ' not in cmd:
+                            calls.append({
+                                'id': f'parsed-{len(calls)}', 'type': 'function',
+                                'function': {'name': 'run_terminal_command',
+                                             'arguments': json.dumps({'command': cmd})},
+                            })
+                else:
+                    self._log(f'Python code execution failed: {result.stderr[:200]}')
+            except Exception as e:
+                self._log(f'Python code execution error: {e}')
+        
+        return calls
+
+    def _parse_code_blocks(self, text: str) -> list[dict]:
+        """Parse fenced code blocks into write_file tool calls.
+        
+        Handles model output format:
+        // filename: path/to/file.js
+        ```javascript
+        <code>
+        ```
+        """
+        import re
+        calls = []
+        seen_paths = set()
+        
+        # Pattern: // [optional prefix:] path/to/file.ext followed by fenced code block
+        # Handles: // filename: foo.py, // path: foo.py, // foo.py
+        for m in re.finditer(
+            r'//\s*(?:(?:filename|file|path):\s*)?([^\n]+\.[a-zA-Z0-9]+)\s*\n\s*```\w*\n(.*?)```',
+            text, re.DOTALL
+        ):
+            path = m.group(1).strip()
+            code = m.group(2).strip()
+            if not path or not code or path in seen_paths:
+                continue
+            # Only accept paths that look like files (have extension)
+            if not re.search(r'\.[a-zA-Z0-9]{1,10}$', path):
+                continue
+            seen_paths.add(path)
+            calls.append({
+                'id': f'parsed-{len(calls)}', 'type': 'function',
+                'function': {'name': 'write_file',
+                             'arguments': json.dumps({'path': path, 'content': code,
+                                                      'instructions': f'Create {path}'})},
+            })
+        
+        # Fallback: try write_file() text calls
+        if not calls:
+            calls = self._parse_text_tool_calls(text)
+        
+        return calls
+
     def _backup_file(self, file_path: str) -> str | None:
         """Create a backup of a file before modification. Returns backup path."""
         abs_path = os.path.join(self.project_path, file_path) if not os.path.isabs(file_path) else file_path
@@ -1180,6 +1425,28 @@ class ProductionAgentLoop:
         if self.config.enforce_plan_mode:
             parts.append("\n\n## CURRENT MODE: PLAN (read-only)\nYou can ONLY use read-only tools. To make changes, the user must switch to act mode.")
 
+        # NIM model instruction: use text blocks for file creation
+        parts.append("""
+
+## FILE CREATION INSTRUCTIONS
+When creating or writing files, DO NOT use the write_file tool for large content.
+Instead, output each file as a fenced code block with a path header:
+
+// path/to/filename.js
+```javascript
+const code = here;
+```
+
+// path/to/other_file.py
+```python
+def main():
+    pass
+```
+
+You MUST include ALL file content completely — do not truncate or abbreviate.
+Only use write_file tool for very small edits or when specifically asked.
+""")
+
         return "\n".join(parts)
 
     def _load_project_rules(self) -> str:
@@ -1281,23 +1548,51 @@ class ProductionAgentLoop:
     def _messages_to_dicts(self, messages: list[Message]) -> list[dict]:
         """Convert Message objects to API-compatible dicts.
         
-        Some NIM endpoints reject messages with both content and tool_calls.
-        Strip content when tool_calls are present to avoid 400 errors.
+        NVIDIA NIM models (especially Llama 3.1 on NIM) only support
+        single tool-calls per assistant message. This method splits
+        multi-tool-call assistant messages into individual pairs:
+          assistant(tc1) -> tool(result1) -> assistant(tc2) -> tool(result2)
         """
+        # First, collect tool results by tool_call_id for easy lookup
+        tool_results_by_id = {}
+        for m in messages:
+            if m.role == "tool" and m.tool_call_id:
+                tool_results_by_id[m.tool_call_id] = m
+
         result = []
         for m in messages:
-            md = {"role": m.role}
-            # Strip content if tool_calls are present (avoids 400 on strict APIs)
-            if m.tool_calls:
-                md["tool_calls"] = m.tool_calls
-                # Don't include content — some APIs reject hybrid messages
+            if m.role == "assistant" and m.tool_calls and len(m.tool_calls) > 1:
+                # Split multi-tool-call assistant into individual pairs
+                for tc in m.tool_calls:
+                    tc_id = tc.get("id", "")
+                    # Assistant message with single tool call
+                    result.append({
+                        "role": "assistant",
+                        "content": m.content or "",
+                        "tool_calls": [tc],
+                    })
+                    # Corresponding tool result
+                    tool_m = tool_results_by_id.get(tc_id)
+                    if tool_m:
+                        result.append({
+                            "role": "tool",
+                            "tool_call_id": tc_id,
+                            "name": tool_m.name or tc.get("function", {}).get("name", ""),
+                            "content": tool_m.content or "{}",
+                        })
+            elif m.role == "tool" and m.tool_call_id:
+                # Skip standalone tool results — already handled above
+                continue
             else:
+                md = {"role": m.role}
                 md["content"] = m.content or ""
-            if m.tool_call_id:
-                md["tool_call_id"] = m.tool_call_id
-            if m.name:
-                md["name"] = m.name
-            result.append(md)
+                if m.tool_calls:
+                    md["tool_calls"] = m.tool_calls
+                if m.tool_call_id:
+                    md["tool_call_id"] = m.tool_call_id
+                if m.name:
+                    md["name"] = m.name
+                result.append(md)
         return result
 
     def _count_tokens(self, messages: list[Message]) -> int:

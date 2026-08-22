@@ -370,7 +370,7 @@ class NimProvider:
                     yield {"type": "tool_call", "tool_call": tc}
                 yield {"type": "finish", "reason": finish_reason}
                 return
-            except Exception as e:
+            except Exception:
                 pass  # Fall through to streaming without tools
         
         # Fallback: non-streaming call (works reliably)

@@ -186,10 +186,11 @@ class RealWriteFileTool(Tool):
             return {"error": str(e), "path": path}
 
     def _resolve_path(self, path: str, project_path: str) -> str:
+        # Always resolve to absolute first
         if os.path.isabs(path):
             abs_path = os.path.normpath(path)
         else:
-            abs_path = os.path.normpath(os.path.join(project_path, path))
+            abs_path = os.path.normpath(os.path.abspath(os.path.join(project_path, path)))
         abs_project = os.path.normpath(os.path.abspath(project_path))
         if not abs_path.startswith(abs_project):
             raise ValueError(f"Path traversal blocked: {path} resolves outside project")
@@ -304,10 +305,11 @@ class RealStrReplaceTool(Tool):
         return "\n".join(diff_lines[:50])
 
     def _resolve_path(self, path: str, project_path: str) -> str:
+        # Always resolve to absolute first
         if os.path.isabs(path):
             abs_path = os.path.normpath(path)
         else:
-            abs_path = os.path.normpath(os.path.join(project_path, path))
+            abs_path = os.path.normpath(os.path.abspath(os.path.join(project_path, path)))
         abs_project = os.path.normpath(os.path.abspath(project_path))
         if not abs_path.startswith(abs_project):
             raise ValueError(f"Path traversal blocked: {path} resolves outside project")
