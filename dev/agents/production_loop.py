@@ -608,6 +608,10 @@ class ProductionAgentLoop:
                 if parsed_calls:
                     tool_calls_data = parsed_calls
                     self._log(f"Extracted {len(parsed_calls)} tool calls from text output")
+                    # IMPORTANT: Update the assistant message so the model sees tool calls
+                    self._state.cur_messages[-1] = Message(
+                        role="assistant", content=full_content, tool_calls=tool_calls_data
+                    )
 
             # Detect truncated write_file tool calls (NIM free tier limits tool arg tokens)
             if tool_calls_data:
@@ -618,22 +622,44 @@ class ProductionAgentLoop:
                         try:
                             args = json.loads(tc["function"]["arguments"])
                             ct = args.get("content", "")
-                            # Detect truncation: content is short AND ends mid-expression
-                            if ct and len(ct) < 30:
-                                # Check if content looks truncated (ends mid-string, mid-paren, etc.)
-                                stripped = ct.rstrip()
-                                if stripped and stripped[-1] in ('(', '[', '{', ',', ':', '=', '+', ' ', '\\'):
+                            # Detect truncation: NIM free tier caps tool args severely
+                            # Check if content looks like actual code vs a placeholder/description
+                            if ct:
+                                stripped = ct.strip()
+                                # Common placeholder patterns that are NOT real code
+                                is_placeholder = stripped in ('', '/* Add your CSS styles here */',
+                                    '/* Add your JavaScript code here */', '// code here',
+                                    'TODO', 'placeholder') or stripped.startswith('Create a new file')
+                                has_code = any(c in stripped for c in '{}()=;<>[]\n@:')
+                                if is_placeholder or (len(stripped) < 50 and not has_code):
                                     truncated = True
-                                    self._log(f"Detected truncated write_file content ({len(ct)} chars) — will retry as text")
+                                    self._log(f"Detected placeholder/description content ({len(ct)} chars) — will retry as text")
                                     break
                         except Exception:
-                            pass
+                            # Even JSON parse failure = likely truncation
+                            truncated = True
+                            self._log("write_file arguments failed to parse — likely truncated")
+                            break
 
                 if truncated:
                     # Re-request WITHOUT tools — model generates full code as text
                     self._log("Retrying without tools for full code generation")
+                    retry_prompt = (
+                        "You are building a project. Generate the COMPLETE code for ALL files.\n"
+                        "Do NOT use any tools. Write EVERY file as a fenced code block.\n\n"
+                        "FORMAT — follow EXACTLY:\n"
+                        "```filename: path/to/file.ext\n"
+                        "<complete file content>\n"
+                        "```\n\n"
+                        "Rules:\n"
+                        "- Use the format: ```filename: path/to/file\n"
+                        "- Each file gets its own fenced code block\n"
+                        "- Write COMPLETE files — no placeholders, no truncation\n"
+                        "- Create ALL files needed for the project\n"
+                        "- Include package.json, server files, HTML, CSS, JS — everything\n"
+                    )
                     retry_msg_dicts = [
-                        {"role": "system", "content": "Generate the complete code as text. Do NOT use any tools. Output each file in a fenced code block with the filename as a comment on the first line: // filename: path/to/file\n<code>"},
+                        {"role": "system", "content": retry_prompt},
                         msg_dicts[1],  # Original user message
                     ]
                     try:
@@ -642,7 +668,7 @@ class ProductionAgentLoop:
                             messages=retry_msg_dicts,
                             model=self.config.model,
                             temperature=self.config.temperature,
-                            max_tokens=8192,
+                            max_tokens=16384,
                             tools=None,
                         ):
                             if event.get("type") == "text":
@@ -661,8 +687,33 @@ class ProductionAgentLoop:
                     except Exception as e:
                         self._log(f"Retry without tools failed: {e}")
 
-            # No tool calls = done
+            # No tool calls = potentially done
             if not tool_calls_data:
+                # Check if there's a pending todo list with unchecked items
+                has_pending_todos = False
+                for msg in reversed(self._state.done_messages + self._state.cur_messages):
+                    if msg.role == 'tool' and msg.name == 'write_todos' and msg.content:
+                        try:
+                            todos = json.loads(msg.content)
+                            if isinstance(todos, list):
+                                incomplete = [t for t in todos if isinstance(t, dict) and not t.get('completed', False)]
+                                if incomplete:
+                                    has_pending_todos = True
+                                    self._log(f"Found {len(incomplete)} incomplete todo items — prompting agent to continue")
+                        except Exception:
+                            pass
+                        break
+
+                if has_pending_todos and step < max_steps - 1:
+                    # Send a follow-up message to keep the agent working
+                    self._state.cur_messages.append(
+                        Message(role='assistant', content=full_content or '', tool_calls=[])  # Commit assistant text
+                    )
+                    self._state.cur_messages.append(
+                        Message(role='user', content='You are NOT done. There are still incomplete tasks in your todo list. Continue creating files until all items are checked off. Create the NEXT file now.')
+                    )
+                    continue  # Don't break — keep the loop going
+
                 final_content = full_content
                 self._state.done_messages.extend(self._state.cur_messages)
                 self._state.cur_messages = []
@@ -1067,6 +1118,25 @@ class ProductionAgentLoop:
                 return m.group(1)
             return ''
         
+        # --- JSON tool call format: {"name": "write_file", "parameters": {...}} ---
+        for m in re.finditer(r'\{\s*"name"\s*:\s*"write_file"\s*,\s*"parameters"\s*:\s*(\{.*?\})\s*\}', clean, re.DOTALL):
+            try:
+                params = json.loads(m.group(1))
+                path = params.get('path', '')
+                content = params.get('content', '')
+                instructions = params.get('instructions', '')
+                # Strip description prefixes like "Create a new file called...\n\n"
+                content = re.sub(r'^(?:Create a new file called.*?with the following content:\s*\n\s*\n?)', '', content)
+                if path and content:
+                    calls.append({
+                        'id': f'parsed-{len(calls)}', 'type': 'function',
+                        'function': {'name': 'write_file',
+                                     'arguments': json.dumps({'path': path, 'content': content,
+                                                              'instructions': instructions})},
+                    })
+            except Exception:
+                pass
+
         # --- write_file with kwargs ---
         for m in re.finditer(r'write_file\s*\((.+?)\n\s*\)', clean, re.DOTALL):
             block = m.group(1)
@@ -1181,42 +1251,99 @@ class ProductionAgentLoop:
 
     def _parse_code_blocks(self, text: str) -> list[dict]:
         """Parse fenced code blocks into write_file tool calls.
-        
-        Handles model output format:
-        // filename: path/to/file.js
-        ```javascript
-        <code>
-        ```
+
+        Handles ALL model output formats:
+        1. ```filename: path/to/file.js\n<code>\n```
+        2. ```path/to/file.js\n<code>\n```
+        3. ```\n// filename: path\n<code>\n```
+        4. ```<lang>\n// path\n<code>\n```
         """
         import re
         calls = []
         seen_paths = set()
-        
-        # Pattern: // [optional prefix:] path/to/file.ext followed by fenced code block
-        # Handles: // filename: foo.py, // path: foo.py, // foo.py
-        for m in re.finditer(
-            r'//\s*(?:(?:filename|file|path):\s*)?([^\n]+\.[a-zA-Z0-9]+)\s*\n\s*```\w*\n(.*?)```',
-            text, re.DOTALL
-        ):
+
+        def _is_file_path(s: str) -> bool:
+            """Check if a string looks like a file path."""
+            s = s.strip()
+            return bool(re.match(r'^[a-zA-Z0-9_\-]+(/[a-zA-Z0-9_\-]+)*\.[a-zA-Z0-9]{1,10}$', s))
+
+        def _extract_path_from_line(line: str) -> str | None:
+            """Extract file path from a line. Returns None if not a path."""
+            line = line.strip()
+            # // filename: path/to/file.js
+            m = re.match(r'^//\s*(?:(?:filename|file|path):\s*)(.+)$', line)
+            if m:
+                candidate = m.group(1).strip()
+                if _is_file_path(candidate):
+                    return candidate
+            # // path/to/file.js
+            m = re.match(r'^//\s+(.+)$', line)
+            if m:
+                candidate = m.group(1).strip()
+                if _is_file_path(candidate):
+                    return candidate
+            # path/to/file.js (bare)
+            if _is_file_path(line):
+                return line
+            return None
+
+        # --- Approach 1: ```path/to/file.js\n<code>\n``` (path as lang tag) ---
+        fence_inline = re.compile(
+            r'(?:^|\n)```((?:[a-zA-Z0-9_\-]+/)*[a-zA-Z0-9_\-]+\.[a-zA-Z0-9]{1,10})\s*\n(.*?)```',
+            re.DOTALL
+        )
+        for m in fence_inline.finditer(text):
             path = m.group(1).strip()
             code = m.group(2).strip()
-            if not path or not code or path in seen_paths:
-                continue
-            # Only accept paths that look like files (have extension)
-            if not re.search(r'\.[a-zA-Z0-9]{1,10}$', path):
-                continue
-            seen_paths.add(path)
-            calls.append({
-                'id': f'parsed-{len(calls)}', 'type': 'function',
-                'function': {'name': 'write_file',
-                             'arguments': json.dumps({'path': path, 'content': code,
-                                                      'instructions': f'Create {path}'})},
-            })
-        
+            if path and code and path not in seen_paths:
+                seen_paths.add(path)
+                calls.append({
+                    'id': f'parsed-{len(calls)}', 'type': 'function',
+                    'function': {'name': 'write_file',
+                                 'arguments': json.dumps({'path': path, 'content': code,
+                                                          'instructions': f'Create {path}'})},
+                })
+
+        # --- Approach 2: ```<lang>\n// filename: path\n<code>\n``` ---
+        if not calls:
+            fence_comment = re.compile(
+                r'(?:^|\n)```\w+\s*\n//\s*(?:(?:filename|file|path):\s*)?([^\n]+\.[a-zA-Z0-9]{1,10})\s*\n(.*?)```',
+                re.DOTALL
+            )
+            for m in fence_comment.finditer(text):
+                path = m.group(1).strip()
+                code = m.group(2).strip()
+                if path and code and _is_file_path(path) and path not in seen_paths:
+                    seen_paths.add(path)
+                    calls.append({
+                        'id': f'parsed-{len(calls)}', 'type': 'function',
+                        'function': {'name': 'write_file',
+                                     'arguments': json.dumps({'path': path, 'content': code,
+                                                              'instructions': f'Create {path}'})},
+                    })
+
+        # --- Approach 3: ```filename: path\n<code>\n``` (inline filename: prefix) ---
+        if not calls:
+            fence_filename = re.compile(
+                r'(?:^|\n)```(?:filename|file|path):\s*((?:[a-zA-Z0-9_\-]+/)*[a-zA-Z0-9_\-]+\.[a-zA-Z0-9]{1,10})\s*\n(.*?)```',
+                re.DOTALL
+            )
+            for m in fence_filename.finditer(text):
+                path = m.group(1).strip()
+                code = m.group(2).strip()
+                if path and code and path not in seen_paths:
+                    seen_paths.add(path)
+                    calls.append({
+                        'id': f'parsed-{len(calls)}', 'type': 'function',
+                        'function': {'name': 'write_file',
+                                     'arguments': json.dumps({'path': path, 'content': code,
+                                                              'instructions': f'Create {path}'})},
+                    })
+
         # Fallback: try write_file() text calls
         if not calls:
             calls = self._parse_text_tool_calls(text)
-        
+
         return calls
 
     def _backup_file(self, file_path: str) -> str | None:
@@ -1425,26 +1552,30 @@ class ProductionAgentLoop:
         if self.config.enforce_plan_mode:
             parts.append("\n\n## CURRENT MODE: PLAN (read-only)\nYou can ONLY use read-only tools. To make changes, the user must switch to act mode.")
 
-        # NIM model instruction: use text blocks for file creation
+        # NIM model instruction: use write_file tool one file at a time
         parts.append("""
 
-## FILE CREATION INSTRUCTIONS
-When creating or writing files, DO NOT use the write_file tool for large content.
-Instead, output each file as a fenced code block with a path header:
+## CRITICAL RULES — FOLLOW EXACTLY
 
-// path/to/filename.js
-```javascript
-const code = here;
-```
+### File Creation
+When creating files, use the write_file tool ONE FILE AT A TIME with COMPLETE content.
+Do NOT describe what you will create — just create it.
+Do NOT use code blocks or text descriptions — use the write_file tool directly.
 
-// path/to/other_file.py
-```python
-def main():
-    pass
-```
+### Multi-File Projects
+When building a project with multiple files:
+1. First, create a todo list with write_todos listing ALL files needed
+2. Then create EACH file one by one using write_file
+3. After creating each file, move to the next — do NOT stop
+4. After ALL files are created, use run_terminal_command to install dependencies if needed
+5. Only say "done" when ALL files from your todo list are created
 
-You MUST include ALL file content completely — do not truncate or abbreviate.
-Only use write_file tool for very small edits or when specifically asked.
+### Step-by-Step
+- Create ONE file per tool call — complete, production-quality code
+- Never truncate, never use placeholders, never say "similar to above"
+- After creating server.js, create index.html, then CSS, then JS, etc.
+- Keep creating files until your todo list is fully checked off
+- You MUST keep working — do not stop until every file is created
 """)
 
         return "\n".join(parts)

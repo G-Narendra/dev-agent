@@ -556,7 +556,7 @@ class RealRunTerminalCommand(Tool):
         except asyncio.TimeoutError:
             try:
                 if is_windows:
-                    proc.send_signal(signal.CTRL_BREAK_EVENT)
+                    proc.send_signal(_signal.CTRL_BREAK_EVENT)
                 else:
                     os.killpg(os.getpgid(proc.pid), _signal.SIGTERM)
             except (ProcessLookupError, OSError):
