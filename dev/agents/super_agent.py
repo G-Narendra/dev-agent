@@ -266,7 +266,8 @@ class SuperAgent:
                     if on_tool_call:
                         on_tool_call(tool_name, tool_args)
                     
-                    result = await self.tools[tool_name].execute(
+                    tool_handler = self.tools[tool_name]
+                    result = await tool_handler.execute(
                         tool_args, None, self.project_path
                     )
                     
@@ -380,11 +381,9 @@ You have access to advanced tools:
     
     def _get_tool_definitions(self) -> list:
         """Get tool definitions for API call."""
-        defs = []
-        for name, tool in self.tools.items():
-            if hasattr(tool, 'get_definition'):
-                defs.append(tool.get_definition())
-        return defs
+        if hasattr(self.tools, 'get_definitions'):
+            return self.tools.get_definitions()
+        return []
     
     def _check_pending_todos(self) -> bool:
         """Check if there are incomplete todos."""

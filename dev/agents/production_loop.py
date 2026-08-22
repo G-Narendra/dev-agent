@@ -627,11 +627,17 @@ class ProductionAgentLoop:
                             if ct:
                                 stripped = ct.strip()
                                 # Common placeholder patterns that are NOT real code
-                                is_placeholder = stripped in ('', '/* Add your CSS styles here */',
-                                    '/* Add your JavaScript code here */', '// code here',
-                                    'TODO', 'placeholder') or stripped.startswith('Create a new file')
-                                has_code = any(c in stripped for c in '{}()=;<>[]\n@:')
-                                if is_placeholder or (len(stripped) < 50 and not has_code):
+                                # Detect placeholder/description content
+                                placeholder_patterns = [
+                                    '', 'TODO', 'placeholder', 'code here',
+                                    'Add your', 'Write your', 'Insert your',
+                                    'Put your', 'Add the', 'Write the',
+                                ]
+                                is_placeholder = any(p.lower() in stripped.lower() for p in placeholder_patterns)
+                                is_comment_only = stripped.startswith('/*') and stripped.endswith('*/') and len(stripped) < 100
+                                is_short = len(stripped) < 80
+                                has_real_code = any(c in stripped for c in '{}()=;<>[]\n@:import require')
+                                if is_placeholder or is_comment_only or (is_short and not has_real_code):
                                     truncated = True
                                     self._log(f"Detected placeholder/description content ({len(ct)} chars) — will retry as text")
                                     break
