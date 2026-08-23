@@ -492,3 +492,83 @@ class ProjectDetector:
                     pass
         
         return graph
+    
+    def detect_circular_dependencies(self) -> list[list[str]]:
+        """Detect circular dependencies in the import graph."""
+        graph = self.build_import_graph()
+        cycles = []
+        
+        def dfs(node, path, visited):
+            if node in path:
+                # Found cycle
+                cycle_start = path.index(node)
+                cycles.append(path[cycle_start:] + [node])
+                return
+            if node in visited:
+                return
+            visited.add(node)
+            path.append(node)
+            for dep in graph.get(node, []):
+                dfs(dep, path, visited)
+            path.pop()
+        
+        visited = set()
+        for node in graph:
+            dfs(node, [], visited)
+        
+        return cycles
+    
+    def detect_unused_imports(self) -> list[dict]:
+        """Detect unused imports in Python files."""
+        results = []
+        
+        for root, dirs, files in os.walk(self.project_path):
+            dirs[:] = [d for d in dirs if d not in (
+                "node_modules", "__pycache__", ".git", "venv", ".venv",
+                "dist", "build",
+            )]
+            
+            for f in files:
+                if not f.endswith(".py"):
+                    continue
+                fpath = os.path.join(root, f)
+                rel_path = os.path.relpath(fpath, self.project_path)
+                
+                try:
+                    with open(fpath, "r", encoding="utf-8", errors="replace") as fh:
+                        content = fh.read()
+                    
+                    import re
+                    lines = content.split("\n")
+                    
+                    # Find all import statements
+                    imports = []
+                    for i, line in enumerate(lines):
+                        stripped = line.strip()
+                        if stripped.startswith("import "):
+                            module = stripped[7:].split(" as ")[0].split(",")[0].strip()
+                            imports.append((i + 1, module, stripped))
+                        elif stripped.startswith("from ") and "import " in stripped:
+                            parts = stripped.split(" import ")
+                            if len(parts) > 1:
+                                for imp in parts[1].split(","):
+                                    imp = imp.strip().split(" as ")[0].strip()
+                                    if imp and imp != "*":
+                                        imports.append((i + 1, imp, stripped))
+                    
+                    # Check if each import is actually used
+                    for line_no, module, stmt in imports:
+                        # Count occurrences of module name (excluding the import line)
+                        other_lines = [l for l in lines if not l.strip().startswith("import ") and not l.strip().startswith("from ")]
+                        other_content = "\n".join(other_lines)
+                        if f"{module}" not in other_content:
+                            results.append({
+                                "file": rel_path,
+                                "line": line_no,
+                                "module": module,
+                                "statement": stmt,
+                            })
+                except Exception:
+                    pass
+        
+        return results
