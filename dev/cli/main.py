@@ -1181,6 +1181,161 @@ def chat(
                     else:
                         console.print("[dim]No stashes found[/dim]")
                     continue
+                elif cmd == "/search":
+                    query = user_input[len("/search"):].strip()
+                    if not query:
+                        console.print("[dim]Usage: /search <query>[/dim]")
+                    else:
+                        import subprocess as _sp
+                        result = _sp.run(["rg", "--files-with-matches", "-i", query, abs_project],
+                                         capture_output=True, text=True, timeout=10)
+                        files = result.stdout.strip().split("\n") if result.stdout.strip() else []
+                        for f in files[:20]:
+                            console.print(f"  {f}")
+                        if len(files) > 20:
+                            console.print(f"  [dim]... {len(files) - 20} more[/dim]")
+                    continue
+                elif cmd == "/grep":
+                    pattern = user_input[len("/grep"):].strip()
+                    if not pattern:
+                        console.print("[dim]Usage: /grep <regex-pattern>[/dim]")
+                    else:
+                        import subprocess as _sp
+                        result = _sp.run(["rg", "-n", "-i", pattern, abs_project],
+                                         capture_output=True, text=True, timeout=10)
+                        lines = result.stdout.strip().split("\n") if result.stdout.strip() else []
+                        for line in lines[:30]:
+                            console.print(f"  {line}")
+                        if len(lines) > 30:
+                            console.print(f"  [dim]... {len(lines) - 30} more[/dim]")
+                    continue
+                elif cmd == "/open":
+                    filename = user_input[len("/open"):].strip()
+                    if not filename:
+                        console.print("[dim]Usage: /open <filename>[/dim]")
+                    else:
+                        filepath = os.path.join(abs_project, filename)
+                        if os.path.isfile(filepath):
+                            with open(filepath, "r", encoding="utf-8", errors="replace") as f:
+                                content = f.read()
+                            console.print(f"[bold]{filename}[/bold]")
+                            console.print(content[:5000])
+                            if len(content) > 5000:
+                                console.print(f"[dim]... truncated ({len(content)} chars total)[/dim]")
+                        else:
+                            console.print(f"[yellow]File not found: {filename}[/yellow]")
+                    continue
+                elif cmd == "/focus":
+                    focus_path = user_input[len("/focus"):].strip()
+                    if not focus_path:
+                        if agent_loop:
+                            files = list(agent_loop.get_state().fnames)
+                            console.print(f"[dim]Current focus: {', '.join(files) if files else 'none'}[/dim]")
+                        else:
+                            console.print("[dim]No active session[/dim]")
+                    else:
+                        if agent_loop:
+                            abs_f = os.path.join(abs_project, focus_path)
+                            agent_loop.get_state().fnames.add(focus_path)
+                            agent_loop.get_state().abs_fnames.add(abs_f)
+                            console.print(f"[green]Focused on: {focus_path}[/green]")
+                        else:
+                            console.print("[dim]No active session[/dim]")
+                    continue
+                elif cmd == "/ignore":
+                    ignore_path = user_input[len("/ignore"):].strip()
+                    if not ignore_path:
+                        console.print("[dim]Usage: /ignore <path-pattern>[/dim]")
+                    else:
+                        gitignore_path = os.path.join(abs_project, ".gitignore")
+                        with open(gitignore_path, "a", encoding="utf-8") as f:
+                            f.write(f"\n{ignore_path}")
+                        console.print(f"[green]Added {ignore_path} to .gitignore[/green]")
+                    continue
+                elif cmd == "/watch":
+                    console.print("[dim]File watching: use /doctor to check file system status[/dim]")
+                    continue
+                elif cmd == "/remember":
+                    remember_text = user_input[len("/remember"):].strip()
+                    if not remember_text:
+                        console.print("[dim]Usage: /remember <text-to-remember>[/dim]")
+                    else:
+                        from dev.utils.memory import AutoMemory
+                        mem = AutoMemory(abs_project)
+                        key = f"manual_{len(mem.entries)}"
+                        mem.remember(key, remember_text, "manual")
+                        console.print(f"[green]Remembered: {remember_text[:100]}[/green]")
+                    continue
+                elif cmd == "/forget":
+                    forget_key = user_input[len("/forget"):].strip()
+                    if not forget_key:
+                        console.print("[dim]Usage: /forget <key>[/dim]")
+                    else:
+                        from dev.utils.memory import AutoMemory
+                        mem = AutoMemory(abs_project)
+                        if mem.forget(forget_key):
+                            console.print(f"[green]Forgot: {forget_key}[/green]")
+                        else:
+                            console.print(f"[yellow]Key not found: {forget_key}[/yellow]")
+                    continue
+                elif cmd == "/model":
+                    model_name = user_input[len("/model"):].strip()
+                    if not model_name:
+                        if agent_loop:
+                            console.print(f"[dim]Current model: {agent_loop.config.model}[/dim]")
+                        else:
+                            console.print("[dim]No active session[/dim]")
+                    else:
+                        if agent_loop:
+                            agent_loop.config.model = model_name
+                            console.print(f"[green]Model set to: {model_name}[/green]")
+                        else:
+                            console.print("[dim]No active session[/dim]")
+                    continue
+                elif cmd == "/approve":
+                    mode = user_input[len("/approve"):].strip()
+                    if mode not in ("suggest", "auto-edit", "full-auto"):
+                        console.print("[dim]Usage: /approve <suggest|auto-edit|full-auto>[/dim]")
+                    else:
+                        if agent_loop:
+                            agent_loop.config.approval_mode = mode
+                            console.print(f"[green]Approval mode: {mode}[/green]")
+                        else:
+                            console.print("[dim]No active session[/dim]")
+                    continue
+                elif cmd == "/act":
+                    if agent_loop:
+                        agent_loop.config.enforce_plan_mode = False
+                        console.print("[green]Switched to ACT mode (write operations allowed)[/green]")
+                    continue
+                elif cmd == "/reset":
+                    if agent_loop:
+                        agent_loop.reset()
+                        console.print("[green]Agent state reset[/green]")
+                    continue
+                elif cmd == "/export":
+                    export_path = user_input[len("/export"):].strip() or "dev-export.md"
+                    with open(export_path, "w", encoding="utf-8") as f:
+                        for msg in (agent_loop.get_state().done_messages + agent_loop.get_state().cur_messages) if agent_loop else []:
+                            if msg.content:
+                                f.write(f"## {msg.role.title()}\n\n{msg.content}\n\n")
+                    console.print(f"[green]Exported to {export_path}[/green]")
+                    continue
+                elif cmd == "/snapshot":
+                    import subprocess as _sp
+                    _sp.run(["git", "add", "-A"], cwd=abs_project, capture_output=True)
+                    _sp.run(["git", "stash", "push", "-m", f"snapshot-{int(time.time())}"], cwd=abs_project, capture_output=True)
+                    console.print("[green]Project snapshot saved to git stash[/green]")
+                    continue
+                elif cmd == "/restore":
+                    import subprocess as _sp
+                    result = _sp.run(["git", "stash", "list"], cwd=abs_project, capture_output=True, text=True)
+                    if result.stdout.strip():
+                        console.print(result.stdout[:500])
+                        console.print("[dim]Use /restore-apply to apply the latest stash[/dim]")
+                    else:
+                        console.print("[dim]No stashes found[/dim]")
+                    continue
                 else:
                     console.print(f"[yellow]Unknown command: {cmd}[/yellow]")
                     console.print("[dim]Type /help for available commands[/dim]")
