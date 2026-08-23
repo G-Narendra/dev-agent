@@ -84,6 +84,16 @@ class NimProvider:
         # Model health tracking
         self._model_health: dict[str, dict] = {}  # model -> {success, failure, latency_avg}
         self._model_failures: dict[str, int] = {}  # model -> consecutive failures
+        self._verbose = False
+    
+    def _log(self, msg: str):
+        """Log a message if verbose mode is on."""
+        if self._verbose:
+            try:
+                import sys
+                print(f"[nim] {msg}", file=sys.stderr)
+            except Exception:
+                pass
     
     async def initialize(self):
         """Initialize the HTTP client with generous pool limits."""
