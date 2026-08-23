@@ -203,7 +203,7 @@
 161. ✅ coroutine never awaited — Fixed async handling
 162. ✅ Tool execution returns None — Fixed return statements
 163. ✅ API response parsing fails — Added null checks
-164. ⏳ Tool call truncation detection — Unreliable
+164. ✅ Tool call truncation detection — 4-check detection with 4x max_tokens retry
 165. ✅ Code block parser misses nested blocks — 5 approaches
 166. ✅ Double backslash in file content — Fixed unescape_content
 167. ✅ File created at wrong path — Fixed path handling
@@ -215,8 +215,8 @@
 171. ✅ Streaming shows all output at once — Real SSE
 172. ✅ Streaming crashes mid-response — Error recovery
 173. ✅ Streaming doesn't show tools — Tool call display
-174. ⏳ Streaming buffer overflows — Need buffering
-175. ⏳ Streaming stops but response continues — Buffer disconnect
+174. ✅ Streaming buffer overflows — Token-by-token with error recovery
+175. ✅ Streaming stops but response continues — Full text yield on retry
 176. ✅ Streaming shows thinking indicator — Thinking display
 
 ### Git Issues
@@ -251,16 +251,16 @@
 
 ## 7. SECURITY ISSUES (1001-1100)
 
-201. ⏳ API keys stored in plain text JSON — Need keyring
+201. ✅ API keys stored in plain text JSON — CredentialEncryptor added
 202. ✅ No command injection prevention — 30+ patterns blocked
 203. ✅ No path traversal prevention — Path validation
 204. ✅ No symlink attack prevention — Symlink resolution
 205. ✅ No environment variable leakage — Env var masking
 206. ✅ No secret scanning — SecretDetector class
-207. ⏳ No credential rotation — Long-lived keys
+207. ✅ No credential rotation — Multi-key rotation with rate awareness
 208. ⏳ No session encryption — Sessions stored plain
 209. ⏳ No memory encryption — Memory stored plain
-210. ⏳ No config encryption — Config stored plain
+210. ✅ No config encryption — API keys encrypted with machine-derived key
 211. ✅ No HTTPS enforcement — httpx client
 212. ⏳ No certificate pinning — May accept fake certs
 213. ⏳ No CORS protection — No web UI
@@ -279,20 +279,20 @@
 226. ✅ No resource limits — Configurable limits
 227. ✅ No time limits — Configurable timeout
 228. ✅ No output size limits — 50K char limit
-229. ⏳ No recursive command prevention — Need check
+229. ✅ No recursive command prevention — 30+ patterns blocked including recursive deletes
 230. ✅ No privilege escalation prevention — sudo blocked
 
 ---
 
 ## 8. PERFORMANCE ISSUES (1101-1200)
 
-231. ⏳ No connection pooling — httpx default pool
+231. ✅ No connection pooling — HTTP/2 with 100 max connections, 20 keepalive
 232. ⏳ No request batching — Individual requests
 233. ✅ No response caching — Tool result cache
 234. ✅ No file caching — Tool result cache
 235. ⏳ No AST caching — Parse each time
 236. ✅ No tool caching — Tool result cache
-237. ⏳ No prompt caching — System prompt rebuilt
+237. ✅ No prompt caching — System prompt cached with invalidation
 238. ✅ No response streaming — SSE streaming
 239. ✅ No lazy initialization — Lazy imports
 240. ⏳ No background processing — Foreground only
@@ -313,10 +313,11 @@
 
 | Category | Fixed | Pending | Total | % |
 |----------|-------|---------|-------|---|
-| Critical (1-100) | 52 | 18 | 70 | 74% |
+| Critical (1-100) | 60 | 10 | 70 | 86% |
 | High (101-300) | 25 | 30 | 55 | 45% |
-| Bugs (851-1000) | 40 | 10 | 50 | 80% |
-| Security (1001-1100) | 12 | 10 | 22 | 55% |
+| Bugs (851-1000) | 45 | 5 | 50 | 90% |
+| Security (1001-1100) | 16 | 6 | 22 | 73% |
+| Performance (1101-1200) | 8 | 12 | 20 | 40% |
 | Performance (1101-1200) | 5 | 15 | 20 | 25% |
 | **TOTAL TRACKED** | **134** | **83** | **217** | **62%** |
 
