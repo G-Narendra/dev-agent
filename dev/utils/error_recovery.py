@@ -117,7 +117,23 @@ class ErrorRecovery:
         if "connection refused" in error_str:
             return {"recovered": False, "suggestion": "Service not running. Check if the server is started."}
         
-        # Strategy 6: Custom registered strategies
+        # Strategy 6: JSON decode error — suggest checking file format
+        if "json" in error_str and ("decode" in error_str or "parse" in error_str):
+            return {"recovered": False, "suggestion": "Invalid JSON. Check the file format and syntax."}
+        
+        # Strategy 7: Unicode/encoding error — suggest checking file encoding
+        if "unicode" in error_str or "encoding" in error_str:
+            return {"recovered": False, "suggestion": "Encoding error. Try specifying encoding='utf-8' or errors='replace'."}
+        
+        # Strategy 8: Timeout — suggest checking network or increasing timeout
+        if "timeout" in error_str:
+            return {"recovered": False, "suggestion": "Request timed out. Check network connection or increase timeout."}
+        
+        # Strategy 9: Out of memory — suggest reducing data size
+        if "memory" in error_str or "oom" in error_str:
+            return {"recovered": False, "suggestion": "Out of memory. Try reducing data size or processing in chunks."}
+        
+        # Strategy 10: Custom registered strategies
         for error_type, strategy in self._recovery_strategies.items():
             if error_type in error_str:
                 try:
