@@ -87,6 +87,14 @@
 | 75 | Verify session persistence exists | ✅ DONE | session_persistence.py | Already implemented |
 | 76 | Verify history exists | ✅ DONE | history.py | Already implemented |
 | 77 | Verify budget management exists | ✅ DONE | budget.py | Already implemented |
+| 78 | Verify Docker sandbox exists | ✅ DONE | docker_sandbox.py | Already implemented |
+| 79 | Verify analytics exists | ✅ DONE | analytics.py | Already implemented |
+| 80 | Verify token cache exists | ✅ DONE | cache.py | Already implemented |
+| 81 | Verify browser automation exists | ✅ DONE | browser.py | Already implemented |
+| 82 | Verify clipboard integration exists | ✅ DONE | clipboard.py | Already implemented |
+| 83 | Verify editor integration exists | ✅ DONE | editor.py | Already implemented |
+| 84 | Verify diff viewer exists | ✅ DONE | diff_viewer.py | Already implemented |
+| 85 | Verify streaming display exists | ✅ DONE | streaming.py | Already implemented |
 
 ---
 
