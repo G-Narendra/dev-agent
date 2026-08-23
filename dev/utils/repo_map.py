@@ -122,14 +122,73 @@ class RepoMap:
         except (OSError, PermissionError):
             return None
     
+    def _extract_tags_tree_sitter(self, fname: str, rel_fname: str, content: str, ext: str) -> list[dict]:
+        """
+        Extract definitions using tree-sitter for accurate AST parsing.
+        Falls back to regex if tree-sitter is not available.
+        """
+        try:
+            import tree_sitter_languages
+            lang_name = {
+                '.py': 'python', '.js': 'javascript', '.jsx': 'javascript',
+                '.ts': 'typescript', '.tsx': 'typescript',
+                '.go': 'go', '.rs': 'rust', '.java': 'java',
+                '.rb': 'ruby', '.c': 'c', '.cpp': 'cpp', '.h': 'c',
+            }.get(ext)
+            if not lang_name:
+                return []
+            
+            parser = tree_sitter_languages.get_parser(lang_name)
+            tree = parser.parse(content.encode('utf-8'))
+            root_node = tree.root_node
+            
+            tags = []
+            # Map node types to tag kinds
+            def_nodes = {
+                'python': ['function_definition', 'class_definition', 'decorated_definition'],
+                'javascript': ['function_declaration', 'class_declaration', 'arrow_function', 'variable_declaration'],
+                'typescript': ['function_declaration', 'class_declaration', 'arrow_function', 'variable_declaration', 'interface_declaration', 'type_alias_declaration'],
+                'go': ['function_declaration', 'method_declaration', 'type_declaration'],
+                'rust': ['function_item', 'struct_item', 'enum_item', 'impl_item'],
+                'java': ['method_declaration', 'class_declaration', 'interface_declaration'],
+                'ruby': ['method', 'class'],
+                'c': ['function_definition', 'declaration'],
+                'cpp': ['function_definition', 'declaration', 'class_specifier'],
+            }
+            
+            target_types = def_nodes.get(lang_name, [])
+            
+            def walk(node, depth=0):
+                if depth > 10:
+                    return  # Prevent infinite recursion
+                if node.type in target_types:
+                    # Extract name from child nodes
+                    name = ''
+                    for child in node.children:
+                        if child.type == 'identifier' or child.type == 'name':
+                            name = child.text.decode('utf-8')
+                            break
+                    if name:
+                        tags.append({
+                            'name': name,
+                            'kind': 'def',
+                            'line': node.start_point[0],
+                            'type': node.type,
+                        })
+                for child in node.children:
+                    walk(child, depth + 1)
+            
+            walk(root_node)
+            return tags
+        except Exception:
+            return []  # Fall back to regex
+    
     def _extract_tags_regex(self, fname: str, rel_fname: str) -> list[dict]:
         """
-        Extract definitions and references from a file using regex.
+        Extract definitions and references from a file.
         
-        Lightweight alternative to tree-sitter. Extracts:
-        - Function/class/method definitions
-        - Import statements
-        - Variable assignments
+        Uses tree-sitter if available (accurate AST parsing),
+        falls back to regex (lightweight alternative).
         """
         if fname in self._tag_cache:
             return self._tag_cache[fname]
@@ -138,8 +197,16 @@ class RepoMap:
         if not content:
             return []
         
-        tags = []
         ext = Path(fname).suffix.lower()
+        
+        # Try tree-sitter first (accurate AST parsing)
+        ts_tags = self._extract_tags_tree_sitter(fname, rel_fname, content, ext)
+        if ts_tags:
+            self._tag_cache[fname] = ts_tags
+            return ts_tags
+        
+        # Fall back to regex
+        tags = []
         
         lines = content.split("\n")
         for i, line in enumerate(lines):
