@@ -176,6 +176,9 @@ class ProductionAgentLoop:
         self._budget_manager = None
         self._session_id = None
         self._session_history = None
+        # Tool result cache: cache read-only tool results to avoid re-reading
+        self._tool_cache: dict[str, dict] = {}  # cache_key -> result
+        self._tool_cache_max = 50  # Max cached results
 
     def set_approval_prompt(self, callback):
         """Set a callback for interactive approval prompts."""
@@ -2014,16 +2017,32 @@ When building a project with multiple files:
     # =========================================================================
 
     async def _execute_tool(self, tool_name: str, tool_args: dict) -> Any:
-        """Execute a tool call with error handling."""
+        """Execute a tool call with error handling and caching for read-only tools."""
         handler = self.tools.get(tool_name)
         if not handler:
             return {"error": f"Unknown tool: {tool_name}"}
+
+        # Cache read-only tool results to avoid re-reading the same files
+        if tool_name in READ_ONLY_TOOLS:
+            cache_key = f"{tool_name}:{json.dumps(tool_args, sort_keys=True)}"
+            if cache_key in self._tool_cache:
+                self._log(f"Cache hit: {tool_name}")
+                return self._tool_cache[cache_key]
 
         try:
             if asyncio.iscoroutinefunction(handler.execute):
                 result = await handler.execute(tool_args, self._state, self.project_path)
             else:
                 result = handler.execute(tool_args, self._state, self.project_path)
+
+            # Cache read-only results
+            if tool_name in READ_ONLY_TOOLS and isinstance(result, dict):
+                if len(self._tool_cache) >= self._tool_cache_max:
+                    # Evict oldest entry
+                    oldest_key = next(iter(self._tool_cache))
+                    del self._tool_cache[oldest_key]
+                self._tool_cache[cache_key] = result
+
             return result
         except Exception as e:
             error_result = {"error": f"Tool execution failed: {str(e)}", "traceback": traceback.format_exc()}
