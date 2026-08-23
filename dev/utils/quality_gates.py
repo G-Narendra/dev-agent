@@ -85,6 +85,14 @@ class AutoLinter:
                 return await self._lint_json(abs_path, result)
             elif ext in (".yaml", ".yml"):
                 return await self._lint_yaml(abs_path, result)
+            elif ext == ".css":
+                return await self._lint_css(abs_path, result)
+            elif ext == ".html":
+                return await self._lint_html(abs_path, result)
+            elif ext == ".md":
+                return await self._lint_markdown(abs_path, result)
+            elif ext == ".sh":
+                return await self._lint_shell(abs_path, result)
             else:
                 return result  # No linter for this file type
         except Exception as e:
@@ -192,6 +200,87 @@ class AutoLinter:
         except Exception as e:
             result.success = False
             result.errors = [{"message": str(e)}]
+        return result
+    
+    async def _lint_css(self, file_path: str, result: LintResult) -> LintResult:
+        """Basic CSS validation (check for syntax errors)."""
+        try:
+            with open(file_path, "r", encoding="utf-8", errors="replace") as f:
+                content = f.read()
+            # Check for unclosed braces
+            open_braces = content.count('{')
+            close_braces = content.count('}')
+            if open_braces != close_braces:
+                result.success = False
+                result.errors = [{"message": f"Unbalanced braces: {open_braces} open, {close_braces} close"}]
+            # Check for common CSS errors
+            if ';;' in content:
+                result.warnings = [{"message": "Double semicolons found"}]
+        except Exception as e:
+            result.errors = [{"message": str(e)}]
+            result.success = False
+        return result
+    
+    async def _lint_html(self, file_path: str, result: LintResult) -> LintResult:
+        """Basic HTML validation."""
+        try:
+            with open(file_path, "r", encoding="utf-8", errors="replace") as f:
+                content = f.read()
+            # Check for unclosed tags (basic)
+            import re
+            open_tags = re.findall(r'<([a-zA-Z]+)[\s>]', content)
+            close_tags = re.findall(r'</([a-zA-Z]+)>', content)
+            # Self-closing tags
+            self_closing = {'meta', 'link', 'img', 'br', 'hr', 'input', 'area', 'base', 'col', 'embed', 'source', 'track', 'wbr'}
+            open_counts = {}
+            close_counts = {}
+            for tag in open_tags:
+                if tag.lower() not in self_closing:
+                    open_counts[tag.lower()] = open_counts.get(tag.lower(), 0) + 1
+            for tag in close_tags:
+                close_counts[tag.lower()] = close_counts.get(tag.lower(), 0) + 1
+            for tag, count in open_counts.items():
+                if close_counts.get(tag, 0) != count:
+                    result.warnings = [{"message": f"Potentially unclosed <{tag}> tag ({count} open, {close_counts.get(tag, 0)} close)"}]
+        except Exception as e:
+            result.errors = [{"message": str(e)}]
+            result.success = False
+        return result
+    
+    async def _lint_markdown(self, file_path: str, result: LintResult) -> LintResult:
+        """Basic Markdown validation."""
+        try:
+            with open(file_path, "r", encoding="utf-8", errors="replace") as f:
+                lines = f.readlines()
+            # Check for common issues
+            for i, line in enumerate(lines, 1):
+                # Trailing whitespace
+                if line.rstrip() != line.rstrip('\n') and line.strip():
+                    result.warnings = [{"line": i, "message": "Trailing whitespace"}]
+                    break  # Only report first
+        except Exception as e:
+            result.errors = [{"message": str(e)}]
+            result.success = False
+        return result
+    
+    async def _lint_shell(self, file_path: str, result: LintResult) -> LintResult:
+        """Basic shell script validation."""
+        try:
+            proc = await asyncio.create_subprocess_exec(
+                "bash", "-n", file_path,
+                stdout=asyncio.subprocess.PIPE,
+                stderr=asyncio.subprocess.PIPE,
+            )
+            _, stderr = await asyncio.wait_for(proc.communicate(), timeout=10)
+            if proc.returncode != 0:
+                error_msg = stderr.decode(errors="replace").strip()
+                result.errors = [{"message": error_msg}]
+                result.success = False
+        except (FileNotFoundError, asyncio.TimeoutError):
+            pass  # bash not available
+        except Exception as e:
+            result.errors = [{"message": str(e)}]
+            result.success = False
         return result
     
     async def lint_project(self) -> dict:
