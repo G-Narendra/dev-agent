@@ -1047,6 +1047,140 @@ def chat(
                     else:
                         console.print("[dim]Usage: /worktree list|add [branch]|remove <path>[/dim]")
                     continue
+                elif cmd == "/review":
+                    console.print("[dim]AI code review of recent changes...[/dim]")
+                    import subprocess as _sp
+                    result = _sp.run(["git", "diff", "--stat"], cwd=abs_project, capture_output=True, text=True)
+                    diff = result.stdout or "No changes"
+                    prompt_review = f"Review these code changes and suggest improvements:\n\n{diff[:3000]}"
+                    result = await agent_loop.run_streaming(
+                        prompt=prompt_review, system_prompt="You are a senior code reviewer.", max_steps=5,
+                    )
+                    content = result.get("content", "")
+                    if content:
+                        console.print(Markdown(content[:2000]))
+                    continue
+                elif cmd == "/explain":
+                    console.print("[dim]Explaining codebase...[/dim]")
+                    prompt_explain = "Explain the current project structure, key files, and architecture. What does each major file do?"
+                    result = await agent_loop.run_streaming(
+                        prompt=prompt_explain, system_prompt="You are a technical writer. Explain clearly.", max_steps=10,
+                    )
+                    content = result.get("content", "")
+                    if content:
+                        console.print(Markdown(content[:3000]))
+                    continue
+                elif cmd == "/refactor":
+                    console.print("[dim]Analyzing code for refactoring opportunities...[/dim]")
+                    prompt_refactor = "Analyze the codebase for refactoring opportunities. Find code smells, duplication, and suggest improvements."
+                    result = await agent_loop.run_streaming(
+                        prompt=prompt_refactor, system_prompt="You are a refactoring expert.", max_steps=15,
+                    )
+                    content = result.get("content", "")
+                    if content:
+                        console.print(Markdown(content[:3000]))
+                    continue
+                elif cmd == "/document":
+                    console.print("[dim]Generating documentation...[/dim]")
+                    prompt_doc = "Generate comprehensive documentation for this project: README, API docs, inline comments."
+                    result = await agent_loop.run_streaming(
+                        prompt=prompt_doc, system_prompt="You are a technical documentation expert.", max_steps=20,
+                    )
+                    content = result.get("content", "")
+                    if content:
+                        console.print(Markdown(content[:3000]))
+                    continue
+                elif cmd == "/debug":
+                    console.print("[dim]Running diagnostics...[/dim]")
+                    _run_doctor(abs_project, provider, runtime)
+                    continue
+                elif cmd == "/optimize":
+                    console.print("[dim]Analyzing for performance optimizations...[/dim]")
+                    prompt_opt = "Analyze the codebase for performance issues and suggest optimizations."
+                    result = await agent_loop.run_streaming(
+                        prompt=prompt_opt, system_prompt="You are a performance optimization expert.", max_steps=15,
+                    )
+                    content = result.get("content", "")
+                    if content:
+                        console.print(Markdown(content[:3000]))
+                    continue
+                elif cmd == "/security":
+                    console.print("[dim]Running security audit...[/dim]")
+                    prompt_sec = "Perform a security audit of this codebase. Check for vulnerabilities, hardcoded secrets, SQL injection, XSS, etc."
+                    result = await agent_loop.run_streaming(
+                        prompt=prompt_sec, system_prompt="You are a security expert.", max_steps=15,
+                    )
+                    content = result.get("content", "")
+                    if content:
+                        console.print(Markdown(content[:3000]))
+                    continue
+                elif cmd == "/deps":
+                    import subprocess as _sp
+                    console.print("[dim]Checking dependencies...[/dim]")
+                    if os.path.exists("package.json"):
+                        result = _sp.run(["npm", "outdated"], cwd=abs_project, capture_output=True, text=True, timeout=30)
+                    elif os.path.exists("requirements.txt"):
+                        result = _sp.run([".venv/Scripts/pip", "list", "--outdated"], cwd=abs_project, capture_output=True, text=True, timeout=30)
+                    else:
+                        console.print("[dim]No package.json or requirements.txt found[/dim]")
+                        continue
+                    if result.stdout:
+                        console.print(result.stdout[:2000])
+                    else:
+                        console.print("[green]All dependencies up to date[/green]")
+                    continue
+                elif cmd == "/env":
+                    env_file = os.path.join(abs_project, ".env")
+                    if os.path.isfile(env_file):
+                        with open(env_file) as f:
+                            env_content = f.read()
+                        # Mask values
+                        lines = []
+                        for line in env_content.splitlines():
+                            if "=" in line and not line.startswith("#"):
+                                key = line.split("=", 1)[0]
+                                lines.append(f"{key}=***")
+                            else:
+                                lines.append(line)
+                        console.print("\n".join(lines))
+                    else:
+                        console.print("[dim]No .env file found[/dim]")
+                    continue
+                elif cmd == "/schema":
+                    console.print("[dim]Analyzing database schema...[/dim]")
+                    prompt_schema = "Find and document any database schemas, models, or data structures in this project."
+                    result = await agent_loop.run_streaming(
+                        prompt=prompt_schema, system_prompt="You are a database expert.", max_steps=10,
+                    )
+                    content = result.get("content", "")
+                    if content:
+                        console.print(Markdown(content[:2000]))
+                    continue
+                elif cmd == "/migrate":
+                    console.print("[dim]Analyzing for migration needs...[/dim]")
+                    prompt_mig = "Check if this project needs any migrations (database, API, dependency upgrades)."
+                    result = await agent_loop.run_streaming(
+                        prompt=prompt_mig, system_prompt="You are a migration expert.", max_steps=10,
+                    )
+                    content = result.get("content", "")
+                    if content:
+                        console.print(Markdown(content[:2000]))
+                    continue
+                elif cmd == "/snapshot":
+                    import subprocess as _sp
+                    _sp.run(["git", "add", "-A"], cwd=abs_project, capture_output=True)
+                    _sp.run(["git", "stash", "push", "-m", f"snapshot-{int(time.time())}"], cwd=abs_project, capture_output=True)
+                    console.print("[green]Project snapshot saved to git stash[/green]")
+                    continue
+                elif cmd == "/restore":
+                    import subprocess as _sp
+                    result = _sp.run(["git", "stash", "list"], cwd=abs_project, capture_output=True, text=True)
+                    if result.stdout.strip():
+                        console.print(result.stdout[:500])
+                        console.print("[dim]Use /restore-apply to apply the latest stash[/dim]")
+                    else:
+                        console.print("[dim]No stashes found[/dim]")
+                    continue
                 else:
                     console.print(f"[yellow]Unknown command: {cmd}[/yellow]")
                     console.print("[dim]Type /help for available commands[/dim]")
@@ -1240,6 +1374,8 @@ def _show_help():
 - `/clear` - Clear screen
 - `/context` - Show context window usage with visual bar
 - `/name <name>` - Name this session
+- `/snapshot` - Save project state to git stash
+- `/restore` - List stashes for restore
 
 ## Agent Control
 - `/approve <mode>` - Set approval mode (suggest/auto-edit/full-auto)
@@ -1262,12 +1398,22 @@ def _show_help():
 ## Code Quality
 - `/test` - Run project tests
 - `/lint` - Run linter
+- `/review` - AI code review of recent changes
+- `/explain` - Explain project structure and architecture
+- `/refactor` - Find and apply refactoring opportunities
+- `/document` - Generate documentation
+- `/optimize` - Performance analysis and suggestions
+- `/security` - Security audit
 
 ## Project
 - `/detect` - Detect project type
 - `/rules` - Show project rules
-- `/doctor` - Run diagnostics
+- `/doctor` or `/debug` - Run diagnostics
 - `/config` - Show current configuration
+- `/deps` - Check dependency status
+- `/env` - Show environment variables (masked)
+- `/schema` - Analyze database schema
+- `/migrate` - Check migration needs
 
 ## Information
 - `/stats` - Show token/request stats

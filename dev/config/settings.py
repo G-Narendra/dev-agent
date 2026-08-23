@@ -10,6 +10,8 @@ Handles:
 
 from __future__ import annotations
 
+import base64
+import hashlib
 import os
 from dataclasses import dataclass, field
 from pathlib import Path

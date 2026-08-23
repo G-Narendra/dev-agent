@@ -504,6 +504,56 @@ class RealRunTerminalCommand(Tool):
                 return bash
         return None
 
+    # Dangerous command patterns that should be blocked
+    BLOCKED_PATTERNS = [
+        "rm -rf /", "rm -r /", "rm -rf /*", "rm -r /*",
+        "dd if=", "mkfs", "> /dev/sd",
+        "shutdown", "reboot", "halt", "poweroff",
+        "format c:", ":(){ :|:& };:",
+        "chmod -R 777 /", "chmod -R 777 /*",
+        "wget|sh", "wget|bash", "curl|sh", "curl|bash",
+        "eval $(", "exec ",
+        "cd / &&", "cd /root &&",
+        "cat /etc/shadow", "cat /etc/passwd",
+    ]
+    
+    def _is_safe_command(self, command: str) -> tuple[bool, str]:
+        """Check if a command is safe to execute.
+        
+        Returns (is_safe, reason).
+        """
+        cmd_lower = command.lower().strip()
+        
+        # Check blocked patterns
+        for pattern in self.BLOCKED_PATTERNS:
+            if pattern.lower() in cmd_lower:
+                return False, f"Blocked dangerous command: {pattern}"
+        
+        # Block sudo
+        if cmd_lower.startswith("sudo "):
+            return False, "Blocked: sudo not allowed"
+        
+        # Block command chaining with dangerous commands
+        if "&&" in cmd_lower or ";" in cmd_lower:
+            parts = cmd_lower.replace("&&", ";").split(";")
+            for part in parts:
+                part = part.strip()
+                for pattern in self.BLOCKED_PATTERNS:
+                    if pattern.lower() in part:
+                        return False, f"Blocked dangerous command in chain: {pattern}"
+        
+        # Block pipe to shell
+        if "| sh" in cmd_lower or "| bash" in cmd_lower:
+            return False, "Blocked: pipe to shell not allowed"
+        
+        # Block writing to system directories
+        system_dirs = ["/etc/", "/usr/", "/var/", "/sys/", "/proc/", "/dev/", "/boot/"]
+        for sys_dir in system_dirs:
+            if f" > {sys_dir}" in cmd_lower or f"> {sys_dir}" in cmd_lower:
+                return False, f"Blocked: writing to {sys_dir}"
+        
+        return True, "OK"
+    
     async def execute(self, input_data: dict, state: Any, project_path: str) -> dict:
         command = input_data.get("command", "")
         cwd = input_data.get("cwd", project_path)
@@ -516,6 +566,11 @@ class RealRunTerminalCommand(Tool):
                 timeout = int(timeout)
             except (ValueError, TypeError):
                 timeout = 30
+        
+        # Safety check: block dangerous commands
+        is_safe, reason = self._is_safe_command(command)
+        if not is_safe:
+            return {"error": reason, "command": command, "blocked": True}
 
         import signal as _signal
         is_windows = os.name == 'nt'

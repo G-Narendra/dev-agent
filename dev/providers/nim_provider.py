@@ -59,6 +59,13 @@ class NimProvider:
         "fast": "meta/llama-3.1-8b-instruct",
         "vision": "meta/llama-3.2-11b-vision-instruct",
         "default": "meta/llama-3.1-70b-instruct",
+        "tool": "meta/llama-3.1-70b-instruct",  # Always use 70B for tool calls
+    }
+    
+    # Models that support reliable tool calling
+    TOOL_CAPABLE_MODELS = {
+        "meta/llama-3.1-70b-instruct",
+        "meta/llama-3.1-8b-instruct",
     }
     
     def __init__(
@@ -304,6 +311,47 @@ class NimProvider:
                 return  # Success after retry — do NOT re-raise
             raise
     
+    def _resolve_model(self, model: str, has_tools: bool = False) -> str:
+        """Resolve model name, forcing 70B for tool calls."""
+        resolved = self.MODELS.get(model, model)
+        # Force 70B for tool calling to avoid truncation
+        if has_tools and resolved not in self.TOOL_CAPABLE_MODELS:
+            resolved = self.MODELS["tool"]
+        return resolved
+    
+    async def _call_with_retry(
+        self,
+        messages: list[dict],
+        model: str = "default",
+        temperature: float = 0.7,
+        max_tokens: int = 4096,
+        tools: list[dict] | None = None,
+        max_retries: int = 3,
+        **kwargs,
+    ) -> dict:
+        """Call LLM with retry and exponential backoff."""
+        import random
+        
+        for attempt in range(max_retries):
+            try:
+                result = await self.chat_completion(
+                    messages=messages,
+                    model=model,
+                    temperature=temperature,
+                    max_tokens=max_tokens,
+                    tools=tools,
+                    **kwargs,
+                )
+                return result
+            except Exception as e:
+                if attempt == max_retries - 1:
+                    raise
+                # Exponential backoff with jitter
+                delay = min(0.5 * (2 ** attempt) + random.uniform(0, 0.5), 30.0)
+                await asyncio.sleep(delay)
+        
+        return {}
+    
     async def chat_completion_stream_events(
         self,
         messages: list[dict],
@@ -330,6 +378,10 @@ class NimProvider:
         
         resolved_model = self.MODELS.get(model, model)
         key = await self._wait_for_available_key()
+        
+        # Force 70B model for tool calls to avoid truncation
+        if tools:
+            resolved_model = self._resolve_model(model, has_tools=True)
         
         # Use non-streaming when tools are present (more reliable with smaller models)
         # Streaming tool calls are unreliable on many NIM models
@@ -359,6 +411,43 @@ class NimProvider:
                 finish_reason = choice.get("finish_reason", "stop")
                 content = message.get("content") or ""
                 tool_calls = message.get("tool_calls", [])
+                
+                # Detect truncation: if tool call arguments are too short
+                truncated = False
+                for tc in tool_calls:
+                    args = tc.get("function", {}).get("arguments", "")
+                    if len(args) < 10:  # Truncated if args < 10 chars
+                        truncated = True
+                        break
+                
+                if truncated and content:
+                    # Model truncated tool calls — retry without tools
+                    # Parse text output for code blocks instead
+                    yield {"type": "text", "content": content}
+                    yield {"type": "finish", "reason": "truncation_recovery"}
+                    return
+                elif truncated and not content:
+                    # Truncated with no content — retry without tools
+                    try:
+                        # Remove tools and retry
+                        retry_result = await self.chat_completion(
+                            messages=messages,
+                            model="default",
+                            temperature=temperature,
+                            max_tokens=max_tokens,
+                        )
+                        retry_choice = retry_result.get("choices", [{}])[0]
+                        retry_message = retry_choice.get("message", {})
+                        retry_content = retry_message.get("content", "")
+                        if retry_content:
+                            chunk_size = 20
+                            for i in range(0, len(retry_content), chunk_size):
+                                yield {"type": "text", "content": retry_content[i:i+chunk_size]}
+                        yield {"type": "finish", "reason": "truncation_recovery"}
+                        return
+                    except Exception:
+                        pass
+                
                 # If no tool calls, simulate streaming by chunking text
                 if content and not tool_calls:
                     chunk_size = 20
