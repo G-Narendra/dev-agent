@@ -1577,6 +1577,23 @@ class ProductionAgentLoop:
         if self.config.enforce_plan_mode:
             parts.append("\n\n## CURRENT MODE: PLAN (read-only)\nYou can ONLY use read-only tools. To make changes, the user must switch to act mode.")
 
+        # Skills integration — inject expert role instructions
+        try:
+            from .skill_integration import SkillIntegration
+            si = SkillIntegration(skills_path=os.path.join(self.project_path, "skills"))
+            # Get the user's task from messages
+            task = ""
+            for msg in messages:
+                if msg.role == "user":
+                    task = msg.content or ""
+                    break
+            if task:
+                skill_prompt = si.build_skill_prompt(task)
+                if skill_prompt:
+                    parts.append(f"\n\n{skill_prompt}")
+        except Exception:
+            pass  # Skills folder not available
+
         # NIM model instruction: use write_file tool one file at a time
         parts.append("""
 
