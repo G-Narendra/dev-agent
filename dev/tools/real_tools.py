@@ -530,6 +530,25 @@ class RealRunTerminalCommand(Tool):
         "eval $(", "exec ",
         "cd / &&", "cd /root &&",
         "cat /etc/shadow", "cat /etc/passwd",
+        # Additional safety patterns
+        "rm -rf .", "rm -r .",  # Recursive delete in current dir
+        "git push --force", "git push -f",  # Force push
+        "DROP TABLE", "DROP DATABASE",  # SQL injection
+        "TRUNCATE TABLE", "DELETE FROM",  # SQL data loss
+        "npm uninstall -g",  # Global uninstall
+        "pip uninstall -y",  # Force uninstall
+        "docker rm -f",  # Force remove container
+        "docker rmi -f",  # Force remove image
+        "kubectl delete",  # K8s deletion
+        "terraform destroy",  # Infra destruction
+        "heroku ps:scale 0",  # Scale to zero
+        "echo '' > ",  # Truncate file
+        "> /dev/null 2>&1",  # Suppress errors (security)
+        "xargs rm",  # Pipe to rm
+        "find . -delete",  # Find and delete
+        "find . -exec rm",  # Find and exec rm
+        "git checkout -- .",  # Discard all changes
+        "git reset --hard",  # Hard reset
     ]
     
     def _is_safe_command(self, command: str) -> tuple[bool, str]:
