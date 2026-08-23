@@ -511,20 +511,30 @@ class NimProvider:
                         break
                 
                 if truncated and content:
-                    # Model truncated tool calls — retry without tools
-                    # Parse text output for code blocks instead
+                    # Model truncated tool calls — use text output for code blocks
+                    # Log the truncation for debugging
+                    self._log(f"Tool call truncated — using text output ({len(content)} chars)")
+                    # Yield text content (production loop will parse code blocks)
                     yield {"type": "text", "content": content}
+                    # Also yield any valid tool calls that weren't truncated
+                    for tc in tool_calls:
+                        try:
+                            args = json.loads(tc.get("function", {}).get("arguments", "{}"))
+                            if isinstance(args, dict) and len(json.dumps(args)) > 20:
+                                yield {"type": "tool_call", "tool_call": tc}
+                        except Exception:
+                            pass
                     yield {"type": "finish", "reason": "truncation_recovery"}
                     return
                 elif truncated and not content:
-                    # Truncated with no content — retry without tools
+                    # Truncated with no content — retry without tools with bigger max_tokens
+                    self._log("Truncated with no content — retrying without tools")
                     try:
-                        # Remove tools and retry
                         retry_result = await self.chat_completion(
                             messages=messages,
                             model="default",
                             temperature=temperature,
-                            max_tokens=max_tokens,
+                            max_tokens=min(max_tokens * 4, 16384),  # 4x the original to avoid re-truncation
                         )
                         retry_choice = retry_result.get("choices", [{}])[0]
                         retry_message = retry_choice.get("message", {})

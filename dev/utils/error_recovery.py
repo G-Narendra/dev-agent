@@ -133,7 +133,42 @@ class ErrorRecovery:
         if "memory" in error_str or "oom" in error_str:
             return {"recovered": False, "suggestion": "Out of memory. Try reducing data size or processing in chunks."}
         
-        # Strategy 10: Custom registered strategies
+        # Strategy 10: NIM API errors
+        if "404" in error_str and "page not found" in error_str:
+            return {"recovered": False, "suggestion": "NIM API endpoint not found. Check if the API key is valid and the model is available."}
+        if "401" in error_str or "unauthorized" in error_str:
+            return {"recovered": False, "suggestion": "API key is invalid or expired. Run 'dev login' to update your key."}
+        if "429" in error_str or "rate limit" in error_str:
+            return {"recovered": False, "suggestion": "Rate limited. Wait a moment and try again, or add more API keys with 'dev setup'."}
+        if "500" in error_str or "internal server error" in error_str:
+            return {"recovered": False, "suggestion": "NIM server error. This is temporary — retry in a few seconds."}
+        
+        # Strategy 11: npm/node errors
+        if "npm" in error_str and ("not found" in error_str or "enoent" in error_str):
+            return {"recovered": False, "suggestion": "npm not found. Install Node.js first: https://nodejs.org"}
+        if "package.json" in error_str and "not found" in error_str:
+            return {"recovered": False, "suggestion": "No package.json found. Initialize with 'npm init -y'."}
+        
+        # Strategy 12: Import cycle errors
+        if "import cycle" in error_str or "circular import" in error_str:
+            return {"recovered": False, "suggestion": "Circular import detected. Refactor to break the cycle — move shared code to a separate module."}
+        
+        # Strategy 13: Syntax errors
+        if "syntaxerror" in error_str or "syntax error" in error_str:
+            import re
+            line_match = re.search(r'line\s+(\d+)', str(error))
+            line_info = f" at line {line_match.group(1)}" if line_match else ""
+            return {"recovered": False, "suggestion": f"Python syntax error{line_info}. Check for missing colons, brackets, or indentation."}
+
+        # Strategy 14: Type errors
+        if "typeerror" in error_str or "type error" in error_str:
+            return {"recovered": False, "suggestion": "Type mismatch. Check variable types and function signatures."}
+
+        # Strategy 15: NameError (undefined variable)
+        if "nameerror" in error_str or "name ' ' is not defined" in error_str:
+            return {"recovered": False, "suggestion": "Undefined variable. Check for typos or missing imports."}
+        
+        # Strategy 16: Custom registered strategies
         for error_type, strategy in self._recovery_strategies.items():
             if error_type in error_str:
                 try:
