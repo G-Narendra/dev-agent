@@ -39,7 +39,7 @@ from ..utils.quality_gates import AutoLinter, AutoTester
 from ..utils.project_detector import ProjectDetector
 from ..utils.error_recovery import ErrorRecovery, ToolRetry, ParallelExecutor
 from ..utils.lsp_client import LSPClient
-from ..utils.templates import (
+from ..utils.prompt_templates import (
     WORKFLOW_TEMPLATES, get_template, list_templates,
     CostDashboard, ReasoningController,
 )

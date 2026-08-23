@@ -55,7 +55,7 @@ from ..utils.auto_commit import AutoCommitter
 from ..utils.quality_gates import AutoLinter, AutoTester
 from ..utils.project_detector import ProjectDetector
 from ..utils.error_recovery import ErrorRecovery, ToolRetry, ParallelExecutor
-from ..utils.templates import (
+from ..utils.prompt_templates import (
     WORKFLOW_TEMPLATES, get_template, list_templates,
     CostDashboard, ReasoningController,
 )
@@ -1876,7 +1876,7 @@ def init_cmd(project: str = typer.Option(".")):
 @app.command("cost")
 def cost_cmd():
     """Show cost and token usage dashboard."""
-    from ..utils.templates import CostDashboard
+    from ..utils.prompt_templates import CostDashboard
     dashboard = CostDashboard()
     console.print(dashboard.format_dashboard())
 

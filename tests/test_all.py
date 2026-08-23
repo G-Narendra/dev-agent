@@ -384,7 +384,7 @@ class TestCostDashboard:
     """Test cost tracking."""
 
     def test_record_usage(self):
-        from dev.utils.templates import CostDashboard
+        from dev.utils.prompt_templates import CostDashboard
         dashboard = CostDashboard()
         dashboard.record(100, 50, "test-model")
         dashboard.record(200, 100, "test-model")
@@ -394,7 +394,7 @@ class TestCostDashboard:
         print("  OK: record usage")
 
     def test_format_dashboard(self):
-        from dev.utils.templates import CostDashboard
+        from dev.utils.prompt_templates import CostDashboard
         dashboard = CostDashboard()
         dashboard.record(100, 50, "model")
         text = dashboard.format_dashboard()
@@ -406,7 +406,7 @@ class TestReasoningController:
     """Test reasoning effort control."""
 
     def test_set_effort(self):
-        from dev.utils.templates import ReasoningController
+        from dev.utils.prompt_templates import ReasoningController
         rc = ReasoningController()
         config = rc.set_effort("high")
         assert config.effort == "high"
@@ -414,7 +414,7 @@ class TestReasoningController:
         print("  OK: set effort")
 
     def test_auto_adjust(self):
-        from dev.utils.templates import ReasoningController
+        from dev.utils.prompt_templates import ReasoningController
         rc = ReasoningController()
         config = rc.auto_adjust("complex_feature")
         assert config.effort == "high"
@@ -533,14 +533,14 @@ class TestTemplates:
     """Test workflow templates."""
 
     def test_list_templates(self):
-        from dev.utils.templates import list_templates
+        from dev.utils.prompt_templates import list_templates
         templates = list_templates()
         assert len(templates) >= 5
         assert any(t["name"] == "full-stack-app" for t in templates)
         print("  OK: list templates")
 
     def test_get_template(self):
-        from dev.utils.templates import get_template
+        from dev.utils.prompt_templates import get_template
         template = get_template("bug-fix")
         assert template is not None
         assert len(template["steps"]) >= 2

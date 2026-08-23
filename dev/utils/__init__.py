@@ -17,7 +17,7 @@ from .quality_gates import AutoLinter, AutoTester
 from .repo_map import RepoMap
 from .security import SecretDetector, CommandSanitizer, InputValidator
 from .session import SessionStore
-from .templates import get_template, list_templates, CostDashboard, ReasoningController
+from .prompt_templates import get_template, list_templates, CostDashboard, ReasoningController
 from .voice import VoiceInput
 
 __all__ = [
