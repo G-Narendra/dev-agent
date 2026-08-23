@@ -113,6 +113,60 @@ def register_new_tools(registry, project_path: str):
     registry.register("monitor_directory", MonitorDirectoryTool())
     registry.register("monitor_log", MonitorLogTool())
     
+    # Agent tools (todos, tasks, spawn)
+    from ..tools.agent_tools import WriteTodosTool, TaskCompletedTool, SpawnAgentsTool
+    registry.register("write_todos", WriteTodosTool())
+    registry.register("task_completed", TaskCompletedTool())
+    registry.register("spawn_agents", SpawnAgentsTool())
+    
+    # Context tools (repo map, context stats, summarize)
+    from ..tools.context_tools import RepoMapTool, ContextStatsTool, SummarizeTool
+    registry.register("repo_map", RepoMapTool())
+    registry.register("context_stats", ContextStatsTool())
+    registry.register("summarize", SummarizeTool())
+    
+    # Multimodal tools (image, PDF)
+    from ..tools.multimodal_tools import ReadImageTool, ReadPdfTool
+    registry.register("read_image", ReadImageTool())
+    registry.register("read_pdf", ReadPdfTool())
+    
+    # Multi-edit tool
+    from ..tools.multi_edit_tool import MultiEditTool
+    registry.register("multi_edit", MultiEditTool())
+    
+    # Sandbox tools
+    from ..tools.sandbox_tools import SandboxedRunTool, SandboxStatusTool
+    registry.register("sandboxed_run", SandboxedRunTool())
+    registry.register("sandbox_status", SandboxStatusTool())
+    
+    # API tools (free APIs)
+    from ..tools.api_tools import FreeApiTool, ListApisTool, ListMcpTools, InstallMcpTool, KrokiDiagramTool
+    registry.register("free_api", FreeApiTool())
+    registry.register("list_apis", ListApisTool())
+    registry.register("list_mcp_servers", ListMcpTools())
+    registry.register("install_mcp_tool", InstallMcpTool())
+    registry.register("generate_diagram", KrokiDiagramTool())
+    
+    # MCP tools
+    from ..tools.mcp_tools import MCPListServersTool, MCPConnectTool, MCPListToolsTool, MCPCallTool, MCPAddServerTool
+    registry.register("mcp_list_servers", MCPListServersTool())
+    registry.register("mcp_connect", MCPConnectTool())
+    registry.register("mcp_list_tools", MCPListToolsTool())
+    registry.register("mcp_call", MCPCallTool())
+    registry.register("mcp_add_server", MCPAddServerTool())
+    
+    # Team tools
+    from ..tools.team_tools import TeamCreateTool, TeamStatusTool, TeamMergeTool, TeamCleanupTool, TeamExecuteTool
+    registry.register("team_create", TeamCreateTool())
+    registry.register("team_status", TeamStatusTool())
+    registry.register("team_merge", TeamMergeTool())
+    registry.register("team_cleanup", TeamCleanupTool())
+    registry.register("team_execute", TeamExecuteTool())
+    
+    # Skill tool
+    from ..tools.skill_tool import SkillTool
+    registry.register("skill", SkillTool())
+    
     return registry
 
 

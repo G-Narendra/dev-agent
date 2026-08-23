@@ -53,7 +53,11 @@ class FreeApiTool(Tool):
     
     def __init__(self):
         from ..apis.free_apis import FREE_APIS
-        self._apis = {api.name.lower().replace(" ", ""): api for api in FREE_APIS}
+        # FREE_APIS is a dict of {"slug": FreeAPI(...)} — iterate values
+        self._apis = {}
+        for slug, api in FREE_APIS.items():
+            self._apis[slug.lower()] = api
+            self._apis[api.name.lower().replace(" ", "")] = api
     
     async def execute(self, input_data: dict, state: Any, project_path: str) -> dict:
         api_name = input_data["api_name"].lower().replace(" ", "")
@@ -131,15 +135,14 @@ class ListApisTool(Tool):
         else:
             apis = get_free_apis(category)
         
+        # get_free_apis returns list[dict]; use dict keys directly
         return {
             "apis": [
                 {
-                    "name": api.name,
-                    "description": api.description,
-                    "category": api.category,
-                    "url": api.base_url,
-                    "auth_required": api.auth_required,
-                    "use_cases": api.use_cases,
+                    "name": api.get("name", api.get("id", "")),
+                    "description": api.get("description", ""),
+                    "category": api.get("category", ""),
+                    "url": api.get("base_url", ""),
                 }
                 for api in apis
             ],

@@ -522,7 +522,6 @@ def chat(
     agents_json: str = typer.Option("", "--agents", help="Define custom subagents via JSON"),
     plugin_dir: list[str] = typer.Option([], "--plugin-dir", help="Load plugin from directory or .zip"),
     plugin_url: list[str] = typer.Option([], "--plugin-url", help="Fetch plugin .zip from URL"),
-    permission_mode: str = typer.Option("", "--permission-mode", help="Permission mode: default, plan, auto, bypassPermissions, manual"),
     permission_prompt_tool: str = typer.Option("", "--permission-prompt-tool", help="MCP tool for permission prompts"),
 ):
     """Interactive chat with streaming, tools, approval modes, context pruning."""

@@ -30,7 +30,8 @@ class MonitorProcessTool(Tool):
         "required": ["command"],
     }
     
-    async def execute(self, args: dict) -> dict:
+    async def execute(self, input_data: dict, state: Any = None, project_path: str = "") -> dict:
+        args = input_data
         command = args.get("command", "")
         duration = args.get("duration", 10)
         cwd = args.get("cwd", ".")
@@ -91,7 +92,8 @@ class MonitorFileTool(Tool):
         "required": ["path"],
     }
     
-    async def execute(self, args: dict) -> dict:
+    async def execute(self, input_data: dict, state: Any = None, project_path: str = "") -> dict:
+        args = input_data
         path = args.get("path", "")
         duration = args.get("duration", 5)
         num_lines = args.get("lines", 10)
@@ -147,7 +149,8 @@ class MonitorDirectoryTool(Tool):
         "required": ["path"],
     }
     
-    async def execute(self, args: dict) -> dict:
+    async def execute(self, input_data: dict, state: Any = None, project_path: str = "") -> dict:
+        args = input_data
         path = args.get("path", ".")
         duration = args.get("duration", 5)
         pattern = args.get("pattern", "*")
@@ -216,7 +219,8 @@ class MonitorLogTool(Tool):
         "required": ["command"],
     }
     
-    async def execute(self, args: dict) -> dict:
+    async def execute(self, input_data: dict, state: Any = None, project_path: str = "") -> dict:
+        args = input_data
         command = args.get("command", "")
         pattern = args.get("pattern", "")
         duration = args.get("duration", 10)
