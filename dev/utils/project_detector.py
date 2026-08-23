@@ -450,3 +450,45 @@ class ProjectDetector:
             result["package_manager"] = "go"
         
         return result
+    
+    def build_import_graph(self) -> dict:
+        """Build import/dependency graph for Python files."""
+        graph = {}  # file -> [imported_files]
+        
+        for root, dirs, files in os.walk(self.project_path):
+            dirs[:] = [d for d in dirs if d not in (
+                "node_modules", "__pycache__", ".git", "venv", ".venv",
+                "dist", "build",
+            )]
+            
+            for f in files:
+                if not f.endswith(".py"):
+                    continue
+                fpath = os.path.join(root, f)
+                rel_path = os.path.relpath(fpath, self.project_path)
+                
+                try:
+                    with open(fpath, "r", encoding="utf-8", errors="replace") as fh:
+                        content = fh.read()
+                    
+                    # Extract imports
+                    import re
+                    imports = []
+                    for match in re.finditer(r'^(?:from\s+(\S+)|import\s+(\S+))', content, re.MULTILINE):
+                        module = match.group(1) or match.group(2)
+                        imports.append(module.split(".")[0])  # Get top-level module
+                    
+                    # Check if imported modules are local files
+                    local_imports = []
+                    for imp in imports:
+                        # Check if it's a local module (exists as .py file)
+                        local_path = os.path.join(root, f"{imp}.py")
+                        if os.path.exists(local_path):
+                            local_imports.append(os.path.relpath(local_path, self.project_path))
+                    
+                    if local_imports:
+                        graph[rel_path] = local_imports
+                except Exception:
+                    pass
+        
+        return graph
