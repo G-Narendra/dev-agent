@@ -515,14 +515,43 @@ class RealGlobTool(Tool):
         search_dir = os.path.join(project_path, cwd) if not os.path.isabs(cwd) else cwd
         full_pattern = os.path.join(search_dir, pattern)
 
+        # Load .gitignore patterns to skip ignored files
+        import fnmatch
+        gitignore_patterns = []
+        gitignore_path = os.path.join(project_path, ".gitignore")
+        if os.path.isfile(gitignore_path):
+            try:
+                with open(gitignore_path, "r", encoding="utf-8", errors="replace") as f:
+                    for line in f:
+                        line = line.strip()
+                        if line and not line.startswith("#"):
+                            gitignore_patterns.append(line)
+            except Exception:
+                pass
+
+        def _is_gitignored(path: str) -> bool:
+            rel = os.path.relpath(path, project_path)
+            for p in gitignore_patterns:
+                if fnmatch.fnmatch(rel, p) or fnmatch.fnmatch(os.path.basename(path), p):
+                    return True
+            return False
+
         matches = []
         total = 0
         for match in glob_module.iglob(full_pattern, recursive=True):
             total += 1
             if len(matches) >= max_results:
                 continue  # Keep counting total
-            rel_path = os.path.relpath(match, project_path)
-            matches.append(rel_path)
+            # Skip gitignored files
+            if _is_gitignored(match):
+                total -= 1
+                continue
+            # Skip hidden dirs and __pycache__
+            rel = os.path.relpath(match, project_path)
+            if any(part.startswith(".") or part == "__pycache__" for part in Path(rel).parts):
+                total -= 1
+                continue
+            matches.append(rel)
 
         result = {"paths": sorted(matches)}
         if total > max_results:

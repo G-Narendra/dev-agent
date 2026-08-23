@@ -297,7 +297,12 @@ class ProductionAgentLoop:
             response = await self._call_llm_with_retries(messages)
 
             if not response:
-                return {"status": "error", "message": "No response from LLM after retries"}
+                # Don't exit — try next step with a different approach
+                self._log(f"No response from LLM at step {step + 1}, retrying...")
+                self._state.cur_messages.append(
+                    Message(role="user", content="Please continue with the task. If there was an error, try a different approach.")
+                )
+                continue
 
             content = response.get("content", "")
             tool_calls = response.get("tool_calls", [])
