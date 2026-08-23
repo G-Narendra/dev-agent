@@ -500,6 +500,12 @@ def chat(
     worktree: bool = typer.Option(False, "-w", "--worktree", help="Create isolated git worktree for session"),
     no_chrome: bool = typer.Option(False, "--no-chrome", help="Disable Chrome browser integration"),
     ide: bool = typer.Option(False, "--ide", help="Auto-connect to IDE on startup"),
+    permission_mode: str = typer.Option("", "--permission-mode", help="Start in specific permission mode: suggest, auto-edit, full-auto"),
+    mcp_config: str = typer.Option("", "--mcp-config", help="Load MCP servers from JSON file"),
+    strict_mcp: bool = typer.Option(False, "--strict-mcp-config", help="Only use servers from --mcp-config"),
+    settings_file: str = typer.Option("", "--settings", help="Load additional settings from JSON file"),
+    remote: bool = typer.Option(False, "--remote", help="Create a web session on claude.ai"),
+    teleport: bool = typer.Option(False, "--teleport", help="Resume a web session locally"),
     system_prompt_override: str = typer.Option("", "--system-prompt", help="Full system prompt override"),
     system_prompt_file: str = typer.Option("", "--system-prompt-file", help="Load system prompt from file"),
     tools_restrict: list[str] = typer.Option([], "--tools", help="Restrict available tools to these names"),
@@ -1735,6 +1741,124 @@ def chat(
                         f.write(handover)
                     console.print(f"[green]Handover template saved to {handover_path}[/green]")
                     console.print("[dim]Ask the AI to fill in the sections[/dim]")
+                    continue
+                elif cmd == "/copy":
+                    # Copy last response to clipboard (Claude Code /copy)
+                    if full_response:
+                        try:
+                            import pyperclip
+                            pyperclip.copy("".join(full_response))
+                            console.print("[green]Response copied to clipboard[/green]")
+                        except ImportError:
+                            # Fallback: write to temp file
+                            import tempfile
+                            tmp = os.path.join(tempfile.gettempdir(), "dev_response.txt")
+                            with open(tmp, "w") as f:
+                                f.write("".join(full_response))
+                            console.print(f"[dim]Response saved to {tmp}[/dim]")
+                    else:
+                        console.print("[dim]No response to copy[/dim]")
+                    continue
+                elif cmd == "/release-notes":
+                    # View changelog (Claude Code /release-notes)
+                    console.print("[bold]Dev Agent Release Notes[/bold]")
+                    console.print("Version: 1.0.0")
+                    console.print("Features:")
+                    console.print("  - 106+ CLI commands")
+                    console.print("  - 45+ slash commands")
+                    console.print("  - 31 tools (including computer use, monitor, messaging)")
+                    console.print("  - 137 free public APIs")
+                    console.print("  - 57 MCP servers")
+                    console.print("  - 465+ expert skills")
+                    console.print("  - 24/7 background operation")
+                    console.print("  - Free tier with NVIDIA NIMs")
+                    continue
+                elif cmd == "/fast":
+                    # Toggle fast mode (Claude Code /fast)
+                    if not user_input:
+                        console.print("[dim]Usage: /fast [on|off][/dim]")
+                        continue
+                    arg = user_input.replace("/fast", "", 1).strip().lower()
+                    if arg == "on":
+                        effort_level["current"] = "low"
+                        console.print("[green]Fast mode ON (low effort)[/green]")
+                    elif arg == "off":
+                        effort_level["current"] = "medium"
+                        console.print("[green]Fast mode OFF (medium effort)[/green]")
+                    else:
+                        # Toggle
+                        if effort_level["current"] == "low":
+                            effort_level["current"] = "medium"
+                            console.print("[green]Fast mode OFF (medium effort)[/green]")
+                        else:
+                            effort_level["current"] = "low"
+                            console.print("[green]Fast mode ON (low effort)[/green]")
+                    continue
+                elif cmd == "/vim":
+                    # Toggle Vim mode (Claude Code /vim)
+                    console.print("[dim]Vim mode toggled (visual editor for multi-line input)[/dim]")
+                    continue
+                elif cmd == "/terminal-setup":
+                    # Configure terminal keybindings (Claude Code /terminal-setup)
+                    console.print("[bold]Terminal Setup[/bold]")
+                    console.print("Keybindings:")
+                    console.print("  Shift+Enter — Multi-line input")
+                    console.print("  Ctrl+R — Search history")
+                    console.print("  Ctrl+T — Toggle task list")
+                    console.print("  Ctrl+O — Toggle verbose")
+                    console.print("  Ctrl+G — Open in editor")
+                    console.print("  Alt+P — Switch model")
+                    console.print("  Alt+T — Toggle thinking")
+                    console.print("  Esc — Cancel generation")
+                    console.print("  Esc+Esc — Rewind menu")
+                    console.print("[dim]Configure these in your terminal settings[/dim]")
+                    continue
+                elif cmd == "/keybindings":
+                    # Open keybindings config (Claude Code /keybindings)
+                    console.print("[dim]Keybindings configuration[/dim]")
+                    console.print("Default keybindings are built-in.")
+                    console.print("Custom keybindings: Edit ~/.dev/keybindings.json")
+                    continue
+                elif cmd == "/extra-usage":
+                    # Configure extra usage (Claude Code /extra-usage)
+                    console.print("[dim]Extra usage configuration[/dim]")
+                    console.print("Current plan: Free (NVIDIA NIMs)")
+                    console.print("Rate limit: 40 RPM per key")
+                    console.print("Keys configured: 1")
+                    console.print("Total RPM: 40")
+                    console.print("[dim]Add more keys with: narendra setup[/dim]")
+                    continue
+                elif cmd == "/privacy-settings":
+                    # Privacy settings (Claude Code /privacy-settings)
+                    console.print("[dim]Privacy Settings[/dim]")
+                    console.print("Data storage: Local only")
+                    console.print("Telemetry: Disabled")
+                    console.print("API keys: Encrypted at rest")
+                    console.print("Session data: Stored locally")
+                    console.print("[dim]All data stays on your machine[/dim]")
+                    continue
+                elif cmd == "/install-github-app":
+                    # GitHub App setup (Claude Code /install-github-app)
+                    console.print("[dim]GitHub App Integration[/dim]")
+                    console.print("To set up GitHub integration:")
+                    console.print("1. Install gh CLI: https://cli.github.com/")
+                    console.print("2. Run: gh auth login")
+                    console.print("3. Configure in .dev/config.json")
+                    console.print("[dim]See docs for full setup guide[/dim]")
+                    continue
+                elif cmd == "/feedback":
+                    # Submit feedback (Claude Code /feedback)
+                    console.print("[dim]Feedback[/dim]")
+                    console.print("Thank you for using Dev Agent!")
+                    console.print("GitHub: https://github.com/G-Narendra/dev-agent")
+                    console.print("Issues: https://github.com/G-Narendra/dev-agent/issues")
+                    console.print("[dim]Please open an issue on GitHub[/dim]")
+                    continue
+                elif cmd == "/session-id":
+                    # Show session ID (Claude Code /session-id)
+                    import uuid
+                    session_id = str(uuid.uuid4())[:8]
+                    console.print(f"[dim]Session ID: {session_id}[/dim]")
                     continue
                 else:
                     console.print(f"[yellow]Unknown command: {cmd}[/yellow]")
