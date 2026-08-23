@@ -83,6 +83,36 @@ def register_new_tools(registry, project_path: str):
     # Pipeline tool (chain multiple tool calls)
     registry.register("pipeline", RealPipelineTool())
     
+    # Computer use tools
+    from ..tools.computer_use import (
+        ComputerScreenshotTool, ComputerMouseMoveTool, ComputerClickTool,
+        ComputerTypeTool, ComputerKeyTool, ComputerOpenAppTool,
+    )
+    registry.register("computer_screenshot", ComputerScreenshotTool())
+    registry.register("computer_mouse_move", ComputerMouseMoveTool())
+    registry.register("computer_click", ComputerClickTool())
+    registry.register("computer_type", ComputerTypeTool())
+    registry.register("computer_key", ComputerKeyTool())
+    registry.register("computer_open_app", ComputerOpenAppTool())
+    
+    # Session messaging tools
+    from ..tools.session_messaging import (
+        SendMessageTool, ReceiveMessagesTool, ListSessionsTool, BroadcastTool,
+    )
+    registry.register("send_session_message", SendMessageTool(project_path=project_path))
+    registry.register("receive_session_messages", ReceiveMessagesTool(project_path=project_path))
+    registry.register("list_sessions", ListSessionsTool(project_path=project_path))
+    registry.register("broadcast_session_message", BroadcastTool(project_path=project_path))
+    
+    # Monitor tools
+    from ..tools.monitor import (
+        MonitorProcessTool, MonitorFileTool, MonitorDirectoryTool, MonitorLogTool,
+    )
+    registry.register("monitor_process", MonitorProcessTool())
+    registry.register("monitor_file", MonitorFileTool())
+    registry.register("monitor_directory", MonitorDirectoryTool())
+    registry.register("monitor_log", MonitorLogTool())
+    
     return registry
 
 

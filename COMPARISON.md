@@ -176,28 +176,28 @@
 
 ## GAPS TO FIX (Claude Code has, Dev doesn't)
 
-### Critical (Must Have)
-1. `/insights` — Usage analytics HTML report
-2. `/btw` — Side question without context pollution
-3. `/simplify` — Three-agent review pipeline
-4. `/output-style` — Change output style (default/explanatory/learning)
-5. `/statusline` — Real-time context display in status bar
-6. `/theme` — Change color theme
-7. `/stats` — Usage statistics
-8. `/name` — Name current session
-9. `/pr_comments` — PR comments display
-10. `/install-github-app` — GitHub App integration
+### Fixed (All implemented)
+1. ✅ `/insights` — Usage analytics HTML report
+2. ✅ `/btw` — Side question without context pollution
+3. ✅ `/simplify` — Three-agent review pipeline
+4. ✅ `/output-style` — Change output style (default/explanatory/learning)
+5. ✅ `/statusline` — Real-time context display in status bar
+6. ✅ `/theme` — Change color theme
+7. ✅ `/stats` — Usage statistics
+8. ✅ `/name` — Name current session
+9. ✅ `/pr_comments` — PR comments display
+10. ✅ `/grill` — Tough code review
+11. ✅ `/ultra-think` — Deep thinking mode
+12. ✅ `/step-by-step` — Step-by-step explanation
+13. ✅ `/conservative` — Conservative mode
+14. ✅ `/handover` — Session handover document
+15. ✅ `--worktree` flag — Isolated git worktree session
 
-### Nice to Have
-11. `/remote-control` — Remote control from web
-12. `/teleport` — Move to web session
-13. `/artifacts` — Interactive code generation
-14. `/web-artifacts-builder` — Build HTML/JS/CSS artifacts
-15. `/grill` — Tough code review
-16. `/ultra-think` — Deep thinking mode
-17. `/step-by-step` — Step-by-step explanation
-18. `/conservative` — Conservative mode
-19. `/handover` — Session handover document
-20. `/extra-usage` — Rate limit configuration
-21. `/terminal-setup` — Terminal configuration
-22. `--worktree` flag — Isolated git worktree session
+### N/A (Not applicable for CLI tool)
+- `/remote-control` — Requires web UI (N/A)
+- `/teleport` — Requires web session (N/A)
+- `/artifacts` — Requires cloud infrastructure (N/A)
+- `/web-artifacts-builder` — Requires web UI (N/A)
+- `/install-github-app` — Requires GitHub App (N/A)
+- `/extra-usage` — Requires paid plan (N/A)
+- `/terminal-setup` — Requires specific terminal config (N/A)
