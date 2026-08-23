@@ -380,3 +380,73 @@ class ProjectDetector:
                 pass
         
         return deps
+    
+    def detect_monorepo(self) -> dict:
+        """Detect monorepo structure and workspaces."""
+        result = {
+            "is_monorepo": False,
+            "workspaces": [],
+            "package_manager": "npm",
+            "root_package_manager": None,
+        }
+        
+        # Check for npm/yarn/pnpm workspaces
+        pkg_file = os.path.join(self.project_path, "package.json")
+        if os.path.exists(pkg_file):
+            try:
+                with open(pkg_file) as f:
+                    import json
+                    pkg = json.load(f)
+                    workspaces = pkg.get("workspaces", [])
+                    if workspaces:
+                        result["is_monorepo"] = True
+                        result["workspaces"] = workspaces
+                        result["package_manager"] = "npm"
+            except Exception:
+                pass
+        
+        # Check for lerna.json
+        if os.path.exists(os.path.join(self.project_path, "lerna.json")):
+            result["is_monorepo"] = True
+            result["package_manager"] = "lerna"
+        
+        # Check for pnpm-workspace.yaml
+        if os.path.exists(os.path.join(self.project_path, "pnpm-workspace.yaml")):
+            result["is_monorepo"] = True
+            result["package_manager"] = "pnpm"
+        
+        # Check for Cargo workspaces (Rust)
+        cargo_file = os.path.join(self.project_path, "Cargo.toml")
+        if os.path.exists(cargo_file):
+            try:
+                with open(cargo_file) as f:
+                    content = f.read()
+                    if "[workspace]" in content:
+                        result["is_monorepo"] = True
+                        result["package_manager"] = "cargo"
+                        # Extract workspace members
+                        import re
+                        members = re.findall(r'members\s*=\s*\[([^\]]+)\]', content)
+                        if members:
+                            result["workspaces"] = [m.strip().strip('"').strip("'") for m in members[0].split(",")]
+            except Exception:
+                pass
+        
+        # Check for pyproject.toml workspaces
+        pyproject = os.path.join(self.project_path, "pyproject.toml")
+        if os.path.exists(pyproject):
+            try:
+                with open(pyproject) as f:
+                    content = f.read()
+                    if "[tool.poetry]" in content and "packages" in content:
+                        result["is_monorepo"] = True
+                        result["package_manager"] = "poetry"
+            except Exception:
+                pass
+        
+        # Check for go.work (Go workspaces)
+        if os.path.exists(os.path.join(self.project_path, "go.work")):
+            result["is_monorepo"] = True
+            result["package_manager"] = "go"
+        
+        return result
