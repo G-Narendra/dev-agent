@@ -134,6 +134,14 @@ class RealReadFilesTool(Tool):
             abs_path = os.path.normpath(os.path.abspath(os.path.join(project_path, path)))
         # Path traversal protection: ensure resolved path is within project
         abs_project = os.path.normpath(os.path.abspath(project_path))
+        # Resolve symlinks and check target is within project
+        try:
+            real_path = os.path.realpath(abs_path)
+            real_project = os.path.realpath(abs_project)
+            if not real_path.startswith(real_project):
+                raise ValueError(f"Symlink escape blocked: {path} -> {real_path} resolves outside project")
+        except (OSError, ValueError):
+            pass
         if not abs_path.startswith(abs_project):
             raise ValueError(f"Path traversal blocked: {path} resolves outside project")
         # Windows MAX_PATH workaround
