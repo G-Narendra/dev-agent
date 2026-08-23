@@ -1085,10 +1085,6 @@ class RealPipelineTool(Tool):
         if not isinstance(steps, list):
             return {"error": "steps must be a list"}
 
-        # Import registry to actually execute tools
-        from dev.tools.real_tools import build_tool_registry
-        registry = build_tool_registry()
-
         results = []
         for i, step in enumerate(steps):
             if not isinstance(step, dict):
@@ -1104,15 +1100,6 @@ class RealPipelineTool(Tool):
                 for key, val in tool_args.items():
                     if isinstance(val, str) and val == "$prev" and results:
                         tool_args[key] = results[-1].get("content", str(results[-1]))
-            # Actually execute the tool
-            if tool_name in registry:
-                try:
-                    tool = registry[tool_name]
-                    result = await tool.execute(tool_args, state, project_path)
-                    results.append({"step": i, "tool": tool_name, "result": result})
-                except Exception as e:
-                    results.append({"step": i, "tool": tool_name, "error": str(e)})
-            else:
-                results.append({"step": i, "tool": tool_name, "error": f"Tool '{tool_name}' not found"})
+            results.append({"step": i, "tool": tool_name, "args": tool_args})
 
-        return {"steps": results, "total": len(results)}
+        return {"steps": results, "total": len(results), "hint": "Pipeline steps recorded. Use production loop to execute."}

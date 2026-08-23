@@ -24,7 +24,7 @@ from ..tools.real_tools import (
     RealReadFilesTool, RealWriteFileTool, RealStrReplaceTool,
     RealCodeSearchTool, RealGlobTool, RealListDirectoryTool,
     RealRunTerminalCommand, RealGitOperations,
-    RealWebSearchTool, RealReadUrlTool,
+    RealWebSearchTool, RealReadUrlTool, RealPipelineTool,
 )
 from ..tools.patch_tools import ApplyPatchTool, EditBlockTool
 from ..tools.browser_tools import (
@@ -79,6 +79,9 @@ def register_new_tools(registry, project_path: str):
     # Docker tools
     registry.register("docker_run", DockerRunTool())
     registry.register("docker_build", DockerBuildTool())
+    
+    # Pipeline tool (chain multiple tool calls)
+    registry.register("pipeline", RealPipelineTool())
     
     return registry
 

@@ -1212,6 +1212,114 @@ def chat(
                     if content:
                         console.print(Markdown(content[:2000]))
                     continue
+                elif cmd == "/btw":
+                    # Side question that doesn't add to conversation history (Claude Code feature)
+                    btw_text = user_input[4:].strip()
+                    if not btw_text:
+                        console.print("[dim]Usage: /btw <side question>[/dim]")
+                    else:
+                        console.print("[dim]Answering as side question (not added to history)...[/dim]")
+                        result = await agent_loop.run_streaming(
+                            prompt=btw_text, system_prompt="Answer briefly. This is a side question.", max_steps=5,
+                        )
+                        content = result.get("content", "")
+                        if content:
+                            console.print(Markdown(content[:2000]))
+                    continue
+                elif cmd == "/usage":
+                    # Show token usage and cost (Claude Code feature)
+                    state = agent_loop.get_state()
+                    console.print(Panel(
+                        f"Tokens sent: {state.total_tokens_sent:,}\n"
+                        f"Tokens received: {state.total_tokens_received:,}\n"
+                        f"Total: {state.total_tokens_sent + state.total_tokens_received:,}\n"
+                        f"Cost: ${state.total_cost:.4f}\n"
+                        f"Edited files: {len(state.edited_files)}\n"
+                        f"Context tokens: ~{agent_loop._count_tokens(state.done_messages + state.cur_messages):,}",
+                        title="[bold]Usage[/bold]",
+                        border_style="blue",
+                    ))
+                    continue
+                elif cmd == "/rewind":
+                    result = agent_loop.undo_last()
+                    if result.get("success"):
+                        console.print(f"[green]{result['message']}[/green]")
+                    else:
+                        console.print(f"[yellow]{result['message']}[/yellow]")
+                    continue
+                elif cmd == "/verify":
+                    console.print("[dim]Verifying project...[/dim]")
+                    prompt_verify = (
+                        "Verify this project works correctly. Check: 1) Dependencies installed, "
+                        "2) Tests pass, 3) Build succeeds, 4) No obvious bugs."
+                    )
+                    result = await agent_loop.run_streaming(
+                        prompt=prompt_verify, system_prompt="You are a QA engineer.", max_steps=15,
+                    )
+                    content = result.get("content", "")
+                    if content:
+                        console.print(Markdown(content[:2000]))
+                    continue
+                elif cmd.startswith("/add "):
+                    file_path = user_input[5:].strip()
+                    if file_path:
+                        abs_f = os.path.join(abs_project, file_path)
+                        if os.path.isfile(abs_f):
+                            agent_loop._state.fnames.add(file_path)
+                            agent_loop._state.abs_fnames.add(abs_f)
+                            console.print(f"[green]Added {file_path} to context[/green]")
+                        else:
+                            console.print(f"[red]File not found: {file_path}[/red]")
+                    continue
+                elif cmd.startswith("/drop "):
+                    file_path = user_input[6:].strip()
+                    if file_path in agent_loop._state.fnames:
+                        agent_loop._state.fnames.discard(file_path)
+                        abs_f = os.path.join(abs_project, file_path)
+                        agent_loop._state.abs_fnames.discard(abs_f)
+                        console.print(f"[green]Removed {file_path} from context[/green]")
+                    else:
+                        console.print(f"[yellow]File not in context: {file_path}[/yellow]")
+                    continue
+                elif cmd == "/files":
+                    if agent_loop._state.fnames:
+                        console.print("[bold]Files in context:[/bold]")
+                        for f in sorted(agent_loop._state.fnames):
+                            console.print(f"  {f}")
+                    else:
+                        console.print("[dim]No files in context[/dim]")
+                    continue
+                elif cmd == "/code-review":
+                    console.print("[dim]Running AI code review...[/dim]")
+                    prompt_review = (
+                        "Review the recent git diff for correctness bugs, security issues, "
+                        "performance problems, and code quality issues. "
+                        "For each issue found, provide: file, line, severity, and fix."
+                    )
+                    result = await agent_loop.run_streaming(
+                        prompt=prompt_review, system_prompt="You are a senior code reviewer.", max_steps=15,
+                    )
+                    content = result.get("content", "")
+                    if content:
+                        console.print(Markdown(content[:3000]))
+                    continue
+                elif cmd == "/tasks":
+                    console.print("[dim]Background tasks: none (single-session mode)[/dim]")
+                    continue
+                elif cmd == "/security-review":
+                    console.print("[dim]Running security review...[/dim]")
+                    prompt_sec = (
+                        "Perform a security review of the recent code changes. "
+                        "Check for: SQL injection, XSS, CSRF, path traversal, "
+                        "hardcoded secrets, insecure defaults, dependency vulnerabilities."
+                    )
+                    result = await agent_loop.run_streaming(
+                        prompt=prompt_sec, system_prompt="You are a security expert.", max_steps=15,
+                    )
+                    content = result.get("content", "")
+                    if content:
+                        console.print(Markdown(content[:3000]))
+                    continue
                 elif cmd == "/snapshot":
                     import subprocess as _sp
                     _sp.run(["git", "add", "-A"], cwd=abs_project, capture_output=True)
