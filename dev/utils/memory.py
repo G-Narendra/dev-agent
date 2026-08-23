@@ -19,7 +19,8 @@ class MemoryEntry:
     """A single memory entry."""
     key: str
     value: str
-    category: str = "general"  # build, debug, preference, pattern, command
+    category: str = "general"  # build, debug, preference, pattern, command, manual
+    importance: int = 5  # 1-10, higher = more important
     created_at: str = field(default_factory=lambda: datetime.now().isoformat())
     last_used: Optional[str] = None
     use_count: int = 0
@@ -49,6 +50,7 @@ class AutoMemory:
                     key=key,
                     value=entry_data["value"],
                     category=entry_data.get("category", "general"),
+                    importance=entry_data.get("importance", 5),
                     created_at=entry_data.get("created_at", ""),
                     last_used=entry_data.get("last_used"),
                     use_count=entry_data.get("use_count", 0),
@@ -58,10 +60,10 @@ class AutoMemory:
         """Remove oldest/least-used entries when over limit."""
         if len(self.entries) <= self.MAX_ENTRIES:
             return
-        # Sort by use_count (ascending) then by last_used (oldest first)
+        # Sort by importance (ascending), then use_count (ascending), then last_used (oldest first)
         sorted_entries = sorted(
             self.entries.items(),
-            key=lambda kv: (kv[1].use_count, kv[1].last_used or "")
+            key=lambda kv: (kv[1].importance, kv[1].use_count, kv[1].last_used or "")
         )
         # Remove oldest 20%
         to_remove = len(self.entries) - int(self.MAX_ENTRIES * 0.8)
@@ -76,6 +78,7 @@ class AutoMemory:
                 key: {
                     "value": e.value,
                     "category": e.category,
+                    "importance": e.importance,
                     "created_at": e.created_at,
                     "last_used": e.last_used,
                     "use_count": e.use_count,
@@ -108,12 +111,13 @@ class AutoMemory:
         with open(self.memory_file, "w", encoding="utf-8") as f:
             f.write("\n".join(lines))
 
-    def remember(self, key: str, value: str, category: str = "general"):
+    def remember(self, key: str, value: str, category: str = "general", importance: int = 5):
         """Store a learning."""
         self.entries[key] = MemoryEntry(
             key=key,
             value=value,
             category=category,
+            importance=max(1, min(10, importance)),
         )
         self._save()
 
