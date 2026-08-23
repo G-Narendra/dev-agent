@@ -12,7 +12,7 @@ import subprocess
 import time
 from typing import Any, Optional
 
-from ..agents.runtime import Tool
+from .base import Tool
 
 
 class MonitorProcessTool(Tool):

@@ -16,7 +16,7 @@ import subprocess
 import tempfile
 from typing import Any
 
-from ..agents.runtime import Tool
+from .base import Tool
 
 
 class ComputerScreenshotTool(Tool):

@@ -16,7 +16,7 @@ import uuid
 from pathlib import Path
 from typing import Any, Optional
 
-from ..agents.runtime import Tool
+from .base import Tool
 
 
 class SessionMessenger:
