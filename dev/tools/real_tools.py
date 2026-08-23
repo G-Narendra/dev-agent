@@ -207,6 +207,14 @@ class RealWriteFileTool(Tool):
                 if os.path.exists(temp_path):
                     os.remove(temp_path)
                 raise
+            # Write verification: read back and check size
+            try:
+                verified_size = os.path.getsize(abs_path)
+                expected_size = len(content.encode('utf-8'))
+                if verified_size != expected_size:
+                    return {"error": f"Write verification failed: expected {expected_size} bytes, got {verified_size}", "path": path}
+            except OSError:
+                pass  # Verification is best-effort
             return {
                 "success": True,
                 "path": path,
