@@ -163,8 +163,40 @@ class SessionManager:
         for session in self.list_sessions():
             if query_lower in session["name"].lower():
                 results.append(session)
+            # Also search in message content
+            elif session.get("messages"):
+                for msg in session["messages"]:
+                    content = msg.get("content", "") if isinstance(msg, dict) else str(msg)
+                    if query_lower in content.lower():
+                        results.append(session)
+                        break
         
         return results
+    
+    def export_session(self, session_id: str, format: str = "markdown") -> str:
+        """Export a session to markdown or JSON format."""
+        session = self.load(session_id)
+        if not session:
+            return "Session not found"
+        
+        if format == "json":
+            return json.dumps(session, indent=2, ensure_ascii=False)
+        
+        # Markdown format
+        lines = [f"# Session: {session.get('name', session_id)}", ""]
+        lines.append(f"Created: {session.get('created_at', 'unknown')}")
+        lines.append("")
+        
+        for msg in session.get("messages", []):
+            role = msg.get("role", "unknown") if isinstance(msg, dict) else "unknown"
+            content = msg.get("content", "") if isinstance(msg, dict) else str(msg)
+            if content:
+                lines.append(f"## {role.title()}")
+                lines.append("")
+                lines.append(content)
+                lines.append("")
+        
+        return "\n".join(lines)
     
     def _msg_to_dict(self, msg) -> dict:
         """Convert a message object to dict."""
