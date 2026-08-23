@@ -2126,6 +2126,16 @@ When building a project with multiple files:
             )
             if result.stdout.strip():
                 parts.append(f"Recent commits:\n{result.stdout.strip()}")
+
+            # Recent file changes (last 5 files changed)
+            result = subprocess.run(
+                ["git", "log", "--diff-filter=AM", "--name-only", "--pretty=format:", "-5"],
+                capture_output=True, text=True, cwd=self.project_path, timeout=5,
+            )
+            if result.stdout.strip():
+                recent_files = [f for f in result.stdout.strip().split("\n") if f][:5]
+                if recent_files:
+                    parts.append(f"Recently changed files: {', '.join(recent_files)}")
         except Exception:
             pass  # Not a git repo or git not available
 
