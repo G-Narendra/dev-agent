@@ -173,6 +173,15 @@ class RealWriteFileTool(Tool):
         content = input_data.get("content", "")
         instructions = input_data.get("instructions", "")
 
+        # Validate content is not empty
+        if not content or not content.strip():
+            return {"error": "Cannot write empty content", "path": path}
+
+        # Content size limit: 5MB
+        content_bytes = len(content.encode('utf-8'))
+        if content_bytes > 5 * 1024 * 1024:
+            return {"error": f"Content too large ({content_bytes // 1024}KB). Max 5MB.", "path": path}
+
         abs_path = self._resolve_path(path, project_path)
 
         # Check for concurrent modification by user
