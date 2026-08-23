@@ -123,6 +123,24 @@ class DevConfig:
                 if hasattr(self.sandbox, k):
                     setattr(self.sandbox, k, v)
     
+    def validate(self) -> list[str]:
+        """Validate configuration and return list of warnings/errors."""
+        errors = []
+        # Check provider config
+        if not self.provider.type:
+            errors.append("No provider type configured")
+        if not self.provider.base_url:
+            errors.append("No base URL configured")
+        # Check agent config
+        if self.agent.max_steps < 1:
+            errors.append(f"Invalid max_steps: {self.agent.max_steps}")
+        if self.agent.max_steps > 200:
+            errors.append(f"max_steps too high: {self.agent.max_steps} (recommended: 50)")
+        # Check sandbox config
+        if self.sandbox.mode not in ("none", "docker", "process"):
+            errors.append(f"Invalid sandbox mode: {self.sandbox.mode}")
+        return errors
+    
     def save(self, project_path: str | None = None):
         """Save configuration to file."""
         save_path = Path(project_path or self.project_path) / ".dev" / "config.yaml"
