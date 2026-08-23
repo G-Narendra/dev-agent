@@ -327,6 +327,104 @@ class QualityChecker:
                 output="Test runner not found",
             )
     
+    def analyze_code_quality(self) -> dict:
+        """Run comprehensive code quality analysis."""
+        results = {
+            "lint": None,
+            "circular_deps": [],
+            "unused_imports": [],
+            "complexity": {},
+        }
+        
+        # Lint all files
+        try:
+            results["lint"] = self._lint_project()
+        except Exception:
+            pass
+        
+        # Detect circular dependencies
+        try:
+            from .project_detector import ProjectDetector
+            detector = ProjectDetector(self.project_path)
+            results["circular_deps"] = detector.detect_circular_dependencies()
+        except Exception:
+            pass
+        
+        # Detect unused imports
+        try:
+            from .project_detector import ProjectDetector
+            detector = ProjectDetector(self.project_path)
+            results["unused_imports"] = detector.detect_unused_imports()
+        except Exception:
+            pass
+        
+        # Calculate cyclomatic complexity
+        try:
+            results["complexity"] = self._calculate_complexity()
+        except Exception:
+            pass
+        
+        return results
+    
+    def _lint_project(self) -> dict:
+        """Lint all files in the project."""
+        import asyncio
+        results = {"files": 0, "errors": 0, "warnings": 0}
+        
+        for root, dirs, files in os.walk(self.project_path):
+            dirs[:] = [d for d in dirs if d not in (
+                "node_modules", "__pycache__", ".git", "venv", ".venv",
+                "dist", "build",
+            )]
+            for f in files:
+                ext = Path(f).suffix
+                if ext in LINTERS:
+                    fpath = os.path.join(root, f)
+                    rel_path = os.path.relpath(fpath, self.project_path)
+                    result = asyncio.get_event_loop().run_until_complete(
+                        self.lint_file(rel_path)
+                    )
+                    results["files"] += 1
+                    results["errors"] += len(result.errors)
+                    results["warnings"] += len(result.warnings)
+        
+        results["success"] = results["errors"] == 0
+        return results
+    
+    def _calculate_complexity(self) -> dict:
+        """Calculate cyclomatic complexity for Python files."""
+        import re
+        complexity = {}
+        
+        for root, dirs, files in os.walk(self.project_path):
+            dirs[:] = [d for d in dirs if d not in (
+                "node_modules", "__pycache__", ".git", "venv", ".venv",
+            )]
+            for f in files:
+                if not f.endswith(".py"):
+                    continue
+                fpath = os.path.join(root, f)
+                rel_path = os.path.relpath(fpath, self.project_path)
+                
+                try:
+                    with open(fpath, "r", encoding="utf-8", errors="replace") as fh:
+                        content = fh.read()
+                    
+                    # Count branching keywords
+                    branches = len(re.findall(
+                        r'\b(if|elif|for|while|and|or|except|case)\b',
+                        content
+                    ))
+                    complexity[rel_path] = {
+                        "branches": branches,
+                        "lines": content.count("\n") + 1,
+                        "complexity": branches + 1,  # McCabe complexity
+                    }
+                except Exception:
+                    pass
+        
+        return complexity
+    
     def _detect_language(self) -> str:
         """Detect project language."""
         if os.path.exists(os.path.join(self.project_path, "pyproject.toml")):
