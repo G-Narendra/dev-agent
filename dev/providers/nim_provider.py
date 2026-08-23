@@ -110,7 +110,7 @@ class NimProvider:
                 max_keepalive_connections=20,
                 keepalive_expiry=30,
             ),
-            http2=True,  # Use HTTP/2 for multiplexed connections
+            # http2=True,  # Enable if h2 package is installed: pip install httpx[http2]
         )
     
     async def close(self):
