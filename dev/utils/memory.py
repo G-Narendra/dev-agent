@@ -207,6 +207,41 @@ class AutoMemory:
             for e in sorted(self.entries.values(), key=lambda x: x.use_count, reverse=True)
         ]
 
+    def consolidate(self) -> int:
+        """Merge related memories and remove duplicates. Returns number merged."""
+        merged = 0
+        # Group by category
+        by_category: dict[str, list[str]] = {}
+        for key, entry in self.entries.items():
+            by_category.setdefault(entry.category, []).append(key)
+        
+        # Within each category, merge entries with similar keys
+        for cat, keys in by_category.items():
+            if len(keys) < 2:
+                continue
+            # Check for fuzzy key matches
+            for i in range(len(keys)):
+                for j in range(i + 1, len(keys)):
+                    k1, k2 = keys[i], keys[j]
+                    e1, e2 = self.entries.get(k1), self.entries.get(k2)
+                    if not e1 or not e2:
+                        continue
+                    # Simple similarity: check if keys share a prefix
+                    if k1[:min(5, len(k1))] == k2[:min(5, len(k2)]:
+                        # Merge: keep the one with higher use_count
+                        if e1.use_count >= e2.use_count:
+                            e1.value += f" | Also: {e2.value[:100]}"
+                            del self.entries[k2]
+                        else:
+                            e2.value += f" | Also: {e1.value[:100]}"
+                            del self.entries[k1]
+                        merged += 1
+                        break
+        
+        if merged:
+            self._save()
+        return merged
+    
     def clear(self):
         """Clear all memories."""
         self.entries.clear()
