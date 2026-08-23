@@ -438,6 +438,7 @@ def chat(
     effort: str = typer.Option("medium", help="Reasoning effort: low, medium, high, xhigh, max"),
     model: str = typer.Option("default", help="NIM model to use"),
     verbose: bool = typer.Option(False, "-v", "--verbose", help="Show detailed output"),
+    quiet: bool = typer.Option(False, "-q", "--quiet", help="Suppress all output except responses"),
     approval: str = typer.Option("auto-edit", help="Approval mode: suggest, auto-edit, full-auto"),
     plan: bool = typer.Option(False, "--plan", help="Start in plan mode (read-only)"),
     append_system: str = typer.Option("", "--append-system", help="Extra system prompt text"),
@@ -497,6 +498,12 @@ def chat(
     async def _chat():
         # Initialize local approval_mode from the chat() parameter
         approval_mode = approval
+
+        # Quiet mode: suppress all output except responses
+        if quiet:
+            global console
+            from rich.console import Console as _Console
+            console = _Console(file=open(os.devnull, 'w'), force_terminal=True)
 
         # --init-only: run setup hooks then exit
         if init_only:
