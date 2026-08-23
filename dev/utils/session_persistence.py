@@ -198,6 +198,58 @@ class SessionManager:
         
         return "\n".join(lines)
     
+    def tag_session(self, session_id: str, tags: list[str]):
+        """Add tags to a session for organization."""
+        path = os.path.join(self.sessions_dir, f"{session_id}.json")
+        if not os.path.isfile(path):
+            return False
+        try:
+            with open(path, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+            metadata = data.get("metadata", {})
+            existing_tags = metadata.get("tags", [])
+            metadata["tags"] = list(set(existing_tags + tags))
+            data["metadata"] = metadata
+            with open(path, 'w', encoding='utf-8') as f:
+                json.dump(data, f, indent=2)
+            return True
+        except Exception:
+            return False
+    
+    def get_analytics(self) -> dict:
+        """Get analytics across all sessions."""
+        sessions = self.list_sessions()
+        if not sessions:
+            return {"total_sessions": 0}
+        
+        total_messages = 0
+        all_tags = []
+        tool_usage = {}
+        
+        for session in sessions:
+            for msg in session.get("messages", []):
+                total_messages += 1
+                if isinstance(msg, dict):
+                    if msg.get("role") == "assistant" and msg.get("tool_calls"):
+                        for tc in msg["tool_calls"]:
+                            name = tc.get("function", {}).get("name", "unknown")
+                            tool_usage[name] = tool_usage.get(name, 0) + 1
+            tags = session.get("metadata", {}).get("tags", [])
+            all_tags.extend(tags)
+        
+        # Count tag usage
+        tag_counts = {}
+        for tag in all_tags:
+            tag_counts[tag] = tag_counts.get(tag, 0) + 1
+        
+        return {
+            "total_sessions": len(sessions),
+            "total_messages": total_messages,
+            "avg_messages_per_session": total_messages // len(sessions) if sessions else 0,
+            "tool_usage": dict(sorted(tool_usage.items(), key=lambda x: x[1], reverse=True)[:10]),
+            "tags": tag_counts,
+        }
+    
     def _msg_to_dict(self, msg) -> dict:
         """Convert a message object to dict."""
         if hasattr(msg, '__dict__'):
