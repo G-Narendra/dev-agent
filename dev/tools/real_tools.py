@@ -271,7 +271,18 @@ class RealStrReplaceTool(Tool):
 
         abs_path = self._resolve_path(path, project_path)
 
+        # File locking to prevent concurrent modification (best-effort)
+        lock_path = abs_path + ".lock"
+        lock_fd = None
         try:
+            try:
+                lock_fd = open(lock_path, "w")
+                if os.name != 'nt':  # fcntl not available on Windows
+                    import fcntl
+                    fcntl.flock(lock_fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
+            except (OSError, ImportError, NameError):
+                pass  # Locking is best-effort on Windows
+
             with open(abs_path, "r", encoding="utf-8") as f:
                 content = f.read()
 
@@ -322,6 +333,17 @@ class RealStrReplaceTool(Tool):
             }
         except Exception as e:
             return {"error": str(e), "path": path}
+        finally:
+            # Release file lock
+            try:
+                if lock_fd:
+                    if os.name != 'nt':
+                        fcntl.flock(lock_fd, fcntl.LOCK_UN)
+                    lock_fd.close()
+                if os.path.exists(lock_path):
+                    os.remove(lock_path)
+            except Exception:
+                pass
 
     def _make_diff(self, old: str, new: str, path: str) -> str:
         """Create a unified diff."""
