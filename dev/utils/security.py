@@ -245,3 +245,72 @@ class SecurityAudit:
         
         ext = Path(filepath).suffix.lower()
         return ext in text_extensions or not ext
+
+
+class AuditLogger:
+    """Audit logging for security-sensitive operations."""
+    
+    def __init__(self, project_path: str = "."):
+        self.project_path = os.path.abspath(project_path)
+        self.audit_dir = os.path.join(self.project_path, ".dev", "audit")
+        os.makedirs(self.audit_dir, exist_ok=True)
+        self.audit_file = os.path.join(self.audit_dir, "audit.log")
+    
+    def log(self, action: str, details: dict, severity: str = "info"):
+        """Log an audit event."""
+        import time
+        import json
+        event = {
+            "timestamp": time.strftime("%Y-%m-%dT%H:%M:%S", time.gmtime()),
+            "action": action,
+            "severity": severity,
+            **details,
+        }
+        try:
+            with open(self.audit_file, "a", encoding="utf-8") as f:
+                f.write(json.dumps(event) + "\n")
+        except Exception:
+            pass
+    
+    def log_tool_use(self, tool_name: str, args: dict, result: dict):
+        """Log a tool execution."""
+        # Don't log read-only tool calls (too noisy)
+        read_only = {"read_files", "code_search", "glob", "list_directory", "write_todos"}
+        if tool_name in read_only:
+            return
+        self.log("tool_use", {
+            "tool": tool_name,
+            "args_summary": str(args)[:200],
+            "success": "error" not in result,
+        })
+    
+    def log_file_change(self, file_path: str, action: str):
+        """Log a file modification."""
+        self.log("file_change", {
+            "path": file_path,
+            "action": action,
+        }, severity="warning")
+    
+    def log_security_event(self, event_type: str, details: dict):
+        """Log a security event."""
+        self.log("security", {
+            "event_type": event_type,
+            **details,
+        }, severity="critical")
+    
+    def get_recent_logs(self, limit: int = 100) -> list[dict]:
+        """Get recent audit log entries."""
+        import json
+        logs = []
+        try:
+            if os.path.isfile(self.audit_file):
+                with open(self.audit_file, "r", encoding="utf-8") as f:
+                    lines = f.readlines()
+                for line in lines[-limit:]:
+                    try:
+                        logs.append(json.loads(line.strip()))
+                    except json.JSONDecodeError:
+                        pass
+        except Exception:
+            pass
+        return logs

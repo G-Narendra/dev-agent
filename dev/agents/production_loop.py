@@ -179,6 +179,13 @@ class ProductionAgentLoop:
         # Tool result cache: cache read-only tool results to avoid re-reading
         self._tool_cache: dict[str, dict] = {}  # cache_key -> result
         self._tool_cache_max = 50  # Max cached results
+        # Audit logger for security-sensitive operations
+        self._audit_logger = None
+        try:
+            from ..utils.security import AuditLogger
+            self._audit_logger = AuditLogger(project_path)
+        except Exception:
+            pass
 
     def set_approval_prompt(self, callback):
         """Set a callback for interactive approval prompts."""
@@ -897,6 +904,10 @@ class ProductionAgentLoop:
 
                 all_tool_calls.append({"name": tool_name, "args": tool_args})
                 all_tool_results.append({"name": tool_name, "result": result})
+
+                # Audit log for non-read-only tools
+                if self._audit_logger and tool_name not in READ_ONLY_TOOLS:
+                    self._audit_logger.log_tool_use(tool_name, tool_args, result)
 
                 # Update tc args to reflect any mutations from hooks
                 tc["function"]["arguments"] = json.dumps(tool_args)
