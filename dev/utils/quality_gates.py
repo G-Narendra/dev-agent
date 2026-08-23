@@ -18,18 +18,10 @@ from typing import Optional
 @dataclass
 class LintResult:
     """Result of linting a file."""
-    file_path: str
+    file_path: str = ""
     success: bool = True
     errors: list[dict] = field(default_factory=list)
     warnings: list[dict] = field(default_factory=list)
-    
-    @property
-    def file_path(self) -> str:
-        return self._file_path
-    
-    @file_path.setter
-    def file_path(self, value: str):
-        self._file_path = value
 
 
 @dataclass
@@ -40,22 +32,6 @@ class TestResult:
     passed: int = 0
     failed: int = 0
     output: str = ""
-    
-    @property
-    def failed(self) -> int:
-        return self._failed
-    
-    @failed.setter
-    def failed(self, value: int):
-        self._failed = value
-    
-    @property
-    def output(self) -> str:
-        return self._output
-    
-    @output.setter
-    def output(self, value: str):
-        self._output = value
 
 
 class AutoLinter:
