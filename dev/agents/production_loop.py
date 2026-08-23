@@ -1107,6 +1107,22 @@ class ProductionAgentLoop:
                             "allowed": False,
                             "reason": f"auto-edit: dangerous command detected: '{pattern}'. Use /approve full-auto.",
                         }
+                # Check for network calls (curl, wget, fetch)
+                network_patterns = ["curl ", "wget ", "fetch(", "http://", "https://"]
+                for np in network_patterns:
+                    if np in cmd.lower():
+                        return {
+                            "allowed": False,
+                            "reason": f"auto-edit: network call detected: '{np}'. Use /approve full-auto.",
+                        }
+                # Check for dependency installation (npm install, pip install)
+                install_patterns = ["npm install", "npm i ", "pip install", "pip i ", "yarn add", "pnpm add"]
+                for ip in install_patterns:
+                    if ip in cmd.lower():
+                        return {
+                            "allowed": False,
+                            "reason": f"auto-edit: dependency install detected: '{ip}'. Use /approve full-auto.",
+                        }
                 return {"allowed": True, "reason": "auto-edit: terminal command auto-approved"}
             if tool_name == "git_operations":
                 action = tool_args.get("action", "")
@@ -1462,15 +1478,39 @@ class ProductionAgentLoop:
     # =========================================================================
 
     def save_plan(self, plan: list[dict]) -> None:
-        """Persist plan items to disk so they survive session restarts."""
+        """Persist plan items to disk with versioning."""
         try:
             os.makedirs(os.path.dirname(self._plan_file), exist_ok=True)
+            # Load existing plan for versioning
+            existing = self.load_plan()
+            version = 1
+            if os.path.isfile(self._plan_file):
+                try:
+                    with open(self._plan_file, "r", encoding="utf-8") as f:
+                        data = json.load(f)
+                    version = data.get("version", 1) + 1
+                except Exception:
+                    pass
+            # Save versioned plan
             with open(self._plan_file, "w", encoding="utf-8") as f:
                 json.dump({
                     "plan": plan,
+                    "version": version,
                     "updated_at": time.time(),
                     "project": self.project_path,
                 }, f, indent=2)
+            # Archive previous version
+            archive_dir = os.path.join(self.project_path, ".dev", "plan_archive")
+            os.makedirs(archive_dir, exist_ok=True)
+            archive_file = os.path.join(archive_dir, f"plan_v{version - 1}.json")
+            if os.path.isfile(self._plan_file) and version > 1:
+                try:
+                    with open(self._plan_file, "r") as src:
+                        with open(archive_file, "w") as dst:
+                            dst.write(src.read())
+                except Exception:
+                    pass
+            self._log(f"Plan saved (v{version})")
         except Exception as e:
             self._log(f"Plan save failed: {e}")
 
@@ -1484,6 +1524,18 @@ class ProductionAgentLoop:
             except Exception:
                 pass
         return []
+
+    def update_plan_item(self, item_index: int, status: str, notes: str = "") -> bool:
+        """Update a specific plan item's status (for progress tracking)."""
+        plan = self.load_plan()
+        if 0 <= item_index < len(plan):
+            plan[item_index]["status"] = status
+            plan[item_index]["completed"] = status == "done"
+            if notes:
+                plan[item_index]["notes"] = notes
+            self.save_plan(plan)
+            return True
+        return False
 
     def get_approval_history(self) -> list[dict]:
         """Return the full approval history for this session."""

@@ -329,6 +329,42 @@ class NimProvider:
                 return  # Success after retry — do NOT re-raise
             raise
     
+    def _sanitize_tools_for_nim(self, tools: list[dict]) -> list[dict]:
+        """Sanitize tool definitions to minimize token usage for NIM.
+        
+        NIM free-tier models truncate tool args. This method:
+        - Removes verbose descriptions (>100 chars)
+        - Strips empty property defaults
+        - Merges required arrays
+        """
+        if not tools:
+            return tools
+        sanitized = []
+        for tool in tools:
+            t = dict(tool)
+            if "function" in t:
+                func = dict(t["function"])
+                # Truncate long descriptions
+                if "description" in func and len(func["description"]) > 100:
+                    func["description"] = func["description"][:97] + "..."
+                # Clean parameters
+                if "parameters" in func:
+                    params = dict(func["parameters"])
+                    props = params.get("properties", {})
+                    for pname, pval in props.items():
+                        if isinstance(pval, dict):
+                            # Remove default if it's None or empty
+                            if pval.get("default") in (None, "", []):
+                                pval = {k: v for k, v in pval.items() if k != "default"}
+                            # Truncate property descriptions
+                            if "description" in pval and len(pval["description"]) > 80:
+                                pval["description"] = pval["description"][:77] + "..."
+                            props[pname] = pval
+                    func["parameters"] = params
+                t["function"] = func
+            sanitized.append(t)
+        return sanitized
+
     def _resolve_model(self, model: str, has_tools: bool = False) -> str:
         """Resolve model name, forcing 70B for tool calls."""
         resolved = self.MODELS.get(model, model)
@@ -392,23 +428,31 @@ class NimProvider:
         max_retries: int = 3,
         **kwargs,
     ) -> dict:
-        """Call LLM with retry and exponential backoff."""
+        """Call LLM with retry, fallback model, and exponential backoff."""
         import random
         
+        current_model = model
         for attempt in range(max_retries):
             try:
                 result = await self.chat_completion(
                     messages=messages,
-                    model=model,
+                    model=current_model,
                     temperature=temperature,
                     max_tokens=max_tokens,
                     tools=tools,
                     **kwargs,
                 )
+                self._record_model_success(current_model)
                 return result
             except Exception as e:
+                self._record_model_failure(current_model)
+                self._log(f"Call failed (attempt {attempt + 1}): {e}")
                 if attempt == max_retries - 1:
                     raise
+                # On second failure, try fallback model
+                if attempt == 1 and self._is_model_healthy(current_model) is False:
+                    current_model = self._get_fallback_model(current_model)
+                    self._log(f"Switching to fallback model: {current_model}")
                 # Exponential backoff with jitter
                 delay = min(0.5 * (2 ** attempt) + random.uniform(0, 0.5), 30.0)
                 await asyncio.sleep(delay)
@@ -445,6 +489,8 @@ class NimProvider:
         # Force 70B model for tool calls to avoid truncation
         if tools:
             resolved_model = self._resolve_model(model, has_tools=True)
+            # Sanitize tool definitions to minimize NIM token usage
+            tools = self._sanitize_tools_for_nim(tools)
         
         # Use non-streaming when tools are present (more reliable with smaller models)
         # Streaming tool calls are unreliable on many NIM models

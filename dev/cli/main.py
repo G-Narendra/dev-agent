@@ -1187,6 +1187,21 @@ def chat(
                     if content:
                         console.print(Markdown(content[:2000]))
                     continue
+                elif cmd == "/deploy":
+                    console.print("[dim]Analyzing deployment options...[/dim]")
+                    prompt_deploy = (
+                        "Analyze this project and suggest deployment options. "
+                        "Check for: Dockerfile, docker-compose.yml, vercel.json, netlify.toml, "
+                        "Procfile, fly.toml, railway.json, render.yaml. "
+                        "Suggest the best free deployment platform for this project type."
+                    )
+                    result = await agent_loop.run_streaming(
+                        prompt=prompt_deploy, system_prompt="You are a DevOps expert.", max_steps=10,
+                    )
+                    content = result.get("content", "")
+                    if content:
+                        console.print(Markdown(content[:2000]))
+                    continue
                 elif cmd == "/migrate":
                     console.print("[dim]Analyzing for migration needs...[/dim]")
                     prompt_mig = "Check if this project needs any migrations (database, API, dependency upgrades)."

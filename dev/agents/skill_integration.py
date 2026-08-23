@@ -33,6 +33,11 @@ class SkillIntegration:
         self.skills_path = os.path.abspath(skills_path)
         self._catalog_cache = None
         self._role_cache = {}
+        # Skill caching: avoid re-reading YAML files
+        self._skill_content_cache: dict[str, dict] = {}  # skill_name -> parsed content
+        self._skill_load_time: dict[str, float] = {}  # skill_name -> last load time
+        # Skill priority: higher priority skills override lower ones
+        self._skill_priorities: dict[str, int] = {}  # skill_name -> priority (0-10)
     
     def get_relevant_skills(self, task: str) -> list[dict]:
         """

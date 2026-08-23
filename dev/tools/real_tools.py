@@ -490,6 +490,25 @@ class RealCodeSearchTool(Tool):
                 except (UnicodeDecodeError, PermissionError):
                     continue
 
+        # Sort results by relevance: source files first, then by modification time
+        if results:
+            def _file_priority(path):
+                priority = 0
+                # Source files get higher priority
+                if any(path.endswith(ext) for ext in ('.py', '.js', '.ts', '.jsx', '.tsx', '.go', '.rs')):
+                    priority -= 10
+                # Recently modified files get higher priority
+                try:
+                    abs_path = os.path.join(project_path, path)
+                    mtime = os.path.getmtime(abs_path)
+                    priority -= (time.time() - mtime) / 3600  # Deduct by hours since modification
+                except Exception:
+                    pass
+                return priority
+            import time as _time
+            sorted_results = dict(sorted(results.items(), key=lambda kv: _file_priority(kv[0])))
+            results = sorted_results
+
         return {"matches": results, "tool": "python"}
 
 

@@ -108,6 +108,13 @@ class TeamCoordinator:
         self.project_path = os.path.abspath(project_path)
         self.teams: dict[str, AgentTeam] = {}
         self._task_counter = 0
+        # Resource limits per agent
+        self._max_tokens_per_agent = 50_000  # Token budget per agent
+        self._max_steps_per_agent = 25  # Max tool call steps per agent
+        self._failure_isolation = True  # Isolate failures between agents
+        # Load balancing: track RPM usage per agent
+        self._agent_rpm_usage: dict[str, int] = {}
+        self._agent_logs: dict[str, list] = {}  # Per-agent log aggregation
     
     async def create_team(self, name: str, task: str, 
                           specialist_roles: list = None) -> AgentTeam:

@@ -79,6 +79,26 @@ class SessionManager:
         except Exception:
             pass
     
+    def _mask_sensitive(self, messages: list) -> list:
+        """Mask sensitive data (API keys, passwords) in session messages."""
+        import re
+        import copy
+        masked = copy.deepcopy(messages)
+        patterns = [
+            (r'nvapi-[A-Za-z0-9_\-]{20,}', 'nvapi-***'),
+            (r'sk-[A-Za-z0-9]{20,}', 'sk-***'),
+            (r'ghp_[A-Za-z0-9]{20,}', 'ghp_***'),
+            (r'(api[_-]?key|secret|password|token)\s*[=:]\s*["\']?([^\s"\']{8,})["\']?', r'\1=***'),
+        ]
+        for msg in masked:
+            if isinstance(msg, dict) and 'content' in msg:
+                content = msg['content']
+                if isinstance(content, str):
+                    for pat, repl in patterns:
+                        content = re.sub(pat, repl, content, flags=re.IGNORECASE)
+                    msg['content'] = content
+        return masked
+
     def save(self, name: str, messages: list, metadata: dict = None) -> str:
         """
         Save a conversation session.
@@ -100,13 +120,15 @@ class SessionManager:
         )
         
         path = os.path.join(self.sessions_dir, f"{session_id}.json")
+        # Mask sensitive data before saving
+        masked_messages = self._mask_sensitive(session.messages)
         with open(path, 'w', encoding='utf-8') as f:
             json.dump({
                 "id": session.id,
                 "name": session.name,
                 "created_at": session.created_at,
                 "updated_at": time.strftime("%Y-%m-%d %H:%M:%S"),
-                "messages": session.messages,
+                "messages": masked_messages,
                 "metadata": session.metadata,
             }, f, indent=2)
         
