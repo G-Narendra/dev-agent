@@ -496,11 +496,9 @@ class NimProvider:
                     except Exception:
                         pass
                 
-                # If no tool calls, simulate streaming by chunking text
+                # If no tool calls, yield text content
                 if content and not tool_calls:
-                    chunk_size = 20
-                    for i in range(0, len(content), chunk_size):
-                        yield {"type": "text", "content": content[i:i+chunk_size]}
+                    yield {"type": "text", "content": content}
                 elif content:
                     yield {"type": "text", "content": content}
                 for tc in tool_calls:
@@ -510,16 +508,15 @@ class NimProvider:
             except Exception:
                 pass  # Fall through to streaming without tools
         
-        # Fallback: non-streaming call (works reliably)
+        # Fallback: streaming call without tools (token-by-token SSE)
         payload = {
             "model": resolved_model,
             "messages": messages,
             "temperature": temperature,
             "max_tokens": max_tokens,
+            "stream": True,
             **kwargs,
         }
-        if tools:
-            payload["tools"] = tools
         
         headers = {
             "Authorization": f"Bearer {key.key}",
@@ -527,45 +524,63 @@ class NimProvider:
         }
         
         try:
-            response = await self._client.post(
+            async with self._client.stream(
+                "POST",
                 "/chat/completions",
                 json=payload,
                 headers=headers,
-            )
-            response.raise_for_status()
-            result = response.json()
-            
-            # Track usage
-            usage = result.get("usage", {})
-            tokens = usage.get("total_tokens", 0)
-            self._record_request(key, tokens)
-            
-            # Yield usage
-            if usage:
-                yield {"type": "usage", "usage": usage}
-            
-            # Parse response
-            choice = result.get("choices", [{}])[0]
-            message = choice.get("message", {})
-            finish_reason = choice.get("finish_reason", "stop")
-            
-            # Yield text content
-            content = message.get("content", "")
-            if content:
-                yield {"type": "text", "content": content}
-            
-            # Yield tool calls
-            tool_calls = message.get("tool_calls", [])
-            for tc in tool_calls:
-                yield {"type": "tool_call", "tool_call": tc}
-            
-            # Yield finish
-            yield {"type": "finish", "reason": finish_reason}
-            
+            ) as response:
+                response.raise_for_status()
+                
+                try:
+                    async for line in response.aiter_lines():
+                        if not line.startswith("data: "):
+                            continue
+                        data = line[6:]
+                        if data == "[DONE]":
+                            break
+                        try:
+                            chunk = json.loads(data)
+                        except json.JSONDecodeError:
+                            continue
+                        
+                        # Usage
+                        usage = chunk.get("usage")
+                        if usage:
+                            self._record_request(key, usage.get("total_tokens", 0))
+                            yield {"type": "usage", "usage": usage}
+                        
+                        choices = chunk.get("choices", [])
+                        if not choices:
+                            continue
+                        choice = choices[0]
+                        delta = choice.get("delta", {})
+                        finish_reason = choice.get("finish_reason")
+                        
+                        # Text content
+                        content = delta.get("content", "")
+                        if content:
+                            yield {"type": "text", "content": content}
+                        
+                        # Tool call deltas (some models support this)
+                        if "tool_calls" in delta:
+                            for tc_delta in delta["tool_calls"]:
+                                yield {"type": "tool_call", "tool_call": tc_delta}
+                        
+                        # Finish
+                        if finish_reason:
+                            yield {"type": "finish", "reason": finish_reason}
+                except (httpx.ReadError, httpx.RemoteProtocolError) as e:
+                    self._log(f"Stream interrupted: {e}")
+                
+                self._record_request(key)
+                
         except (httpx.HTTPStatusError, httpx.TimeoutException, httpx.ConnectError, httpx.PoolTimeout) as e:
             if isinstance(e, httpx.HTTPStatusError) and e.response.status_code == 429:
                 key.is_exhausted = True
                 key.exhausted_until = time.time() + self.config.cooldown_seconds
+                # Retry with a different key after cooldown
+                await asyncio.sleep(1.0)
                 async for event in self.chat_completion_stream_events(
                     messages, model, temperature, max_tokens, tools, **kwargs
                 ):

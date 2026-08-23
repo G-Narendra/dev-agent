@@ -205,7 +205,11 @@ class ProductionAgentLoop:
     def _log(self, msg: str):
         """Verbose logging — only prints when verbose mode is on."""
         if self.config.verbose:
-            print(f"[dev:verbose] {msg}")
+            try:
+                from ..utils.logger import get_logger
+                get_logger("dev.agent").debug(msg)
+            except Exception:
+                print(f"[dev:verbose] {msg}")
 
     def abort(self):
         """Abort the current run."""
@@ -1586,9 +1590,9 @@ class ProductionAgentLoop:
         try:
             from .skill_integration import SkillIntegration
             si = SkillIntegration(skills_path=os.path.join(self.project_path, "skills"))
-            # Get the user's task from messages
+            # Get the user's task from current messages
             task = ""
-            for msg in messages:
+            for msg in self._state.done_messages + self._state.cur_messages:
                 if msg.role == "user":
                     task = msg.content or ""
                     break

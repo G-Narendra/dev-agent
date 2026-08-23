@@ -81,6 +81,12 @@ class RealReadFilesTool(Tool):
                     results.append({"path": file_path, "error": f"Is a directory: {file_path}. Use list_directory instead."})
                     continue
 
+                # File size limit: 10MB
+                file_size = os.path.getsize(abs_path)
+                if file_size > 10 * 1024 * 1024:
+                    results.append({"path": file_path, "error": f"File too large ({file_size // 1024}KB). Max 10MB."})
+                    continue
+
                 # Detect binary files by checking for null bytes
                 try:
                     with open(abs_path, "rb") as f:
@@ -91,8 +97,17 @@ class RealReadFilesTool(Tool):
                 except Exception:
                     pass
 
-                with open(abs_path, "r", encoding="utf-8", errors="replace") as f:
-                    lines = f.readlines()
+                # Try UTF-8 first, then fallback to system encoding
+                try:
+                    with open(abs_path, "r", encoding="utf-8") as f:
+                        lines = f.readlines()
+                except UnicodeDecodeError:
+                    try:
+                        with open(abs_path, "r", encoding="latin-1") as f:
+                            lines = f.readlines()
+                    except Exception:
+                        with open(abs_path, "r", encoding="utf-8", errors="replace") as f:
+                            lines = f.readlines()
 
                 total_lines = len(lines)
                 start = max(0, offset - 1)

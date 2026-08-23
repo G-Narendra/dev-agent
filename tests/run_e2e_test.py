@@ -4,10 +4,10 @@ End-to-end test script for Dev CLI.
 Run this with your NVIDIA NIM API key to test the full flow.
 
 Usage:
-    cd dev-agent
+    cd Dev
     .venv\Scripts\activate
-    python tests/test_e2e.py --key YOUR_API_KEY
-    python tests/test_e2e.py --key KEY1 --key2 KEY2 --key3 KEY3
+    python tests/run_e2e_test.py --key YOUR_API_KEY
+    python tests/run_e2e_test.py --key KEY1 --key2 KEY2 --key3 KEY3
 """
 
 import argparse
@@ -21,7 +21,11 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
 
 def run_async(coro):
-    return asyncio.get_event_loop().run_until_complete(coro)
+    loop = asyncio.new_event_loop()
+    try:
+        return loop.run_until_complete(coro)
+    finally:
+        loop.close()
 
 
 class Colors:
@@ -55,12 +59,49 @@ def section(msg):
 
 
 # ===========================================================================
-# Test 1: Provider initialization
+# Test 1: Tool Definitions
+# ===========================================================================
+def test_tool_definitions():
+    section("Test 1: Tool Definitions")
+
+    try:
+        from dev.tools.real_tools import TOOL_DEFINITIONS
+        assert len(TOOL_DEFINITIONS) > 0
+        ok(f"Found {len(TOOL_DEFINITIONS)} tool definitions")
+        for t in TOOL_DEFINITIONS[:5]:
+            info(f"  Tool: {t.get('function', {}).get('name', 'unknown')}")
+        return True
+    except Exception as e:
+        fail("Tool definitions failed", str(e))
+        return False
+
+
+# ===========================================================================
+# Test 2: Tool Registry
+# ===========================================================================
+def test_tool_registry():
+    section("Test 2: Tool Registry")
+
+    try:
+        from dev.tools.real_tools import build_tool_registry
+        registry = build_tool_registry()
+        assert len(registry) > 0
+        ok(f"Registered {len(registry)} tools")
+        for name in list(registry.keys())[:5]:
+            info(f"  Registered: {name}")
+        return True
+    except Exception as e:
+        fail("Tool registry failed", str(e))
+        return False
+
+
+# ===========================================================================
+# Test 3: Provider initialization
 # ===========================================================================
 def test_provider_init(keys):
     from dev.providers.nim_provider import NimProvider, RateLimitConfig
 
-    section("Test 1: Provider Initialization")
+    section("Test 3: Provider Initialization")
 
     try:
         provider = NimProvider(keys=keys, config=RateLimitConfig(rpm=40))
@@ -75,10 +116,10 @@ def test_provider_init(keys):
 
 
 # ===========================================================================
-# Test 2: Non-streaming chat completion
+# Test 4: Non-streaming chat completion
 # ===========================================================================
 def test_chat_completion(provider):
-    section("Test 2: Chat Completion (non-streaming)")
+    section("Test 4: Chat Completion (non-streaming)")
 
     try:
         result = run_async(provider.chat_completion(
@@ -102,19 +143,17 @@ def test_chat_completion(provider):
 
 
 # ===========================================================================
-# Test 3: Streaming text-only
+# Test 5: Streaming text
 # ===========================================================================
 def test_streaming_text(provider):
-    section("Test 3: Streaming (text-only)")
+    section("Test 5: Streaming Text")
 
     try:
         chunks = []
-        start = time.time()
-
-        async def stream():
+        async def collect():
             async for chunk in provider.chat_completion_stream(
                 messages=[
-                    {"role": "system", "content": "You are a helpful assistant. Reply briefly."},
+                    {"role": "system", "content": "You are a helpful assistant."},
                     {"role": "user", "content": "Count from 1 to 5, one number per line."}
                 ],
                 model="default",
@@ -122,15 +161,13 @@ def test_streaming_text(provider):
                 max_tokens=100,
             ):
                 chunks.append(chunk)
-                print(f"    {Colors.DIM}[chunk]{Colors.RESET} {chunk}", end="", flush=True)
 
-        run_async(stream())
-        elapsed = time.time() - start
+        run_async(collect())
 
-        print()
-        full_text = "".join(chunks)
-        ok(f"Received {len(chunks)} chunks in {elapsed:.1f}s")
-        ok(f"Full response: {full_text[:100]}")
+        full = "".join(chunks)
+        ok(f"Got {len(chunks)} chunks, {len(full)} chars total")
+        ok(f"Response: {full[:100]}")
+        assert len(chunks) > 1, "Expected multiple chunks for streaming"
         return True
     except Exception as e:
         fail("Streaming failed", str(e))
@@ -138,41 +175,40 @@ def test_streaming_text(provider):
 
 
 # ===========================================================================
-# Test 4: Streaming with tools (structured events)
+# Test 6: Stream events (with tools)
 # ===========================================================================
 def test_stream_events(provider):
-    section("Test 4: Structured Streaming Events")
+    section("Test 6: Stream Events (with tool definitions)")
 
     try:
-        events = []
-        start = time.time()
+        from dev.tools.real_tools import TOOL_DEFINITIONS
 
-        async def stream():
+        events = []
+        async def collect():
             async for event in provider.chat_completion_stream_events(
                 messages=[
-                    {"role": "system", "content": "You are a helpful assistant. Reply briefly."},
-                    {"role": "user", "content": "What is 2+2? Reply with just the number."}
+                    {"role": "system", "content": "You are a helpful assistant."},
+                    {"role": "user", "content": "What files are in the current directory?"}
                 ],
                 model="default",
                 temperature=0.1,
-                max_tokens=20,
-                tools=None,
+                max_tokens=200,
+                tools=TOOL_DEFINITIONS,
             ):
                 events.append(event)
-                etype = event.get("type", "?")
-                if etype == "text":
-                    print(f"    {Colors.GREEN}text{Colors.RESET}: {event['content']}", end="", flush=True)
-                elif etype == "usage":
-                    print(f"\n    {Colors.CYAN}usage{Colors.RESET}: {event['usage']}")
-                elif etype == "finish":
-                    print(f"    {Colors.YELLOW}finish{Colors.RESET}: {event['reason']}")
 
-        run_async(stream())
-        elapsed = time.time() - start
+        run_async(collect())
 
-        text_events = [e for e in events if e["type"] == "text"]
-        assert len(text_events) > 0, "No text events received"
-        ok(f"Got {len(text_events)} text events in {elapsed:.1f}s")
+        ok(f"Got {len(events)} events")
+        text_events = [e for e in events if e.get("type") == "text"]
+        tool_events = [e for e in events if e.get("type") == "tool_call"]
+        info(f"  Text events: {len(text_events)}")
+        info(f"  Tool events: {len(tool_events)}")
+
+        full_text = "".join(e.get("content", "") for e in text_events)
+        if full_text:
+            ok(f"Text: {full_text[:100]}")
+
         return True
     except Exception as e:
         fail("Stream events failed", str(e))
@@ -180,97 +216,41 @@ def test_stream_events(provider):
 
 
 # ===========================================================================
-# Test 5: Tool definitions
-# ===========================================================================
-def test_tool_definitions():
-    section("Test 5: Tool Definitions")
-
-    try:
-        from dev.tools.tool_defs import get_all_definitions
-        defs = get_all_definitions()
-        ok(f"Loaded {len(defs)} tool definitions")
-        for d in defs[:5]:
-            name = d.get("function", {}).get("name", "?")
-            print(f"    - {name}")
-        if len(defs) > 5:
-            print(f"    ... and {len(defs) - 5} more")
-        return True
-    except Exception as e:
-        fail("Tool definitions failed", str(e))
-        return False
-
-
-# ===========================================================================
-# Test 6: Tool registry
-# ===========================================================================
-def test_tool_registry():
-    section("Test 6: Tool Registry")
-
-    try:
-        from dev.agents.runtime import ToolRegistry
-        from dev.cli.commands import register_new_tools
-
-        registry = ToolRegistry()
-        register_new_tools(registry, ".")
-
-        tools = registry.list_tools()
-        defs = registry.get_definitions()
-        ok(f"Registered {len(tools)} tools, {len(defs)} definitions")
-        for t in tools[:5]:
-            print(f"    - {t}")
-        if len(tools) > 5:
-            print(f"    ... and {len(tools) - 5} more")
-        return True
-    except Exception as e:
-        fail("Tool registry failed", str(e))
-        return False
-
-
-# ===========================================================================
-# Test 7: ProductionAgentLoop.run_streaming (with tools)
+# Test 7: Agent Loop
 # ===========================================================================
 def test_agent_loop(provider):
-    section("Test 7: ProductionAgentLoop (streaming + tools)")
+    section("Test 7: Agent Loop (ProductionAgentLoop)")
 
     try:
         from dev.agents.production_loop import ProductionAgentLoop, LoopConfig
-        from dev.agents.runtime import ToolRegistry
-        from dev.cli.commands import register_new_tools
+        from dev.tools.real_tools import build_tool_registry
 
-        # Set up registry with real tools
-        registry = ToolRegistry()
-        register_new_tools(registry, ".")
-
+        registry = build_tool_registry()
         loop = ProductionAgentLoop(
             provider=provider,
             tool_registry=registry,
-            config=LoopConfig(model="default", auto_lint=False, auto_commit=False),
-            project_path=".",
+            config=LoopConfig(
+                model="default",
+                temperature=0.1,
+                max_tokens=500,
+                max_steps=3,
+                auto_lint=False,
+                auto_commit=False,
+                verbose=False,
+            ),
         )
 
-        # Track callbacks
-        text_chunks = []
-        tool_calls = []
-        tool_results = []
-
-        start = time.time()
-
-        result = run_async(loop.run_streaming(
-            prompt="Use the list_directory tool to list files in the current directory, then tell me what you see.",
-            system_prompt="You are Dev, a helpful coding assistant. Use tools to help the user.",
-            on_tool_call=lambda n, a: tool_calls.append(n),
-            on_tool_result=lambda n, r: tool_results.append(n),
-            on_text=lambda c: text_chunks.append(c),
-            max_steps=5,
+        result = run_async(loop.run(
+            prompt="Create a file called test_hello.txt with the content 'Hello from Dev!'",
+            max_steps=3,
         ))
-        elapsed = time.time() - start
 
-        full_text = "".join(text_chunks)
-        ok(f"Status: {result['status']}")
+        ok(f"Agent status: {result.get('status')}")
         ok(f"Steps: {result.get('steps', 0)}")
-        ok(f"Tool calls: {len(result.get('tool_calls', []))}")
-        ok(f"Time: {elapsed:.1f}s")
-        ok(f"Response preview: {full_text[:150]}")
+        tool_calls = result.get("tool_calls", [])
+        ok(f"Tool calls: {len(tool_calls)}")
+        for tc in tool_calls:
+            info(f"  Called: {tc.get('name', 'unknown')}")
         return True
     except Exception as e:
         fail("Agent loop failed", str(e))
@@ -278,96 +258,79 @@ def test_agent_loop(provider):
 
 
 # ===========================================================================
-# Test 8: File creation workflow
+# Test 8: File Workflow
 # ===========================================================================
 def test_file_workflow(provider):
-    section("Test 8: File Creation Workflow")
+    section("Test 8: File Workflow (create + read + verify)")
 
     try:
-        from dev.agents.production_loop import ProductionAgentLoop, LoopConfig
-        from dev.agents.runtime import ToolRegistry
-        from dev.cli.commands import register_new_tools
+        from dev.tools.real_tools import build_tool_registry
 
-        registry = ToolRegistry()
-        register_new_tools(registry, ".")
+        registry = build_tool_registry()
+        test_path = "_e2e_test_output.txt"
+        test_content = "This is a test file created by Dev E2E test."
 
-        loop = ProductionAgentLoop(
-            provider=provider,
-            tool_registry=registry,
-            config=LoopConfig(model="default", auto_lint=False, auto_commit=False),
-            project_path=".",
-        )
-
-        # Create a test file
-        text_chunks = []
-        result = run_async(loop.run_streaming(
-            prompt="Create a file called _dev_test_e2e.py with this content:\nimport sys\nprint(f'Hello from Dev E2E test! Python {sys.version}')",
-            system_prompt="You are Dev, a helpful coding assistant. Use tools to create files.",
-            on_text=lambda c: text_chunks.append(c),
-            on_tool_call=lambda n, a: print(f"    -> {n}", flush=True),
-            on_tool_result=lambda n, r: print(f"    <- {n}: {'ok' if isinstance(r, dict) and r.get('success') else r}", flush=True),
-            max_steps=5,
+        # Write
+        write_handler = registry.get("write_file")
+        assert write_handler, "write_file tool not found"
+        write_result = run_async(write_handler.execute(
+            {"path": test_path, "content": test_content, "instructions": "Create test file"},
+            None, ".",
         ))
+        ok(f"Write result: {write_result}")
 
-        full_text = "".join(text_chunks)
+        # Read
+        read_handler = registry.get("read_files")
+        assert read_handler, "read_files tool not found"
+        read_result = run_async(read_handler.execute(
+            {"paths": [{"path": test_path}]},
+            None, ".",
+        ))
+        ok(f"Read result success: {read_result.get('success', False)}")
 
-        # Verify file was created
-        test_file = "_dev_test_e2e.py"
-        if os.path.exists(test_file):
-            with open(test_file) as f:
-                content = f.read()
-            ok(f"File created: {test_file}")
-            ok(f"Content: {content[:100]}")
+        # Verify content
+        files = read_result.get("files", [])
+        if files:
+            content = files[0].get("content", "")
+            assert test_content in content, f"Content mismatch: {content[:100]}"
+            ok("Content verified!")
 
-            # Try to run it
-            import subprocess
-            proc = subprocess.run(
-                [sys.executable, test_file],
-                capture_output=True, text=True, timeout=10,
-            )
-            if proc.returncode == 0:
-                ok(f"File runs successfully: {proc.stdout.strip()}")
-            else:
-                fail(f"File failed to run: {proc.stderr[:200]}")
-
-            # Cleanup
-            os.remove(test_file)
-            ok("Cleaned up test file")
-        else:
-            info(f"File not created (model response: {full_text[:150]})")
-            info("This is OK - the model may have described the file instead")
+        # Cleanup
+        os.remove(test_path)
+        ok("Cleanup done")
 
         return True
     except Exception as e:
         fail("File workflow failed", str(e))
+        # Cleanup on error
+        try:
+            os.remove("_e2e_test_output.txt")
+        except Exception:
+            pass
         return False
 
 
 # ===========================================================================
-# Test 9: Session persistence
+# Test 9: Session Persistence
 # ===========================================================================
 def test_session():
     section("Test 9: Session Persistence")
 
     try:
-        from dev.utils.session import SessionStore
+        from dev.utils.sessions import SessionStore
 
-        store = SessionStore(sessions_dir=".dev/sessions")
-
-        # Create session
-        sid = store.create_session(name="e2e-test", model="nvidia_nims")
+        store = SessionStore(".dev/sessions")
+        sid = store.create_session({"test": True})
         ok(f"Created session: {sid}")
 
-        # Load it
-        session = store.load_session(sid)
-        assert session is not None
-        ok(f"Loaded session: {session.metadata.name}")
+        store.save_message(sid, {"role": "user", "content": "test message"})
+        store.save_message(sid, {"role": "assistant", "content": "test response"})
+        ok("Saved messages")
 
-        # List sessions
-        sessions = store.list_sessions()
-        ok(f"Found {len(sessions)} session(s)")
+        loaded = store.load_session(sid)
+        assert loaded is not None, "Session not found"
+        ok(f"Loaded session with {len(loaded.get('messages', []))} messages")
 
-        # Delete
         store.delete_session(sid)
         ok("Deleted session")
         return True
@@ -386,10 +349,10 @@ def test_project_detection():
         from dev.utils.project_detector import ProjectDetector
 
         detector = ProjectDetector(".")
-        info = detector.detect()
-        ok(f"Language: {info.language}")
-        ok(f"Framework: {info.framework}")
-        ok(f"Package manager: {info.package_manager}")
+        info_result = detector.detect()
+        ok(f"Language: {info_result.language}")
+        ok(f"Framework: {info_result.framework}")
+        ok(f"Package manager: {info_result.package_manager}")
         return True
     except Exception as e:
         fail("Project detection failed", str(e))

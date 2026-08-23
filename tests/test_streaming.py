@@ -353,7 +353,7 @@ class TestStreamingFallback:
         print("  OK: fallback to non-streaming works")
 
     def test_streaming_no_tools(self):
-        """Test stream_events without tools uses direct streaming path."""
+        """Test stream_events without tools uses SSE streaming path."""
         from dev.providers.nim_provider import NimProvider, RateLimitConfig, NimKey
 
         provider = NimProvider(keys=["test-key"], config=RateLimitConfig(rpm=100))
@@ -365,17 +365,25 @@ class TestStreamingFallback:
         real_key.is_exhausted = False
         provider.keys = [real_key]
 
-        # When no tools provided, it goes straight to non-streaming path
-        mock_response = MagicMock()
-        mock_response.raise_for_status = MagicMock()
-        mock_response.json.return_value = {
-            "choices": [{
-                "message": {"content": "Hello world", "tool_calls": []},
-                "finish_reason": "stop",
-            }],
-            "usage": {"prompt_tokens": 5, "completion_tokens": 3, "total_tokens": 8},
-        }
-        provider._client.post = AsyncMock(return_value=mock_response)
+        # Mock SSE streaming response — aiter_lines yields SSE data lines
+        sse_lines = [
+            'data: {"choices":[{"delta":{"content":"Hello "},"finish_reason":null}]}',
+            'data: {"choices":[{"delta":{"content":"world"},"finish_reason":null}]}',
+            'data: [DONE]',
+        ]
+
+        async def mock_aiter_lines():
+            for line in sse_lines:
+                yield line
+
+        mock_sse_response = MagicMock()
+        mock_sse_response.raise_for_status = MagicMock()
+        mock_sse_response.aiter_lines = mock_aiter_lines
+
+        mock_cm = AsyncMock()
+        mock_cm.__aenter__ = AsyncMock(return_value=mock_sse_response)
+        mock_cm.__aexit__ = AsyncMock(return_value=False)
+        provider._client.stream = MagicMock(return_value=mock_cm)
 
         async def run():
             events = []
@@ -389,9 +397,10 @@ class TestStreamingFallback:
         events = run_async(run())
 
         text_events = [e for e in events if e["type"] == "text"]
-        assert len(text_events) == 1
-        assert text_events[0]["content"] == "Hello world"
-        print("  OK: text-only non-streaming works")
+        assert len(text_events) == 2
+        full_text = "".join(e["content"] for e in text_events)
+        assert full_text == "Hello world"
+        print("  OK: SSE streaming without tools works")
 
 
 def main():

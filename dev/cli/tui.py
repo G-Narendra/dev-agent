@@ -16,7 +16,7 @@ import asyncio
 import os
 import sys
 import time
-from typing import AsyncIterator, Optional
+from typing import Any, AsyncIterator, Optional
 
 from rich.console import Console
 from rich.live import Live
