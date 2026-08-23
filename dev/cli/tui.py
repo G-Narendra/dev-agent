@@ -61,12 +61,22 @@ class DevTUI:
         self._tool_count = 0
         self._message_count = 0
     
-    def show_welcome(self):
-        """Show welcome screen."""
+    def show_welcome(self, model: str = "default", approval: str = "auto-edit", effort: str = "medium"):
+        """Show welcome screen with status info."""
+        from rich.columns import Columns
+        
+        # Build status bar items
+        status_items = [
+            f"[bold cyan]Model:[/bold cyan] {model}",
+            f"[bold green]Approval:[/bold green] {approval}",
+            f"[bold yellow]Effort:[/bold yellow] {effort}",
+        ]
+        status_text = " | ".join(status_items)
+        
         self.console.print(Panel(
             "[bold blue]Dev[/bold blue] - Free 24/7 AI Coding Agent\n"
-            "[dim]Powered by NVIDIA NIMs free tier (no local GPU required)[/dim]\n\n"
-            "Type your request. Use /help for commands.",
+            f"[dim]{status_text}[/dim]\n"
+            "[dim]Type your request. Use /help for commands.[/dim]",
             title="[bold]Dev[/bold]",
             border_style="blue",
         ))
@@ -108,20 +118,46 @@ class DevTUI:
         self.console.print(table)
     
     def show_thinking(self, message: str = "Thinking..."):
-        """Show thinking indicator."""
-        self.console.print(f"[thinking]{message}[/thinking]", end="")
+        """Show thinking indicator with animated dots."""
+        self.console.print(f"  [bold blue]|[/bold blue] [dim]{message}[/dim]", end="\r")
     
     def show_tool_call(self, tool_name: str, args: dict):
-        """Show tool call."""
-        self.console.print(f"  [bold cyan]  -> {tool_name}[/bold cyan] [dim]{str(args)[:120]}[/dim]")
+        """Show tool call with formatted args."""
+        # Format args nicely based on tool type
+        args_str = str(args)[:120]
+        if tool_name == "write_file" and isinstance(args, dict):
+            path = args.get("path", "")
+            content_len = len(args.get("content", ""))
+            args_str = f"path={path} ({content_len} chars)"
+        elif tool_name == "str_replace" and isinstance(args, dict):
+            path = args.get("path", "")
+            old = args.get("oldString", "")
+            args_str = f"path={path} (replacing {len(old)} chars)"
+        elif tool_name == "run_terminal_command" and isinstance(args, dict):
+            args_str = f"{args.get('command', '')}"
+        elif tool_name == "read_files" and isinstance(args, dict):
+            paths = args.get("paths", [])
+            if isinstance(paths, list):
+                args_str = f"{len(paths)} file(s)"
+        
+        self.console.print(f"  [bold cyan]  -> {tool_name}[/bold cyan] [dim]{args_str}[/dim]")
         self._tool_count += 1
     
     def show_tool_result(self, tool_name: str, result: Any):
-        """Show tool result."""
+        """Show tool result with formatted output."""
         if isinstance(result, dict) and "error" in result:
-            self.console.print(f"  [red]  <- {tool_name}: ERROR {result['error'][:100]}[/red]")
+            self.console.print(f"  [red]  <- {tool_name}: ERROR {result['error'][:150]}[/red]")
         elif isinstance(result, dict) and "blocked" in result:
-            self.console.print(f"  [yellow]  <- {tool_name}: BLOCKED - {result['blocked'][:100]}[/yellow]")
+            self.console.print(f"  [yellow]  <- {tool_name}: BLOCKED - {result['blocked'][:150]}[/yellow]")
+        elif isinstance(result, dict) and result.get("success"):
+            # Show success with relevant details
+            details = []
+            if "lines" in result:
+                details.append(f"{result['lines']} lines")
+            if "bytes" in result:
+                details.append(f"{result['bytes']} bytes")
+            detail_str = f" ({', '.join(details)})" if details else ""
+            self.console.print(f"  [green]  <- {tool_name}: OK{detail_str}[/green]")
         else:
             result_str = str(result)[:200] if result else "ok"
             self.console.print(f"  [dim]  <- {tool_name}: {result_str}[/dim]")
