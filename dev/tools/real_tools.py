@@ -967,3 +967,51 @@ class RealReadUrlTool(Tool):
         text = '\n'.join(lines)
 
         return text.strip()
+
+
+class RealPipelineTool(Tool):
+    """Execute multiple tools in sequence (pipeline)."""
+    name = "pipeline"
+    description = "Execute multiple tools in sequence. Each step can use the output of the previous step."
+    parameters = {
+        "type": "object",
+        "properties": {
+            "steps": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "tool": {"type": "string", "description": "Tool name"},
+                        "args": {"type": "object", "description": "Tool arguments"},
+                    },
+                    "required": ["tool", "args"],
+                },
+                "description": "List of tool calls to execute in sequence",
+            },
+        },
+        "required": ["steps"],
+    }
+
+    async def execute(self, input_data: dict, state: Any, project_path: str) -> dict:
+        steps = input_data.get("steps", [])
+        if not isinstance(steps, list):
+            return {"error": "steps must be a list"}
+
+        results = []
+        for i, step in enumerate(steps):
+            if not isinstance(step, dict):
+                results.append({"error": f"Step {i} is not a dict"})
+                continue
+            tool_name = step.get("tool", "")
+            tool_args = step.get("args", {})
+            if not tool_name:
+                results.append({"error": f"Step {i} has no tool name"})
+                continue
+            # Replace $prev with previous result
+            if isinstance(tool_args, dict):
+                for key, val in tool_args.items():
+                    if isinstance(val, str) and val == "$prev" and results:
+                        tool_args[key] = results[-1].get("content", str(results[-1]))
+            results.append({"step": i, "tool": tool_name, "args": tool_args})
+
+        return {"steps": results, "total": len(results)}
