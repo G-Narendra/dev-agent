@@ -737,6 +737,17 @@ class ProductionAgentLoop:
                         self._log(f"Retry without tools failed: {e}")
 
             # No tool calls = potentially done
+            if not tool_calls_data and full_content:
+                # Model outputted text instead of tool calls — try to parse code blocks
+                parsed = self._parse_code_blocks(full_content)
+                if parsed:
+                    tool_calls_data = parsed
+                    self._log(f"Parsed {len(parsed)} file(s) from text output (no tool calls)")
+                    # Update the assistant message with the parsed tool calls
+                    self._state.cur_messages[-1] = Message(
+                        role="assistant", content=full_content, tool_calls=tool_calls_data
+                    )
+
             if not tool_calls_data:
                 # Check if there's a pending todo list with unchecked items
                 has_pending_todos = False
@@ -1459,6 +1470,45 @@ class ProductionAgentLoop:
                 path = m.group(1).strip()
                 code = m.group(2).strip()
                 if path and code and path not in seen_paths:
+                    seen_paths.add(path)
+                    calls.append({
+                        'id': f'parsed-{len(calls)}', 'type': 'function',
+                        'function': {'name': 'write_file',
+                                     'arguments': json.dumps({'path': path, 'content': code,
+                                                              'instructions': f'Create {path}'})},
+                    })
+
+        # --- Approach 6: ```bash\nwrite_file <path>\n``` followed by ```<lang>\n<code>\n``` ---
+        # Model outputs: heading + bash block with write_file + code block with content
+        if not calls:
+            # Pattern: write_file <path> in a code block, followed by another code block with content
+            write_cmd_pattern = re.compile(
+                r'```(?:bash|shell|sh)?\s*\n\s*write_file\s+(\S+)\s*\n```\s*\n.*?```\w*\s*\n(.*?)```',
+                re.DOTALL
+            )
+            for m in write_cmd_pattern.finditer(text):
+                path = m.group(1).strip()
+                code = m.group(2).strip()
+                if path and code and path not in seen_paths and not code.startswith('write_file'):
+                    seen_paths.add(path)
+                    calls.append({
+                        'id': f'parsed-{len(calls)}', 'type': 'function',
+                        'function': {'name': 'write_file',
+                                     'arguments': json.dumps({'path': path, 'content': code,
+                                                              'instructions': f'Create {path}'})},
+                    })
+
+        # --- Approach 7: Heading + code block with file path as first line ---
+        # Model outputs: ### Creating filename\n```lang\n<code>\n```
+        if not calls:
+            heading_pattern = re.compile(
+                r'(?:#{1,3})\s*(?:Creating|File|Write)\s+((?:[a-zA-Z0-9_\-]+/)*[a-zA-Z0-9_\-]+\.[a-zA-Z0-9]{1,10})\s*\n.*?```\w*\s*\n(.*?)```',
+                re.DOTALL
+            )
+            for m in heading_pattern.finditer(text):
+                path = m.group(1).strip()
+                code = m.group(2).strip()
+                if path and code and path not in seen_paths and not code.startswith('write_file'):
                     seen_paths.add(path)
                     calls.append({
                         'id': f'parsed-{len(calls)}', 'type': 'function',
