@@ -1315,10 +1315,22 @@ class ProductionAgentLoop:
 
         def _unescape_content(s: str) -> str:
             """Fix escaped newlines and quotes that the model outputs literally."""
-            s = s.replace('\\n', '\n')
-            s = s.replace('\\t', '\t')
-            s = s.replace('\\"', '"')
-            s = s.replace("\\'", "'")
+            # Only unescape if the string contains double-escaped sequences
+            # (i.e., the model output has literal backslash-n, not actual newline)
+            if '\\\\n' in s:
+                s = s.replace('\\\\n', '\n')
+            elif '\n' in s:
+                # Already has real newlines, don't double-escape
+                pass
+            else:
+                # Model output has literal \n (backslash followed by n)
+                s = s.replace('\n', '\n')
+            if '\\t' in s:
+                s = s.replace('\\t', '\t')
+            if '\\"' in s:
+                s = s.replace('\\"', '"')
+            if "\\'" in s:
+                s = s.replace("\\'", "'")
             return s
 
         # --- Approach 1: ```path/to/file.js\n<code>\n``` (path as lang tag) ---

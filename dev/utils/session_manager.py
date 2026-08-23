@@ -34,6 +34,7 @@ class BackgroundSession:
 
 class SessionManager:
     """Manages background agent sessions."""
+    MAX_SESSIONS = 50  # Prevent unbounded session growth
     
     def __init__(self, sessions_dir: str = ".dev/sessions"):
         self.sessions_dir = os.path.abspath(sessions_dir)
@@ -41,6 +42,7 @@ class SessionManager:
         self._sessions_file = os.path.join(self.sessions_dir, "sessions.json")
         self._sessions: dict[str, BackgroundSession] = {}
         self._load()
+        self._cleanup_old_sessions()
     
     def _load(self):
         """Load sessions from disk."""
@@ -52,6 +54,25 @@ class SessionManager:
                     self._sessions[sid] = BackgroundSession(**sdata)
             except Exception:
                 self._sessions = {}
+    
+    def _cleanup_old_sessions(self):
+        """Remove old stopped sessions when over limit."""
+        if len(self._sessions) <= self.MAX_SESSIONS:
+            return
+        # Sort by created_at (oldest first)
+        sorted_sessions = sorted(
+            self._sessions.items(),
+            key=lambda kv: kv[1].created_at or ""
+        )
+        # Remove oldest stopped sessions first
+        to_remove = len(self._sessions) - self.MAX_SESSIONS
+        for sid, session in sorted_sessions:
+            if to_remove <= 0:
+                break
+            if session.status in ("stopped", "completed", "failed"):
+                del self._sessions[sid]
+                to_remove -= 1
+        self._save()
     
     def _save(self):
         """Save sessions to disk."""

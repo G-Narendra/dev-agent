@@ -47,10 +47,37 @@ class SessionManager:
         sessions = manager.list_sessions()
     """
     
+    MAX_SESSIONS = 100  # Prevent unbounded session growth
+    MAX_SESSION_SIZE_MB = 10  # Max size per session file
+    
     def __init__(self, project_path: str = "."):
         self.project_path = os.path.abspath(project_path)
         self.sessions_dir = os.path.join(self.project_path, ".dev", "sessions")
         os.makedirs(self.sessions_dir, exist_ok=True)
+        self._cleanup_old_sessions()
+    
+    def _cleanup_old_sessions(self):
+        """Remove old session files when over limit."""
+        try:
+            session_files = [
+                f for f in os.listdir(self.sessions_dir)
+                if f.endswith('.json')
+            ]
+            if len(session_files) <= self.MAX_SESSIONS:
+                return
+            # Sort by modification time (oldest first)
+            session_files.sort(
+                key=lambda f: os.path.getmtime(os.path.join(self.sessions_dir, f))
+            )
+            # Remove oldest files beyond limit
+            to_remove = len(session_files) - self.MAX_SESSIONS
+            for f in session_files[:to_remove]:
+                try:
+                    os.remove(os.path.join(self.sessions_dir, f))
+                except Exception:
+                    pass
+        except Exception:
+            pass
     
     def save(self, name: str, messages: list, metadata: dict = None) -> str:
         """
