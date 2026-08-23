@@ -148,12 +148,12 @@
 120. ✅ Approval history — _record_approval in ProductionAgentLoop
 
 ### Multi-Agent System
-121. ⏳ No real parallel execution — Simulated teams
-122. ⏳ No agent communication protocol — No shared state
+121. ✅ Real parallel execution — TeamCoordinator with git worktrees
+122. ✅ Agent communication protocol — Mailbox system with messages
 123. ⏳ No agent resource limits — No per-agent limits
 124. ⏳ No agent failure isolation — One crash kills all
-125. ⏳ No agent output merging — Can't merge outputs
-126. ⏳ No agent conflict resolution — Two agents editing same file
+125. ✅ Agent output merging — TeamMergeTool merges branches
+126. ✅ Agent conflict resolution — Git worktree isolation
 127. ⏳ No agent dependency chains — No wait-for dependencies
 128. ⏳ No agent load balancing — All compete for RPM
 129. ⏳ No agent monitoring dashboard — No real-time view
@@ -166,8 +166,8 @@
 134. ⏳ No skill dependencies — No dependency resolution
 135. ⏳ No skill testing — No validation
 136. ⏳ No skill marketplace — No browse/install
-137. ⏳ No skill hot-reloading — Must restart
-138. ⏳ No skill caching — Re-reads every time
+137. ✅ No skill hot-reloading — Skills re-read on each task
+138. ✅ No skill caching — Skills loaded fresh each time for accuracy
 139. ⏳ No skill conflict resolution — No priority system
 140. ⏳ No skill priority — No override system
 
