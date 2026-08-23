@@ -352,11 +352,15 @@ Commands:
   /redo           Redo last undone edit
   /diff           Show colored diff of changes
   /commit [msg]   Commit all changes
+  /branch [name]  Create/switch branch (no args = list)
+  /checkout <b>   Switch to existing branch
   /web <url>      Scrape webpage and add to context
   /clear          Clear conversation history
   /compact        Compress conversation history
   /model <name>   Switch model
   /mode <name>    Switch mode (ask/code/architect)
+  /plan           Switch to plan mode (read-only)
+  /act            Switch to act mode (full access)
   /cost           Show token usage
   /lint           Run linter on project
   /test           Run tests
@@ -455,6 +459,68 @@ Commands:
             return "No files in chat"
         return "Files in chat:\n" + "\n".join(f"  {f}" for f in sorted(self.chat_files))
     
+    def cmd_branch(self, args: str) -> str:
+        """Create and switch to a new branch."""
+        if not args:
+            # List branches
+            try:
+                result = subprocess.run(
+                    ["git", "branch", "-a"],
+                    cwd=self.project_path,
+                    capture_output=True,
+                    text=True,
+                )
+                return f"Branches:\n{result.stdout}"
+            except Exception:
+                return "Not a git repo"
+        
+        # Create and switch
+        branch_name = args.strip()
+        try:
+            result = subprocess.run(
+                ["git", "checkout", "-b", branch_name],
+                cwd=self.project_path,
+                capture_output=True,
+                text=True,
+            )
+            if result.returncode == 0:
+                return f"Created and switched to branch: {branch_name}"
+            return f"Error: {result.stderr}"
+        except Exception as e:
+            return f"Error: {e}"
+    
+    def cmd_checkout(self, args: str) -> str:
+        """Switch to an existing branch."""
+        if not args:
+            return "Usage: /checkout <branch-name>"
+        
+        try:
+            result = subprocess.run(
+                ["git", "checkout", args.strip()],
+                cwd=self.project_path,
+                capture_output=True,
+                text=True,
+            )
+            if result.returncode == 0:
+                return f"Switched to branch: {args.strip()}"
+            return f"Error: {result.stderr}"
+        except Exception as e:
+            return f"Error: {e}"
+    
+    def cmd_plan(self, args: str) -> str:
+        """Switch to plan mode (read-only)."""
+        if self.agent and hasattr(self.agent, 'config'):
+            self.agent.config.enforce_plan_mode = True
+            self.agent.config.approval_mode = 'suggest'
+        return "Switched to PLAN mode (read-only)"
+    
+    def cmd_act(self, args: str) -> str:
+        """Switch to act mode (full access)."""
+        if self.agent and hasattr(self.agent, 'config'):
+            self.agent.config.enforce_plan_mode = False
+            self.agent.config.approval_mode = 'full-auto'
+        return "Switched to ACT mode (full access)"
+    
     def cmd_status(self, args: str) -> str:
         """Show agent status."""
         lines = [
@@ -466,6 +532,7 @@ Commands:
         if self.agent:
             lines.append(f"Model: {getattr(self.agent.config, 'default_model', 'unknown')}")
             lines.append(f"Mode: {getattr(self.agent.config, 'approval_mode', 'unknown')}")
+            lines.append(f"Plan mode: {getattr(self.agent.config, 'enforce_plan_mode', False)}")
             lines.append(f"Steps: {len(self.agent.messages)}")
         
         # Git status
