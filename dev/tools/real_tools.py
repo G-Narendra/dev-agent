@@ -681,8 +681,21 @@ class RealGitOperations(Tool):
     async def execute(self, input_data: dict, state: Any, project_path: str) -> dict:
         action = input_data.get("action", "status")
         args = input_data.get("args", "")
-        message = input_data.get("message", "")
-
+        message = input_data.get("message", "")        # Safety: block dangerous git operations
+        blocked_actions = {
+            "push --force", "push -f", "push --force-with-lease",
+            "reset --hard", "reset --mixed",
+            "checkout -- .", "checkout --",
+            "clean -fd", "clean -f",
+            "rebase --abort",
+            "stash drop", "stash clear",
+        }
+        action_lower = action.lower()
+        args_lower = args.lower() if args else ""
+        for blocked in blocked_actions:
+            if blocked in action_lower or blocked in args_lower:
+                return {"error": f"Blocked dangerous git operation: {action} {args}", "blocked": True}
+        
         cmd_map = {
             "diff": "git diff",
             "diff-stat": "git diff --stat",
@@ -693,8 +706,11 @@ class RealGitOperations(Tool):
             "add": f"git add {args}" if args else "git add .",
             "push": "git push",
             "pull": "git pull",
+            "stash": "git stash push",
+            "stash-list": "git stash list",
+            "stash-pop": "git stash pop",
         }
-
+        
         cmd = cmd_map.get(action, f"git {action} {args}")
 
         try:
