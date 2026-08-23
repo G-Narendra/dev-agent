@@ -1,0 +1,40 @@
+{
+  "name": "dev-agent",
+  "version": "1.0.0",
+  "description": "Free 24/7 AI coding agent powered by NVIDIA NIMs. No API costs. No cloud required.",
+  "main": "bin/narendra",
+  "bin": {
+    "narendra": "bin/narendra",
+    "dev-agent": "bin/narendra"
+  },
+  "scripts": {
+    "start": "node bin/narendra",
+    "postinstall": "node install.js"
+  },
+  "keywords": [
+    "ai",
+    "coding-agent",
+    "cli",
+    "nvidia",
+    "nim",
+    "llm",
+    "code-generation",
+    "pair-programming"
+  ],
+  "author": "G-Narendra",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/G-Narendra/dev-agent.git"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "files": [
+    "bin/",
+    "dev/",
+    "skills/",
+    "install.js",
+    "README.md"
+  ]
+}

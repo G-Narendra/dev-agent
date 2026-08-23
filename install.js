@@ -1,269 +1,80 @@
 #!/usr/bin/env node
-
 /**
- * Narendra - Postinstall Script
- *
- * Automatically sets up the Python virtual environment and installs
- * all dependencies when the user runs `npm install -g narendra`.
- *
- * This runs after npm downloads the package.
+ * Postinstall script for dev-agent
+ * Sets up Python virtual environment and installs dependencies
  */
+const { execSync } = require('child_process');
+const fs = require('fs');
+const path = require('path');
 
-const { execSync, spawn } = require("child_process");
-const path = require("path");
-const fs = require("fs");
-const os = require("os");
+const ROOT = __dirname;
+const VENV_DIR = path.join(ROOT, '.venv');
+const REQUIREMENTS = path.join(ROOT, 'requirements.txt');
 
-const PACKAGE_DIR = __dirname;
-const VENV_DIR = path.join(PACKAGE_DIR, ".venv");
-const IS_WINDOWS = os.platform() === "win32";
+console.log('🚀 Setting up Dev Agent...');
 
-// ============================================================================
-// Logging
-// ============================================================================
-
-function log(msg) {
-  console.log(`\x1b[32m[narendra]\x1b[0m ${msg}`);
-}
-
-function warn(msg) {
-  console.log(`\x1b[33m[narendra]\x1b[0m ${msg}`);
-}
-
-function error(msg) {
-  console.error(`\x1b[31m[narendra]\x1b[0m ${msg}`);
-}
-
-// ============================================================================
-// Python Detection
-// ============================================================================
-
-function findPython() {
-  const candidates = IS_WINDOWS
-    ? ["python", "python3", "py -3"]
-    : ["python3", "python"];
-
-  for (const cmd of candidates) {
-    try {
-      const version = execSync(`${cmd} --version 2>&1`, {
-        encoding: "utf-8",
-        timeout: 10000,
-      }).trim();
-
-      // Extract version number
-      const match = version.match(/Python (\d+)\.(\d+)/);
-      if (match) {
-        const major = parseInt(match[1]);
-        const minor = parseInt(match[2]);
-        if (major >= 3 && minor >= 11) {
-          log(`Found ${version} (${cmd})`);
-          return cmd;
+// Check if Python is available
+function checkPython() {
+    const commands = ['python3', 'python', 'py'];
+    for (const cmd of commands) {
+        try {
+            execSync(`${cmd} --version`, { stdio: 'pipe' });
+            return cmd;
+        } catch (e) {
+            continue;
         }
-      }
-    } catch {
-      // Not found, try next
     }
-  }
-
-  return null;
+    return null;
 }
 
-// ============================================================================
-// Virtual Environment Setup
-// ============================================================================
-
-function createVenv(pythonCmd) {
-  if (fs.existsSync(VENV_DIR)) {
-    log("Virtual environment already exists, upgrading...");
-    return;
-  }
-
-  log("Creating virtual environment...");
-  try {
-    execSync(`${pythonCmd} -m venv "${VENV_DIR}"`, {
-      cwd: PACKAGE_DIR,
-      stdio: "pipe",
-      timeout: 120000,
-    });
-    log("Virtual environment created");
-  } catch (err) {
-    error(`Failed to create virtual environment: ${err.message}`);
-    throw err;
-  }
-}
-
-function getVenvPython() {
-  return IS_WINDOWS
-    ? path.join(VENV_DIR, "Scripts", "python.exe")
-    : path.join(VENV_DIR, "bin", "python");
-}
-
-function getVenvPip() {
-  return IS_WINDOWS
-    ? path.join(VENV_DIR, "Scripts", "pip.exe")
-    : path.join(VENV_DIR, "bin", "pip");
-}
-
-// ============================================================================
-// Package Installation
-// ============================================================================
-
-function installDependencies() {
-  const pip = getVenvPip();
-  const venvPython = getVenvPython();
-
-  if (!fs.existsSync(pip)) {
-    error("pip not found in virtual environment");
-    return false;
-  }
-
-  log("Installing Python dependencies...");
-
-  // Upgrade pip first
-  try {
-    execSync(`"${pip}" install --upgrade pip --quiet`, {
-      cwd: PACKAGE_DIR,
-      stdio: "pipe",
-      timeout: 120000,
-    });
-  } catch {
-    warn("pip upgrade failed, continuing...");
-  }
-
-  // Install the dev package with all dependencies
-  try {
-    execSync(
-      `"${pip}" install -e ".[full]" --quiet 2>&1`,
-      {
-        cwd: PACKAGE_DIR,
-        stdio: "pipe",
-        timeout: 300000,
-      }
-    );
-    log("Dependencies installed successfully");
-    return true;
-  } catch (err) {
-    // Try without optional dependencies
-    warn("Some optional dependencies failed, installing core...");
-    try {
-      execSync(`"${pip}" install -e . --quiet 2>&1`, {
-        cwd: PACKAGE_DIR,
-        stdio: "pipe",
-        timeout: 300000,
-      });
-      log("Core dependencies installed");
-      return true;
-    } catch (err2) {
-      error(`Failed to install dependencies: ${err2.message}`);
-      return false;
+// Create virtual environment
+function createVenv(python) {
+    if (fs.existsSync(VENV_DIR)) {
+        console.log('✅ Virtual environment already exists');
+        return;
     }
-  }
+    
+    console.log('📦 Creating virtual environment...');
+    execSync(`${python} -m venv "${VENV_DIR}"`, { stdio: 'pipe' });
 }
 
-// ============================================================================
-// Verification
-// ============================================================================
-
-function verifyInstallation() {
-  const venvPython = getVenvPython();
-
-  try {
-    const result = execSync(
-      `"${venvPython}" -c "from dev.cli.main import app; print('OK')" 2>&1`,
-      {
-        cwd: PACKAGE_DIR,
-        encoding: "utf-8",
-        timeout: 30000,
-      }
-    );
-
-    if (result.trim() === "OK") {
-      log("Installation verified!");
-      return true;
+// Install dependencies
+function installDeps(python) {
+    const pip = path.join(VENV_DIR, 'Scripts', 'pip.exe');
+    const pipUnix = path.join(VENV_DIR, 'bin', 'pip');
+    const pipCmd = fs.existsSync(pip) ? pip : pipUnix;
+    
+    if (!fs.existsSync(pipCmd)) {
+        console.log('⚠️  pip not found, skipping dependency installation');
+        return;
     }
-  } catch {
-    // Not verified
-  }
-
-  return false;
+    
+    if (fs.existsSync(REQUIREMENTS)) {
+        console.log('📚 Installing dependencies...');
+        execSync(`"${pipCmd}" install -r "${REQUIREMENTS}" --quiet`, { stdio: 'pipe' });
+    }
 }
 
-// ============================================================================
-// Create Convenience Scripts
-// ============================================================================
-
-function createConvenienceScripts() {
-  const venvPython = getVenvPython();
-  const binDir = path.join(PACKAGE_DIR, "bin");
-
-  // Create dev wrapper for the Python CLI
-  const devWrapper = IS_WINDOWS
-    ? path.join(binDir, "dev.cmd")
-    : path.join(binDir, "dev");
-
-  const shebang = IS_WINDOWS ? "" : "#!/bin/sh\n";
-  const pythonPath = IS_WINDOWS
-    ? `"${venvPython}"`
-    : `"${venvPython}"`;
-  const mainPy = path.join(PACKAGE_DIR, "dev", "cli", "main.py");
-
-  const content = IS_WINDOWS
-    ? `@echo off\n"${venvPython}" "${mainPy}" %*`
-    : `${shebang}exec ${pythonPath} "${mainPy}" "$@"`;
-
-  fs.writeFileSync(devWrapper, content, { mode: 0o755 });
-}
-
-// ============================================================================
 // Main
-// ============================================================================
-
-async function main() {
-  log("Setting up Narendra...");
-
-  // Step 1: Find Python
-  const python = findPython();
-  if (!python) {
-    error("Python 3.11+ is required but not found.");
-    error("");
-    error("Install Python:");
-    error("  macOS:   brew install python@3.12");
-    error("  Ubuntu:  sudo apt install python3.12");
-    error("  Windows: https://python.org/downloads");
-    error("");
-    error("After installing, run: npm install -g narendra");
-    process.exit(1);
-  }
-
-  // Step 2: Create virtual environment
-  createVenv(python);
-
-  // Step 3: Install dependencies
-  const installed = installDependencies();
-  if (!installed) {
-    warn("Some dependencies may not have installed correctly.");
-    warn("You can manually run: pip install -e .");
-  }
-
-  // Step 4: Verify
-  if (verifyInstallation()) {
-    log("");
-    log("Narendra is ready! Run: narendra --help");
-    log("");
-  } else {
-    warn("Installation could not be verified.");
-    warn("Try running: narendra --help");
-  }
-
-  // Step 5: Create convenience scripts
-  try {
-    createConvenienceScripts();
-  } catch {
-    // Non-critical
-  }
+try {
+    const python = checkPython();
+    if (!python) {
+        console.error('❌ Python not found. Please install Python 3.10+');
+        process.exit(1);
+    }
+    
+    createVenv(python);
+    installDeps(python);
+    
+    console.log('');
+    console.log('✅ Dev Agent installed successfully!');
+    console.log('');
+    console.log('Quick start:');
+    console.log('  narendra setup     # Configure API keys');
+    console.log('  narendra chat      # Start interactive chat');
+    console.log('  narendra run "build a website"  # Single task');
+    console.log('');
+} catch (e) {
+    console.error('⚠️  Setup warning:', e.message);
+    console.log('You may need to run manually: python -m dev setup');
 }
-
-main().catch((err) => {
-  error(`Setup failed: ${err.message}`);
-  process.exit(1);
-});

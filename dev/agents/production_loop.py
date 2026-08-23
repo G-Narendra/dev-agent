@@ -510,9 +510,14 @@ class ProductionAgentLoop:
                     full_content = ""
                     tool_calls_data = []
 
+                    # Use 70B for tool calls (8B truncates tool args)
+                    effective_model = self.config.model
+                    if tool_defs and '8b' in self.config.model.lower():
+                        effective_model = 'meta/llama-3.1-70b-instruct'
+                    
                     async for event in self.provider.chat_completion_stream_events(
                         messages=msg_dicts,
-                        model=self.config.model,
+                        model=effective_model,
                         temperature=self.config.temperature,
                         max_tokens=self.config.max_tokens,
                         tools=tool_defs if tool_defs else None,
