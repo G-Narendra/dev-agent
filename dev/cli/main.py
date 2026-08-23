@@ -1306,6 +1306,57 @@ def chat(
                 elif cmd == "/tasks":
                     console.print("[dim]Background tasks: none (single-session mode)[/dim]")
                     continue
+                elif cmd == "/clear":
+                    # Clear conversation context but keep project memory (Claude Code /clear)
+                    agent_loop._state.done_messages = []
+                    agent_loop._state.cur_messages = []
+                    console.print("[green]Context cleared. Project memory preserved.[/green]")
+                    continue
+                elif cmd == "/init":
+                    # Initialize project config (Claude Code /init)
+                    console.print("[dim]Initializing Dev project config...[/dim]")
+                    dev_dir = os.path.join(abs_project, ".dev")
+                    os.makedirs(dev_dir, exist_ok=True)
+                    # Create DEV.md if it doesn't exist
+                    devmd = os.path.join(abs_project, "DEV.md")
+                    if not os.path.exists(devmd):
+                        with open(devmd, "w") as f:
+                            f.write("# Project Instructions\n\n")
+                            f.write("Add your project-specific instructions here.\n")
+                        console.print("[green]Created DEV.md[/green]")
+                    else:
+                        console.print("[dim]DEV.md already exists[/dim]")
+                    # Create .devrules if it doesn't exist
+                    rules_dir = os.path.join(abs_project, ".devrules")
+                    os.makedirs(rules_dir, exist_ok=True)
+                    console.print("[green]Initialized .dev directory[/green]")
+                    continue
+                elif cmd == "/memory":
+                    # Show/edit auto memory (Claude Code /memory)
+                    try:
+                        from dev.utils.memory import AutoMemory
+                        memory = AutoMemory(abs_project)
+                        if memory.entries:
+                            console.print("[bold]Auto Memory:[/bold]")
+                            for key, entry in list(memory.entries.items())[:20]:
+                                console.print(f"  [{entry.category}] {key}: {entry.value[:80]}")
+                        else:
+                            console.print("[dim]No memories stored yet[/dim]")
+                    except Exception as e:
+                        console.print(f"[red]Memory error: {e}[/red]")
+                    continue
+                elif cmd == "/permissions":
+                    # Show/edit approval permissions (Claude Code /permissions)
+                    console.print(Panel(
+                        f"Current mode: [bold]{agent_loop.config.approval_mode}[/bold]\n\n"
+                        f"Commands:\n"
+                        f"  /approve suggest     - Ask before every write\n"
+                        f"  /approve auto-edit   - Auto-edit files, ask for commands\n"
+                        f"  /approve full-auto   - Auto-approve everything",
+                        title="[bold]Permissions[/bold]",
+                        border_style="yellow",
+                    ))
+                    continue
                 elif cmd == "/security-review":
                     console.print("[dim]Running security review...[/dim]")
                     prompt_sec = (
