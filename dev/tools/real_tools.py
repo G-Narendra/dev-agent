@@ -321,8 +321,26 @@ class RealStrReplaceTool(Tool):
                 applied += 1
 
             if applied > 0:
-                with open(abs_path, "w", encoding="utf-8") as f:
-                    f.write(content)
+                # Atomic write: write to temp then replace
+                temp_path = abs_path + ".strtmp"
+                try:
+                    with open(temp_path, "w", encoding="utf-8") as f:
+                        f.write(content)
+                        f.flush()
+                        os.fsync(f.fileno())
+                    os.replace(temp_path, abs_path)
+                except OSError:
+                    if os.path.exists(temp_path):
+                        os.remove(temp_path)
+                    raise
+                # Verify write
+                try:
+                    verified_size = os.path.getsize(abs_path)
+                    expected_size = len(content.encode('utf-8'))
+                    if verified_size != expected_size:
+                        return {"error": f"Write verification failed: expected {expected_size} bytes, got {verified_size}", "path": path}
+                except OSError:
+                    pass
 
             return {
                 "success": applied > 0,
