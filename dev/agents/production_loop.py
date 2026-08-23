@@ -1374,6 +1374,42 @@ class ProductionAgentLoop:
                                                               'instructions': f'Create {path}'})},
                     })
 
+        # --- Approach 4: ```<lang>\n# filename: path\n<code>\n``` (Python comment style) ---
+        if not calls:
+            fence_python = re.compile(
+                r'(?:^|\n)```\w+\s*\n#\s*(?:filename|file|path):\s*([^\n]+\.[a-zA-Z0-9]{1,10})\s*\n(.*?)```',
+                re.DOTALL
+            )
+            for m in fence_python.finditer(text):
+                path = m.group(1).strip()
+                code = m.group(2).strip()
+                if path and code and path not in seen_paths:
+                    seen_paths.add(path)
+                    calls.append({
+                        'id': f'parsed-{len(calls)}', 'type': 'function',
+                        'function': {'name': 'write_file',
+                                     'arguments': json.dumps({'path': path, 'content': code,
+                                                              'instructions': f'Create {path}'})},
+                    })
+
+        # --- Approach 5: ```<lang>\n<!-- filename: path -->\n<code>\n``` (HTML comment style) ---
+        if not calls:
+            fence_html = re.compile(
+                r'(?:^|\n)```\w+\s*\n<!--\s*(?:filename|file|path):\s*([^\-]+\.[a-zA-Z0-9]{1,10})\s*-->\s*\n(.*?)```',
+                re.DOTALL
+            )
+            for m in fence_html.finditer(text):
+                path = m.group(1).strip()
+                code = m.group(2).strip()
+                if path and code and path not in seen_paths:
+                    seen_paths.add(path)
+                    calls.append({
+                        'id': f'parsed-{len(calls)}', 'type': 'function',
+                        'function': {'name': 'write_file',
+                                     'arguments': json.dumps({'path': path, 'content': code,
+                                                              'instructions': f'Create {path}'})},
+                    })
+
         # Fallback: try write_file() text calls
         if not calls:
             calls = self._parse_text_tool_calls(text)

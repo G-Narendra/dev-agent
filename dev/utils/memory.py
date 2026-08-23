@@ -27,6 +27,7 @@ class MemoryEntry:
 
 class AutoMemory:
     """Automatic memory system that persists learnings across sessions."""
+    MAX_ENTRIES = 500  # Prevent unbounded growth
     
     def __init__(self, project_root: str = "."):
         self.project_root = os.path.abspath(project_root)
@@ -36,6 +37,7 @@ class AutoMemory:
         os.makedirs(self.memory_dir, exist_ok=True)
         self.entries: dict[str, MemoryEntry] = {}
         self._load()
+        self._cleanup_if_needed()
 
     def _load(self):
         """Load memory from disk."""
@@ -51,6 +53,21 @@ class AutoMemory:
                     last_used=entry_data.get("last_used"),
                     use_count=entry_data.get("use_count", 0),
                 )
+
+    def _cleanup_if_needed(self):
+        """Remove oldest/least-used entries when over limit."""
+        if len(self.entries) <= self.MAX_ENTRIES:
+            return
+        # Sort by use_count (ascending) then by last_used (oldest first)
+        sorted_entries = sorted(
+            self.entries.items(),
+            key=lambda kv: (kv[1].use_count, kv[1].last_used or "")
+        )
+        # Remove oldest 20%
+        to_remove = len(self.entries) - int(self.MAX_ENTRIES * 0.8)
+        for key, _ in sorted_entries[:to_remove]:
+            del self.entries[key]
+        self._save()
 
     def _save(self):
         """Save memory to disk."""
