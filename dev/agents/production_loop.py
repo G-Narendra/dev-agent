@@ -186,6 +186,10 @@ class ProductionAgentLoop:
             self._audit_logger = AuditLogger(project_path)
         except Exception:
             pass
+        # Approval history: track all approval decisions for review
+        self._approval_history: list[dict] = []
+        # Plan persistence
+        self._plan_file = os.path.join(self.project_path, ".dev", "current_plan.json")
 
     def set_approval_prompt(self, callback):
         """Set a callback for interactive approval prompts."""
@@ -524,6 +528,10 @@ class ProductionAgentLoop:
                     }
                 self._budget_manager.record_request()
 
+            # Clear tool cache between steps to avoid stale reads after edits
+            if all_tool_calls:
+                self._tool_cache.clear()
+
             for attempt in range(self.config.max_retries):
                 try:
                     full_content = ""
@@ -821,6 +829,7 @@ class ProductionAgentLoop:
                 if not approval["allowed"]:
                     if self.config.approval_mode == "suggest" and self._interactive_allowed:
                         approved = await self._prompt_user_approval(tool_name, tool_args)
+                        self._record_approval(tool_name, tool_args, approved, "User" if approved else "User rejected")
                         if not approved:
                             blocked_result = {"blocked": "User rejected"}
                             if on_tool_result:
@@ -831,6 +840,7 @@ class ProductionAgentLoop:
                             )
                             continue
                     else:
+                        self._record_approval(tool_name, tool_args, False, approval["reason"])
                         blocked_result = {"blocked": approval["reason"]}
                         if on_tool_result:
                             on_tool_result(tool_name, blocked_result)
@@ -1447,6 +1457,52 @@ class ProductionAgentLoop:
 
         return calls
 
+    # =========================================================================
+    # Plan Persistence
+    # =========================================================================
+
+    def save_plan(self, plan: list[dict]) -> None:
+        """Persist plan items to disk so they survive session restarts."""
+        try:
+            os.makedirs(os.path.dirname(self._plan_file), exist_ok=True)
+            with open(self._plan_file, "w", encoding="utf-8") as f:
+                json.dump({
+                    "plan": plan,
+                    "updated_at": time.time(),
+                    "project": self.project_path,
+                }, f, indent=2)
+        except Exception as e:
+            self._log(f"Plan save failed: {e}")
+
+    def load_plan(self) -> list[dict]:
+        """Load persisted plan items."""
+        if os.path.isfile(self._plan_file):
+            try:
+                with open(self._plan_file, "r", encoding="utf-8") as f:
+                    data = json.load(f)
+                return data.get("plan", [])
+            except Exception:
+                pass
+        return []
+
+    def get_approval_history(self) -> list[dict]:
+        """Return the full approval history for this session."""
+        return list(self._approval_history)
+
+    def _record_approval(self, tool_name: str, tool_args: dict, approved: bool, reason: str = "") -> None:
+        """Record an approval decision for audit."""
+        entry = {
+            "timestamp": time.time(),
+            "tool": tool_name,
+            "approved": approved,
+            "reason": reason,
+            "args_preview": {k: str(v)[:100] for k, v in tool_args.items()},
+        }
+        self._approval_history.append(entry)
+        # Keep only last 200 entries
+        if len(self._approval_history) > 200:
+            self._approval_history = self._approval_history[-200:]
+
     def _backup_file(self, file_path: str) -> str | None:
         """Create a backup of a file before modification. Returns backup path."""
         abs_path = os.path.join(self.project_path, file_path) if not os.path.isabs(file_path) else file_path
@@ -1617,7 +1673,11 @@ class ProductionAgentLoop:
     # =========================================================================
 
     def _build_system_prompt(self, base_prompt: str, repo_map: str = "") -> str:
-        """Build the full system prompt with all context."""
+        """Build the full system prompt with all context. Cached to avoid rebuilds."""
+        # Cache key based on base_prompt + repo_map + project rules
+        cache_key = f"{base_prompt[:200]}:{repo_map[:200]}:{self._state.fnames and sorted(self._state.fnames)[0]}"
+        if hasattr(self, '_system_prompt_cache') and self._system_prompt_cache.get('key') == cache_key:
+            return self._system_prompt_cache['value']
         parts = []
 
         # Base prompt
@@ -1699,7 +1759,12 @@ When building a project with multiple files:
 - Test the server starts correctly after all files are created
 """)
 
-        return "\n".join(parts)
+        result = "\n".join(parts)
+        # Cache for reuse
+        if not hasattr(self, '_system_prompt_cache'):
+            self._system_prompt_cache = {}
+        self._system_prompt_cache = {'key': cache_key, 'value': result}
+        return result
 
     def _load_project_rules(self) -> str:
         """Load project rules from DEV.md, .devrules, and .dev/ directory."""

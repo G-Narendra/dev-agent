@@ -81,6 +81,10 @@ class NimProvider:
         self._client: Optional[httpx.AsyncClient] = None
         self._request_queue: asyncio.Queue = asyncio.Queue()
         self._lock = asyncio.Lock()
+        # Cached tool definitions (avoid re-serializing each call)
+        self._tool_cache: list[dict] = []
+        # Connection pool stats
+        self._pool_stats = {"reused": 0, "new": 0}
         # Model health tracking
         self._model_health: dict[str, dict] = {}  # model -> {success, failure, latency_avg}
         self._model_failures: dict[str, int] = {}  # model -> consecutive failures
@@ -106,6 +110,7 @@ class NimProvider:
                 max_keepalive_connections=20,
                 keepalive_expiry=30,
             ),
+            http2=True,  # Use HTTP/2 for multiplexed connections
         )
     
     async def close(self):
@@ -525,9 +530,7 @@ class NimProvider:
                         retry_message = retry_choice.get("message", {})
                         retry_content = retry_message.get("content", "")
                         if retry_content:
-                            chunk_size = 20
-                            for i in range(0, len(retry_content), chunk_size):
-                                yield {"type": "text", "content": retry_content[i:i+chunk_size]}
+                            yield {"type": "text", "content": retry_content}
                         yield {"type": "finish", "reason": "truncation_recovery"}
                         return
                     except Exception:

@@ -95,13 +95,37 @@ CONFIG_FILE = CONFIG_DIR / "config.json"
 def load_config() -> dict:
     if CONFIG_FILE.exists():
         with open(CONFIG_FILE, encoding="utf-8") as f:
-            return json.load(f)
+            config = json.load(f)
+        # Decrypt API keys if they're encrypted
+        if "api_keys" in config:
+            try:
+                from ..utils.security import CredentialEncryptor
+                enc = CredentialEncryptor()
+                config["api_keys"] = [
+                    (enc.decrypt(k[4:]) if k.startswith("enc:") else k)
+                    for k in config["api_keys"]
+                ]
+            except Exception:
+                pass  # Decryption is best-effort
+        return config
     return {}
 
 
-def save_config(config: dict):
+def save_config(config: dict, encrypt_keys: bool = True):
     import stat
     CONFIG_DIR.mkdir(parents=True, exist_ok=True)
+    # Encrypt API keys before saving if they're not already encrypted
+    if encrypt_keys and "api_keys" in config:
+        try:
+            from ..utils.security import CredentialEncryptor
+            enc = CredentialEncryptor()
+            config = dict(config)  # don't mutate caller's dict
+            config["api_keys"] = [
+                ("enc:" + enc.encrypt(k) if not k.startswith("enc:") else k)
+                for k in config["api_keys"]
+            ]
+        except Exception:
+            pass  # Encryption is best-effort
     with open(CONFIG_FILE, "w", encoding="utf-8") as f:
         json.dump(config, f, indent=2)
     # Restrict file permissions to owner only (contains API keys)

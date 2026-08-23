@@ -314,3 +314,76 @@ class AuditLogger:
         except Exception:
             pass
         return logs
+
+
+class CredentialEncryptor:
+    """
+    Encrypt/decrypt API keys for storage.
+    Uses machine-specific key derivation for local-only encryption.
+    Not military-grade but prevents plain-text key storage.
+    """
+
+    def __init__(self):
+        import hashlib, getpass, platform
+        # Derive a machine-specific key from hostname + username
+        seed = f"{platform.node()}-{getpass.getuser()}".encode()
+        self._key = hashlib.sha256(seed).digest()[:32]
+
+    def encrypt(self, plaintext: str) -> str:
+        """Encrypt a string (XOR cipher with machine-derived key)."""
+        import base64
+        data = plaintext.encode('utf-8')
+        key_bytes = self._key
+        encrypted = bytes(b ^ key_bytes[i % len(key_bytes)] for i, b in enumerate(data))
+        return base64.b64encode(encrypted).decode('ascii')
+
+    def decrypt(self, ciphertext: str) -> str:
+        """Decrypt a string encrypted with encrypt()."""
+        import base64
+        data = base64.b64decode(ciphertext)
+        key_bytes = self._key
+        decrypted = bytes(b ^ key_bytes[i % len(key_bytes)] for i, b in enumerate(data))
+        return decrypted.decode('utf-8')
+
+    def encrypt_config_keys(self, config_path: str) -> bool:
+        """Encrypt API keys in a config file."""
+        import json
+        if not os.path.isfile(config_path):
+            return False
+        try:
+            with open(config_path, 'r', encoding='utf-8') as f:
+                config = json.load(f)
+            keys = config.get('keys', [])
+            if not keys:
+                return True
+            encrypted_keys = []
+            for k in keys:
+                if isinstance(k, str) and not k.startswith('enc:'):
+                    encrypted_keys.append('enc:' + self.encrypt(k))
+                else:
+                    encrypted_keys.append(k)
+            config['keys'] = encrypted_keys
+            with open(config_path, 'w', encoding='utf-8') as f:
+                json.dump(config, f, indent=2)
+            return True
+        except Exception:
+            return False
+
+    def decrypt_config_keys(self, config_path: str) -> list[str]:
+        """Decrypt API keys from a config file."""
+        import json
+        if not os.path.isfile(config_path):
+            return []
+        try:
+            with open(config_path, 'r', encoding='utf-8') as f:
+                config = json.load(f)
+            keys = config.get('keys', [])
+            decrypted = []
+            for k in keys:
+                if isinstance(k, str) and k.startswith('enc:'):
+                    decrypted.append(self.decrypt(k[4:]))
+                else:
+                    decrypted.append(k)
+            return decrypted
+        except Exception:
+            return []
