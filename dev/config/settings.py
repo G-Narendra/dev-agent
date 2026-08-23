@@ -103,6 +103,25 @@ class DevConfig:
             config.provider.model = os.environ["DEV_MODEL"]
         if os.environ.get("DEV_API_KEY"):
             config.provider.api_keys.append(os.environ["DEV_API_KEY"])
+        if os.environ.get("DEV_BASE_URL"):
+            config.provider.base_url = os.environ["DEV_BASE_URL"]
+        if os.environ.get("DEV_MAX_STEPS"):
+            try:
+                config.agent.max_steps = int(os.environ["DEV_MAX_STEPS"])
+            except ValueError:
+                pass
+        if os.environ.get("DEV_AUTO_LINT"):
+            config.agent.auto_lint = os.environ["DEV_AUTO_LINT"].lower() in ("true", "1", "yes")
+        if os.environ.get("DEV_AUTO_COMMIT"):
+            config.agent.auto_commit = os.environ["DEV_AUTO_COMMIT"].lower() in ("true", "1", "yes")
+        if os.environ.get("DEV_SANDBOX_MODE"):
+            config.sandbox.mode = os.environ["DEV_SANDBOX_MODE"]
+        
+        # Validate after loading
+        errors = config.validate()
+        if errors:
+            import sys
+            print(f"[dev:config] Config warnings: {'; '.join(errors)}", file=sys.stderr)
         
         return config
     
