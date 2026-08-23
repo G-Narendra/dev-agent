@@ -67,18 +67,47 @@ class FileWatcher:
     def _scan_files(self) -> dict[str, float]:
         """Scan directory for file modification times."""
         mtimes = {}
+        # Load .gitignore patterns
+        gitignore_patterns = self._load_gitignore()
         for root, dirs, files in os.walk(self.watch_dir):
-            # Skip hidden dirs and __pycache__
-            dirs[:] = [d for d in dirs if not d.startswith(".") and d != "__pycache__"]
+            # Skip hidden dirs, __pycache__, node_modules, .venv
+            dirs[:] = [d for d in dirs if not d.startswith(".") and d != "__pycache__" and d != "node_modules" and d != ".venv"]
             for f in files:
                 if f.startswith("."):
                     continue
                 fpath = os.path.join(root, f)
+                # Skip gitignored files
+                rel_path = os.path.relpath(fpath, self.watch_dir)
+                if self._is_gitignored(rel_path, gitignore_patterns):
+                    continue
                 try:
                     mtimes[fpath] = os.path.getmtime(fpath)
                 except OSError:
                     pass
         return mtimes
+    
+    def _load_gitignore(self) -> list[str]:
+        """Load .gitignore patterns."""
+        patterns = []
+        gitignore_path = os.path.join(self.watch_dir, ".gitignore")
+        if os.path.isfile(gitignore_path):
+            try:
+                with open(gitignore_path, "r", encoding="utf-8", errors="replace") as f:
+                    for line in f:
+                        line = line.strip()
+                        if line and not line.startswith("#"):
+                            patterns.append(line)
+            except Exception:
+                pass
+        return patterns
+    
+    def _is_gitignored(self, path: str, patterns: list[str]) -> bool:
+        """Check if a path matches any gitignore pattern."""
+        import fnmatch
+        for pattern in patterns:
+            if fnmatch.fnmatch(path, pattern) or fnmatch.fnmatch(os.path.basename(path), pattern):
+                return True
+        return False
     
     def _watch_loop(self):
         """Background watch loop."""
