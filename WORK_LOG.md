@@ -34,6 +34,32 @@
 | 22 | Add /restore command | ✅ DONE | main.py | List stashes for restore |
 | 23 | Add /debug command | ✅ DONE | main.py | Alias for /doctor |
 | 24 | Update /help text | ✅ DONE | main.py | Added all new commands to help |
+| 25 | Add model health monitoring | ✅ DONE | nim_provider.py | Track success/failure/latency per model |
+| 26 | Add automatic model downgrade | ✅ DONE | nim_provider.py | Fallback chain when model is unhealthy |
+| 27 | Add security audit tool | ✅ DONE | audit.py | Comprehensive codebase scanner |
+| 28 | Verify browser tools exist | ✅ DONE | browser_tools.py | Already implemented |
+| 29 | Verify image analysis exists | ✅ DONE | multimodal_tools.py | Already implemented |
+| 30 | Verify Docker sandboxing exists | ✅ DONE | sandbox_manager.py | Already implemented |
+| 31 | Verify multi-agent teams exist | ✅ DONE | teams.py | Already implemented |
+| 32 | Verify scheduled agents exist | ✅ DONE | task_queue.py | Already implemented |
+| 33 | Verify MCP client exists | ✅ DONE | mcp/client.py | Already implemented |
+| 34 | Verify context compression exists | ✅ DONE | production_loop.py | Already implemented |
+| 35 | Verify git diff display exists | ✅ DONE | production_loop.py | Already implemented |
+| 36 | Verify session persistence exists | ✅ DONE | session.py | Already implemented |
+| 37 | Verify web search exists | ✅ DONE | web_search.py | Already implemented |
+| 38 | Verify progress indicators exist | ✅ DONE | progress.py | Already implemented |
+| 39 | Verify model router exists | ✅ DONE | model_router.py | Already implemented |
+| 40 | Verify skill integration exists | ✅ DONE | skill_integration.py | Already implemented |
+| 41 | Verify context pruner exists | ✅ DONE | context_pruner.py | Already implemented (Aider pattern) |
+| 42 | Verify error recovery exists | ✅ DONE | error_recovery.py | Already implemented |
+| 43 | Verify auto-commit exists | ✅ DONE | auto_commit.py | Already implemented |
+| 44 | Verify git auto exists | ✅ DONE | git_auto.py | Already implemented |
+| 45 | Verify quality gates exist | ✅ DONE | quality_gates.py | Already implemented |
+| 46 | Verify approval modes exist | ✅ DONE | approval.py | Already implemented |
+| 47 | Verify checkpoints exist | ✅ DONE | checkpoints.py | Already implemented |
+| 48 | Verify headless mode exists | ✅ DONE | headless.py | Already implemented |
+| 49 | Verify hooks system exists | ✅ DONE | hooks.py | Already implemented |
+| 50 | Verify memory system exists | ✅ DONE | memory.py | Already implemented |
 
 ---
 
