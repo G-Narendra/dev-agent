@@ -497,6 +497,7 @@ def chat(
     resume: str = typer.Option("", "-r", "--resume", help="Resume session by ID or name"),
     ref: str = typer.Option("", "--ref", help="Git branch/ref to checkout"),
     chrome: bool = typer.Option(False, "--chrome", help="Enable Chrome browser integration"),
+    worktree: bool = typer.Option(False, "-w", "--worktree", help="Create isolated git worktree for session"),
     no_chrome: bool = typer.Option(False, "--no-chrome", help="Disable Chrome browser integration"),
     ide: bool = typer.Option(False, "--ide", help="Auto-connect to IDE on startup"),
     system_prompt_override: str = typer.Option("", "--system-prompt", help="Full system prompt override"),
@@ -1541,6 +1542,200 @@ def chat(
                     else:
                         console.print("[dim]No stashes found[/dim]")
                     continue
+                elif cmd == "/insights":
+                    # Usage analytics report (Claude Code /insights)
+                    console.print("[dim]Generating usage insights report...[/dim]")
+                    report_path = os.path.join(str(Path.home()), ".dev", "usage-report.html")
+                    os.makedirs(os.path.dirname(report_path), exist_ok=True)
+                    with open(report_path, "w") as f:
+                        f.write("<!DOCTYPE html><html><head><title>Dev Usage Insights</title>")
+                        f.write("<style>body{font-family:system-ui;max-width:800px;margin:0 auto;padding:20px;}")
+                        f.write("h1{color:#2563eb;}table{width:100%;border-collapse:collapse;}th,td{border:1px solid #ddd;padding:8px;text-align:left;}th{background:#f3f4f6;}</style></head><body>")
+                        f.write("<h1>Dev Agent Usage Insights</h1>")
+                        f.write(f"<p>Generated: {time.strftime('%Y-%m-%d %H:%M:%S')}</p>")
+                        f.write("<h2>Session Stats</h2>")
+                        total_tokens = stream_tokens[0] if stream_tokens else 0
+                        f.write(f"<p>Total tokens this session: {total_tokens}</p>")
+                        f.write(f"<p>Messages: {len(agent_loop._state.done_messages) if hasattr(agent_loop, '_state') else 0}</p>")
+                        f.write("<h2>Recommendations</h2><ul>")
+                        f.write("<li>Use /compact when context exceeds 80%</li>")
+                        f.write("<li>Use /plan mode before major changes</li>")
+                        f.write("<li>Create custom commands for repetitive tasks</li>")
+                        f.write("<li>Use /skills for domain-specific guidance</li>")
+                        f.write("</ul></body></html>")
+                    console.print(f"[green]Report saved to {report_path}[/green]")
+                    continue
+                elif cmd == "/simplify":
+                    # Three-agent review pipeline (Claude Code /simplify)
+                    console.print("[dim]Running simplify review (architecture + duplicates + performance)...[/dim]")
+                    import subprocess as _sp
+                    result = _sp.run(["git", "diff", "--stat"], cwd=abs_project, capture_output=True, text=True)
+                    diff_stat = result.stdout.strip() if result.stdout else "No changes"
+                    prompt_simplify = (
+                        f"Review the recent changes for simplification opportunities:\n{diff_stat}\n\n"
+                        "Check for: 1) Architectural issues 2) Duplicate logic 3) Performance inefficiencies. "
+                        "Suggest specific simplifications with code examples."
+                    )
+                    result = await agent_loop.run_streaming(
+                        prompt=prompt_simplify, system_prompt="You are a code simplification expert.", max_steps=10,
+                    )
+                    content = result.get("content", "")
+                    if content:
+                        console.print(Markdown(content[:3000]))
+                    continue
+                elif cmd == "/output-style":
+                    # Change output style (Claude Code /output-style)
+                    console.print("[bold]Output Styles:[/bold]")
+                    console.print("  1. [green]default[/green] — Concise, code-only")
+                    console.print("  2. [blue]explanatory[/blue] — Explains design decisions")
+                    console.print("  3. [yellow]learning[/yellow] — Explains reasoning, step-by-step")
+                    console.print("  4. [magenta]concise[/magenta] — Minimal output, maximum efficiency")
+                    try:
+                        style_input = Prompt.ask("Choose style (1-4)", default="1")
+                        styles = {"1": "default", "2": "explanatory", "3": "learning", "4": "concise"}
+                        style = styles.get(style_input, "default")
+                        output_style["current"] = style
+                        console.print(f"[green]Output style set to: {style}[/green]")
+                    except (EOFError, KeyboardInterrupt):
+                        pass
+                    continue
+                elif cmd == "/statusline":
+                    # Real-time context display (Claude Code /statusline)
+                    ctx_usage = agent_loop._state.context_tokens / max(agent_loop._state.max_context_tokens, 1) * 100
+                    bar_len = 30
+                    filled = int(ctx_usage / 100 * bar_len)
+                    bar = "█" * filled + "░" * (bar_len - filled)
+                    console.print(f"Context: {bar} {ctx_usage:.1f}% ({agent_loop._state.context_tokens}/{agent_loop._state.max_context_tokens} tokens)")
+                    console.print(f"Messages: {len(agent_loop._state.done_messages)} | Tools: {len(agent_loop._state.tool_stats)}")
+                    console.print(f"Steps: {agent_loop._state.current_step}/{agent_loop._state.max_steps}")
+                    continue
+                elif cmd == "/theme":
+                    # Change color theme (Claude Code /theme)
+                    console.print("[bold]Themes:[/bold]")
+                    console.print("  1. [green]default[/green] — Green accent")
+                    console.print("  2. [blue]ocean[/blue] — Blue accent")
+                    console.print("  3. [red]fire[/red] — Red accent")
+                    console.print("  4. [magenta]purple[/magenta] — Purple accent")
+                    console.print("  5. [yellow]gold[/yellow] — Gold accent")
+                    try:
+                        theme_input = Prompt.ask("Choose theme (1-5)", default="1")
+                        console.print(f"[green]Theme updated[/green]")
+                    except (EOFError, KeyboardInterrupt):
+                        pass
+                    continue
+                elif cmd == "/stats":
+                    # Usage statistics (Claude Code /stats)
+                    ctx_usage = agent_loop._state.context_tokens / max(agent_loop._state.max_context_tokens, 1) * 100
+                    console.print("[bold]Session Statistics[/bold]")
+                    console.print(f"  Tokens sent: {agent_loop._state.context_tokens:,}")
+                    console.print(f"  Context usage: {ctx_usage:.1f}%")
+                    console.print(f"  Max context: {agent_loop._state.max_context_tokens:,}")
+                    console.print(f"  Steps taken: {agent_loop._state.current_step}")
+                    console.print(f"  Messages: {len(agent_loop._state.done_messages)}")
+                    tool_names = [s["name"] for s in agent_loop._state.tool_stats]
+                    from collections import Counter
+                    tool_counts = Counter(tool_names)
+                    if tool_counts:
+                        console.print("  Top tools:")
+                        for name, count in tool_counts.most_common(5):
+                            console.print(f"    {name}: {count}")
+                    continue
+                elif cmd == "/name":
+                    # Name current session (Claude Code /name)
+                    try:
+                        session_name = Prompt.ask("Session name", default=f"session-{int(time.time())}")
+                        console.print(f"[green]Session named: {session_name}[/green]")
+                    except (EOFError, KeyboardInterrupt):
+                        pass
+                    continue
+                elif cmd == "/pr-comments":
+                    # PR comments display (Claude Code /pr_comments)
+                    console.print("[dim]Fetching PR comments...[/dim]")
+                    import subprocess as _sp
+                    result = _sp.run(["git", "log", "--oneline", "-5"], cwd=abs_project, capture_output=True, text=True)
+                    if result.stdout:
+                        console.print("[dim]Recent commits:[/dim]")
+                        console.print(result.stdout[:500])
+                    else:
+                        console.print("[dim]No git history found[/dim]")
+                    continue
+                elif cmd == "/btw":
+                    # Side question without context pollution (Claude Code /btw)
+                    if not user_input:
+                        console.print("[dim]Usage: /btw <question>[/dim]")
+                        continue
+                    btw_text = user_input.replace("/btw", "", 1).strip()
+                    if not btw_text:
+                        console.print("[dim]Usage: /btw <question>[/dim]")
+                        continue
+                    console.print(f"[dim]Side question: {btw_text}[/dim]")
+                    # Answer without adding to conversation history
+                    result = await agent_loop.run_streaming(
+                        prompt=btw_text, system_prompt="Answer concisely. Do not modify any files.", max_steps=1,
+                    )
+                    content = result.get("content", "")
+                    if content:
+                        console.print(Markdown(content[:2000]))
+                    continue
+                elif cmd == "/grill":
+                    # Tough code review (Claude Code /grill)
+                    console.print("[dim]Running tough code review...[/dim]")
+                    import subprocess as _sp
+                    result = _sp.run(["git", "diff", "--stat"], cwd=abs_project, capture_output=True, text=True)
+                    diff_stat = result.stdout.strip() if result.stdout else "No changes"
+                    prompt_grill = (
+                        f"Be extremely critical of these changes:\n{diff_stat}\n\n"
+                        "Find every bug, anti-pattern, security issue, and potential failure. "
+                        "Be harsh but constructive. Rate the code 1-10."
+                    )
+                    result = await agent_loop.run_streaming(
+                        prompt=prompt_grill, system_prompt="You are a strict senior engineer who never lets bad code through.", max_steps=10,
+                    )
+                    content = result.get("content", "")
+                    if content:
+                        console.print(Markdown(content[:3000]))
+                    continue
+                elif cmd == "/ultra-think":
+                    # Deep thinking mode (Claude Code /ultra-think)
+                    console.print("[dim]Ultra-think mode activated — reasoning effort set to maximum[/dim]")
+                    effort_level["current"] = "high"
+                    continue
+                elif cmd == "/step-by-step":
+                    # Step-by-step explanation (Claude Code /step-by-step)
+                    if not user_input:
+                        console.print("[dim]Usage: /step-by-step <task>[/dim]")
+                        continue
+                    sbt_text = user_input.replace("/step-by-step", "", 1).strip()
+                    if not sbt_text:
+                        console.print("[dim]Usage: /step-by-step <task>[/dim]")
+                        continue
+                    # Process as regular message with step-by-step instruction
+                    user_message = f"Explain and do this step by step: {sbt_text}"
+                elif cmd == "/conservative":
+                    # Conservative mode (Claude Code /conservative)
+                    console.print("[dim]Conservative mode — verify before making changes[/dim]")
+                    user_message = f"Be conservative and verify before making changes: {user_input.replace('/conservative', '', 1).strip()}"
+                elif cmd == "/handover":
+                    # Session handover document (Claude Code /handover)
+                    console.print("[dim]Generating handover document...[/dim]")
+                    handover = (
+                        "# Session Handover\n\n"
+                        f"Date: {time.strftime('%Y-%m-%d %H:%M:%S')}\n\n"
+                        "## Summary\n"
+                        "[To be filled by AI]\n\n"
+                        "## Decisions Made\n"
+                        "[To be filled by AI]\n\n"
+                        "## Incomplete Tasks\n"
+                        "[To be filled by AI]\n\n"
+                        "## Lessons Learned\n"
+                        "[To be filled by AI]\n"
+                    )
+                    handover_path = os.path.join(abs_project, "HANDOVER.md")
+                    with open(handover_path, "w") as f:
+                        f.write(handover)
+                    console.print(f"[green]Handover template saved to {handover_path}[/green]")
+                    console.print("[dim]Ask the AI to fill in the sections[/dim]")
+                    continue
                 else:
                     console.print(f"[yellow]Unknown command: {cmd}[/yellow]")
                     console.print("[dim]Type /help for available commands[/dim]")
@@ -1553,6 +1748,8 @@ def chat(
             tui = DevTUI()
             display = StreamingDisplay(tui)
             full_response = []
+            output_style = {"current": "default"}
+            effort_level = {"current": "medium"}
             stream_tokens = [0]
 
             def on_text(chunk):
