@@ -470,11 +470,38 @@ class NimProvider:
                 content = message.get("content") or ""
                 tool_calls = message.get("tool_calls", [])
                 
-                # Detect truncation: if tool call arguments are too short
+                # Detect truncation: if tool call arguments are too short or malformed
                 truncated = False
                 for tc in tool_calls:
                     args = tc.get("function", {}).get("arguments", "")
-                    if len(args) < 10:  # Truncated if args < 10 chars
+                    name = tc.get("function", {}).get("name", "")
+                    # Check 1: Args too short (less than 10 chars)
+                    if len(args) < 10:
+                        truncated = True
+                        break
+                    # Check 2: Args are not valid JSON and look truncated
+                    try:
+                        parsed = json.loads(args)
+                        if not isinstance(parsed, dict):
+                            truncated = True
+                            break
+                        # Check 3: write_file with missing content
+                        if name == "write_file" and "content" not in parsed:
+                            truncated = True
+                            break
+                        # Check 4: Content looks like placeholder/description
+                        if name == "write_file" and "content" in parsed:
+                            content_val = parsed["content"]
+                            if isinstance(content_val, str):
+                                placeholder_patterns = [
+                                    '', 'TODO', 'placeholder', 'code here',
+                                    'Add your', 'Write your', 'Insert your',
+                                ]
+                                if any(p.lower() in content_val.strip().lower() for p in placeholder_patterns):
+                                    truncated = True
+                                    break
+                    except json.JSONDecodeError:
+                        # Not valid JSON = likely truncated
                         truncated = True
                         break
                 
