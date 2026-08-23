@@ -81,6 +81,9 @@ class NimProvider:
         self._client: Optional[httpx.AsyncClient] = None
         self._request_queue: asyncio.Queue = asyncio.Queue()
         self._lock = asyncio.Lock()
+        # Model health tracking
+        self._model_health: dict[str, dict] = {}  # model -> {success, failure, latency_avg}
+        self._model_failures: dict[str, int] = {}  # model -> consecutive failures
     
     async def initialize(self):
         """Initialize the HTTP client with generous pool limits."""
@@ -318,6 +321,51 @@ class NimProvider:
         if has_tools and resolved not in self.TOOL_CAPABLE_MODELS:
             resolved = self.MODELS["tool"]
         return resolved
+    
+    def _record_model_success(self, model: str, latency: float = 0.0):
+        """Record successful model call for health tracking."""
+        if model not in self._model_health:
+            self._model_health[model] = {"success": 0, "failure": 0, "latency_avg": 0.0}
+        health = self._model_health[model]
+        health["success"] += 1
+        # Exponential moving average for latency
+        if latency > 0:
+            health["latency_avg"] = health["latency_avg"] * 0.9 + latency * 0.1
+        self._model_failures[model] = 0  # Reset consecutive failures
+    
+    def _record_model_failure(self, model: str):
+        """Record failed model call for health tracking."""
+        if model not in self._model_health:
+            self._model_health[model] = {"success": 0, "failure": 0, "latency_avg": 0.0}
+        self._model_health[model]["failure"] += 1
+        self._model_failures[model] = self._model_failures.get(model, 0) + 1
+    
+    def _is_model_healthy(self, model: str) -> bool:
+        """Check if a model is healthy enough to use."""
+        failures = self._model_failures.get(model, 0)
+        if failures >= 3:
+            return False  # 3+ consecutive failures = unhealthy
+        return True
+    
+    def _get_fallback_model(self, model: str) -> str:
+        """Get a fallback model when the primary is unhealthy."""
+        # Fallback chain: 70B -> 8B -> 70B (alternate)
+        if "70b" in model:
+            return self.MODELS["fast"]  # Try 8B
+        elif "8b" in model:
+            return self.MODELS["default"]  # Try 70B
+        return self.MODELS["default"]
+    
+    def get_model_health(self) -> dict:
+        """Get health status of all models."""
+        return {
+            model: {
+                **health,
+                "consecutive_failures": self._model_failures.get(model, 0),
+                "healthy": self._is_model_healthy(model),
+            }
+            for model, health in self._model_health.items()
+        }
     
     async def _call_with_retry(
         self,
