@@ -29,22 +29,22 @@ from pydantic import BaseModel
 # ============================================================================
 
 PROVIDER_CONFIGS = {
-    "bytez": {
-        "name": "Bytez",
-        "base_url": "https://api.bytez.com/models/v2/openai/v1",
-        "env_key": "BYTEZ_API_KEY",
+    "openrouter": {
+        "name": "OpenRouter",
+        "base_url": "https://openrouter.ai/api/v1",
+        "env_key": "OPENROUTER_API_KEY",
         "auth_header": "Authorization",
         "auth_prefix": "Bearer ",
-        "rpm": 60,  # Generous free tier
+        "rpm": 20,
         "tpm": 200_000,
-        "strengths": ["scale", "multi-modal", "175K+ models"],
+        "strengths": ["550B model", "best quality free", "variety"],
         "best_models": {
-            "coding": "Qwen/Qwen3-Coder-32B-Instruct",
-            "fast": "Qwen/Qwen3-4B",
-            "reasoning": "deepseek-ai/DeepSeek-R1-Distill-Qwen-32B",
-            "vision": "meta-llama/Llama-4-Scout-17B-16E-Instruct",
-            "default": "meta-llama/Llama-3.3-70B-Instruct",
-            "tool": "meta-llama/Llama-3.3-70B-Instruct",
+            "coding": "nvidia/nemotron-3-ultra-550b-a55b:free",
+            "fast": "nvidia/nemotron-3.5-lightning:free",
+            "reasoning": "nvidia/nemotron-3-ultra-550b-a55b:free",
+            "vision": "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
+            "default": "nvidia/nemotron-3-ultra-550b-a55b:free",
+            "tool": "nvidia/nemotron-3-super-120b-a12b:free",
         },
     },
     "nvidia": {
@@ -55,32 +55,32 @@ PROVIDER_CONFIGS = {
         "auth_prefix": "Bearer ",
         "rpm": 40,
         "tpm": 400_000,
-        "strengths": ["speed", "top models", "enterprise"],
+        "strengths": ["speed", "fast inference", "40 RPM"],
         "best_models": {
             "coding": "meta/llama-3.1-70b-instruct",
             "fast": "meta/llama-3.1-8b-instruct",
-            "reasoning": "nvidia/llama-3.1-nemotron-ultra-253b-v1",
+            "reasoning": "meta/llama-3.1-70b-instruct",
             "vision": "meta/llama-3.2-11b-vision-instruct",
             "default": "meta/llama-3.1-70b-instruct",
             "tool": "meta/llama-3.1-70b-instruct",
         },
     },
-    "openrouter": {
-        "name": "OpenRouter",
-        "base_url": "https://openrouter.ai/api/v1",
-        "env_key": "OPENROUTER_API_KEY",
+    "bytez": {
+        "name": "Bytez",
+        "base_url": "https://api.bytez.com/models/v2/openai/v1",
+        "env_key": "BYTEZ_API_KEY",
         "auth_header": "Authorization",
         "auth_prefix": "Bearer ",
-        "rpm": 20,
+        "rpm": 60,
         "tpm": 200_000,
-        "strengths": ["variety", "free models", "550B ultra model"],
+        "strengths": ["scale", "175K+ models"],
         "best_models": {
-            "coding": "poolside/laguna-s-2.1:free",
-            "fast": "nvidia/nemotron-3.5-lightning:free",
-            "reasoning": "nvidia/nemotron-3-ultra-550b-a55b:free",
-            "vision": "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
-            "default": "nvidia/nemotron-3-super-120b-a12b:free",
-            "tool": "nvidia/nemotron-3-super-120b-a12b:free",
+            "coding": "Qwen/Qwen3-Coder-32B-Instruct",
+            "fast": "Qwen/Qwen3-4B",
+            "reasoning": "deepseek-ai/DeepSeek-R1-Distill-Qwen-32B",
+            "vision": "meta-llama/Llama-4-Scout-17B-16E-Instruct",
+            "default": "meta-llama/Llama-3.3-70B-Instruct",
+            "tool": "meta-llama/Llama-3.3-70B-Instruct",
         },
     },
 }
@@ -131,7 +131,7 @@ class UnifiedProvider:
             provider_order: Priority order for provider selection.
                           Default: ["nvidia", "openrouter", "bytez"]
         """
-        self.provider_order = provider_order or ["nvidia", "openrouter", "bytez"]
+        self.provider_order = provider_order or ["openrouter", "nvidia", "bytez"]
         
         # Build flat key list from dict
         self.keys: list[ProviderKey] = []
