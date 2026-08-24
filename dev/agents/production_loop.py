@@ -56,7 +56,7 @@ class LoopConfig:
     """Agent configuration."""
     model: str = "default"
     temperature: float = 0.7
-    max_tokens: int = 4096
+    max_tokens: int = 16384  # Must be high enough for complete file generation
     max_retries: int = 5
     retry_delay: float = 0.25
     max_retry_delay: float = 30.0
@@ -714,20 +714,15 @@ class ProductionAgentLoop:
                             # Check if content looks like actual code vs a placeholder/description
                             if ct:
                                 stripped = ct.strip()
-                                # Common placeholder patterns that are NOT real code
-                                # Detect placeholder/description content
-                                placeholder_patterns = [
-                                    '', 'TODO', 'placeholder', 'code here',
-                                    'Add your', 'Write your', 'Insert your',
-                                    'Put your', 'Add the', 'Write the',
-                                ]
-                                is_placeholder = any(p.lower() in stripped.lower() for p in placeholder_patterns)
-                                is_comment_only = stripped.startswith('/*') and stripped.endswith('*/') and len(stripped) < 100
-                                is_short = len(stripped) < 80
+                                # Detect placeholder/description content (not real code)
+                                is_empty = len(stripped) < 10
+                                is_comment_only = (stripped.startswith('/*') or stripped.startswith('//')) and stripped.endswith('*/') and len(stripped) < 200
+                                is_short = len(stripped) < 60
                                 has_real_code = any(c in stripped for c in '{}()=;<>[]\n@:import require')
-                                if is_placeholder or is_comment_only or (is_short and not has_real_code):
+                                # Only flag as placeholder if truly not code
+                                if is_empty or is_comment_only or (is_short and not has_real_code):
                                     truncated = True
-                                    self._log(f"Detected placeholder/description content ({len(ct)} chars) — will retry as text")
+                                    self._log(f"Detected placeholder content ({len(ct)} chars) — will retry")
                                     break
                         except Exception:
                             # Even JSON parse failure = likely truncation
@@ -736,8 +731,8 @@ class ProductionAgentLoop:
                             break
 
                 if truncated:
-                    # Re-request WITHOUT tools — model generates full code as text
-                    self._log("Retrying without tools for full code generation")
+                    # Re-request WITH tools — model must use write_file tool
+                    self._log("Retrying with tools for full code generation")
                     # Extract the folder prefix from the original request if present
                     folder_prefix = ""
                     for tc in tool_calls_data:
@@ -750,47 +745,23 @@ class ProductionAgentLoop:
                         except Exception:
                             pass
                     retry_prompt = (
-                        "Generate COMPLETE code for ALL files. Write EVERY file as a fenced code block.\n\n"
-                        f"IMPORTANT: All file paths must start with '{folder_prefix}' prefix.\n\n"
-                        "FORMAT — follow EXACTLY:\n"
-                        "```filename: folder/file.ext\n"
-                        "<complete file content with REAL newlines, not escaped>\n"
-                        "```\n\n"
-                        "Rules:\n"
-                        f"- All paths MUST start with '{folder_prefix}' (e.g. {folder_prefix}server.js, {folder_prefix}views/index.ejs)\n"
-                        "- Use the format: ```filename: path/to/file\n"
-                        "- Each file gets its own fenced code block\n"
-                        "- Write COMPLETE files with REAL newlines — no placeholders, no truncation\n"
-                        "- Create ALL files needed for the project\n"
+                        "The previous write_file calls had PLACEHOLDER content — not real code. "
+                        "You MUST call write_file AGAIN with COMPLETE, PRODUCTION-QUALITY code.\n\n"
+                        "RULES:\n"
+                        "1. Call write_file for EACH file with the FULL file content\n"
+                        "2. Content must be REAL code with COMPLETE implementations — not stubs\n"
+                        "3. For web projects: include COMPLETE HTML with CSS styling, animations, images\n"
+                        "4. Every CSS rule, every HTML element, every JS function must be complete\n"
+                        "5. Use professional design: gradients, shadows, animations, responsive layout\n"
+                        "6. NEVER output placeholder text like '// add code here' or 'TODO'\n"
+                        f"7. All paths must start with '{folder_prefix}' if creating a subfolder\n\n"
+                        f"Create ALL files needed. Start with write_file NOW — do not describe, just create."
                     )
-                    retry_msg_dicts = [
-                        {"role": "system", "content": retry_prompt},
-                        msg_dicts[1],  # Original user message
-                    ]
-                    try:
-                        retry_content = ""
-                        async for event in self.provider.chat_completion_stream_events(
-                            messages=retry_msg_dicts,
-                            model=self.config.model,
-                            temperature=self.config.temperature,
-                            max_tokens=16384,
-                            tools=None,
-                        ):
-                            if event.get("type") == "text":
-                                retry_content += event.get("content", "")
-
-                        if retry_content:
-                            # Parse code blocks into write_file calls
-                            parsed = self._parse_code_blocks(retry_content)
-                            if parsed:
-                                tool_calls_data = parsed
-                                self._log(f"Parsed {len(parsed)} file(s) from code blocks")
-                                # Update the assistant message with the full content
-                                self._state.cur_messages[-1] = Message(
-                                    role="assistant", content=retry_content, tool_calls=tool_calls_data
-                                )
-                    except Exception as e:
-                        self._log(f"Retry without tools failed: {e}")
+                    # Insert the retry prompt as a user message to keep context
+                    self._state.cur_messages.append(
+                        Message(role='user', content=retry_prompt)
+                    )
+                    continue  # Go back to top of loop — will call LLM with tools
 
             # No tool calls = potentially done
             if not tool_calls_data and full_content:
@@ -848,9 +819,22 @@ class ProductionAgentLoop:
                         Message(role='assistant', content=full_content or '', tool_calls=[])  # Commit assistant text
                     )
                     if incomplete_count > 0:
-                        follow_up = f"You are NOT done. You have {incomplete_count} incomplete tasks. Continue creating files using write_file tool. Create the NEXT file NOW. Do NOT describe files — actually create them with write_file."
+                        follow_up = (
+                            f"STOP TALKING. You have {incomplete_count} incomplete tasks.\n"
+                            "CALL write_file RIGHT NOW for the NEXT file.\n"
+                            "Each file must have COMPLETE content — full HTML, full CSS, full JS.\n"
+                            "No placeholders, no 'add code here', no stubs.\n"
+                            "Write the ENTIRE file content in the write_file call.\n"
+                            "DO NOT describe what you will write. JUST WRITE IT."
+                        )
                     else:
-                        follow_up = "You described files but did not create them. Use write_file tool to ACTUALLY CREATE each file. Do NOT just describe what you would write — use write_file to create real files."
+                        follow_up = (
+                            "You described files in text but did not create them. THIS IS WRONG.\n"
+                            "CALL write_file for EACH file you described.\n"
+                            "The content parameter must contain the COMPLETE file — not a description.\n"
+                            "For CSS: write ALL styles. For HTML: write ALL markup. For JS: write ALL code.\n"
+                            "CALL write_file NOW."
+                        )
                     self._state.cur_messages.append(
                         Message(role='user', content=follow_up)
                     )
@@ -873,7 +857,7 @@ class ProductionAgentLoop:
 
             # Execute tool calls
             # Cap tool calls per turn to prevent context overflow
-            MAX_TOOL_CALLS_PER_TURN = 10
+            MAX_TOOL_CALLS_PER_TURN = 20  # Allow up to 20 tool calls per turn for multi-file projects
             if len(tool_calls_data) > MAX_TOOL_CALLS_PER_TURN:
                 self._log(f"Warning: LLM requested {len(tool_calls_data)} tools. Capping at {MAX_TOOL_CALLS_PER_TURN}.")
                 tool_calls_data = tool_calls_data[:MAX_TOOL_CALLS_PER_TURN]

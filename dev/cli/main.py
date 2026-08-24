@@ -27,6 +27,7 @@ from rich.table import Table
 from rich.markdown import Markdown
 
 from ..providers.nim_provider import NimProvider, RateLimitConfig
+from ..providers.unified_provider import UnifiedProvider
 from ..agents.runtime import AgentRuntime, ToolRegistry
 from ..agents.agent_definition import get_agent, list_agents
 from ..agents.production_loop import ProductionAgentLoop, LoopConfig
@@ -130,25 +131,28 @@ def save_config(config: dict, encrypt_keys: bool = True):
 
 
 async def get_provider():
-    config = load_config()
-    keys = config.get("api_keys", [])
-
-    if not keys:
+    """Initialize the unified multi-provider system."""
+    from ..providers.unified_provider import UnifiedProvider
+    from ..config.provider_config import get_api_keys, has_any_key
+    
+    all_keys = get_api_keys()
+    
+    if not has_any_key():
         # First-run wizard: ask for API keys interactively
-        from ..utils.first_run import ensure_setup
-        if not ensure_setup():
+        from ..config.first_run import run_first_run_wizard
+        all_keys = run_first_run_wizard()
+        if not any(all_keys.values()):
             raise typer.Exit(1)
-        # Reload config after wizard
-        config = load_config()
-        keys = config.get("api_keys", [])
-        if not keys:
-            raise typer.Exit(1)
-
-    rate_config = RateLimitConfig(rpm=config.get("rpm", 40))
-    nim = NimProvider(keys=keys, config=rate_config)
-    await nim.initialize()
-    console.print(f"[green]Using NVIDIA NIMs ({len(keys)} keys, free tier)[/green]")
-    return nim
+    
+    provider = UnifiedProvider(keys=all_keys)
+    await provider.initialize()
+    
+    # Log provider status
+    total_keys = sum(len(v) for v in all_keys.values())
+    providers = [p for p, v in all_keys.items() if v]
+    console.print(f"[green]Using {', '.join(providers)} ({total_keys} keys, free tier)[/green]")
+    
+    return provider
 
 
 def get_runtime(provider: NimProvider, project: str = ".") -> AgentRuntime:
@@ -284,26 +288,37 @@ def build_system_prompt(agent_id: str, project_path: str, extra_rules: str = "")
 
 @app.command()
 def setup(
-    key: str = typer.Option("", help="NVIDIA NIM API key (skip for interactive wizard)"),
-    name: str = typer.Option("default", help="Key name/alias"),
-    wizard: bool = typer.Option(False, "-w", "--wizard", help="Run interactive setup wizard"),
+    key: str = typer.Option("", help="API key (skip for interactive wizard)"),
+    provider: str = typer.Option("nvidia", help="Provider: nvidia, openrouter, bytez"),
+    wizard: bool = typer.Option(True, "-w/--wizard", help="Run interactive setup wizard (default: True)"),
 ):
-    """Configure Dev with NVIDIA NIM API keys. Runs interactive wizard if no key provided."""
-    if wizard or not key:
-        # Run the interactive wizard
-        from ..utils.first_run import run_wizard
-        asyncio.run(run_wizard())
+    """Configure Dev with free API keys from NVIDIA NIM, OpenRouter, and Bytez."""
+    from ..config.first_run import run_first_run_wizard, PROVIDERS, verify_key
+    from ..config.provider_config import save_api_keys, has_any_key, get_api_keys
+    
+    if not key:
+        # Run the interactive wizard for all 3 providers
+        keys = run_first_run_wizard()
+        total = sum(len(v) for v in keys.values())
+        if total > 0:
+            console.print(f"\n[green]✅ {total} key(s) configured across {len(keys)} provider(s)[/green]")
+        else:
+            console.print("[yellow]No keys configured. Run 'dev setup' later.[/yellow]")
         return
-
-    config = load_config()
-    if "api_keys" not in config:
-        config["api_keys"] = []
-    if key in config["api_keys"]:
-        console.print("[yellow]Key already configured[/yellow]")
+    
+    # Single key mode
+    if provider not in PROVIDERS:
+        console.print(f"[red]Unknown provider: {provider}. Use: nvidia, openrouter, bytez[/red]")
         return
-    config["api_keys"].append(key)
-    save_config(config)
-    console.print(f"[green]Key '{name}' added ({len(config['api_keys'])} total)[/green]")
+    
+    console.print(f"[dim]Verifying {PROVIDERS[provider]['name']} key...[/dim]")
+    valid, message = verify_key(provider, key)
+    if valid:
+        save_api_keys(provider, [key])
+        console.print(f"[green]✅ {PROVIDERS[provider]['name']} key verified ({message})[/green]")
+    else:
+        console.print(f"[red]❌ Key verification failed: {message}[/red]")
+        console.print(f"[dim]Get a free key at: {PROVIDERS[provider]['url']}[/dim]")
 
 
 @app.command()
@@ -2331,9 +2346,12 @@ def status():
 
 @app.command("first-run")
 def first_run_cmd():
-    """Run the interactive API key setup wizard."""
-    from ..utils.first_run import run_wizard
-    asyncio.run(run_wizard())
+    """Run the interactive API key setup wizard for all 3 providers."""
+    from ..config.first_run import run_first_run_wizard
+    keys = run_first_run_wizard()
+    total = sum(len(v) for v in keys.values())
+    if total > 0:
+        console.print(f"\n[green]✅ {total} key(s) configured[/green]")
 
 
 # ============================================================================
