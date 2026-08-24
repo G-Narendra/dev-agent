@@ -1763,7 +1763,38 @@ class ProductionAgentLoop:
             return None
 
     def undo_last(self) -> dict:
-        """Undo the last checkpoint (restore backed-up file)."""
+        """Undo the last edit using git (Aider pattern).
+        
+        Uses git checkout to restore files to their previous state.
+        Falls back to file-based backup for non-git projects.
+        """
+        # Try git-based undo first
+        if self._state.edited_files:
+            try:
+                # Get the list of edited files
+                files_to_restore = list(self._state.edited_files)
+                # Use git checkout to restore each file to HEAD~1
+                for f in files_to_restore:
+                    abs_f = os.path.join(self.project_path, f) if not os.path.isabs(f) else f
+                    rel_f = os.path.relpath(abs_f, self.project_path)
+                    result = subprocess.run(
+                        ["git", "checkout", "HEAD~1", "--", rel_f],
+                        capture_output=True, text=True, cwd=self.project_path, timeout=10
+                    )
+                    if result.returncode != 0:
+                        # File might not be tracked — try file-based fallback
+                        self._restore_from_backup(f)
+                # Clear the edited files set
+                self._state.edited_files.clear()
+                return {
+                    "success": True,
+                    "message": f"Undone: {len(files_to_restore)} file(s) restored via git",
+                    "restored": files_to_restore,
+                }
+            except Exception as e:
+                self._log(f"Git undo failed: {e}, falling back to file backup")
+        
+        # Fallback: file-based backup
         if self._checkpoint_id <= 0:
             return {"success": False, "message": "No checkpoints to undo"}
 
@@ -1771,7 +1802,6 @@ class ProductionAgentLoop:
         if not os.path.isdir(backup_dir):
             return {"success": False, "message": "No backup directory"}
 
-        # Find the most recent backup
         backups = sorted(
             [f for f in os.listdir(backup_dir) if f.startswith("cp")],
             reverse=True,
@@ -1780,10 +1810,7 @@ class ProductionAgentLoop:
             return {"success": False, "message": "No backup files"}
 
         latest = backups[0]
-        safe_name = latest.split("_", 1)[1] if "_" in latest else latest
         backup_path = os.path.join(backup_dir, latest)
-
-        # Read the original path from .meta sidecar file
         meta_path = backup_path + ".meta"
         original_path = None
         if os.path.isfile(meta_path):
@@ -1793,14 +1820,12 @@ class ProductionAgentLoop:
         if not original_path or not os.path.isfile(backup_path):
             return {"success": False, "message": "Backup file not found"}
 
-        # Actually restore the file
         try:
             shutil.copy2(backup_path, original_path)
             return {
                 "success": True,
                 "message": f"Restored: {original_path}",
                 "restored": original_path,
-                "from_backup": backup_path,
             }
         except Exception as e:
             return {"success": False, "message": f"Restore failed: {e}"}
