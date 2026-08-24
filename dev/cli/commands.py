@@ -170,6 +170,10 @@ def register_new_tools(registry, project_path: str):
     from ..tools.skill_tool import SkillTool
     registry.register("skill", SkillTool())
     
+    # Tool search meta-tool
+    from ..tools.tool_search import ToolSearchTool
+    registry.register("tool_search", ToolSearchTool())
+    
     return registry
 
 
