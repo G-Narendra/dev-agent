@@ -1846,9 +1846,9 @@ class ProductionAgentLoop:
     # =========================================================================
 
     async def _auto_compact_if_needed(self, messages: list[Message], system_prompt: str):
-        """Auto-compact context when usage exceeds 80%."""
+        """Auto-compact context when usage exceeds 70%."""
         tokens = self._count_tokens(messages)
-        threshold = self.config.max_context_tokens * 0.8
+        threshold = self.config.max_context_tokens * 0.7
 
         if tokens <= threshold or len(self._state.done_messages) <= 6:
             return

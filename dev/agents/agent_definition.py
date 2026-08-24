@@ -117,7 +117,7 @@ def get_coder_agent() -> AgentDefinition:
             "run_terminal_command", "code_search", "glob", "list_directory",
             "git_operations", "write_todos", "task_completed",
             "web_search", "read_url",
-            "summarize", "free_api", "skill",
+            "summarize", "free_api", "skill", "tool_search",
         ],
         spawnable_agents=["researcher", "reviewer"],
         system_prompt="""You are Dev, an expert AI coding assistant. You are an AUTONOMOUS AGENT that builds real software.

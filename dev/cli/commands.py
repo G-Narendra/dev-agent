@@ -83,17 +83,20 @@ def register_new_tools(registry, project_path: str):
     # Pipeline tool (chain multiple tool calls)
     registry.register("pipeline", RealPipelineTool())
     
-    # Computer use tools
-    from ..tools.computer_use import (
-        ComputerScreenshotTool, ComputerMouseMoveTool, ComputerClickTool,
-        ComputerTypeTool, ComputerKeyTool, ComputerOpenAppTool,
-    )
-    registry.register("computer_screenshot", ComputerScreenshotTool())
-    registry.register("computer_mouse_move", ComputerMouseMoveTool())
-    registry.register("computer_click", ComputerClickTool())
-    registry.register("computer_type", ComputerTypeTool())
-    registry.register("computer_key", ComputerKeyTool())
-    registry.register("computer_open_app", ComputerOpenAppTool())
+    # Computer use tools (optional — requires pyautogui)
+    try:
+        from ..tools.computer_use import (
+            ComputerScreenshotTool, ComputerMouseMoveTool, ComputerClickTool,
+            ComputerTypeTool, ComputerKeyTool, ComputerOpenAppTool,
+        )
+        registry.register("computer_screenshot", ComputerScreenshotTool())
+        registry.register("computer_mouse_move", ComputerMouseMoveTool())
+        registry.register("computer_click", ComputerClickTool())
+        registry.register("computer_type", ComputerTypeTool())
+        registry.register("computer_key", ComputerKeyTool())
+        registry.register("computer_open_app", ComputerOpenAppTool())
+    except (ImportError, Exception):
+        pass  # pyautogui not installed — skip computer use tools
     
     # Session messaging tools
     from ..tools.session_messaging import (

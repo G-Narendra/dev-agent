@@ -194,6 +194,10 @@ def get_runtime(provider: NimProvider, project: str = ".") -> AgentRuntime:
     skill_loader.load_from_disk()
     registry.register("skill", SkillTool(skill_loader))
 
+    # Tool search — meta-tool for discovering additional tools
+    from ..tools.tool_search import ToolSearchTool
+    registry.register("tool_search", ToolSearchTool())
+
     # Free APIs and MCP
     from ..tools.api_tools import FreeApiTool, ListApisTool, ListMcpTools, InstallMcpTool, KrokiDiagramTool
     registry.register("free_api", FreeApiTool())
@@ -261,6 +265,17 @@ def build_system_prompt(agent_id: str, project_path: str, extra_rules: str = "")
     if all_rules:
         rules_text = "\n".join(f"- [{r.priority}] {r.name}: {r.content}" for r in all_rules)
         parts.append(f"\n\n## Project Rules\n{rules_text}")
+
+    # Auto-load relevant skills based on project type
+    try:
+        from ..agents.skill_integration import SkillIntegration
+        si = SkillIntegration(project_path)
+        # Use a generic task prompt to get relevant skills
+        skill_prompt = si.build_skill_prompt("build a web application")
+        if skill_prompt and len(skill_prompt) > 50:
+            parts.append(f"\n\n## Relevant Skills\n{skill_prompt[:2000]}")
+    except Exception:
+        pass  # Skills not available, skip
 
     # Extra rules from --append-system-prompt
     if extra_rules:
