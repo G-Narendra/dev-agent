@@ -176,6 +176,8 @@ class ProductionAgentLoop:
         self._budget_manager = None
         self._session_id = None
         self._session_history = None
+        # Tool names to filter tool definitions (reduces tool count for LLM)
+        self._tool_names: list[str] | None = None
         # Tool result cache: cache read-only tool results to avoid re-reading
         self._tool_cache: dict[str, dict] = {}  # cache_key -> result
         self._tool_cache_max = 50  # Max cached results
@@ -198,6 +200,14 @@ class ProductionAgentLoop:
     def set_hook_manager(self, hook_manager):
         """Set the hook manager for pre/post tool hooks."""
         self._hook_manager = hook_manager
+
+    def set_tool_names(self, tool_names: list[str]):
+        """Set the list of tool names to expose to the LLM.
+        
+        Limits tool definitions sent to the model, which is critical
+        for models like Llama 3.1 70B that can only handle ~15-20 tools.
+        """
+        self._tool_names = tool_names
 
     def set_error_recovery(self, error_recovery):
         """Set the error recovery system."""
@@ -316,6 +326,49 @@ class ProductionAgentLoop:
             )
 
             if not tool_calls and content:
+                # Check if content has code blocks that should be file writes
+                parsed_calls = self._parse_code_blocks(content)
+                if parsed_calls:
+                    self._log(f"Found {len(parsed_calls)} code blocks in text, converting to tool calls")
+                    # Execute each parsed code block as a tool call
+                    for pc in parsed_calls:
+                        tool_name = pc["name"]
+                        tool_args = pc["args"]
+                        
+                        if on_tool_call:
+                            on_tool_call(tool_name, tool_args)
+                        
+                        result = await self._execute_tool_with_hooks(tool_name, tool_args, "parsed")
+                        
+                        if on_tool_result:
+                            on_tool_result(tool_name, result)
+                        
+                        all_tool_calls.append({"name": tool_name, "args": tool_args})
+                        all_tool_results.append({"name": tool_name, "result": result})
+                        
+                        result_str = json.dumps(result)
+                        self._state.cur_messages.append(
+                            Message(role="tool", tool_call_id="parsed",
+                                    name=tool_name, content=result_str))
+                        
+                        if tool_name in COMMIT_TOOLS:
+                            edited_path = tool_args.get("path", "")
+                            if edited_path:
+                                self._state.edited_files.add(edited_path)
+                    
+                    # Continue the loop — don't exit yet
+                    continue
+                
+                # Check if there are pending todo items — if so, auto-continue
+                if self._has_pending_todos(content):
+                    self._log("Model returned text but has pending todos, auto-continuing")
+                    self._state.cur_messages.append(
+                        Message(role="user", content=
+                            "You have unfinished tasks. Continue creating the remaining files "
+                            "using write_file tool. Do NOT stop until all tasks are complete.")
+                    )
+                    continue
+                
                 self._state.done_messages.extend(self._state.cur_messages)
                 self._state.cur_messages = []
                 return {
@@ -501,8 +554,11 @@ class ProductionAgentLoop:
             # Convert to dicts for API
             msg_dicts = self._messages_to_dicts(messages)
 
-            # Get tool definitions — always include them
-            tool_defs = self.tools.get_definitions()
+            # Get tool definitions — filter by tool_names if set (reduces for LLM)
+            if self._tool_names and hasattr(self.tools, 'get_definitions_for_tools'):
+                tool_defs = self.tools.get_definitions_for_tools(self._tool_names)
+            else:
+                tool_defs = self.tools.get_definitions()
             self._log(f"Sending {len(msg_dicts)} messages, {len(tool_defs)} tool schemas to LLM")
 
             # Stream the response WITH retry logic
@@ -751,26 +807,52 @@ class ProductionAgentLoop:
             if not tool_calls_data:
                 # Check if there's a pending todo list with unchecked items
                 has_pending_todos = False
+                incomplete_count = 0
                 for msg in reversed(self._state.done_messages + self._state.cur_messages):
                     if msg.role == 'tool' and msg.name == 'write_todos' and msg.content:
                         try:
-                            todos = json.loads(msg.content)
+                            data = json.loads(msg.content)
+                            # Tool returns {"todos": [...], "display": ..., "completed_count": N, "total_count": N}
+                            if isinstance(data, dict):
+                                todos = data.get("todos", [])
+                            elif isinstance(data, list):
+                                todos = data
+                            else:
+                                todos = []
                             if isinstance(todos, list):
                                 incomplete = [t for t in todos if isinstance(t, dict) and not t.get('completed', False)]
                                 if incomplete:
                                     has_pending_todos = True
-                                    self._log(f"Found {len(incomplete)} incomplete todo items — prompting agent to continue")
+                                    incomplete_count = len(incomplete)
+                                    self._log(f"Found {incomplete_count} incomplete todo items — prompting agent to continue")
                         except Exception:
                             pass
                         break
+
+                # Also auto-continue if the model described files in text without creating them
+                if not has_pending_todos and full_content and step < max_steps - 1:
+                    text_lower = full_content.lower()
+                    # Detect if model described what it would do instead of doing it
+                    description_phrases = [
+                        "i'll create", "i will create", "here is", "here are the files",
+                        "the file would be", "the project structure", "let me create",
+                        "i would create", "here is the code", "below is the",
+                    ]
+                    if any(phrase in text_lower for phrase in description_phrases):
+                        has_pending_todos = True
+                        self._log("Model described files instead of creating them — auto-continuing")
 
                 if has_pending_todos and step < max_steps - 1:
                     # Send a follow-up message to keep the agent working
                     self._state.cur_messages.append(
                         Message(role='assistant', content=full_content or '', tool_calls=[])  # Commit assistant text
                     )
+                    if incomplete_count > 0:
+                        follow_up = f"You are NOT done. You have {incomplete_count} incomplete tasks. Continue creating files using write_file tool. Create the NEXT file NOW. Do NOT describe files — actually create them with write_file."
+                    else:
+                        follow_up = "You described files but did not create them. Use write_file tool to ACTUALLY CREATE each file. Do NOT just describe what you would write — use write_file to create real files."
                     self._state.cur_messages.append(
-                        Message(role='user', content='You are NOT done. There are still incomplete tasks in your todo list. Continue creating files until all items are checked off. Create the NEXT file now.')
+                        Message(role='user', content=follow_up)
                     )
                     continue  # Don't break — keep the loop going
 
@@ -1331,6 +1413,21 @@ class ProductionAgentLoop:
         
         return calls
 
+    def _has_pending_todos(self, content: str) -> bool:
+        """Check if there are pending todo items in the last assistant message."""
+        # Look for write_todos results in recent tool results
+        for msg in reversed(self._state.cur_messages):
+            if msg.role == "tool" and msg.name == "write_todos":
+                try:
+                    data = json.loads(msg.content) if isinstance(msg.content, str) else msg.content
+                    todos = data.get("todos", []) if isinstance(data, dict) else []
+                    for t in todos:
+                        if isinstance(t, dict) and not t.get("completed", False):
+                            return True
+                except (json.JSONDecodeError, AttributeError):
+                    pass
+        return False
+
     def _parse_code_blocks(self, text: str) -> list[dict]:
         """Parse fenced code blocks into write_file tool calls.
 
@@ -1515,6 +1612,39 @@ class ProductionAgentLoop:
                         'function': {'name': 'write_file',
                                      'arguments': json.dumps({'path': path, 'content': code,
                                                               'instructions': f'Create {path}'})},
+                    })
+
+        # --- Approach 8: XML-style <write_file><path>...</path><content>...</content></write_file> ---
+        if not calls:
+            xml_pattern = re.compile(
+                r'<write_file>\s*<path>(.*?)</path>\s*<content>(.*?)</content>\s*</write_file>',
+                re.DOTALL
+            )
+            for m in xml_pattern.finditer(text):
+                path = m.group(1).strip()
+                code = m.group(2).strip()
+                if path and code and path not in seen_paths:
+                    seen_paths.add(path)
+                    calls.append({
+                        'id': f'parsed-{len(calls)}', 'type': 'function',
+                        'function': {'name': 'write_file',
+                                     'arguments': json.dumps({'path': path, 'content': code,
+                                                              'instructions': f'Create {path}'})},
+                    })
+
+        # --- Approach 9: run_terminal_command with npm init/install ---
+        if not calls:
+            terminal_pattern = re.compile(
+                r'<run_terminal_command>\s*<command>(.*?)</command>\s*</run_terminal_command>',
+                re.DOTALL
+            )
+            for m in terminal_pattern.finditer(text):
+                cmd = m.group(1).strip()
+                if cmd and '/workspace' not in cmd:
+                    calls.append({
+                        'id': f'parsed-{len(calls)}', 'type': 'function',
+                        'function': {'name': 'run_terminal_command',
+                                     'arguments': json.dumps({'command': cmd})},
                     })
 
         # Fallback: try write_file() text calls
@@ -2140,7 +2270,10 @@ When building a project with multiple files:
         for attempt in range(self.config.max_retries):
             try:
                 msg_dicts = self._messages_to_dicts(messages)
-                tool_defs = self.tools.get_definitions()
+                if self._tool_names and hasattr(self.tools, 'get_definitions_for_tools'):
+                    tool_defs = self.tools.get_definitions_for_tools(self._tool_names)
+                else:
+                    tool_defs = self.tools.get_definitions()
 
                 response = await self.provider.chat_completion(
                     messages=msg_dicts,

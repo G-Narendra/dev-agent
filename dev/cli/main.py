@@ -329,6 +329,7 @@ def run(
 ):
     """Run a task with streaming output, auto-commit, auto-lint, auto-test."""
     async def _run():
+        effective_approval = approval
         # --init-only: run setup hooks then exit
         if init_only:
             console.print("[dim]Running setup hooks...[/dim]")
@@ -361,7 +362,7 @@ def run(
 
         # Wire dangerously-skip-permissions for run command
         if dangerously_skip:
-            approval = "full-auto"
+            effective_approval = "full-auto"
 
         try:
             # Auto-detect project
@@ -394,7 +395,7 @@ def run(
                 auto_commit=True,
                 auto_test=False,
                 verbose=verbose,
-                approval_mode=approval_mode,
+                approval_mode=effective_approval,
             )
             agent_loop = ProductionAgentLoop(
                 provider=provider,
@@ -402,6 +403,13 @@ def run(
                 config=loop_config,
                 project_path=abs_project,
             )
+
+            # Limit tool definitions to agent's tool list (critical for Llama 70B)
+            try:
+                agent_def = get_agent(agent)
+                agent_loop.set_tool_names(agent_def.tool_names)
+            except Exception:
+                pass
 
             # Wire budget, error recovery, tool rules, hooks
             from ..utils.budget import BudgetManager, BudgetConfig

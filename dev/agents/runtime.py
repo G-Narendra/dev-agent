@@ -105,6 +105,40 @@ class ToolRegistry:
 
         return defs
 
+    def get_definitions_for_tools(self, tool_names: list[str]) -> list[dict]:
+        """Get OpenAI-compatible tool definitions for SPECIFIC tools only.
+        
+        This limits the number of tools sent to the model, which is critical
+        for models like Llama 3.1 70B that can only handle ~15-20 tools.
+        """
+        all_defs = self.get_definitions()
+        if not tool_names:
+            return all_defs
+        
+        # Priority order: core tools first, then extras
+        CORE_TOOLS = [
+            'read_files', 'write_file', 'str_replace', 'run_terminal_command',
+            'code_search', 'glob', 'list_directory', 'git_operations',
+            'web_search', 'read_url', 'write_todos', 'task_completed',
+            'summarize', 'free_api', 'skill',
+        ]
+        
+        # Build filtered list: core tools that are in tool_names, then extras
+        seen = set()
+        filtered = []
+        for d in all_defs:
+            name = d.get('function', {}).get('name', '')
+            if name in tool_names and name not in seen:
+                seen.add(name)
+                filtered.append(d)
+        
+        # If still too many (>20), only keep core tools
+        if len(filtered) > 20:
+            filtered = [d for d in filtered 
+                       if d.get('function', {}).get('name', '') in CORE_TOOLS]
+        
+        return filtered
+
 
 class AgentRuntime:
     """

@@ -55,17 +55,18 @@ class NimProvider:
     # Available models on NVIDIA NIMs free tier (verified working)
     MODELS = {
         "coding": "meta/llama-3.1-70b-instruct",
-        "reasoning": "meta/llama-3.1-70b-instruct",
+        "reasoning": "nvidia/llama-3.1-nemotron-ultra-253b-v1",
         "fast": "meta/llama-3.1-8b-instruct",
         "vision": "meta/llama-3.2-11b-vision-instruct",
         "default": "meta/llama-3.1-70b-instruct",
-        "tool": "meta/llama-3.1-70b-instruct",  # Always use 70B for tool calls
+        "tool": "meta/llama-3.1-70b-instruct",
     }
     
     # Models that support reliable tool calling
     TOOL_CAPABLE_MODELS = {
         "meta/llama-3.1-70b-instruct",
         "meta/llama-3.1-8b-instruct",
+        "nvidia/llama-3.1-nemotron-ultra-253b-v1",
     }
     
     def __init__(
@@ -492,9 +493,18 @@ class NimProvider:
             # Sanitize tool definitions to minimize NIM token usage
             tools = self._sanitize_tools_for_nim(tools)
         
-        # Use non-streaming when tools are present (more reliable with smaller models)
-        # Streaming tool calls are unreliable on many NIM models
+        # Try streaming with tools first (token-by-token display)
+        # Falls back to non-streaming if streaming fails
         if tools:
+            try:
+                async for event in self._stream_with_tools(
+                    messages, resolved_model, temperature, max_tokens, tools, key, **kwargs
+                ):
+                    yield event
+                return
+            except Exception as e:
+                self._log(f"Streaming with tools failed: {e}, falling back to non-streaming")
+            # Fallback: non-streaming with tools
             payload = {
                 "model": resolved_model,
                 "messages": messages,
@@ -521,42 +531,23 @@ class NimProvider:
                 content = message.get("content") or ""
                 tool_calls = message.get("tool_calls", [])
                 
-                # Detect truncation: if tool call arguments are too short or malformed
+                # Detect truncation: ONLY for truly broken tool calls
                 truncated = False
+                has_valid_tool_calls = False
                 for tc in tool_calls:
                     args = tc.get("function", {}).get("arguments", "")
                     name = tc.get("function", {}).get("name", "")
-                    # Check 1: Args too short (less than 10 chars)
-                    if len(args) < 10:
-                        truncated = True
-                        break
-                    # Check 2: Args are not valid JSON and look truncated
+                    # Only mark truncated if args are empty or not valid JSON at all
                     try:
-                        parsed = json.loads(args)
-                        if not isinstance(parsed, dict):
-                            truncated = True
-                            break
-                        # Check 3: write_file with missing content
-                        if name == "write_file" and "content" not in parsed:
-                            truncated = True
-                            break
-                        # Check 4: Content looks like placeholder/description
-                        if name == "write_file" and "content" in parsed:
-                            content_val = parsed["content"]
-                            if isinstance(content_val, str):
-                                placeholder_patterns = [
-                                    '', 'TODO', 'placeholder', 'code here',
-                                    'Add your', 'Write your', 'Insert your',
-                                ]
-                                if any(p.lower() in content_val.strip().lower() for p in placeholder_patterns):
-                                    truncated = True
-                                    break
-                    except json.JSONDecodeError:
-                        # Not valid JSON = likely truncated
+                        parsed = json.loads(args) if args else {}
+                        if isinstance(parsed, dict):
+                            has_valid_tool_calls = True
+                    except (json.JSONDecodeError, TypeError):
+                        # Invalid JSON in args = likely truncated
                         truncated = True
                         break
                 
-                if truncated and content:
+                if truncated and content and not has_valid_tool_calls:
                     # Model truncated tool calls — use text output for code blocks
                     # Log the truncation for debugging
                     self._log(f"Tool call truncated — using text output ({len(content)} chars)")
