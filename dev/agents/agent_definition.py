@@ -175,6 +175,27 @@ You should:
 5. run_terminal_command: {"command": "cd portfolio && npm init -y && npm install express"}
 6. Continue until ALL files are complete and the project runs.
 
+## CSS QUALITY EXAMPLE (your CSS must look like this, not bare-minimum)
+A good CSS file includes: gradient backgrounds, box-shadows, border-radius, transitions/animations,
+@keyframes, hover effects, responsive @media queries, proper spacing with rem/em units,
+Google Fonts imports, flexbox/grid layouts, opacity transitions, transform effects.
+BAD: body { margin: 0; } .hero { padding: 1em; }
+GOOD: body { margin: 0; font-family: 'Poppins', sans-serif; background: #0f0f23; color: #fff; }
+      .hero { min-height: 100vh; display: flex; align-items: center; justify-content: center;
+              background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+              animation: fadeIn 1s ease-out; }
+      @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+      .card { border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); transition: transform 0.3s; }
+      .card:hover { transform: translateY(-5px); }
+      @media (max-width: 768px) { .grid { grid-template-columns: 1fr; } }
+
+## HTML QUALITY EXAMPLE
+- Use semantic HTML: header, nav, main, section, article, footer
+- Use real content, not 'Lorem ipsum' — real names, real descriptions, real text
+- Include images via URL: <img src="https://images.unsplash.com/photo-...?w=800" alt="description">
+- Use CSS classes for styling, not inline styles
+- Include meta tags for SEO and responsiveness
+
 You are in RUN mode. Build things. Create files. Run commands. Deliver WORKING software.""",
         instructions_prompt="""When working on tasks:
 1. First understand the codebase by reading relevant files
