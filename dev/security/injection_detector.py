@@ -94,6 +94,28 @@ class PromptInjectionDetector:
         r'act\s+as\s+if\s+you\s+are',
         r'roleplay\s+as',
         r'from\s+now\s+on\s+you\s+are',
+        r'you\s+are\s+now\s+DAN',
+        r'Do\s+Anything\s+Now',
+        r'no\s+restrictions?',
+        r'let.s\s+play\s+a\s+game',
+        
+        # Data exfiltration (natural language)
+        r'show\s+(me\s+)?(all\s+)?(the\s+)?api\s+keys?',
+        r'print\s+(all\s+)?environment\s+variables?',
+        r'copy\s+.*\s+id_rsa',
+        r'\~/.ssh',
+        r'\~/.dev',
+        r'\~/.aws',
+        r'\~/.env',
+        r'exfiltrate',
+        r'send\s+(all\s+)?data\s+to',
+        r'upload\s+(all\s+)?(files?|data|code)\s+to',
+        r'POST\s+(all\s+)?(files?|data)\s+to',
+        
+        # System prompt extraction (natural language)
+        r'output\s+your\s+system\s+configuration',
+        r'can\s+you\s+output\s+your\s+system',
+        r'put\s+.*prompt\s+inside\s+a\s+code\s+block',
         
         # Dangerous commands
         r'rm\s+-rf\s+/',
@@ -146,6 +168,16 @@ class PromptInjectionDetector:
         detected = []
         max_threat = ThreatLevel.SAFE
         confidence = 0.0
+        
+        # DoS defense: reject extremely long inputs
+        if len(text) > 50000:
+            return DetectionResult(
+                threat_level=ThreatLevel.MEDIUM,
+                detected_patterns=["input_too_large"],
+                confidence=0.9,
+                blocked=True,
+                reason="Input exceeds 50K characters (potential DoS)",
+            )
         
         # Layer 1: Pattern matching
         for i, pattern in enumerate(self._compiled_patterns):
@@ -339,6 +371,11 @@ class PromptInjectionDetector:
         img_patterns = re.findall(r'!\[.*?\]\(https?://[^\)]*(?:ignore|override|system)[^\)]*\)', text, re.IGNORECASE)
         if img_patterns:
             return f"markdown_injection:{len(img_patterns)}"
+        
+        # Check for zero-width characters (unicode smuggling)
+        zero_width_chars = [c for c in text if unicodedata.category(c).startswith('C') and c not in '\n\r\t']
+        if len(zero_width_chars) > 2:
+            return f"unicode_smuggling:{len(zero_width_chars)}_chars"
         
         return None
     

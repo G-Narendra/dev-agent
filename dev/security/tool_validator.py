@@ -190,6 +190,9 @@ class ToolCallValidator:
             command = tool_args.get("command", "")
             cmd_violations = self._check_dangerous_command(command)
             violations.extend(cmd_violations)
+            # Also check for path traversal in commands
+            path_violations = self._check_path_traversal(command)
+            violations.extend(path_violations)
         
         # Check 4: Path traversal in file operations
         if tool_name in ("write_file", "str_replace", "read_files"):
