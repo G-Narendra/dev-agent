@@ -192,6 +192,10 @@ class RealWriteFileTool(Tool):
 
         abs_path = self._resolve_path(path, project_path)
 
+        # Warn if path has no file extension (likely a mistake — model wrote to a directory name)
+        if path and '.' not in os.path.basename(path):
+            return {"error": f"Path '{path}' has no file extension. Use a proper filename like '{path}/index.html' or '{path}.js'.", "path": path}
+
         # Check for concurrent modification by user
         expected_mtime = input_data.get("expected_mtime")
         if expected_mtime and os.path.exists(abs_path):

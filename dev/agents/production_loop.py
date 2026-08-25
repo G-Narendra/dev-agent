@@ -2155,9 +2155,22 @@ class ProductionAgentLoop:
         parts.append("""
 
 ## CRITICAL: USE write_file TOOL — ONE FILE AT A TIME
-Complete content. No placeholders. No descriptions. Just create files.
-After ALL files created, run_terminal_command to install deps and test.
-Do NOT stop until todo list is 100% complete.
+
+### File Paths
+- Each write_file call creates ONE file with a proper filename and extension
+- Example paths: 'myapp/package.json', 'myapp/server.js', 'myapp/views/index.ejs'
+- The path MUST end with a file extension (.js, .css, .html, .json, .ejs, etc.)
+- NEVER write all content to a single file — split into separate files
+
+### Content
+- Complete file content. No placeholders. No descriptions. No stubs.
+- Each file must be self-contained and production-quality
+
+### Flow
+1. Create a todo list with write_todos listing ALL files needed
+2. Create EACH file one by one using write_file with proper path
+3. After ALL files created, run_terminal_command to install deps and test
+4. Do NOT stop until todo list is 100% complete
 """)
 
         result = "\n".join(parts)
