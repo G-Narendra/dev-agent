@@ -37,7 +37,7 @@ class TestToolSearch:
         from dev.tools.tool_search import ToolSearchTool, _build_catalog
         _build_catalog()  # Ensure catalog is built
         tool = ToolSearchTool()
-        result = asyncio.get_event_loop().run_until_complete(
+        result = asyncio.run(
             tool.execute({"query": "write"})
         )
         assert result["matches"] > 0
@@ -48,7 +48,7 @@ class TestToolSearch:
         from dev.tools.tool_search import ToolSearchTool, _build_catalog
         _build_catalog()
         tool = ToolSearchTool()
-        result = asyncio.get_event_loop().run_until_complete(
+        result = asyncio.run(
             tool.execute({"query": "pdf"})
         )
         assert result["matches"] > 0
@@ -57,7 +57,7 @@ class TestToolSearch:
         from dev.tools.tool_search import ToolSearchTool, _build_catalog
         _build_catalog()
         tool = ToolSearchTool()
-        result = asyncio.get_event_loop().run_until_complete(
+        result = asyncio.run(
             tool.execute({"query": "xyznonexistent"})
         )
         assert result["matches"] == 0
@@ -252,7 +252,7 @@ class TestFileOperations:
         read_tool = RealReadFilesTool()
 
         # Write a file
-        result = asyncio.get_event_loop().run_until_complete(
+        result = asyncio.run(
             write_tool.execute(
                 {"path": os.path.join(self.test_dir, "test.txt"), "content": "Hello, Dev!"},
                 None,
@@ -262,7 +262,7 @@ class TestFileOperations:
         assert "error" not in result
 
         # Read it back
-        result = asyncio.get_event_loop().run_until_complete(
+        result = asyncio.run(
             read_tool.execute(
                 {"paths": [{"path": os.path.join(self.test_dir, "test.txt")}]},
                 None,
@@ -279,7 +279,7 @@ class TestFileOperations:
         test_file = os.path.join(self.test_dir, "replace.txt")
 
         # Write initial content
-        asyncio.get_event_loop().run_until_complete(
+        asyncio.run(
             write_tool.execute(
                 {"path": test_file, "content": "Hello World"},
                 None,
@@ -288,7 +288,7 @@ class TestFileOperations:
         )
 
         # Replace
-        result = asyncio.get_event_loop().run_until_complete(
+        result = asyncio.run(
             replace_tool.execute(
                 {"path": test_file, "replacements": [{"oldString": "World", "newString": "Dev", "allowMultiple": False}]},
                 None,
@@ -305,7 +305,7 @@ class TestFileOperations:
         from dev.tools.real_tools import RealRunTerminalCommand
 
         tool = RealRunTerminalCommand()
-        result = asyncio.get_event_loop().run_until_complete(
+        result = asyncio.run(
             tool.execute(
                 {"command": "echo hello"},
                 None,
@@ -323,7 +323,7 @@ class TestFileOperations:
                 f.write("test")
 
         tool = RealGlobTool()
-        result = asyncio.get_event_loop().run_until_complete(
+        result = asyncio.run(
             tool.execute(
                 {"pattern": "*.py", "cwd": self.test_dir},
                 None,

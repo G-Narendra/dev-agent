@@ -234,23 +234,54 @@ class UnifiedProvider:
         self,
         provider: str | None = None,
         timeout: float = 30.0,
+        patient: bool = False,
     ) -> ProviderKey:
-        """Wait for an available key with timeout."""
+        """Wait for an available key with timeout.
+
+        patient=True: when all keys are exhausted, wait for the nearest
+        RPM-window reset (up to 90s) instead of raising immediately.
+        Daily-limit keys (exhausted_until > 3600s) are never waited for.
+        """
         deadline = time.time() + timeout
-        
+
         while True:
             key = self._get_available_key(provider)
             if key:
                 return key
-            
+
             if time.time() >= deadline:
+                # Patient mode: if the earliest RPM reset is imminent, wait for it
+                if patient:
+                    earliest = self._earliest_rpm_reset(provider)
+                    if earliest is not None and earliest <= 90:
+                        self._log(f"Patient wait: sleeping {earliest:.0f}s for RPM window reset")
+                        await asyncio.sleep(earliest + 1.0)
+                        # Re-check after sleeping
+                        key = self._get_available_key(provider)
+                        if key:
+                            return key
+
                 exhausted = sum(1 for k in self.keys if k.is_exhausted)
                 raise TimeoutError(
                     f"All API keys exhausted for {timeout}s "
                     f"({exhausted}/{len(self.keys)} rate-limited)"
                 )
-            
+
             await asyncio.sleep(min(1.0, deadline - time.time()))
+
+    def _earliest_rpm_reset(self, provider: str | None = None) -> float | None:
+        """Return seconds until the earliest non-daily RPM reset, or None."""
+        now = time.time()
+        earliest = None
+        for k in self.keys:
+            if provider and k.provider != provider:
+                continue
+            if k.is_exhausted and k.exhausted_until > now:
+                wait = k.exhausted_until - now
+                if wait <= 120:  # RPM resets within 2 minutes — worth waiting
+                    if earliest is None or wait < earliest:
+                        earliest = wait
+        return earliest
     
     def _record_request(self, key: ProviderKey, tokens: int = 0):
         """Record a request against a key."""
@@ -399,7 +430,7 @@ class UnifiedProvider:
         last_error = None
         for prov in providers_to_try:
             try:
-                key = await self._wait_for_key(provider=prov, timeout=3.0)
+                key = await self._wait_for_key(provider=prov, timeout=3.0, patient=True)
                 config = PROVIDER_CONFIGS[prov]
                 
                 # Resolve model for this provider (only if user didn't specify one)
@@ -579,7 +610,7 @@ class UnifiedProvider:
         **kwargs,
     ) -> AsyncIterator[dict]:
         """Stream from a specific provider."""
-        key = await self._wait_for_key(provider=provider_name, timeout=3.0)
+        key = await self._wait_for_key(provider=provider_name, timeout=3.0, patient=True)
         config = PROVIDER_CONFIGS[provider_name]
         
         # Use the provided model or resolve one

@@ -57,7 +57,7 @@ class TestGracefulDegradation:
         loop.provider.chat_completion = AsyncMock(side_effect=fake_completion)
         loop._state.cur_messages.append(Message(role="user", content="task"))
 
-        result = asyncio.get_event_loop().run_until_complete(
+        result = asyncio.run(
             loop._synthesize_final_summary("system prompt")
         )
         assert "Done:" in result
@@ -69,7 +69,7 @@ class TestGracefulDegradation:
         loop.provider.chat_completion = AsyncMock(side_effect=Exception("rate limited"))
         loop._state.cur_messages.append(Message(role="user", content="task"))
 
-        result = asyncio.get_event_loop().run_until_complete(
+        result = asyncio.run(
             loop._synthesize_final_summary("system prompt")
         )
         assert result == ""  # never crashes the loop

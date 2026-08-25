@@ -514,8 +514,14 @@ class ProductionAgentLoop:
                         result_str = json.dumps({'exitCode': result.get('exitCode', 0), 'stdout': str(result.get('stdout', ''))[:200]})
                     else:
                         result_str = json.dumps(result)
-                        if len(result_str) > 2000:
-                            result_str = result_str[:2000] + '...[truncated]'
+                        if len(result_str) > 1500:
+                            # Head+tail truncation preserves beginning and end context
+                            half = 700
+                            result_str = result_str[:half] + f'\n...[{len(result_str) - half*2} chars removed]\n' + result_str[-half:]
+                    
+                    # Global cap — no single tool result exceeds 2000 chars
+                    if len(result_str) > 2000:
+                        result_str = result_str[:800] + f'\n...[{len(result_str) - 1600} chars truncated]\n' + result_str[-800:]
 
                     self._state.cur_messages.append(
                         Message(
@@ -793,17 +799,33 @@ class ProductionAgentLoop:
                 self._state.cur_messages = self._state.cur_messages[:msg_checkpoint]
                 error_msg = f"LLM call failed after {self.config.max_retries} retries: {last_error}"
                 self._log(error_msg)
-                consecutive_failures += 1
-                # Bounded failure: don't grind through remaining steps when provider is down.
-                if consecutive_failures >= self.config.max_consecutive_failures:
-                    self._log(f"{consecutive_failures} consecutive failed steps — aborting with summary")
-                    return {
-                        "status": "error",
-                        "message": f"Provider failed {consecutive_failures} steps in a row: {last_error}",
-                        "tool_calls": all_tool_calls,
-                        "tool_results": all_tool_results,
-                        "steps": step + 1,
-                    }
+                
+                # Detect rate-limit errors — these should NOT count toward consecutive_failures
+                error_str = str(last_error).lower()
+                is_rate_limit = any(term in error_str for term in (
+                    '429', 'rate', 'exhausted', 'too many', 'limit reached',
+                ))
+                
+                if is_rate_limit:
+                    # Patient wait: sleep until the RPM window resets (60-90s)
+                    wait_seconds = 65  # Default: wait just over a minute for RPM reset
+                    self._log(f"Rate limit detected — waiting {wait_seconds}s before retry")
+                    if on_text:
+                        on_text(f"\n⏳ Rate limited — waiting {wait_seconds}s for API window reset...\n")
+                    await asyncio.sleep(wait_seconds)
+                    # Don't increment consecutive_failures for rate limits
+                else:
+                    consecutive_failures += 1
+                    # Bounded failure: don't grind through remaining steps when provider is down.
+                    if consecutive_failures >= self.config.max_consecutive_failures:
+                        self._log(f"{consecutive_failures} consecutive failed steps — aborting with summary")
+                        return {
+                            "status": "error",
+                            "message": f"Provider failed {consecutive_failures} steps in a row: {last_error}",
+                            "tool_calls": all_tool_calls,
+                            "tool_results": all_tool_results,
+                            "steps": step + 1,
+                        }
                 # Inject error context so next step knows what happened, then continue
                 self._state.cur_messages.append(
                     Message(role="user", content=f"The previous LLM request failed ({last_error}). Continue the task from where you left off.")
@@ -2338,6 +2360,8 @@ class ProductionAgentLoop:
 4. NEVER create local image/binary files (.jpg, .png, .gif) — reference remote URLs like https://upload.wikimedia.org/... directly in HTML/CSS
 5. After ALL files created, run_terminal_command to install deps and test
 6. Do NOT stop until todo list is 100% complete
+7. Research real information from the web before writing content — use web_search for facts, use real URLs for images
+8. If the model outputs truncate mid-file, use str_replace to extend it rather than rewriting the whole file
 """)
 
         result = "\n".join(parts)

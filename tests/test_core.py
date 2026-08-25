@@ -320,7 +320,7 @@ def test_quality_checker():
             f.write("def hello():\n    pass\n")
         
         checker = QualityChecker(tmpdir)
-        result = asyncio.get_event_loop().run_until_complete(
+        result = asyncio.run(
             checker.lint_file("test.py")
         )
         assert result is not None
