@@ -71,11 +71,11 @@ PROVIDERS = {
         "verify_url": "https://openrouter.ai/api/v1/models",
         "models_count": "28+ free",
         "models_list": [
-            "qwen/qwen3-coder:free (480B coding)",
-            "deepseek/deepseek-r1:free (reasoning)",
-            "meta-llama/llama-3.3-70b-instruct:free (general)",
-            "google/gemini-flash:free (multimodal)",
-            "meta-llama/llama-3.1-8b-instruct:free (fast)",
+            "nvidia/nemotron-3-ultra-550b-a55b:free (1M context, reasoning)",
+            "poolside/laguna-s-2.1:free (coding agent)",
+            "cohere/north-mini-code:free (code generation)",
+            "nvidia/nemotron-3-super-120b-a12b:free (general agent)",
+            "google/gemma-4-26b-a4b-it:free (multimodal)",
         ],
     },
     "bytez": {

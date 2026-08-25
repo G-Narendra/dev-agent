@@ -111,7 +111,7 @@ def get_coder_agent() -> AgentDefinition:
     return AgentDefinition(
         id="coder",
         display_name="Dev Coder",
-        model="coding",  # 550B Nemotron Ultra (OpenRouter) or 70B Llama (NIM fallback)
+        model="coding",  # Poolside Laguna S 2.1 (OpenRouter free) or 70B Llama (NIM fallback)
         tool_names=[
             "read_files", "write_file", "str_replace",
             "run_terminal_command", "code_search", "glob", "list_directory",

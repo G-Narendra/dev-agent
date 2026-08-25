@@ -24,10 +24,10 @@ class ProviderConfig:
     type: str = "nvidia_nims"  # nvidia_nims
     base_url: str = "https://integrate.api.nvidia.com/v1"
     api_keys: list[str] = field(default_factory=list)
-    model: str = "nvidia/llama-3.1-nemotron-70b-instruct"
-    coding_model: str = "nvidia/llama-3.1-nemotron-70b-instruct"
-    reasoning_model: str = "nvidia/llama-3.1-nemotron-70b-instruct"
-    fast_model: str = "nvidia/llama-3.1-8b-instruct"
+    model: str = "nvidia/nemotron-3-ultra-550b-a55b:free"
+    coding_model: str = "poolside/laguna-s-2.1:free"
+    reasoning_model: str = "nvidia/nemotron-3-ultra-550b-a55b:free"
+    fast_model: str = "cohere/north-mini-code:free"
     temperature: float = 0.7
     max_tokens: int = 4096
 

@@ -37,14 +37,14 @@ PROVIDER_CONFIGS = {
         "auth_prefix": "Bearer ",
         "rpm": 20,
         "tpm": 200_000,
-        "strengths": ["550B model", "best quality free", "variety"],
+        "strengths": ["550B model", "1M context", "best free coding"],
         "best_models": {
-            "coding": "nvidia/nemotron-3-ultra-550b-a55b:free",
-            "fast": "nvidia/nemotron-3.5-lightning:free",
+            "coding": "poolside/laguna-s-2.1:free",
+            "fast": "cohere/north-mini-code:free",
             "reasoning": "nvidia/nemotron-3-ultra-550b-a55b:free",
             "vision": "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
             "default": "nvidia/nemotron-3-ultra-550b-a55b:free",
-            "tool": "nvidia/nemotron-3-super-120b-a12b:free",
+            "tool": "cohere/north-mini-code:free",
         },
     },
     "nvidia": {
@@ -376,10 +376,18 @@ class UnifiedProvider:
         if not self._client:
             await self.initialize()
         
+        user_specified_model = model is not None
         if not model:
             provider_name, model = self.resolve_model(task_type, has_tools=bool(tools))
         else:
-            provider_name = self.provider_order[0] if self.provider_order else 'nvidia'
+            # User specified a model — detect which provider it belongs to
+            provider_name = None
+            for pname in self.provider_order:
+                if model.startswith(pname + "/") or model in PROVIDER_CONFIGS.get(pname, {}).get("best_models", {}).values():
+                    provider_name = pname
+                    break
+            if not provider_name:
+                provider_name = self.provider_order[0] if self.provider_order else 'nvidia'
         
         # Try each provider in order
         providers_to_try = [provider_name]
@@ -394,8 +402,9 @@ class UnifiedProvider:
                 key = await self._wait_for_key(provider=prov, timeout=15.0)
                 config = PROVIDER_CONFIGS[prov]
                 
-                # Resolve model for this provider
-                _, model = self.resolve_model(task_type, preferred_provider=prov, has_tools=bool(tools))
+                # Resolve model for this provider (only if user didn't specify one)
+                if not user_specified_model:
+                    _, model = self.resolve_model(task_type, preferred_provider=prov, has_tools=bool(tools))
                 
                 payload = {
                     "model": model,
@@ -477,10 +486,17 @@ class UnifiedProvider:
         if not self._client:
             await self.initialize()
         
+        user_specified_model = model is not None
         if not model:
             provider_name, model = self.resolve_model(task_type, has_tools=bool(tools))
         else:
-            provider_name = self.provider_order[0] if self.provider_order else 'nvidia'
+            provider_name = None
+            for pname in self.provider_order:
+                if model.startswith(pname + "/") or model in PROVIDER_CONFIGS.get(pname, {}).get("best_models", {}).values():
+                    provider_name = pname
+                    break
+            if not provider_name:
+                provider_name = self.provider_order[0] if self.provider_order else 'nvidia'
         
         # Try providers in order
         providers_to_try = [provider_name]
