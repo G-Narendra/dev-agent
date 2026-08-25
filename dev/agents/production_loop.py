@@ -28,6 +28,26 @@ import subprocess
 import time
 import traceback
 from dataclasses import dataclass, field
+
+# Smart Compaction (OpenClaw/Claude Code/Codex patterns)
+try:
+    from .compaction import CompactionEngine, CompactionConfig, is_overflow_error
+except ImportError:
+    CompactionEngine = None
+    CompactionConfig = None
+    is_overflow_error = None
+
+# Security (Teleport-style + OWASP defenses)
+try:
+    from ..security.injection_detector import PromptInjectionDetector, ThreatLevel
+    from ..security.tool_validator import ToolCallValidator
+    from ..security.audit_logger import AuditLogger
+    from ..security.output_monitor import OutputMonitor
+except ImportError:
+    PromptInjectionDetector = None
+    ToolCallValidator = None
+    AuditLogger = None
+    OutputMonitor = None
 from pathlib import Path
 from typing import Any, AsyncIterator, Callable, Optional
 
@@ -176,6 +196,27 @@ class ProductionAgentLoop:
         self._budget_manager = None
         self._session_id = None
         self._session_history = None
+        # Smart Compaction Engine (OpenClaw-style)
+        self._compaction = None
+        if CompactionEngine:
+            self._compaction = CompactionEngine(CompactionConfig() if CompactionConfig else None)
+        # Security modules (Teleport-style + OWASP)
+        self._injection_detector = None
+        self._tool_validator = None
+        self._output_monitor = None
+        if PromptInjectionDetector:
+            self._injection_detector = PromptInjectionDetector(strict_mode=True)
+        if ToolCallValidator:
+            self._tool_validator = ToolCallValidator(project_path)
+        if OutputMonitor:
+            self._output_monitor = OutputMonitor(strict_mode=False)
+        # Reuse the imported AuditLogger class if available
+        try:
+            from ..security.audit_logger import AuditLogger as _AuditLogger
+            self._audit_logger = _AuditLogger(project_path)
+            self._audit_logger_new = True
+        except Exception:
+            pass
         # Tool names to filter tool definitions (reduces tool count for LLM)
         self._tool_names: list[str] | None = None
         # Tool result cache: cache read-only tool results to avoid re-reading
@@ -282,6 +323,28 @@ class ProductionAgentLoop:
                 abs_f = os.path.join(self.project_path, f)
                 self._state.fnames.add(f)
                 self._state.abs_fnames.add(abs_f)
+
+        # SECURITY: Validate user input for prompt injection
+        if self._injection_detector:
+            detection = self._injection_detector.detect(prompt)
+            if detection.blocked:
+                self._log(f"\u26d4 Security: Input BLOCKED — {detection.reason}")
+                if self._audit_logger:
+                    self._audit_logger.log_security_event(
+                        event_type="input_blocked",
+                        details=detection.reason,
+                        threat_level=detection.threat_level.value,
+                        blocked=True,
+                    )
+                return {"status": "blocked", "reason": detection.reason}
+            elif detection.threat_level.value in ("medium", "high"):
+                self._log(f"\u26a0\ufe0f Security: Suspicious input detected ({detection.threat_level.value}) — monitoring")
+                if self._audit_logger:
+                    self._audit_logger.log_security_event(
+                        event_type="suspicious_input",
+                        details=str(detection.detected_patterns),
+                        threat_level=detection.threat_level.value,
+                    )
 
         self._state.cur_messages.append(
             Message(role="user", content=prompt)
@@ -530,6 +593,28 @@ class ProductionAgentLoop:
         self._abort = False
         self._on_tool_call = on_tool_call
         self._on_tool_result = on_tool_result
+
+        # SECURITY: Validate user input for prompt injection
+        if self._injection_detector:
+            detection = self._injection_detector.detect(prompt)
+            if detection.blocked:
+                self._log(f"\u26d4 Security: Input BLOCKED — {detection.reason}")
+                if self._audit_logger:
+                    self._audit_logger.log_security_event(
+                        event_type="input_blocked",
+                        details=detection.reason,
+                        threat_level=detection.threat_level.value,
+                        blocked=True,
+                    )
+                return {"status": "blocked", "reason": detection.reason}
+            elif detection.threat_level.value in ("medium", "high"):
+                self._log(f"\u26a0\ufe0f Security: Suspicious input detected ({detection.threat_level.value}) — monitoring")
+                if self._audit_logger:
+                    self._audit_logger.log_security_event(
+                        event_type="suspicious_input",
+                        details=str(detection.detected_patterns),
+                        threat_level=detection.threat_level.value,
+                    )
 
         self._state.cur_messages.append(
             Message(role="user", content=prompt)
@@ -1874,18 +1959,48 @@ class ProductionAgentLoop:
     # =========================================================================
 
     async def _auto_compact_if_needed(self, messages: list[Message], system_prompt: str):
-        """Auto-compact context when usage exceeds 50%."""
+        """Smart auto-compact using OpenClaw-style compaction engine."""
         tokens = self._count_tokens(messages)
-        threshold = self.config.max_context_tokens * 0.5
+        threshold = self.config.max_context_tokens * 0.75  # 75% threshold (OpenClaw/Claude Code pattern)
 
         if tokens <= threshold or len(self._state.done_messages) <= 6:
             return
 
-        self._log(f"Auto-compact triggered: {tokens:,} tokens ({tokens / self.config.max_context_tokens * 100:.0f}% of {self.config.max_context_tokens:,})")
+        self._log(f"\u2728 Auto-compact triggered: {tokens:,} tokens ({tokens / self.config.max_context_tokens * 100:.0f}% of {self.config.max_context_tokens:,})")
 
-        # Compact: summarize old messages, keep recent ones
+        # Use smart compaction engine if available
+        if self._compaction:
+            try:
+                all_messages = self._state.done_messages + self._state.cur_messages
+                result = await self._compaction.compact(
+                    messages=all_messages,
+                    provider=self.provider,
+                    system_prompt=system_prompt,
+                    project_path=self.project_path,
+                )
+                if result.success:
+                    # Rebuild done_messages from compacted result
+                    self._state.done_messages = all_messages[:1]  # Keep system msg
+                    # The summary message + recent messages
+                    summary_msg = Message(role="system", content=f"[Compacted: {result.original_tokens:,} -> {result.compacted_tokens:,} tokens, {result.messages_removed} messages summarized, {len(result.identifiers_preserved)} identifiers preserved]" + chr(10) + result.summary)
+                    self._state.done_messages = [summary_msg] + self._state.done_messages[-6:]
+                    self._state.cur_messages = []
+                    self._log(f"\u2728 Smart compaction: {result.original_tokens:,} -> {result.compacted_tokens:,} tokens")
+                    if result.memory_flushed:
+                        self._log("\U0001f4be Memory flushed before compaction")
+                    # Audit log
+                    if self._audit_logger:
+                        self._audit_logger.log_compaction(
+                            original_tokens=result.original_tokens,
+                            compacted_tokens=result.compacted_tokens,
+                            messages_removed=result.messages_removed,
+                        )
+                    return
+            except Exception as e:
+                self._log(f"Smart compaction failed, falling back to rule-based: {e}")
+
+        # Fallback: rule-based compaction (original logic)
         if len(self._state.done_messages) > 6:
-            # Summarize all but last 6 done messages
             old_msgs = self._state.done_messages[:-6]
             keep_msgs = self._state.done_messages[-6:]
 
@@ -2364,11 +2479,26 @@ When building a project with multiple files:
     # =========================================================================
 
     async def _execute_tool(self, tool_name: str, tool_args: dict) -> Any:
-        """Execute a tool call with error handling and caching for read-only tools."""
+        """Execute a tool call with security validation, error handling, and caching."""
         handler = self.tools.get(tool_name)
         if not handler:
             return {"error": f"Unknown tool: {tool_name}"}
 
+        # SECURITY: Validate tool call against permission rules
+        if self._tool_validator:
+            validation = self._tool_validator.validate(tool_name, tool_args)
+            if not validation.allowed:
+                self._log(f"\u26d4 Security: Tool call BLOCKED: {tool_name} — {validation.reason}")
+                if self._audit_logger:
+                    self._audit_logger.log_security_event(
+                        event_type="tool_blocked",
+                        details=f"{tool_name}: {validation.reason}",
+                        threat_level="high",
+                        blocked=True,
+                    )
+                return {"blocked": f"Security: {validation.reason}"}
+
+        # SECURITY: Sanitize output of read-only tools for injection patterns
         # Cache read-only tool results to avoid re-reading the same files
         if tool_name in READ_ONLY_TOOLS:
             cache_key = f"{tool_name}:{json.dumps(tool_args, sort_keys=True)}"
@@ -2376,24 +2506,65 @@ When building a project with multiple files:
                 self._log(f"Cache hit: {tool_name}")
                 return self._tool_cache[cache_key]
 
+        # Audit log
+        start_time = time.time()
+        if self._audit_logger and hasattr(self._audit_logger, 'log_tool_call'):
+            self._audit_logger.log_tool_call(tool_name, tool_args)
+        elif self._audit_logger and hasattr(self._audit_logger, 'log_tool_use'):
+            self._audit_logger.log_tool_use(tool_name, tool_args, {})
+
         try:
             if asyncio.iscoroutinefunction(handler.execute):
                 result = await handler.execute(tool_args, self._state, self.project_path)
             else:
                 result = handler.execute(tool_args, self._state, self.project_path)
 
+            # SECURITY: Scan tool output for injection patterns
+            if self._injection_detector and isinstance(result, dict):
+                result_str = json.dumps(result)
+                if len(result_str) > 100:  # Only scan non-trivial results
+                    detection = self._injection_detector.detect_in_file_content(result_str, tool_name)
+                    if detection.threat_level.value in ("high", "critical"):
+                        self._log(f"\u26a0\ufe0f Security: Injection pattern detected in {tool_name} output")
+                        if self._audit_logger:
+                            self._audit_logger.log_security_event(
+                                event_type="injection_in_output",
+                                details=f"{tool_name}: {detection.detected_patterns}",
+                                threat_level=detection.threat_level.value,
+                            )
+
+            # SECURITY: Monitor output for sensitive data leakage
+            if self._output_monitor and isinstance(result, dict):
+                result_str = json.dumps(result)
+                monitor_result = self._output_monitor.check(result_str)
+                if not monitor_result.safe:
+                    self._log(f"\U0001f6e1\ufe0f Security: Sensitive data in {tool_name} output: {monitor_result.violations}")
+
             # Cache read-only results
             if tool_name in READ_ONLY_TOOLS and isinstance(result, dict):
                 if len(self._tool_cache) >= self._tool_cache_max:
-                    # Evict oldest entry
                     oldest_key = next(iter(self._tool_cache))
                     del self._tool_cache[oldest_key]
                 self._tool_cache[cache_key] = result
+
+            # Audit log success
+            if self._audit_logger and hasattr(self._audit_logger, 'log_tool_call'):
+                duration_ms = (time.time() - start_time) * 1000
+                self._audit_logger.log_tool_call(
+                    tool_name, tool_args, success=True,
+                    result=json.dumps(result)[:500], duration_ms=duration_ms,
+                )
 
             return result
         except Exception as e:
             error_result = {"error": f"Tool execution failed: {str(e)}", "traceback": traceback.format_exc()}
             self._log(f"Tool {tool_name} failed: {e}")
+            if self._audit_logger and hasattr(self._audit_logger, 'log_tool_call'):
+                duration_ms = (time.time() - start_time) * 1000
+                self._audit_logger.log_tool_call(
+                    tool_name, tool_args, success=False,
+                    error=str(e), duration_ms=duration_ms,
+                )
 
             # Try error recovery if available
             if self._error_recovery:
