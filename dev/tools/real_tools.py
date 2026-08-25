@@ -196,6 +196,18 @@ class RealWriteFileTool(Tool):
         if path and '.' not in os.path.basename(path):
             return {"error": f"Path '{path}' has no file extension. Use a proper filename like '{path}/index.html' or '{path}.js'.", "path": path}
 
+        # Block binary file creation — models must reference remote URLs instead of writing images
+        BINARY_EXTS = {'.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg', '.ico', '.bmp',
+                       '.mp4', '.mp3', '.wav', '.avi', '.mov', '.pdf', '.zip', '.tar', '.gz',
+                       '.exe', '.dll', '.bin', '.woff', '.woff2', '.ttf', '.eot'}
+        ext = os.path.splitext(path)[1].lower()
+        if ext in BINARY_EXTS:
+            return {"error": (
+                f"Cannot write binary file '{path}'. NEVER create local image/media files. "
+                "Instead, use a remote URL directly in your HTML/CSS, e.g.: "
+                "<img src='https://upload.wikimedia.org/wikipedia/commons/...'>"
+            ), "path": path}
+
         # Check for concurrent modification by user
         expected_mtime = input_data.get("expected_mtime")
         if expected_mtime and os.path.exists(abs_path):

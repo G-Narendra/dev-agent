@@ -117,7 +117,11 @@ class SummarizeTool(Tool):
         from ..utils.context_pruner import truncate_long_text, estimate_tokens
         
         text = input_data["text"]
-        max_tokens = input_data.get("max_tokens", 500)
+        # Coerce model-supplied values — models often send numbers as strings
+        try:
+            max_tokens = int(input_data.get("max_tokens", 500))
+        except (TypeError, ValueError):
+            max_tokens = 500
         
         current_tokens = estimate_tokens(text)
         

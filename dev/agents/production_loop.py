@@ -459,6 +459,7 @@ class ProductionAgentLoop:
                         tool_args = {}
                     if not isinstance(tool_args, dict):
                         tool_args = {}
+                    tool_args = self._coerce_tool_args(tool_args)
 
                     # Check approval + plan mode
                     approval = self._check_tool_allowed(tool_name, tool_args)
@@ -848,6 +849,21 @@ class ProductionAgentLoop:
                                     truncated = True
                                     self._log(f"Detected placeholder content ({len(ct)} chars) — will retry")
                                     break
+                                # --- Structural truncation detection (cut-off mid-file) ---
+                                # HTML that opens a document but never closes it
+                                low = stripped.lower()
+                                if (low.startswith('<!doctype') or low.startswith('<html')) and '</html>' not in low:
+                                    truncated = True
+                                    self._log(f"Detected TRUNCATED HTML ({len(ct)} chars, no </html>) — will split")
+                                    break
+                                # Unbalanced braces/brackets in code = cut off mid-write
+                                for op, cl in [('{', '}'), ('[', ']')]:
+                                    if stripped.count(op) - stripped.count(cl) > 2 and len(stripped) > 100:
+                                        truncated = True
+                                        self._log(f"Detected UNBALANCED {op}{cl} ({stripped.count(op)} vs {stripped.count(cl)}) — file cut off")
+                                        break
+                                if truncated:
+                                    break
                         except Exception:
                             # Even JSON parse failure = likely truncation
                             truncated = True
@@ -869,17 +885,18 @@ class ProductionAgentLoop:
                         except Exception:
                             pass
                     retry_prompt = (
-                        "The previous write_file calls had PLACEHOLDER content — not real code. "
-                        "You MUST call write_file AGAIN with COMPLETE, PRODUCTION-QUALITY code.\n\n"
+                        "The previous write_file calls had PLACEHOLDER or CUT-OFF content — the file was truncated mid-write.\n"
+                        "This happens when a single write_file is too large. You MUST SPLIT YOUR WORK:\n\n"
                         "RULES:\n"
-                        "1. Call write_file for EACH file with the FULL file content\n"
-                        "2. Content must be REAL code with COMPLETE implementations — not stubs\n"
-                        "3. For web projects: include COMPLETE HTML with CSS styling, animations, images\n"
-                        "4. Every CSS rule, every HTML element, every JS function must be complete\n"
-                        "5. Use professional design: gradients, shadows, animations, responsive layout\n"
-                        "6. NEVER output placeholder text like '// add code here' or 'TODO'\n"
-                        f"7. All paths must start with '{folder_prefix}' if creating a subfolder\n\n"
-                        f"Create ALL files needed. Start with write_file NOW — do not describe, just create."
+                        "1. Write ONE small file per step (keep each under 120 lines)\n"
+                        "2. If a page is long, create it in parts: first part with write_file, "
+                        "then EXTEND it using str_replace on a unique marker like <!-- PART2 -->\n"
+                        "3. Content must be REAL code with COMPLETE implementations — not stubs\n"
+                        "4. NEVER output placeholder text like '// add code here' or 'TODO'\n"
+                        "5. NEVER create local image files (.jpg/.png) — use remote image URLs "
+                        "(https://upload.wikimedia.org/...) directly in HTML/CSS instead\n"
+                        f"6. All paths must start with '{folder_prefix}' if creating a subfolder\n\n"
+                        f"Start NOW with the NEXT unfinished file. Do not describe, just create."
                     )
                     # Insert the retry prompt as a user message to keep context
                     self._state.cur_messages.append(
@@ -1092,6 +1109,7 @@ class ProductionAgentLoop:
                     tool_args = {}
                 if not isinstance(tool_args, dict):
                     tool_args = {}
+                tool_args = self._coerce_tool_args(tool_args)
 
                 # Check approval + plan mode
                 approval = self._check_tool_allowed(tool_name, tool_args)
@@ -1331,6 +1349,32 @@ class ProductionAgentLoop:
 
         return result
 
+    @staticmethod
+    def _coerce_tool_args(args: dict) -> dict:
+        """Coerce model-supplied arg values: models often send numbers/booleans as strings,
+        which crashes tools comparing them to real ints (e.g. '<=' not supported between
+        instances of 'int' and 'str'). Keys that must stay strings are preserved."""
+        STRING_ONLY_KEYS = {"path", "content", "command", "pattern", "text", "query", "name", "description", "instructions", "old_string", "new_string", "message", "url", "cwd"}
+        coerced = {}
+        for k, v in args.items():
+            if k in STRING_ONLY_KEYS or isinstance(v, (dict, list)):
+                coerced[k] = v
+            elif isinstance(v, str):
+                s = v.strip()
+                if s.lower() in ("true", "false"):
+                    coerced[k] = s.lower() == "true"
+                else:
+                    try:
+                        coerced[k] = int(s)
+                    except ValueError:
+                        try:
+                            coerced[k] = float(s)
+                        except ValueError:
+                            coerced[k] = v
+            else:
+                coerced[k] = v
+        return coerced
+
     async def _execute_single_tool(self, tc: dict, on_tool_call: Callable | None, on_tool_result: Callable | None) -> Any:
         """Execute a single tool call (used for parallel read-only execution)."""
         tool_name = tc.get("function", {}).get("name", "")
@@ -1341,6 +1385,7 @@ class ProductionAgentLoop:
             tool_args = {}
         if not isinstance(tool_args, dict):
             tool_args = {}
+        tool_args = self._coerce_tool_args(tool_args)
 
         if on_tool_call:
             on_tool_call(tool_name, tool_args)
@@ -2289,8 +2334,10 @@ class ProductionAgentLoop:
 ### Flow
 1. Create a todo list with write_todos listing ALL files needed
 2. Create EACH file one by one using write_file with proper path
-3. After ALL files created, run_terminal_command to install deps and test
-4. Do NOT stop until todo list is 100% complete
+3. Keep each write_file under 120 lines — split long files into parts (write_file then str_replace to extend)
+4. NEVER create local image/binary files (.jpg, .png, .gif) — reference remote URLs like https://upload.wikimedia.org/... directly in HTML/CSS
+5. After ALL files created, run_terminal_command to install deps and test
+6. Do NOT stop until todo list is 100% complete
 """)
 
         result = "\n".join(parts)
