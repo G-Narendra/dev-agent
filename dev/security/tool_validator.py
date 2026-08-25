@@ -93,11 +93,20 @@ class ToolCallValidator:
         r'curl\s.*\|\s*sh',        # Pipe to shell
         r'curl\s.*\|\s*bash',      # Pipe to bash
         r'wget\s.*\|\s*sh',        # Pipe to shell
+        r'wget\s.*\|\s*bash',      # Pipe to bash
         r'eval\s*\(',              # Eval execution
         r'exec\s*\(',              # Exec execution
         r'>\s*/etc/',              # Write to /etc
         r'>>\s*/etc/',             # Append to /etc
         r'>(\s*)/dev/sd',          # Write to disk device
+        r'nc\s+-e',                # Netcat reverse shell
+        r'ncat\s+-e',              # Ncat reverse shell
+        r'crontab\s+-',            # Crontab manipulation
+        r'iptables\s',             # Firewall manipulation
+        r'useradd\s',              # User creation
+        r'usermod\s',              # User modification
+        r'passwd\s',               # Password change
+        r'su\s+-',                 # Switch user
     ]
     
     # Path traversal patterns

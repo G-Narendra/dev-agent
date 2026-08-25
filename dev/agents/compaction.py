@@ -334,7 +334,7 @@ class CompactionEngine:
         OpenClaw rule: Keep tool_call and tool_result pairs together.
         If split lands inside a tool block, move boundary so pairs stay intact.
         """
-        keep_count = self.config.keep_recent_messages
+        keep_count = min(self.config.keep_recent_messages, max(2, len(messages) // 3))
         if len(messages) <= keep_count + 2:
             return 1  # Not enough to compact
         
@@ -453,11 +453,15 @@ class CompactionEngine:
             )
             
             if response and response.get("choices"):
-                return response["choices"][0].get("message", {}).get("content", "")
-        except Exception:
+                content = response["choices"][0].get("message", {}).get("content", "")
+                if content and len(content) > 10:
+                    return content
+        except Exception as e:
+            # Log error but don't crash — fallback to rule-based
             pass
         
-        return ""
+        # LLM returned empty or too short — use rule-based fallback
+        return self._rule_based_summary(old_messages, identifiers)
     
     def _rule_based_summary(self, messages: list, identifiers: list[str]) -> str:
         """Fallback rule-based summarization when LLM is unavailable."""

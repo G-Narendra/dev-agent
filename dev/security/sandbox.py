@@ -362,9 +362,12 @@ class NetworkSandbox:
         
         for host in all_hosts:
             host = host.lower().strip().rstrip('/')
-            # Remove port if present
-            if ':' in host and not host.startswith('['):
-                host = host.split(':')[0]
+            # Strip protocol if present
+            host = re.sub(r'^https?://', '', host)
+            # Remove port and path
+            host = re.sub(r'[:/].*$', '', host)
+            if not host:
+                continue
             
             result = self.check_connection(host)
             if not result.allowed:

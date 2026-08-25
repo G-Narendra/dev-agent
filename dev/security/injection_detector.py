@@ -86,6 +86,9 @@ class PromptInjectionDetector:
         r'POST\s+(all\s+)?(files?|data)\s+to',
         r'curl\s+.*\s+-d\s+',
         r'wget\s+.*\s+--post',
+        r'print\s+(all\s+)?environment\s+variables?',
+        r'env\s*\|',
+        r'printenv',
         
         # Role hijacking
         r'you\s+are\s+not\s+an?\s+AI',
