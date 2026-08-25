@@ -130,6 +130,14 @@ class ToolCallValidator:
         self._rate_limit_window = 60.0  # seconds
         self._rate_limit_max = 30      # calls per window
         
+        # Security sandbox (NVIDIA mandatory controls)
+        self._sandbox = None
+        try:
+            from .sandbox import SecuritySandbox, SandboxConfig
+            self._sandbox = SecuritySandbox(SandboxConfig(workspace_path=project_path))
+        except Exception:
+            pass
+        
         # Add default rules
         self._setup_default_rules()
     
@@ -216,6 +224,12 @@ class ToolCallValidator:
         # Check 6: Project boundary
         boundary_violations = self._check_project_boundary(tool_args)
         violations.extend(boundary_violations)
+        
+        # Check 7: Security sandbox (NVIDIA mandatory controls)
+        if self._sandbox:
+            sandbox_result = self._sandbox.check_all(tool_name, tool_args)
+            if not sandbox_result.allowed:
+                violations.append(f"Sandbox: {sandbox_result.reason}")
         
         # Determine final permission
         permission = ToolPermission.FULL
