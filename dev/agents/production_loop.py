@@ -91,6 +91,10 @@ class LoopConfig:
     approval_mode: str = "auto-edit"  # suggest, auto-edit, full-auto
     diff_preview: bool = False  # Show diff before applying edits
     enforce_plan_mode: bool = False  # If True, only read-only actions allowed
+    # Research-backed loop safety (Codex/smolagents patterns)
+    max_identical_tool_repeats: int = 3  # Same tool+args N times consecutively → inject correction
+    max_consecutive_empty: int = 3  # Empty responses in a row → corrective nudge, then abort
+    max_consecutive_failures: int = 4  # Failed LLM steps in a row → abort early with summary
 
 
 @dataclass
@@ -567,8 +571,12 @@ class ProductionAgentLoop:
                 partial_warning = f"Agent stopped at MAX_STEPS with {len(last_msg.tool_calls)} unexecuted tool call(s). Results may be incomplete."
                 self._log(partial_warning)
 
+        # Graceful degradation: never stop silently at max_steps — synthesize a summary.
+        summary_content = await self._synthesize_final_summary(full_system)
+
         return {
             "status": "max_steps",
+            "content": summary_content,
             "steps": max_steps,
             "tool_calls": all_tool_calls,
             "tool_results": all_tool_results,
@@ -634,6 +642,12 @@ class ProductionAgentLoop:
         all_tool_calls = []
         all_tool_results = []
         final_content = ""
+
+        # --- Research-backed loop safety state (Codex/smolagents patterns) ---
+        last_tool_signature = None  # signature of most recent executed tool call
+        identical_repeat_count = 0  # consecutive repeats of the same signature
+        consecutive_empty = 0  # empty responses (no text, no tool calls) in a row
+        consecutive_failures = 0  # steps where all LLM retries failed
 
         for step in range(max_steps):
             if self._abort:
@@ -778,13 +792,22 @@ class ProductionAgentLoop:
                 self._state.cur_messages = self._state.cur_messages[:msg_checkpoint]
                 error_msg = f"LLM call failed after {self.config.max_retries} retries: {last_error}"
                 self._log(error_msg)
-                return {
-                    "status": "error",
-                    "message": error_msg,
-                    "tool_calls": all_tool_calls,
-                    "tool_results": all_tool_results,
-                    "steps": step + 1,
-                }
+                consecutive_failures += 1
+                # Bounded failure: don't grind through remaining steps when provider is down.
+                if consecutive_failures >= self.config.max_consecutive_failures:
+                    self._log(f"{consecutive_failures} consecutive failed steps — aborting with summary")
+                    return {
+                        "status": "error",
+                        "message": f"Provider failed {consecutive_failures} steps in a row: {last_error}",
+                        "tool_calls": all_tool_calls,
+                        "tool_results": all_tool_results,
+                        "steps": step + 1,
+                    }
+                # Inject error context so next step knows what happened, then continue
+                self._state.cur_messages.append(
+                    Message(role="user", content=f"The previous LLM request failed ({last_error}). Continue the task from where you left off.")
+                )
+                continue
 
             # Add assistant message to history
             self._state.cur_messages.append(
@@ -941,6 +964,31 @@ class ProductionAgentLoop:
                     )
                     continue  # Don't break — keep the loop going
 
+                # --- Empty-response tracking (research: silent stalls are the #1 free-model failure) ---
+                if not full_content and not tool_calls_data:
+                    consecutive_empty += 1
+                    self._log(f"Empty response ({consecutive_empty}/{self.config.max_consecutive_empty})")
+                    if consecutive_empty <= self.config.max_consecutive_empty:
+                        self._state.cur_messages.append(
+                            Message(role="user", content=(
+                                "Your last response was EMPTY. Do not send empty responses. "
+                                "Either call a tool (e.g., write_file, run_terminal_command, read_files) "
+                                "or reply with useful text about the task progress. Try again now."
+                            ))
+                        )
+                        continue
+                    # Exceeded threshold — synthesize graceful summary and stop (smolagents pattern)
+                    self._log("Too many empty responses — synthesizing final summary")
+                    return {
+                        "status": "completed",
+                        "content": final_content or f"[Agent stopped after {consecutive_empty} empty model responses. Work done so far: {len(all_tool_calls)} tool calls.]",
+                        "tool_calls": all_tool_calls,
+                        "tool_results": all_tool_results,
+                        "steps": step + 1,
+                        "warning": "ended_early_empty_responses",
+                    }
+                consecutive_empty = 0
+
                 final_content = full_content
                 self._state.done_messages.extend(self._state.cur_messages)
                 self._state.cur_messages = []
@@ -976,6 +1024,35 @@ class ProductionAgentLoop:
                         Message(role='user', content=f"ERROR: You called tools that don't exist: {invalid_names}. Available tools: {sorted(valid_tool_names)}. Use ONLY the available tools. Try again.")
                     )
                     continue  # Retry with correction
+
+            # --- Loop detection (research: repeated identical calls = model stuck) ---
+            if tool_calls_data:
+                sigs = []
+                for tc in tool_calls_data:
+                    try:
+                        a = json.loads(tc.get("function", {}).get("arguments", "{}"))
+                        a.pop("content", None)  # file content makes signatures huge; path+args suffice
+                    except Exception:
+                        a = {}
+                    sigs.append(f"{tc.get('function', {}).get('name', '')}:{json.dumps(a, sort_keys=True)[:200]}")
+                step_signature = "|".join(sigs)
+                if step_signature == last_tool_signature:
+                    identical_repeat_count += 1
+                else:
+                    identical_repeat_count = 0
+                    last_tool_signature = step_signature
+                if identical_repeat_count + 1 >= self.config.max_identical_tool_repeats:
+                    self._log(f"Loop detected: same tool calls repeated {identical_repeat_count + 1}x — injecting correction")
+                    self._state.cur_messages.append(
+                        Message(role="user", content=(
+                            "ERROR: You are repeating the exact same tool calls with the same arguments. "
+                            "This means your approach is not working. STOP and try a DIFFERENT approach: "
+                            "read the error output carefully, check what already exists on disk, or break "
+                            "the task into smaller steps. Do NOT repeat the previous calls unchanged."
+                        ))
+                    )
+                    identical_repeat_count = 0
+                    continue
 
             # Separate read-only and write tools for parallel execution
             read_only_tcs = []
@@ -1210,8 +1287,12 @@ class ProductionAgentLoop:
                 partial_warning = f"Agent stopped at MAX_STEPS with {len(last_msg.tool_calls)} unexecuted tool call(s). Results may be incomplete."
                 self._log(partial_warning)
 
+        # Graceful degradation: never stop silently at max_steps — synthesize a summary.
+        summary_content = await self._synthesize_final_summary(full_system)
+
         return {
             "status": "max_steps",
+            "content": summary_content,
             "steps": max_steps,
             "tool_calls": all_tool_calls,
             "tool_results": all_tool_results,
@@ -2000,6 +2081,45 @@ class ProductionAgentLoop:
     # =========================================================================
     # Auto-Compact (Claude Code pattern)
     # =========================================================================
+
+    async def _synthesize_final_summary(self, system_prompt: str, on_text=None) -> str:
+        """Graceful degradation (smolagents pattern): when the loop ends at max_steps,
+        make one final no-tools LLM call to summarize completed work + remaining work.
+        The agent should NEVER stop silently."""
+        try:
+            self._state.cur_messages.append(
+                Message(role="user", content=(
+                    "You have reached the maximum number of steps for this session. "
+                    "Do NOT call any more tools. In plain text only: (1) summarize exactly what you "
+                    "completed, (2) list what remains unfinished, and (3) give the single most important "
+                    "next step to continue."
+                ))
+            )
+            messages = self._format_messages(system_prompt)
+            msg_dicts = self._messages_to_dicts(messages)
+            summary = await asyncio.wait_for(
+                self.provider.chat_completion(
+                    messages=msg_dicts,
+                    model=None,
+                    temperature=0.3,
+                    max_tokens=2048,
+                    tools=None,
+                ),
+                timeout=60.0,
+            )
+            content = ""
+            try:
+                content = summary.get("choices", [{}])[0].get("message", {}).get("content", "") or ""
+            except Exception:
+                pass
+            if content.strip():
+                if on_text:
+                    on_text(f"\n📋 **Session summary** (steps exhausted):\n{content}\n")
+                self._log("Generated end-of-session summary")
+            return content
+        except Exception as e:
+            self._log(f"Summary generation skipped: {e}")
+            return ""
 
     async def _auto_compact_if_needed(self, messages: list[Message], system_prompt: str):
         """Smart auto-compact using OpenClaw-style compaction engine."""
