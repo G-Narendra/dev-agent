@@ -325,8 +325,11 @@ class NetworkSandbox:
         if not self.config.enabled or not self.config.restrict_network:
             return SandboxCheckResult(allowed=True)
         
-        # Normalize host
+        # Normalize host — strip protocol, path, port
         host = host.lower().strip()
+        host = re.sub(r'^https?://', '', host)  # Strip protocol
+        host = re.sub(r'[:/].*$', '', host)     # Strip port and path
+        host = host.rstrip('.')
         
         # Allow localhost/127.0.0.1 for dev servers
         if host in ("localhost", "127.0.0.1", "::1", "0.0.0.0"):
