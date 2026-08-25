@@ -395,8 +395,13 @@ class ProductionAgentLoop:
                     self._log(f"Found {len(parsed_calls)} code blocks in text, converting to tool calls")
                     # Execute each parsed code block as a tool call
                     for pc in parsed_calls:
-                        tool_name = pc["name"]
-                        tool_args = pc["args"]
+                        # Handle both formats: {"name": ..., "args": ...} and {"function": {"name": ...}}
+                        if "function" in pc:
+                            tool_name = pc["function"]["name"]
+                            tool_args = json.loads(pc["function"]["arguments"]) if isinstance(pc["function"].get("arguments"), str) else pc["function"].get("arguments", {})
+                        else:
+                            tool_name = pc.get("name", "")
+                            tool_args = pc.get("args", {})
                         
                         if on_tool_call:
                             on_tool_call(tool_name, tool_args)

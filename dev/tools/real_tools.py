@@ -177,6 +177,14 @@ class RealWriteFileTool(Tool):
         if not content or not content.strip():
             return {"error": "Cannot write empty content", "path": path}
 
+        # Unescape literal newlines from LLM output
+        if '\\n' in content and '\n' not in content:
+            content = content.replace('\\n', '\n')
+        if '\\t' in content and '\t' not in content:
+            content = content.replace('\\t', '\t')
+        if '\\"' in content:
+            content = content.replace('\\"', '"')
+
         # Content size limit: 5MB
         content_bytes = len(content.encode('utf-8'))
         if content_bytes > 5 * 1024 * 1024:
