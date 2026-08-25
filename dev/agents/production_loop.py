@@ -431,11 +431,15 @@ class ProductionAgentLoop:
                     all_tool_calls.append({"name": tool_name, "args": tool_args})
                     all_tool_results.append({"name": tool_name, "result": result})
 
-                    # Truncate large tool results
-                    result_str = json.dumps(result)
-                    MAX_TOOL_RESULT_CHARS = 50000
-                    if len(result_str) > MAX_TOOL_RESULT_CHARS:
-                        result_str = result_str[:MAX_TOOL_RESULT_CHARS] + f"\n\n... [Truncated: {len(json.dumps(result)):,} chars total]"
+                    # Compress tool results — minimal feedback to save context
+                    if tool_name == 'write_file':
+                        result_str = json.dumps({'success': True, 'path': result.get('path', ''), 'lines': result.get('lines', 0)})
+                    elif tool_name == 'run_terminal_command':
+                        result_str = json.dumps({'exitCode': result.get('exitCode', 0), 'stdout': str(result.get('stdout', ''))[:200]})
+                    else:
+                        result_str = json.dumps(result)
+                        if len(result_str) > 2000:
+                            result_str = result_str[:2000] + '...[truncated]'
 
                     self._state.cur_messages.append(
                         Message(
@@ -1005,11 +1009,22 @@ class ProductionAgentLoop:
                 tc["function"]["arguments"] = json.dumps(tool_args)
 
                 # Truncate large tool results to prevent context overflow
-                result_str = json.dumps(result)
-                MAX_TOOL_RESULT_CHARS = 50000  # ~16K tokens
-                if len(result_str) > MAX_TOOL_RESULT_CHARS:
-                    result_str = result_str[:MAX_TOOL_RESULT_CHARS] + f"\n\n... [Truncated: {len(json.dumps(result)):,} chars total, showing first {MAX_TOOL_RESULT_CHARS:,}]"
-                    self._log(f"Tool {tool_name} result truncated from {len(json.dumps(result)):,} to {MAX_TOOL_RESULT_CHARS:,} chars")
+                # Compress write_file results to minimal — model doesn't need full content back
+                if tool_name == 'write_file':
+                    result_str = json.dumps({
+                        'success': result.get('success', True),
+                        'path': result.get('path', ''),
+                        'lines': result.get('lines', 0),
+                        'bytes': result.get('bytes', 0),
+                    })
+                elif tool_name == 'read_files':
+                    result_str = json.dumps(result)
+                    if len(result_str) > 3000:
+                        result_str = result_str[:3000] + '\n\n[...truncated to save context...]'
+                else:
+                    result_str = json.dumps(result)
+                    if len(result_str) > 2000:
+                        result_str = result_str[:2000] + '\n\n[...truncated to save context...]'
 
                 # Add tool result to history
                 self._state.cur_messages.append(
@@ -1050,6 +1065,10 @@ class ProductionAgentLoop:
 
             # Save session state after each step
             await self._save_session()
+
+            # Rate limit delay — respect provider limits (20 RPM on OpenRouter = 3s between calls)
+            if step < max_steps - 1 and tool_calls_data:
+                await asyncio.sleep(1.5)
 
             # Auto-learn from session (last step only to avoid overhead)
             if step == max_steps - 1 or not tool_calls_data:
@@ -1855,9 +1874,9 @@ class ProductionAgentLoop:
     # =========================================================================
 
     async def _auto_compact_if_needed(self, messages: list[Message], system_prompt: str):
-        """Auto-compact context when usage exceeds 70%."""
+        """Auto-compact context when usage exceeds 50%."""
         tokens = self._count_tokens(messages)
-        threshold = self.config.max_context_tokens * 0.7
+        threshold = self.config.max_context_tokens * 0.5
 
         if tokens <= threshold or len(self._state.done_messages) <= 6:
             return
@@ -1967,6 +1986,9 @@ class ProductionAgentLoop:
             if task:
                 skill_prompt = si.build_skill_prompt(task)
                 if skill_prompt:
+                    # Compress: keep only first 500 chars of skill prompt to save context
+                    if len(skill_prompt) > 500:
+                        skill_prompt = skill_prompt[:500] + "\n[...truncated for context efficiency...]"
                     parts.append(f"\n\n{skill_prompt}")
         except Exception:
             pass  # Skills folder not available
