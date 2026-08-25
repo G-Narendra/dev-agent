@@ -76,10 +76,10 @@ class LoopConfig:
     """Agent configuration."""
     model: str = "default"
     temperature: float = 0.7
-    max_tokens: int = 16384  # Must be high enough for complete file generation
+    max_tokens: int = 32768  # High enough for complete file generation in one shot
     max_retries: int = 5
-    retry_delay: float = 0.25
-    max_retry_delay: float = 30.0
+    retry_delay: float = 1.0
+    max_retry_delay: float = 60.0
     auto_lint: bool = True
     auto_test: bool = False
     auto_commit: bool = True
@@ -222,13 +222,7 @@ class ProductionAgentLoop:
         # Tool result cache: cache read-only tool results to avoid re-reading
         self._tool_cache: dict[str, dict] = {}  # cache_key -> result
         self._tool_cache_max = 50  # Max cached results
-        # Audit logger for security-sensitive operations
-        self._audit_logger = None
-        try:
-            from ..utils.security import AuditLogger
-            self._audit_logger = AuditLogger(project_path)
-        except Exception:
-            pass
+        # Audit logger already set above from security module — don't overwrite
         # Approval history: track all approval decisions for review
         self._approval_history: list[dict] = []
         # Plan persistence
@@ -499,9 +493,18 @@ class ProductionAgentLoop:
                     all_tool_calls.append({"name": tool_name, "args": tool_args})
                     all_tool_results.append({"name": tool_name, "result": result})
 
-                    # Compress tool results — minimal feedback to save context
+                    # Compress tool results — add quality feedback if file is too short
                     if tool_name == 'write_file':
-                        result_str = json.dumps({'success': True, 'path': result.get('path', ''), 'lines': result.get('lines', 0)})
+                        file_lines = result.get('lines', 0)
+                        file_path = result.get('path', '')
+                        quality_warning = ''
+                        if file_path.endswith('.css') and file_lines < 50:
+                            quality_warning = f' WARNING: CSS only {file_lines} lines. REWRITE with 100+ lines: gradients, animations, shadows, responsive, Google Fonts.'
+                        elif file_path.endswith('.js') and file_lines < 30:
+                            quality_warning = f' WARNING: JS only {file_lines} lines. REWRITE with 50+ lines: event handlers, smooth scroll, form validation.'
+                        elif file_path.endswith('.ejs') and file_lines < 20:
+                            quality_warning = f' WARNING: EJS only {file_lines} lines. REWRITE with 50+ lines: complete HTML, real content.'
+                        result_str = json.dumps({'success': True, 'path': file_path, 'lines': file_lines, 'feedback': quality_warning})
                     elif tool_name == 'run_terminal_command':
                         result_str = json.dumps({'exitCode': result.get('exitCode', 0), 'stdout': str(result.get('stdout', ''))[:200]})
                     else:
@@ -626,6 +629,8 @@ class ProductionAgentLoop:
         )
 
         full_system = self._build_system_prompt(system_prompt, repo_map)
+        import sys as _sys
+        print(f"[DEBUG] System prompt: {len(full_system)} chars, Messages: {len(self._state.cur_messages)}", file=_sys.stderr, flush=True)
         all_tool_calls = []
         all_tool_results = []
         final_content = ""
@@ -687,10 +692,12 @@ class ProductionAgentLoop:
                     full_content = ""
                     tool_calls_data = []
 
-                    # Use 70B for tool calls (8B truncates tool args)
+                    # Resolve model: 'default'/'coding'/'reasoning' are task types, not model names
                     effective_model = self.config.model
-                    if tool_defs and '8b' in self.config.model.lower():
-                        effective_model = 'meta/llama-3.1-70b-instruct'
+                    if effective_model in ('default', 'coding', 'reasoning', 'fast'):
+                        effective_model = None  # Let provider resolve the best model
+                    elif tool_defs and '8b' in str(effective_model).lower():
+                        effective_model = None  # Let provider pick a larger model for tools
                     
                     async for event in self.provider.chat_completion_stream_events(
                         messages=msg_dicts,
@@ -956,6 +963,20 @@ class ProductionAgentLoop:
                 self._log(f"Warning: LLM requested {len(tool_calls_data)} tools. Capping at {MAX_TOOL_CALLS_PER_TURN}.")
                 tool_calls_data = tool_calls_data[:MAX_TOOL_CALLS_PER_TURN]
 
+            # Filter out hallucinated tool calls (tools that don't exist)
+            valid_tool_names = {d.get('function', {}).get('name', '') for d in tool_defs}
+            invalid_tcs = [tc for tc in tool_calls_data if tc.get('function', {}).get('name', '') not in valid_tool_names]
+            if invalid_tcs:
+                invalid_names = [tc.get('function', {}).get('name', '') for tc in invalid_tcs]
+                self._log(f"Filtering {len(invalid_tcs)} hallucinated tool calls: {invalid_names}")
+                tool_calls_data = [tc for tc in tool_calls_data if tc.get('function', {}).get('name', '') in valid_tool_names]
+                # If ALL tool calls were hallucinated, inject a correction message
+                if not tool_calls_data:
+                    self._state.cur_messages.append(
+                        Message(role='user', content=f"ERROR: You called tools that don't exist: {invalid_names}. Available tools: {sorted(valid_tool_names)}. Use ONLY the available tools. Try again.")
+                    )
+                    continue  # Retry with correction
+
             # Separate read-only and write tools for parallel execution
             read_only_tcs = []
             write_tcs = []
@@ -1093,19 +1114,35 @@ class ProductionAgentLoop:
 
                 # Audit log for non-read-only tools
                 if self._audit_logger and tool_name not in READ_ONLY_TOOLS:
-                    self._audit_logger.log_tool_use(tool_name, tool_args, result)
+                    if hasattr(self._audit_logger, 'log_tool_use'):
+                        self._audit_logger.log_tool_use(tool_name, tool_args, result)
+                    elif hasattr(self._audit_logger, 'log_tool_call'):
+                        self._audit_logger.log_tool_call(tool_name, tool_args)
 
                 # Update tc args to reflect any mutations from hooks
                 tc["function"]["arguments"] = json.dumps(tool_args)
 
                 # Truncate large tool results to prevent context overflow
-                # Compress write_file results to minimal — model doesn't need full content back
+                # Compress write_file results — add quality feedback if file is too short
                 if tool_name == 'write_file':
+                    file_lines = result.get('lines', 0)
+                    file_path = result.get('path', '')
+                    quality_warning = ''
+                    # Detect stubs: CSS/JS should be 50+ lines, HTML 30+ lines
+                    if file_path.endswith('.css') and file_lines < 50:
+                        quality_warning = f' WARNING: CSS file has only {file_lines} lines. Must have 100+ lines with gradients, animations, shadows, responsive design, Google Fonts. REWRITE with COMPLETE professional styling.'
+                    elif file_path.endswith('.js') and file_lines < 30:
+                        quality_warning = f' WARNING: JS file has only {file_lines} lines. Must have 50+ lines with full event handlers, smooth scrolling, form validation. REWRITE with COMPLETE implementation.'
+                    elif file_path.endswith('.ejs') and file_lines < 20:
+                        quality_warning = f' WARNING: EJS file has only {file_lines} lines. Must have 50+ lines with complete HTML structure, real content, proper layout. REWRITE with COMPLETE page.'
+                    elif file_path.endswith('.html') and file_lines < 30:
+                        quality_warning = f' WARNING: HTML file has only {file_lines} lines. Must have 50+ lines with semantic HTML, real content, meta tags. REWRITE with COMPLETE markup.'
                     result_str = json.dumps({
                         'success': result.get('success', True),
-                        'path': result.get('path', ''),
-                        'lines': result.get('lines', 0),
+                        'path': file_path,
+                        'lines': file_lines,
                         'bytes': result.get('bytes', 0),
+                        'feedback': quality_warning,
                     })
                 elif tool_name == 'read_files':
                     result_str = json.dumps(result)
@@ -1156,9 +1193,10 @@ class ProductionAgentLoop:
             # Save session state after each step
             await self._save_session()
 
-            # Rate limit delay — respect provider limits (20 RPM on OpenRouter = 3s between calls)
+            # Rate limit delay — respect provider limits
+            # Use 2s as safe default; providers handle their own rate limiting
             if step < max_steps - 1 and tool_calls_data:
-                await asyncio.sleep(1.5)
+                await asyncio.sleep(2.0)
 
             # Auto-learn from session (last step only to avoid overhead)
             if step == max_steps - 1 or not tool_calls_data:
@@ -1966,7 +2004,7 @@ class ProductionAgentLoop:
     async def _auto_compact_if_needed(self, messages: list[Message], system_prompt: str):
         """Smart auto-compact using OpenClaw-style compaction engine."""
         tokens = self._count_tokens(messages)
-        threshold = self.config.max_context_tokens * 0.75  # 75% threshold (OpenClaw/Claude Code pattern)
+        threshold = self.config.max_context_tokens * 0.55  # 55% threshold — compact earlier to keep context lean for free models
 
         if tokens <= threshold or len(self._state.done_messages) <= 6:
             return
@@ -2116,30 +2154,10 @@ class ProductionAgentLoop:
         # NIM model instruction: use write_file tool one file at a time
         parts.append("""
 
-## CRITICAL RULES — FOLLOW EXACTLY
-
-### File Creation
-When creating files, use the write_file tool ONE FILE AT A TIME with COMPLETE content.
-Do NOT describe what you will create — just create it.
-Do NOT use code blocks or text descriptions — use the write_file tool directly.
-Do NOT overwrite or modify files in the skills/ folder.
-Each file must be PRODUCTION-QUALITY code, not placeholders.
-
-### Multi-File Projects
-When building a project with multiple files:
-1. First, create a todo list with write_todos listing ALL files needed
-2. Then create EACH file one by one using write_file
-3. After creating each file, move to the next — do NOT stop
-4. After ALL files are created, use run_terminal_command to install dependencies if needed
-5. Only say "done" when ALL files from your todo list are created
-
-### Step-by-Step
-- Create ONE file per tool call — complete, production-quality code
-- Never truncate, never use placeholders, never say "similar to above"
-- Keep creating files until your todo list is fully checked off
-- You MUST keep working — do not stop until every file is created
-- Run npm install after package.json is created
-- Test the server starts correctly after all files are created
+## CRITICAL: USE write_file TOOL — ONE FILE AT A TIME
+Complete content. No placeholders. No descriptions. Just create files.
+After ALL files created, run_terminal_command to install deps and test.
+Do NOT stop until todo list is 100% complete.
 """)
 
         result = "\n".join(parts)
@@ -2426,9 +2444,14 @@ When building a project with multiple files:
                 else:
                     tool_defs = self.tools.get_definitions()
 
+                # Resolve model: 'default'/'coding' are task types, not model names
+                effective_model = self.config.model
+                if effective_model in ('default', 'coding', 'reasoning', 'fast'):
+                    effective_model = None  # Let provider resolve
+
                 response = await self.provider.chat_completion(
                     messages=msg_dicts,
-                    model=self.config.model,
+                    model=effective_model,
                     temperature=self.config.temperature,
                     max_tokens=self.config.max_tokens,
                     tools=tool_defs if tool_defs else None,
@@ -2515,8 +2538,8 @@ When building a project with multiple files:
         start_time = time.time()
         if self._audit_logger and hasattr(self._audit_logger, 'log_tool_call'):
             self._audit_logger.log_tool_call(tool_name, tool_args)
-        elif self._audit_logger and hasattr(self._audit_logger, 'log_tool_use'):
-            self._audit_logger.log_tool_use(tool_name, tool_args, {})
+        elif self._audit_logger and hasattr(self._audit_logger, 'log_tool_call'):
+            self._audit_logger.log_tool_call(tool_name, tool_args)
 
         try:
             if asyncio.iscoroutinefunction(handler.execute):

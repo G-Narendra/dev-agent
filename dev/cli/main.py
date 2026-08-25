@@ -462,6 +462,8 @@ def run(
                     status = str(result)[:200] if result else "ok"
                     console.print(f"[dim]  <- {name}: {status}[/dim]")
 
+            import sys as _sys
+            print(f"[CLI-DEBUG] About to call run_streaming, bare={bare}, model={model}, max_steps={max_steps}", file=_sys.stderr, flush=True)
             result = await agent_loop.run_streaming(
                 prompt=prompt,
                 system_prompt=system_prompt,

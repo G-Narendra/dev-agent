@@ -129,7 +129,7 @@ def save_api_keys(provider: str, keys: list[str]):
 def get_provider_order() -> list[str]:
     """Get the configured provider priority order."""
     config = load_config()
-    return config.get("provider_order", ["nvidia", "openrouter", "bytez"])
+    return config.get("provider_order", ["openrouter", "nvidia", "bytez"])
 
 
 def set_provider_order(order: list[str]):

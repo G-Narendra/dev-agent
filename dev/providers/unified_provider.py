@@ -399,12 +399,13 @@ class UnifiedProvider:
         last_error = None
         for prov in providers_to_try:
             try:
-                key = await self._wait_for_key(provider=prov, timeout=15.0)
+                key = await self._wait_for_key(provider=prov, timeout=3.0)
                 config = PROVIDER_CONFIGS[prov]
                 
                 # Resolve model for this provider (only if user didn't specify one)
                 if not user_specified_model:
                     _, model = self.resolve_model(task_type, preferred_provider=prov, has_tools=bool(tools))
+                # else: keep the user-specified model
                 
                 payload = {
                     "model": model,
@@ -446,8 +447,13 @@ class UnifiedProvider:
                 last_error = e
                 if e.response.status_code == 429:
                     key.is_exhausted = True
-                    key.exhausted_until = time.time() + 60
-                    self._log(f"[{prov}] Rate limited, trying next provider")
+                    # Check if it's a daily limit (longer cooldown) or per-minute (short cooldown)
+                    error_body = str(e.response.text)
+                    if 'daily' in error_body.lower() or 'per-day' in error_body.lower():
+                        key.exhausted_until = time.time() + 3600  # 1 hour for daily limits
+                    else:
+                        key.exhausted_until = time.time() + 60  # 1 min for per-minute limits
+                    self._log(f"[{prov}] Rate limited ({e.response.status_code}), trying next provider")
                     continue
                 self._record_provider_failure(prov)
                 continue
@@ -508,14 +514,28 @@ class UnifiedProvider:
         last_error = None
         for prov in providers_to_try:
             try:
+                # Resolve model for this specific provider
+                if not user_specified_model:
+                    _, resolved = self.resolve_model(task_type, preferred_provider=prov, has_tools=bool(tools))
+                else:
+                    resolved = model
                 async for event in self._stream_provider(
-                    prov, messages, model, temperature, max_tokens, tools, on_text, **kwargs
+                    prov, messages, resolved, temperature, max_tokens, tools, on_text, **kwargs
                 ):
                     yield event
                 return  # Success
             except Exception as e:
                 last_error = e
                 self._record_provider_failure(prov)
+                # Mark keys as exhausted on rate limit
+                if '429' in str(e) or 'rate' in str(e).lower():
+                    for pk in self.keys:
+                        if pk.provider == prov and not pk.is_exhausted:
+                            pk.is_exhausted = True
+                            if 'daily' in str(e).lower():
+                                pk.exhausted_until = time.time() + 3600
+                            else:
+                                pk.exhausted_until = time.time() + 60
                 self._log(f"[{prov}] Stream failed: {e}, trying next provider")
                 continue
         
@@ -559,7 +579,7 @@ class UnifiedProvider:
         **kwargs,
     ) -> AsyncIterator[dict]:
         """Stream from a specific provider."""
-        key = await self._wait_for_key(provider=provider_name, timeout=15.0)
+        key = await self._wait_for_key(provider=provider_name, timeout=3.0)
         config = PROVIDER_CONFIGS[provider_name]
         
         # Use the provided model or resolve one
