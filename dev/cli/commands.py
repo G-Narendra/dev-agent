@@ -174,6 +174,10 @@ def register_new_tools(registry, project_path: str):
     from ..tools.tool_search import ToolSearchTool
     registry.register("tool_search", ToolSearchTool())
     
+    # Deploy helper
+    from ..tools.deploy_tool import DeployTool
+    registry.register("deploy", DeployTool())
+    
     return registry
 
 
