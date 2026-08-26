@@ -29,6 +29,24 @@ from pydantic import BaseModel
 # ============================================================================
 
 PROVIDER_CONFIGS = {
+    "nvidia": {
+        "name": "NVIDIA NIM",
+        "base_url": "https://integrate.api.nvidia.com/v1",
+        "env_key": "NVIDIA_API_KEY",
+        "auth_header": "Authorization",
+        "auth_prefix": "Bearer ",
+        "rpm": 40,
+        "tpm": 400_000,
+        "strengths": ["speed", "fast inference", "40 RPM", "tool calling"],
+        "best_models": {
+            "coding": "nvidia/nemotron-3-super-120b-a12b",
+            "fast": "nvidia/nemotron-3-nano-30b-a3b",
+            "reasoning": "nvidia/nemotron-3-super-120b-a12b",
+            "vision": "meta/llama-3.2-11b-vision-instruct",
+            "default": "nvidia/nemotron-3-super-120b-a12b",
+            "tool": "nvidia/nemotron-3-super-120b-a12b",
+        },
+    },
     "openrouter": {
         "name": "OpenRouter",
         "base_url": "https://openrouter.ai/api/v1",
@@ -45,24 +63,6 @@ PROVIDER_CONFIGS = {
             "vision": "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
             "default": "nvidia/nemotron-3-ultra-550b-a55b:free",
             "tool": "cohere/north-mini-code:free",
-        },
-    },
-    "nvidia": {
-        "name": "NVIDIA NIM",
-        "base_url": "https://integrate.api.nvidia.com/v1",
-        "env_key": "NVIDIA_API_KEY",
-        "auth_header": "Authorization",
-        "auth_prefix": "Bearer ",
-        "rpm": 40,
-        "tpm": 400_000,
-        "strengths": ["speed", "fast inference", "40 RPM"],
-        "best_models": {
-            "coding": "meta/llama-3.1-70b-instruct",
-            "fast": "meta/llama-3.1-8b-instruct",
-            "reasoning": "meta/llama-3.1-70b-instruct",
-            "vision": "meta/llama-3.2-11b-vision-instruct",
-            "default": "meta/llama-3.1-70b-instruct",
-            "tool": "meta/llama-3.1-70b-instruct",
         },
     },
     "bytez": {
@@ -131,7 +131,7 @@ class UnifiedProvider:
             provider_order: Priority order for provider selection.
                           Default: ["nvidia", "openrouter", "bytez"]
         """
-        self.provider_order = provider_order or ["openrouter", "nvidia", "bytez"]
+        self.provider_order = provider_order or ["nvidia", "openrouter", "bytez"]
         
         # Build flat key list from dict
         self.keys: list[ProviderKey] = []
@@ -839,18 +839,19 @@ class NimProvider(UnifiedProvider):
     
     # Keep old MODELS dict for compatibility
     MODELS = {
-        "coding": "meta/llama-3.1-70b-instruct",
-        "reasoning": "nvidia/llama-3.1-nemotron-ultra-253b-v1",
-        "fast": "meta/llama-3.1-8b-instruct",
+        "coding": "nvidia/nemotron-3-super-120b-a12b",
+        "reasoning": "nvidia/nemotron-3-super-120b-a12b",
+        "fast": "nvidia/nemotron-3-nano-30b-a3b",
         "vision": "meta/llama-3.2-11b-vision-instruct",
-        "default": "meta/llama-3.1-70b-instruct",
-        "tool": "meta/llama-3.1-70b-instruct",
+        "default": "nvidia/nemotron-3-super-120b-a12b",
+        "tool": "nvidia/nemotron-3-super-120b-a12b",
     }
     
     TOOL_CAPABLE_MODELS = {
-        "meta/llama-3.1-70b-instruct",
-        "meta/llama-3.1-8b-instruct",
-        "nvidia/llama-3.1-nemotron-ultra-253b-v1",
+        "nvidia/nemotron-3-super-120b-a12b",
+        "nvidia/nemotron-3-nano-30b-a3b",
+        "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
+        "meta/llama-3.2-11b-vision-instruct",
     }
     
     BASE_URL = "https://integrate.api.nvidia.com/v1"
