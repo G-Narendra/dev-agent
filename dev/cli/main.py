@@ -3822,5 +3822,55 @@ def shell_completion_cmd(
         console.print(f"[red]Unsupported shell: {shell}[/red]")
 
 
+@app.command("design")
+def design(
+    action: str = typer.Argument("show", help="Action: show, init, learn, edit"),
+    learning: str = typer.Option("", "--learning", help="New pattern to add (for 'learn' action)"),
+):
+    """Manage DESIGN.md — the agent's design knowledge base."""
+    from ..utils.design_knowledge import (
+        load_design_knowledge,
+        append_learning,
+        save_design_knowledge,
+    )
+    from pathlib import Path
+
+    if action == "init":
+        # Create DESIGN.md from template
+        template = Path(__file__).parent.parent / "templates" / "DESIGN.md"
+        target = Path("DESIGN.md")
+        if target.exists():
+            console.print("[yellow]DESIGN.md already exists. Use 'design edit' to modify.[/yellow]")
+        elif template.exists():
+            import shutil
+            shutil.copy(template, target)
+            console.print("[green]Created DESIGN.md from template[/green]")
+        else:
+            console.print("[red]Template not found[/red]")
+
+    elif action == "show":
+        content = load_design_knowledge(".")
+        if content:
+            console.print(Panel(content[:2000], title="DESIGN.md", border_style="cyan"))
+        else:
+            console.print("[yellow]No DESIGN.md found. Run 'design init' to create one.[/yellow]")
+
+    elif action == "learn":
+        if not learning:
+            console.print("[red]Provide a pattern with --learning 'description'[/red]")
+        else:
+            append_learning(learning, ".")
+            console.print(f"[green]Added learning to DESIGN.md:[/green] {learning[:80]}")
+
+    elif action == "edit":
+        console.print("[dim]Opening DESIGN.md in your editor...[/dim]")
+        import subprocess
+        editor = os.environ.get("EDITOR", "notepad")
+        subprocess.run([editor, "DESIGN.md"])
+
+    else:
+        console.print(f"[red]Unknown action: {action}. Use show, init, learn, or edit[/red]")
+
+
 # Register additional commands
 add_new_commands(app)

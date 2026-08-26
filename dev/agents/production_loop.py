@@ -2415,6 +2415,15 @@ class ProductionAgentLoop:
             parts.append(f"\n\n## Project Rules\n{rules}")
             parts.append("\n\n**Rule Precedence:** .devrules overrides DEV.md. When rules conflict, follow the most specific source.")
 
+        # Design knowledge (DESIGN.md patterns)
+        try:
+            from ..utils.design_knowledge import get_design_prompt_section
+            design_knowledge = get_design_prompt_section(self.project_path)
+            if design_knowledge:
+                parts.append(f"\n\n{design_knowledge}")
+        except Exception:
+            pass
+
         # Auto-memory from previous sessions
         memory = self._load_auto_memory()
         if memory:
