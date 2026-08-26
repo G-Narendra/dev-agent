@@ -81,7 +81,7 @@ class LoopConfig:
     retry_delay: float = 1.0
     max_retry_delay: float = 60.0
     auto_lint: bool = True
-    auto_test: bool = False
+    auto_test: bool = True
     auto_commit: bool = True
     verbose: bool = False
     show_diffs: bool = True
@@ -1346,6 +1346,16 @@ class ProductionAgentLoop:
                     commit_result = await self._auto_commit()
                     if commit_result and commit_result.get("success"):
                         self._log(f"Auto-committed: {commit_result.get('hash', 'ok')}")
+
+                # Auto-test after all writes in this step are done
+                if self.config.auto_test and tool_name in COMMIT_TOOLS and tool_name == write_tcs[-1].get("function", {}).get("name", ""):
+                    test_result = await self._auto_test()
+                    if test_result and test_result.get("failed"):
+                        self._log(f"Auto-test FAILED: {test_result['failed']}")
+                        # Inject test failure into context so model can fix it
+                        self._state.cur_messages.append(
+                            Message(role='user', content=f"Tests FAILED: {test_result.get('output', '')[:500]}. Fix the issues and try again.")
+                        )
 
             # Show git diff after all tool calls in this step
             if self.config.show_diffs and all_tool_calls:
@@ -3053,6 +3063,54 @@ class ProductionAgentLoop:
     # =========================================================================
     # Auto Quality Gates
     # =========================================================================
+
+    async def _auto_test(self) -> dict | None:
+        """Auto-detect and run tests after file changes.
+        
+        Detects test framework from project files and runs tests:
+        - pytest if pytest.ini/setup.cfg/pyproject.toml with pytest config
+        - npm test if package.json has test script
+        - python -m unittest if test_*.py files exist
+        """
+        try:
+            import subprocess as _sp
+            project = self.project_path
+            
+            # Check for package.json with test script
+            pkg_path = os.path.join(project, 'package.json')
+            if os.path.isfile(pkg_path):
+                try:
+                    with open(pkg_path) as f:
+                        pkg = json.load(f)
+                    if 'test' in pkg.get('scripts', {}):
+                        result = _sp.run(
+                            ['npm', 'test'],
+                            capture_output=True, text=True,
+                            cwd=project, timeout=60,
+                        )
+                        if result.returncode != 0:
+                            return {'failed': True, 'output': result.stdout + result.stderr}
+                        return {'passed': True}
+                except Exception:
+                    pass
+            
+            # Check for Python test files
+            import glob as _glob
+            test_files = _glob.glob(os.path.join(project, 'test_*.py'))
+            if test_files:
+                result = _sp.run(
+                    ['python', '-m', 'pytest', '-x', '-q', '--tb=short'],
+                    capture_output=True, text=True,
+                    cwd=project, timeout=60,
+                )
+                if result.returncode != 0:
+                    return {'failed': True, 'output': result.stdout + result.stderr}
+                return {'passed': True}
+            
+            return None  # No tests detected
+        except Exception as e:
+            self._log(f'Auto-test failed: {e}')
+            return None
 
     async def _auto_lint(self, tool_args: dict) -> dict | None:
         """Auto-lint after file changes."""

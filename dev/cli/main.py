@@ -3092,13 +3092,34 @@ def resume_cmd(
             project_path=abs_project,
         )
 
-        # Load conversation history into loop
+        # Load conversation history into loop with full state restoration
+        from dev.agents.production_loop import Message
+        msg_count = 0
+        tool_call_count = 0
+        edited_files = set()
         for msg in conv.get_messages():
-            from dev.agents.production_loop import Message
+            role = msg.role
+            content = msg.content or ""
+            tool_calls = getattr(msg, 'tool_calls', None) or []
+            # Track edited files from tool results
+            if role == 'tool':
+                try:
+                    data = json.loads(content)
+                    if isinstance(data, dict) and 'path' in data:
+                        edited_files.add(data['path'])
+                except Exception:
+                    pass
+            if tool_calls:
+                tool_call_count += len(tool_calls)
             agent_loop._state.done_messages.append(
-                Message(role=msg.role, content=msg.content)
+                Message(role=role, content=content, tool_calls=tool_calls)
             )
-
+            msg_count += 1
+        if edited_files:
+            agent_loop._state.edited_files = edited_files
+        console.print(f"[dim]Restored {msg_count} messages, {tool_call_count} tool calls, {len(edited_files)} edited files[/dim]")
+        if edited_files:
+            console.print(f"[dim]Files modified: {', '.join(sorted(edited_files)[:10])}{'...' if len(edited_files) > 10 else ''}[/dim]")
         console.print("[dim]Type your message to continue. /quit to exit.[/dim]")
 
         while True:
