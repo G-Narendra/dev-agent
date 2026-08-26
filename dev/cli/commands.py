@@ -183,6 +183,11 @@ def register_new_tools(registry, project_path: str):
     registry.register("visual_review", VisualReviewTool())
     registry.register("auto_visual_review", AutoVisualReviewTool())
     
+    # Design fetcher (learn from real brand DESIGN.md files)
+    from ..tools.design_fetcher import DesignFetcherTool, DesignListTool
+    registry.register("design_fetch", DesignFetcherTool())
+    registry.register("design_list", DesignListTool())
+    
     return registry
 
 

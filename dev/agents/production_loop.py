@@ -2501,6 +2501,8 @@ class ProductionAgentLoop:
 - Architecture diagrams → generate_diagram
 - Website looks ugly or need design feedback → visual_review (screenshots page, sends to vision model, returns scores + CSS fixes)
 - Auto-fix ugly website → auto_visual_review (screenshot + analyze + apply CSS fixes in a loop)
+- Need design patterns for a brand → design_fetch (fetches real Stripe/Linear/Apple/Nike DESIGN.md from GitHub)
+- List available brand designs → design_list (shows 40+ brands available)
 """)
 
         result = "\n".join(parts)
