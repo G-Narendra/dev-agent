@@ -982,6 +982,29 @@ class ProductionAgentLoop:
                         has_pending_todos = True
                         self._log("Model described files instead of creating them -- auto-continuing")
 
+                # Auto-research: if model says it needs info but didn't call web_search
+                if not has_pending_todos and full_content and step < max_steps - 1:
+                    research_phrases = [
+                        "i don't know", "i'm not sure", "i need to research", "let me look up",
+                        "i'll search", "i need more information", "let me find out",
+                        "i need to check", "i'm not familiar", "i don't have that info",
+                    ]
+                    used_web_search = any(
+                        tc.get('function', {}).get('name', '') in ('web_search', 'read_url')
+                        for tc in (tool_calls_data or [])
+                    )
+                    if any(phrase in text_lower for phrase in research_phrases) and not used_web_search:
+                        # Extract the topic the model wants to research
+                        self._state.cur_messages.append(
+                            Message(role='user', content=(
+                                "You said you need information but didn't search for it. "
+                                "CALL web_search with a specific query to find the answer. "
+                                "Then use read_url on the best result. "
+                                "Do NOT guess -- RESEARCH from the web."
+                            ))
+                        )
+                        continue
+
                 if has_pending_todos and step < max_steps - 1:
                     # Send a follow-up message to keep the agent working
                     self._state.cur_messages.append(
