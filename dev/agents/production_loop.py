@@ -22,6 +22,7 @@ from __future__ import annotations
 
 import asyncio
 import json
+import re
 import os
 import shutil
 import subprocess
@@ -349,6 +350,10 @@ class ProductionAgentLoop:
         )
 
         full_system = self._build_system_prompt(system_prompt, repo_map)
+        
+        # AUTO-DESIGN: Detect if building a web project and fetch brand design
+        full_system = await self._auto_fetch_design(prompt, full_system)
+        
         all_tool_calls = []
         all_tool_results = []
         reflection_count = 0
@@ -647,6 +652,10 @@ class ProductionAgentLoop:
         )
 
         full_system = self._build_system_prompt(system_prompt, repo_map)
+        
+        # AUTO-DESIGN: Detect if building a web project and fetch brand design
+        full_system = await self._auto_fetch_design(prompt, full_system)
+        
         import sys as _sys
         print(f"[DEBUG] System prompt: {len(full_system)} chars, Messages: {len(self._state.cur_messages)}", file=_sys.stderr, flush=True)
         all_tool_calls = []
@@ -2209,6 +2218,120 @@ class ProductionAgentLoop:
     # =========================================================================
     # Auto-Compact (Claude Code pattern)
     # =========================================================================
+    # AUTO-DESIGN: Fetch brand design patterns before building
+    # =========================================================================
+
+    # Brand keyword mapping for auto-detection
+    _BRAND_KEYWORDS = {
+        "stripe": ["stripe", "payment", "checkout", "billing"],
+        "linear": ["linear", "project management", "task board", "kanban"],
+        "apple": ["apple", "ios", "macos", "premium", "minimalist white"],
+        "github": ["github", "git", "code repo", "developer platform"],
+        "vercel": ["vercel", "next.js", "deployment", "frontend"],
+        "notion": ["notion", "workspace", "documentation", "wiki"],
+        "figma": ["figma", "design tool", "collaborative design"],
+        "nike": ["nike", "sportswear", "athletic", "fitness"],
+        "tesla": ["tesla", "electric car", "ev", "automotive"],
+        "spotify": ["spotify", "music", "streaming", "audio"],
+        "supabase": ["supabase", "firebase", "database", "backend"],
+        "cursor": ["cursor", "code editor", "ide", "coding"],
+        "airbnb": ["airbnb", "travel", "booking", "rental"],
+        "shopify": ["shopify", "ecommerce", "store", "shop"],
+        "resend": ["resend", "email", "transactional"],
+    }
+
+    async def _auto_fetch_design(self, prompt: str, system_prompt: str) -> str:
+        """Auto-detect if building a web project and fetch brand DESIGN.md.
+        
+        Pattern from Addy Osmani's self-improving agents:
+        - Detect project type from prompt
+        - Fetch relevant DESIGN.md from awesome-design-md repo
+        - Inject design tokens into system prompt
+        """
+        prompt_lower = prompt.lower()
+        
+        # Detect if this is a web/UI project
+        web_keywords = [
+            "website", "web app", "portfolio", "landing page", "frontend",
+            "ui", "design", "css", "html", "react", "next.js", "vue",
+            "site", "page", "dashboard", "app", "build", "create",
+        ]
+        is_web_project = any(kw in prompt_lower for kw in web_keywords)
+        
+        if not is_web_project:
+            return system_prompt
+        
+        # Detect brand from prompt
+        detected_brand = None
+        for brand, keywords in self._BRAND_KEYWORDS.items():
+            if any(kw in prompt_lower for kw in keywords):
+                detected_brand = brand
+                break
+        
+        # Default to a good general design if no brand detected
+        if not detected_brand:
+            # Detect style preference
+            if any(kw in prompt_lower for kw in ["dark", "modern", "sleek"]):
+                detected_brand = "linear"
+            elif any(kw in prompt_lower for kw in ["clean", "minimal", "white"]):
+                detected_brand = "apple"
+            elif any(kw in prompt_lower for kw in ["colorful", "vibrant", "playful"]):
+                detected_brand = "figma"
+            elif any(kw in prompt_lower for kw in ["professional", "corporate", "business"]):
+                detected_brand = "stripe"
+            else:
+                detected_brand = "stripe"  # Safe default
+        
+        self._log(f"Auto-design: Detected brand '{detected_brand}' from prompt")
+        
+        # Fetch the DESIGN.md
+        try:
+            from ..tools.design_fetcher import DesignFetcherTool
+            fetcher = DesignFetcherTool()
+            result = await fetcher.execute(
+                {"brand": detected_brand, "save_to_project": True},
+                None,
+                self.project_path,
+            )
+            
+            if result.get("success"):
+                content = result.get("content_preview", "")
+                tokens = result.get("tokens", {})
+                
+                # Build design context injection
+                design_section = f"\n\n## AUTO-LOADED DESIGN: {detected_brand.upper()}\n"
+                design_section += f"Source: VoltAgent/awesome-design-md\n"
+                
+                if tokens.get("colors"):
+                    design_section += f"\nColors: {json.dumps(tokens['colors'], indent=2)}\n"
+                if tokens.get("font_family"):
+                    design_section += f"Font: {tokens['font_family']}\n"
+                if tokens.get("radii"):
+                    design_section += f"Radii: {json.dumps(tokens['radii'])}\n"
+                
+                # Add key rules from the DESIGN.md
+                if content:
+                    # Extract the Overview section
+                    overview_match = re.search(r'## Overview\n(.*?)(?=\n## |$)', content, re.DOTALL)
+                    if overview_match:
+                        overview = overview_match.group(1).strip()[:1500]
+                        design_section += f"\nDesign Overview:\n{overview}\n"
+                    
+                    # Extract Do's and Don'ts
+                    dos_match = re.search(r"Do's and Don'ts.*?\n(.*?)(?=\n## |$)", content, re.DOTALL)
+                    if dos_match:
+                        dos = dos_match.group(1).strip()[:1000]
+                        design_section += f"\nDo's and Don'ts:\n{dos}\n"
+                
+                design_section += f"\n\n**INSTRUCTION:** Apply these {detected_brand.upper()} design patterns to your code. Use the exact colors, fonts, spacing, and component styles defined above. Do NOT use generic patterns — use the {detected_brand} design system.\n"
+                
+                system_prompt += design_section
+                self._log(f"Auto-design: Injected {detected_brand} design ({len(design_section)} chars)")
+            
+        except Exception as e:
+            self._log(f"Auto-design: Failed to fetch {detected_brand}: {e}")
+        
+        return system_prompt
 
     async def _synthesize_final_summary(self, system_prompt: str, on_text=None) -> str:
         """Graceful degradation (smolagents pattern): when the loop ends at max_steps,
