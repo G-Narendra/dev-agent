@@ -1,5 +1,5 @@
 """
-Production Agent Loop for Dev — the CORE of the entire agent.
+Production Agent Loop for Dev -- the CORE of the entire agent.
 
 Modeled after Claude Code's run.ts + Aider's base_coder.py.
 Every chat/run/headless command flows through here.
@@ -170,7 +170,7 @@ DANGEROUS_COMMANDS = [
 
 class ProductionAgentLoop:
     """
-    Production-quality agent loop — the brain of Dev.
+    Production-quality agent loop -- the brain of Dev.
 
     Modeled after Claude Code's run.ts with Aider-style context management.
     Every interaction flows through here.
@@ -226,7 +226,7 @@ class ProductionAgentLoop:
         # Tool result cache: cache read-only tool results to avoid re-reading
         self._tool_cache: dict[str, dict] = {}  # cache_key -> result
         self._tool_cache_max = 50  # Max cached results
-        # Audit logger already set above from security module — don't overwrite
+        # Audit logger already set above from security module -- don't overwrite
         # Approval history: track all approval decisions for review
         self._approval_history: list[dict] = []
         # Plan persistence
@@ -266,7 +266,7 @@ class ProductionAgentLoop:
         self._session_history = session_history
 
     def _log(self, msg: str):
-        """Verbose logging — only prints when verbose mode is on."""
+        """Verbose logging -- only prints when verbose mode is on."""
         if self.config.verbose:
             try:
                 from ..utils.logger import get_logger
@@ -326,7 +326,7 @@ class ProductionAgentLoop:
         if self._injection_detector:
             detection = self._injection_detector.detect(prompt)
             if detection.blocked:
-                self._log(f"\u26d4 Security: Input BLOCKED — {detection.reason}")
+                self._log(f"\u26d4 Security: Input BLOCKED -- {detection.reason}")
                 if self._audit_logger:
                     self._audit_logger.log_security_event(
                         event_type="input_blocked",
@@ -336,7 +336,7 @@ class ProductionAgentLoop:
                     )
                 return {"status": "blocked", "reason": detection.reason}
             elif detection.threat_level.value in ("medium", "high"):
-                self._log(f"\u26a0\ufe0f Security: Suspicious input detected ({detection.threat_level.value}) — monitoring")
+                self._log(f"\u26a0\ufe0f Security: Suspicious input detected ({detection.threat_level.value}) -- monitoring")
                 if self._audit_logger:
                     self._audit_logger.log_security_event(
                         event_type="suspicious_input",
@@ -360,6 +360,9 @@ class ProductionAgentLoop:
 
             self._log(f"Step {step + 1}/{max_steps}, context tokens: ~{self._count_tokens(self._state.done_messages + self._state.cur_messages):,}")
 
+            # Auto-poll background jobs and inject their output as context
+            await self._poll_background_jobs()
+
             messages = self._format_messages(full_system)
             messages = self._prune_if_needed(messages, full_system)
 
@@ -372,7 +375,7 @@ class ProductionAgentLoop:
             response = await self._call_llm_with_retries(messages)
 
             if not response:
-                # Don't exit — try next step with a different approach
+                # Don't exit -- try next step with a different approach
                 self._log(f"No response from LLM at step {step + 1}, retrying...")
                 self._state.cur_messages.append(
                     Message(role="user", content="Please continue with the task. If there was an error, try a different approach.")
@@ -422,10 +425,10 @@ class ProductionAgentLoop:
                             if edited_path:
                                 self._state.edited_files.add(edited_path)
                     
-                    # Continue the loop — don't exit yet
+                    # Continue the loop -- don't exit yet
                     continue
                 
-                # Check if there are pending todo items — if so, auto-continue
+                # Check if there are pending todo items -- if so, auto-continue
                 if self._has_pending_todos(content):
                     self._log("Model returned text but has pending todos, auto-continuing")
                     self._state.cur_messages.append(
@@ -498,7 +501,7 @@ class ProductionAgentLoop:
                     all_tool_calls.append({"name": tool_name, "args": tool_args})
                     all_tool_results.append({"name": tool_name, "result": result})
 
-                    # Compress tool results — add quality feedback if file is too short
+                    # Compress tool results -- add quality feedback if file is too short
                     if tool_name == 'write_file':
                         file_lines = result.get('lines', 0)
                         file_path = result.get('path', '')
@@ -519,7 +522,7 @@ class ProductionAgentLoop:
                             half = 700
                             result_str = result_str[:half] + f'\n...[{len(result_str) - half*2} chars removed]\n' + result_str[-half:]
                     
-                    # Global cap — no single tool result exceeds 2000 chars
+                    # Global cap -- no single tool result exceeds 2000 chars
                     if len(result_str) > 2000:
                         result_str = result_str[:800] + f'\n...[{len(result_str) - 1600} chars truncated]\n' + result_str[-800:]
 
@@ -578,7 +581,7 @@ class ProductionAgentLoop:
                 partial_warning = f"Agent stopped at MAX_STEPS with {len(last_msg.tool_calls)} unexecuted tool call(s). Results may be incomplete."
                 self._log(partial_warning)
 
-        # Graceful degradation: never stop silently at max_steps — synthesize a summary.
+        # Graceful degradation: never stop silently at max_steps -- synthesize a summary.
         summary_content = await self._synthesize_final_summary(full_system)
 
         return {
@@ -621,7 +624,7 @@ class ProductionAgentLoop:
         if self._injection_detector:
             detection = self._injection_detector.detect(prompt)
             if detection.blocked:
-                self._log(f"\u26d4 Security: Input BLOCKED — {detection.reason}")
+                self._log(f"\u26d4 Security: Input BLOCKED -- {detection.reason}")
                 if self._audit_logger:
                     self._audit_logger.log_security_event(
                         event_type="input_blocked",
@@ -631,7 +634,7 @@ class ProductionAgentLoop:
                     )
                 return {"status": "blocked", "reason": detection.reason}
             elif detection.threat_level.value in ("medium", "high"):
-                self._log(f"\u26a0\ufe0f Security: Suspicious input detected ({detection.threat_level.value}) — monitoring")
+                self._log(f"\u26a0\ufe0f Security: Suspicious input detected ({detection.threat_level.value}) -- monitoring")
                 if self._audit_logger:
                     self._audit_logger.log_security_event(
                         event_type="suspicious_input",
@@ -662,6 +665,9 @@ class ProductionAgentLoop:
 
             self._log(f"Step {step + 1}/{max_steps}, context tokens: ~{self._count_tokens(self._state.done_messages + self._state.cur_messages):,}")
 
+            # Auto-poll background jobs and inject their output as context
+            await self._poll_background_jobs()
+
             messages = self._format_messages(full_system)
             messages = self._prune_if_needed(messages, full_system)
 
@@ -674,7 +680,7 @@ class ProductionAgentLoop:
             # Convert to dicts for API
             msg_dicts = self._messages_to_dicts(messages)
 
-            # Get tool definitions — filter by tool_names if set (reduces for LLM)
+            # Get tool definitions -- filter by tool_names if set (reduces for LLM)
             if self._tool_names and hasattr(self.tools, 'get_definitions_for_tools'):
                 tool_defs = self.tools.get_definitions_for_tools(self._tool_names)
             else:
@@ -686,7 +692,7 @@ class ProductionAgentLoop:
             tool_calls_data = []
             stream_success = False
             last_error = None
-            # Checkpoint message count before retry — rollback on failure to prevent duplicates
+            # Checkpoint message count before retry -- rollback on failure to prevent duplicates
             msg_checkpoint = len(self._state.cur_messages)
 
             # Budget check before LLM call
@@ -747,7 +753,7 @@ class ProductionAgentLoop:
                             self._state.total_tokens_received += usage.get("completion_tokens", 0)
 
                     stream_success = True
-                    break  # Success — exit retry loop
+                    break  # Success -- exit retry loop
 
                 except Exception as e:
                     last_error = str(e)
@@ -756,7 +762,7 @@ class ProductionAgentLoop:
                     if "400" in last_error or "context" in last_error.lower():
                         old_limit = self.config.max_context_tokens
                         self.config.max_context_tokens = int(old_limit * 0.7)
-                        self._log(f"Context too large — reducing limit from {old_limit:,} to {self.config.max_context_tokens:,} tokens")
+                        self._log(f"Context too large -- reducing limit from {old_limit:,} to {self.config.max_context_tokens:,} tokens")
                         # Prune aggressively before retrying
                         self._state.cur_messages = self._state.cur_messages[-4:]
                         if self._state.done_messages:
@@ -778,7 +784,7 @@ class ProductionAgentLoop:
                     if '500' in last_error:
                         old_limit = self.config.max_context_tokens
                         self.config.max_context_tokens = int(old_limit * 0.7)
-                        self._log(f"Server error — reducing context from {old_limit:,} to {self.config.max_context_tokens:,}")
+                        self._log(f"Server error -- reducing context from {old_limit:,} to {self.config.max_context_tokens:,}")
                         self._state.cur_messages = self._state.cur_messages[-6:]
                         if self._state.done_messages:
                             self._state.done_messages = self._state.done_messages[-3:]
@@ -800,7 +806,7 @@ class ProductionAgentLoop:
                 error_msg = f"LLM call failed after {self.config.max_retries} retries: {last_error}"
                 self._log(error_msg)
                 
-                # Detect rate-limit errors — these should NOT count toward consecutive_failures
+                # Detect rate-limit errors -- these should NOT count toward consecutive_failures
                 error_str = str(last_error).lower()
                 is_rate_limit = any(term in error_str for term in (
                     '429', 'rate', 'exhausted', 'too many', 'limit reached',
@@ -809,16 +815,16 @@ class ProductionAgentLoop:
                 if is_rate_limit:
                     # Patient wait: sleep until the RPM window resets (60-90s)
                     wait_seconds = 65  # Default: wait just over a minute for RPM reset
-                    self._log(f"Rate limit detected — waiting {wait_seconds}s before retry")
+                    self._log(f"Rate limit detected -- waiting {wait_seconds}s before retry")
                     if on_text:
-                        on_text(f"\n⏳ Rate limited — waiting {wait_seconds}s for API window reset...\n")
+                        on_text(f"\n⏳ Rate limited -- waiting {wait_seconds}s for API window reset...\n")
                     await asyncio.sleep(wait_seconds)
                     # Don't increment consecutive_failures for rate limits
                 else:
                     consecutive_failures += 1
                     # Bounded failure: don't grind through remaining steps when provider is down.
                     if consecutive_failures >= self.config.max_consecutive_failures:
-                        self._log(f"{consecutive_failures} consecutive failed steps — aborting with summary")
+                        self._log(f"{consecutive_failures} consecutive failed steps -- aborting with summary")
                         return {
                             "status": "error",
                             "message": f"Provider failed {consecutive_failures} steps in a row: {last_error}",
@@ -869,31 +875,31 @@ class ProductionAgentLoop:
                                 # Only flag as placeholder if truly not code
                                 if is_empty or is_comment_only or (is_short and not has_real_code):
                                     truncated = True
-                                    self._log(f"Detected placeholder content ({len(ct)} chars) — will retry")
+                                    self._log(f"Detected placeholder content ({len(ct)} chars) -- will retry")
                                     break
                                 # --- Structural truncation detection (cut-off mid-file) ---
                                 # HTML that opens a document but never closes it
                                 low = stripped.lower()
                                 if (low.startswith('<!doctype') or low.startswith('<html')) and '</html>' not in low:
                                     truncated = True
-                                    self._log(f"Detected TRUNCATED HTML ({len(ct)} chars, no </html>) — will split")
+                                    self._log(f"Detected TRUNCATED HTML ({len(ct)} chars, no </html>) -- will split")
                                     break
                                 # Unbalanced braces/brackets in code = cut off mid-write
                                 for op, cl in [('{', '}'), ('[', ']')]:
                                     if stripped.count(op) - stripped.count(cl) > 2 and len(stripped) > 100:
                                         truncated = True
-                                        self._log(f"Detected UNBALANCED {op}{cl} ({stripped.count(op)} vs {stripped.count(cl)}) — file cut off")
+                                        self._log(f"Detected UNBALANCED {op}{cl} ({stripped.count(op)} vs {stripped.count(cl)}) -- file cut off")
                                         break
                                 if truncated:
                                     break
                         except Exception:
                             # Even JSON parse failure = likely truncation
                             truncated = True
-                            self._log("write_file arguments failed to parse — likely truncated")
+                            self._log("write_file arguments failed to parse -- likely truncated")
                             break
 
                 if truncated:
-                    # Re-request WITH tools — model must use write_file tool
+                    # Re-request WITH tools -- model must use write_file tool
                     self._log("Retrying with tools for full code generation")
                     # Extract the folder prefix from the original request if present
                     folder_prefix = ""
@@ -907,15 +913,15 @@ class ProductionAgentLoop:
                         except Exception:
                             pass
                     retry_prompt = (
-                        "The previous write_file calls had PLACEHOLDER or CUT-OFF content — the file was truncated mid-write.\n"
+                        "The previous write_file calls had PLACEHOLDER or CUT-OFF content -- the file was truncated mid-write.\n"
                         "This happens when a single write_file is too large. You MUST SPLIT YOUR WORK:\n\n"
                         "RULES:\n"
                         "1. Write ONE small file per step (keep each under 120 lines)\n"
                         "2. If a page is long, create it in parts: first part with write_file, "
                         "then EXTEND it using str_replace on a unique marker like <!-- PART2 -->\n"
-                        "3. Content must be REAL code with COMPLETE implementations — not stubs\n"
+                        "3. Content must be REAL code with COMPLETE implementations -- not stubs\n"
                         "4. NEVER output placeholder text like '// add code here' or 'TODO'\n"
-                        "5. NEVER create local image files (.jpg/.png) — use remote image URLs "
+                        "5. NEVER create local image files (.jpg/.png) -- use remote image URLs "
                         "(https://upload.wikimedia.org/...) directly in HTML/CSS instead\n"
                         f"6. All paths must start with '{folder_prefix}' if creating a subfolder\n\n"
                         f"Start NOW with the NEXT unfinished file. Do not describe, just create."
@@ -924,11 +930,11 @@ class ProductionAgentLoop:
                     self._state.cur_messages.append(
                         Message(role='user', content=retry_prompt)
                     )
-                    continue  # Go back to top of loop — will call LLM with tools
+                    continue  # Go back to top of loop -- will call LLM with tools
 
             # No tool calls = potentially done
             if not tool_calls_data and full_content:
-                # Model outputted text instead of tool calls — try to parse code blocks
+                # Model outputted text instead of tool calls -- try to parse code blocks
                 parsed = self._parse_code_blocks(full_content)
                 if parsed:
                     tool_calls_data = parsed
@@ -958,7 +964,7 @@ class ProductionAgentLoop:
                                 if incomplete:
                                     has_pending_todos = True
                                     incomplete_count = len(incomplete)
-                                    self._log(f"Found {incomplete_count} incomplete todo items — prompting agent to continue")
+                                    self._log(f"Found {incomplete_count} incomplete todo items -- prompting agent to continue")
                         except Exception:
                             pass
                         break
@@ -974,7 +980,7 @@ class ProductionAgentLoop:
                     ]
                     if any(phrase in text_lower for phrase in description_phrases):
                         has_pending_todos = True
-                        self._log("Model described files instead of creating them — auto-continuing")
+                        self._log("Model described files instead of creating them -- auto-continuing")
 
                 if has_pending_todos and step < max_steps - 1:
                     # Send a follow-up message to keep the agent working
@@ -985,7 +991,7 @@ class ProductionAgentLoop:
                         follow_up = (
                             f"STOP TALKING. You have {incomplete_count} incomplete tasks.\n"
                             "CALL write_file RIGHT NOW for the NEXT file.\n"
-                            "Each file must have COMPLETE content — full HTML, full CSS, full JS.\n"
+                            "Each file must have COMPLETE content -- full HTML, full CSS, full JS.\n"
                             "No placeholders, no 'add code here', no stubs.\n"
                             "Write the ENTIRE file content in the write_file call.\n"
                             "DO NOT describe what you will write. JUST WRITE IT."
@@ -994,14 +1000,14 @@ class ProductionAgentLoop:
                         follow_up = (
                             "You described files in text but did not create them. THIS IS WRONG.\n"
                             "CALL write_file for EACH file you described.\n"
-                            "The content parameter must contain the COMPLETE file — not a description.\n"
+                            "The content parameter must contain the COMPLETE file -- not a description.\n"
                             "For CSS: write ALL styles. For HTML: write ALL markup. For JS: write ALL code.\n"
                             "CALL write_file NOW."
                         )
                     self._state.cur_messages.append(
                         Message(role='user', content=follow_up)
                     )
-                    continue  # Don't break — keep the loop going
+                    continue  # Don't break -- keep the loop going
 
                 # --- Empty-response tracking (research: silent stalls are the #1 free-model failure) ---
                 if not full_content and not tool_calls_data:
@@ -1016,8 +1022,8 @@ class ProductionAgentLoop:
                             ))
                         )
                         continue
-                    # Exceeded threshold — synthesize graceful summary and stop (smolagents pattern)
-                    self._log("Too many empty responses — synthesizing final summary")
+                    # Exceeded threshold -- synthesize graceful summary and stop (smolagents pattern)
+                    self._log("Too many empty responses -- synthesizing final summary")
                     return {
                         "status": "completed",
                         "content": final_content or f"[Agent stopped after {consecutive_empty} empty model responses. Work done so far: {len(all_tool_calls)} tool calls.]",
@@ -1086,7 +1092,7 @@ class ProductionAgentLoop:
                     identical_repeat_count = 0
                     last_tool_signature = step_signature
                 if identical_repeat_count + 1 >= self.config.max_identical_tool_repeats:
-                    self._log(f"Loop detected: same tool calls repeated {identical_repeat_count + 1}x — injecting correction")
+                    self._log(f"Loop detected: same tool calls repeated {identical_repeat_count + 1}x -- injecting correction")
                     self._state.cur_messages.append(
                         Message(role="user", content=(
                             "ERROR: You are repeating the exact same tool calls with the same arguments. "
@@ -1122,7 +1128,7 @@ class ProductionAgentLoop:
                         if isinstance(res, Exception):
                             res = {"error": str(res)}
                 else:
-                    # Single read-only tool — execute sequentially
+                    # Single read-only tool -- execute sequentially
                     await self._execute_single_tool(read_only_tcs[0], on_tool_call, on_tool_result)
 
             # Execute write tools sequentially
@@ -1245,7 +1251,7 @@ class ProductionAgentLoop:
                 tc["function"]["arguments"] = json.dumps(tool_args)
 
                 # Truncate large tool results to prevent context overflow
-                # Compress write_file results — add quality feedback if file is too short
+                # Compress write_file results -- add quality feedback if file is too short
                 if tool_name == 'write_file':
                     file_lines = result.get('lines', 0)
                     file_path = result.get('path', '')
@@ -1269,11 +1275,21 @@ class ProductionAgentLoop:
                 elif tool_name == 'read_files':
                     result_str = json.dumps(result)
                     if len(result_str) > 3000:
-                        result_str = result_str[:3000] + '\n\n[...truncated to save context...]'
+                        # Head+tail: keep first 2000 + last 800 chars
+                        result_str = result_str[:2000] + f'\n\n[...{len(result_str) - 2800} chars truncated...]\n' + result_str[-800:]
+                elif tool_name == 'web_search':
+                    result_str = json.dumps(result)
+                    if len(result_str) > 2500:
+                        # For search results, keep top results and truncate the rest
+                        result_str = result_str[:2500] + f'\n[...{len(result_str) - 2500} chars truncated...]'
                 else:
                     result_str = json.dumps(result)
                     if len(result_str) > 2000:
-                        result_str = result_str[:2000] + '\n\n[...truncated to save context...]'
+                        # Head+tail truncation preserves both beginning and end context
+                        head = 1200
+                        tail = 600
+                        removed = len(result_str) - head - tail
+                        result_str = result_str[:head] + f'\n[...{removed} chars truncated...]\n' + result_str[-tail:]
 
                 # Add tool result to history
                 self._state.cur_messages.append(
@@ -1315,7 +1331,7 @@ class ProductionAgentLoop:
             # Save session state after each step
             await self._save_session()
 
-            # Rate limit delay — respect provider limits
+            # Rate limit delay -- respect provider limits
             # Use 2s as safe default; providers handle their own rate limiting
             if step < max_steps - 1 and tool_calls_data:
                 await asyncio.sleep(2.0)
@@ -1332,7 +1348,7 @@ class ProductionAgentLoop:
                 partial_warning = f"Agent stopped at MAX_STEPS with {len(last_msg.tool_calls)} unexecuted tool call(s). Results may be incomplete."
                 self._log(partial_warning)
 
-        # Graceful degradation: never stop silently at max_steps — synthesize a summary.
+        # Graceful degradation: never stop silently at max_steps -- synthesize a summary.
         summary_content = await self._synthesize_final_summary(full_system)
 
         return {
@@ -1482,7 +1498,7 @@ class ProductionAgentLoop:
                 return {"allowed": True, "reason": "auto-edit: read-only auto-approved"}
             if tool_name in COMMIT_TOOLS:
                 return {"allowed": True, "reason": "auto-edit: file edit auto-approved"}
-            # Terminal commands — check for dangerous patterns
+            # Terminal commands -- check for dangerous patterns
             if tool_name == "run_terminal_command":
                 cmd = tool_args.get("command", "")
                 for pattern in DANGEROUS_COMMANDS:
@@ -2073,7 +2089,7 @@ class ProductionAgentLoop:
                         capture_output=True, text=True, cwd=self.project_path, timeout=10
                     )
                     if result.returncode != 0:
-                        # File might not be tracked — try file-based fallback
+                        # File might not be tracked -- try file-based fallback
                         self._restore_from_backup(f)
                 # Clear the edited files set
                 self._state.edited_files.clear()
@@ -2226,7 +2242,7 @@ class ProductionAgentLoop:
                 tool_call_id=msg.tool_call_id,
                 name=name,
                 content=msg.content[:shrink_to]
-                + f"\n[...older {name} output trimmed — see recent results for current state...]",
+                + f"\n[...older {name} output trimmed -- see recent results for current state...]",
             )
 
     _REMINDER_INTERVAL = 8  # inject a system reminder every N steps
@@ -2237,7 +2253,7 @@ class ProductionAgentLoop:
         at the decision point instead of relying on the initial system prompt."""
         if step == 0 or step % self._REMINDER_INTERVAL != 0:
             return
-        parts = [f"[System reminder — step {step}]"]
+        parts = [f"[System reminder -- step {step}]"]
         # Todo progress
         todos = None
         if isinstance(self._state.output, dict):
@@ -2247,13 +2263,13 @@ class ProductionAgentLoop:
             total = len(todos)
             remaining = [t.get("task", "") for t in todos if isinstance(t, dict) and not t.get("completed")]
             parts.append(f"Todos: {done}/{total} complete. Remaining: " + "; ".join(remaining[:5]))
-        parts.append("Stay focused on the user's task. Use write_file with complete file content — no placeholders.")
+        parts.append("Stay focused on the user's task. Use write_file with complete file content -- no placeholders.")
         self._state.cur_messages.append(Message(role="user", content="\n".join(parts)))
 
     async def _auto_compact_if_needed(self, messages: list[Message], system_prompt: str):
         """Smart auto-compact using OpenClaw-style compaction engine."""
         tokens = self._count_tokens(messages)
-        threshold = self.config.max_context_tokens * 0.55  # 55% threshold — compact earlier to keep context lean for free models
+        threshold = self.config.max_context_tokens * 0.55  # 55% threshold -- compact earlier to keep context lean for free models
 
         if tokens <= threshold or len(self._state.done_messages) <= 6:
             return
@@ -2308,7 +2324,7 @@ class ProductionAgentLoop:
                     summary_parts.append(f"Tool({tool_name}): {content_preview}")
 
             summary_text = (
-                "[Previous conversation summary — auto-compacted to save context]\n"
+                "[Previous conversation summary -- auto-compacted to save context]\n"
                 + "\n".join(summary_parts[-30:])
                 + "\n\n[End of summary. Continue from the live message below.]"
             )
@@ -2380,7 +2396,7 @@ class ProductionAgentLoop:
         if self.config.enforce_plan_mode:
             parts.append("\n\n## CURRENT MODE: PLAN (read-only)\nYou can ONLY use read-only tools. To make changes, the user must switch to act mode.")
 
-        # Skills integration — inject expert role instructions
+        # Skills integration -- inject expert role instructions
         try:
             from .skill_integration import SkillIntegration
             si = SkillIntegration(skills_path=os.path.join(self.project_path, "skills"))
@@ -2393,9 +2409,9 @@ class ProductionAgentLoop:
             if task:
                 skill_prompt = si.build_skill_prompt(task)
                 if skill_prompt:
-                    # Compress: keep only first 500 chars of skill prompt to save context
-                    if len(skill_prompt) > 500:
-                        skill_prompt = skill_prompt[:500] + "\n[...truncated for context efficiency...]"
+                    # Compress: keep only first 400 chars of skill prompt to save context
+                    if len(skill_prompt) > 400:
+                        skill_prompt = skill_prompt[:400] + "\n[truncated]"
                     parts.append(f"\n\n{skill_prompt}")
         except Exception:
             pass  # Skills folder not available
@@ -2403,13 +2419,13 @@ class ProductionAgentLoop:
         # NIM model instruction: use write_file tool one file at a time
         parts.append("""
 
-## CRITICAL: USE write_file TOOL — ONE FILE AT A TIME
+## CRITICAL: USE write_file TOOL -- ONE FILE AT A TIME
 
 ### File Paths
 - Each write_file call creates ONE file with a proper filename and extension
 - Example paths: 'myapp/package.json', 'myapp/server.js', 'myapp/views/index.ejs'
 - The path MUST end with a file extension (.js, .css, .html, .json, .ejs, etc.)
-- NEVER write all content to a single file — split into separate files
+- NEVER write all content to a single file -- split into separate files
 
 ### Content
 - Complete file content. No placeholders. No descriptions. No stubs.
@@ -2418,18 +2434,18 @@ class ProductionAgentLoop:
 ### Flow
 1. Create a todo list with write_todos listing ALL files needed
 2. Create EACH file one by one using write_file with proper path
-3. Keep each write_file under 120 lines — split long files into parts (write_file then str_replace to extend)
-4. NEVER create local image/binary files (.jpg, .png, .gif) — reference remote URLs like https://upload.wikimedia.org/... directly in HTML/CSS
+3. Keep each write_file under 120 lines -- split long files into parts (write_file then str_replace to extend)
+4. NEVER create local image/binary files (.jpg, .png, .gif) -- reference remote URLs like https://upload.wikimedia.org/... directly in HTML/CSS
 5. After ALL files created, run_terminal_command to install deps and test
 6. Do NOT stop until todo list is 100% complete
-7. Research real information from the web before writing content — use web_search for facts, use real URLs for images
+7. Research real information from the web before writing content -- use web_search for facts, use real URLs for images
 8. If the model outputs truncate mid-file, use str_replace to extend it rather than rewriting the whole file
 """)
 
         # Capability map: teach the model WHICH tool solves WHICH problem.
         parts.append("""
 
-## TOOL SELECTION GUIDE — pick the right tool for each need
+## TOOL SELECTION GUIDE -- pick the right tool for each need
 - Facts, docs, research → web_search then read_url on the best result
 - Live webpage content/screenshots → browser_navigate + browser_screenshot
 - Find code in repo → code_search (regex) or glob (filename patterns); read_files to open
@@ -2441,7 +2457,6 @@ class ProductionAgentLoop:
 - External integrations (DBs, GitHub, Slack, browsers...) → list_mcp_servers / mcp_connect / mcp_call
 - Free public APIs for data (weather, stocks, news...) → list_apis / free_api
 - Architecture diagrams → generate_diagram
-""")
 """)
 
         result = "\n".join(parts)
@@ -2455,7 +2470,7 @@ class ProductionAgentLoop:
         """Load project rules from DEV.md, .devrules, and .dev/ directory."""
         parts = []
 
-        # 1. DEV.md (like CLAUDE.md — the primary project instructions file)
+        # 1. DEV.md (like CLAUDE.md -- the primary project instructions file)
         for devmd_name in ["DEV.md", "CLAUDE.md", ".dev.md"]:
             devmd_path = os.path.join(self.project_path, devmd_name)
             if os.path.isfile(devmd_path):
@@ -2583,7 +2598,7 @@ class ProductionAgentLoop:
                             "content": tool_m.content or "{}",
                         })
             elif m.role == "tool" and m.tool_call_id:
-                # Skip standalone tool results — already handled above
+                # Skip standalone tool results -- already handled above
                 continue
             else:
                 md = {"role": m.role}
@@ -2629,7 +2644,7 @@ class ProductionAgentLoop:
         """Prune messages if they exceed token limits.
         
         Strategy:
-        1. Check if within limits — return as-is
+        1. Check if within limits -- return as-is
         2. If over 80%, summarize old messages (auto-compact)
         3. If still over, truncate oldest messages
         """
@@ -2673,7 +2688,7 @@ class ProductionAgentLoop:
                     summary_parts.append(f"Called: {name}")
 
         summary_text = (
-            "[Previous conversation summary — original messages condensed to save context]\n"
+            "[Previous conversation summary -- original messages condensed to save context]\n"
             + "\n".join(summary_parts[-30:])
             + "\n\n[End of summary. Continue from the live message below.]"
         )
@@ -2686,7 +2701,7 @@ class ProductionAgentLoop:
     def _truncate_to_fit(self, messages: list[Message]) -> list[Message]:
         """Brute-force truncation to fit within token limits.
         
-        Keeps tool_call and tool_result pairs atomic — if we remove
+        Keeps tool_call and tool_result pairs atomic -- if we remove
         an assistant message with tool_calls, we also remove the
         corresponding tool result messages that follow it.
         """
@@ -2761,7 +2776,7 @@ class ProductionAgentLoop:
                 if "400" in last_error or "context" in last_error.lower():
                     old_limit = self.config.max_context_tokens
                     self.config.max_context_tokens = int(old_limit * 0.7)
-                    self._log(f"Context too large — reducing limit from {old_limit:,} to {self.config.max_context_tokens:,}")
+                    self._log(f"Context too large -- reducing limit from {old_limit:,} to {self.config.max_context_tokens:,}")
                     self._state.cur_messages = self._state.cur_messages[-4:]
                     if self._state.done_messages:
                         self._state.done_messages = self._state.done_messages[-2:]
@@ -2800,7 +2815,7 @@ class ProductionAgentLoop:
         if self._tool_validator:
             validation = self._tool_validator.validate(tool_name, tool_args)
             if not validation.allowed:
-                self._log(f"\u26d4 Security: Tool call BLOCKED: {tool_name} — {validation.reason}")
+                self._log(f"\u26d4 Security: Tool call BLOCKED: {tool_name} -- {validation.reason}")
                 if self._audit_logger:
                     self._audit_logger.log_security_event(
                         event_type="tool_blocked",
@@ -2889,6 +2904,47 @@ class ProductionAgentLoop:
                     pass
 
             return error_result
+
+    # =========================================================================
+    # Background Job Polling
+    # =========================================================================
+
+    async def _poll_background_jobs(self):
+        """Poll background terminal jobs and inject new output as context.
+        
+        This ensures long-running processes (dev servers, build watchers, test runners)
+        automatically feed their output back into the agent's context.
+        """
+        try:
+            # Find the RealRunTerminalCommand tool if available
+            rtc = None
+            if hasattr(self.tools, '_tools'):
+                rtc = self.tools._tools.get('run_terminal_command')
+            elif hasattr(self.tools, 'tools'):
+                for t in self.tools.tools.values():
+                    if hasattr(t, '_bg_jobs'):
+                        rtc = t
+                        break
+            if not rtc or not hasattr(rtc, '_bg_jobs') or not rtc._bg_jobs:
+                return
+            # Check each background job for new output
+            check_result = rtc._check_background_jobs()
+            if check_result and check_result.get('outputs'):
+                for output in check_result['outputs']:
+                    job_id = output.get('job_id', 'bg')
+                    stdout = output.get('stdout', '')
+                    exit_code = output.get('exit_code')
+                    if stdout:
+                        # Inject as a system message so the model sees the output
+                        self._state.cur_messages.append(
+                            Message(role='user', content=(
+                                f'[Background job {job_id} output]:\n{stdout[:800]}'
+                                + ('\n[Process exited]' if exit_code is not None else '')
+                            ))
+                        )
+                        self._log(f'Injected {len(stdout)} chars from background job {job_id}')
+        except Exception as e:
+            self._log(f'Background job poll failed: {e}')
 
     # =========================================================================
     # Session Persistence
@@ -2984,7 +3040,7 @@ class ProductionAgentLoop:
         try:
             from ..utils.quality_gates import AutoLinter
             linter = AutoLinter(self.project_path)
-            # lint_file is async — check and call properly
+            # lint_file is async -- check and call properly
             if asyncio.iscoroutinefunction(linter.lint_file):
                 result = await linter.lint_file(file_path)
             else:
@@ -3075,7 +3131,7 @@ class ProductionAgentLoop:
                 if count >= 3:
                     memory.remember(
                         f"frequent_tool_{tool_name}",
-                        f"Tool '{tool_name}' used {count} times — commonly needed for this project",
+                        f"Tool '{tool_name}' used {count} times -- commonly needed for this project",
                         "pattern",
                     )
 
