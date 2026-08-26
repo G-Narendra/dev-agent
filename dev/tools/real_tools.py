@@ -632,18 +632,52 @@ class RealListDirectoryTool(Tool):
 
 
 class RealRunTerminalCommand(Tool):
-    """Run shell commands."""
+    """Run shell commands.
+
+    Claude Code-style features:
+    - Persistent working directory: `cd X` carries over to the next call
+    - Background execution: run_in_background=True returns immediately with a job id;
+      poll output with check_background=true
+    """
     name = "run_terminal_command"
-    description = "Execute a shell command."
+    description = "Execute a shell command. Working directory persists between calls (cd carries over). Use run_in_background=true for long-running processes (dev servers, watchers), then read output with check_background."
     parameters = {
         "type": "object",
         "properties": {
             "command": {"type": "string", "description": "Command to execute"},
-            "cwd": {"type": "string", "description": "Working directory"},
+            "cwd": {"type": "string", "description": "Working directory (defaults to last directory used, initially project root)"},
             "timeout_seconds": {"type": "integer", "description": "Timeout", "default": 30},
+            "run_in_background": {"type": "boolean", "description": "Run without waiting; returns a job_id immediately. Poll with check_background."},
+            "check_background": {"type": "boolean", "description": "If true, ignore command and return new output from background jobs since last check."},
         },
         "required": ["command"],
     }
+
+    # Class-level persistent shell state shared across all instances
+    _shell_cwd: str | None = None
+    _bg_jobs: dict[str, dict] = {}  # job_id -> {proc, log_path, pos, command}
+
+    def _resolve_cwd(self, cwd: str | None, project_path: str) -> str:
+        """Resolve effective cwd: explicit > persisted > project root."""
+        if cwd and os.path.isdir(cwd):
+            return os.path.abspath(cwd)
+        if self._shell_cwd and os.path.isdir(self._shell_cwd):
+            return self._shell_cwd
+        return os.path.abspath(project_path)
+
+    @staticmethod
+    def _extract_cd(command: str) -> str | None:
+        """Extract final `cd target` from a compound command so cwd persists."""
+        import re
+        matches = re.findall(r'(?:^|&&|;)\s*cd\s+("[^"]+"|\S+)', command)
+        if not matches:
+            return None
+        target = matches[-1].strip().strip('"')
+        if target in ("~",):
+            return os.path.expanduser("~")
+        if target.startswith("-"):  # cd - — not tracked
+            return None
+        return os.path.abspath(target)
 
     def _find_bash(self) -> str | None:
         """Find bash executable on Windows."""
@@ -725,9 +759,6 @@ class RealRunTerminalCommand(Tool):
     
     async def execute(self, input_data: dict, state: Any, project_path: str) -> dict:
         command = input_data.get("command", "")
-        cwd = input_data.get("cwd", project_path)
-        if not cwd or not os.path.isdir(cwd):
-            cwd = project_path
         timeout = input_data.get("timeout_seconds", 30)
         # LLM may send timeout as string
         if isinstance(timeout, str):
@@ -735,11 +766,25 @@ class RealRunTerminalCommand(Tool):
                 timeout = int(timeout)
             except (ValueError, TypeError):
                 timeout = 30
-        
+        run_in_background = bool(input_data.get("run_in_background", False))
+
+        # --- Background output polling (Claude Code BashOutput pattern) ---
+        if input_data.get("check_background"):
+            return self._check_background_jobs()
+
+        # --- Resolve persistent working directory ---
+        cwd = self._resolve_cwd(input_data.get("cwd"), project_path)
+        self._shell_cwd = cwd  # persist for next call
+
         # Safety check: block dangerous commands
         is_safe, reason = self._is_safe_command(command)
         if not is_safe:
             return {"error": reason, "command": command, "blocked": True}
+
+        # Track `cd` so it persists to the next call
+        new_cwd = self._extract_cd(command)
+        if new_cwd and os.path.isdir(new_cwd):
+            self._shell_cwd = new_cwd
 
         import signal as _signal
         is_windows = os.name == 'nt'
@@ -768,15 +813,41 @@ class RealRunTerminalCommand(Tool):
             env['PYTHONUTF8'] = '1'
             env['PYTHONIOENCODING'] = 'utf-8'
             kwargs['env'] = env
+
+            # --- Background execution ---
+            if run_in_background:
+                import tempfile, uuid as _uuid
+                job_id = _uuid.uuid4().hex[:8]
+                log_path = os.path.join(tempfile.gettempdir(), f"dev_bg_{job_id}.log")
+                log_fh = open(log_path, "wb")
+                proc = await asyncio.create_subprocess_shell(
+                    effective_command, stdout=log_fh, stderr=asyncio.subprocess.STDOUT, **{
+                        k: v for k, v in kwargs.items() if k not in ("stdout", "stderr")
+                    },
+                )
+                self._bg_jobs[job_id] = {
+                    "proc": proc, "log_path": log_path, "pos": 0,
+                    "command": command, "fh": log_fh,
+                }
+                return {
+                    "command": command,
+                    "job_id": job_id,
+                    "log_file": log_path,
+                    "message": f"Started in background (job {job_id}). Poll with check_background=true.",
+                }
+
             proc = await asyncio.create_subprocess_shell(effective_command, **kwargs)
             stdout, stderr = await asyncio.wait_for(proc.communicate(), timeout=timeout)
 
-            return {
+            result = {
                 "command": command,
                 "exitCode": proc.returncode,
                 "stdout": stdout.decode(errors="replace")[:30000],
                 "stderr": stderr.decode(errors="replace")[:5000],
             }
+            if os.path.abspath(cwd) != os.path.abspath(project_path):
+                result["cwd"] = cwd
+            return result
         except asyncio.TimeoutError:
             try:
                 if is_windows:
@@ -789,6 +860,46 @@ class RealRunTerminalCommand(Tool):
             return {"error": f"Command timed out after {timeout}s", "command": command}
         except Exception as e:
             return {"error": str(e), "command": command}
+
+    def _check_background_jobs(self) -> dict:
+        """Return new output from background jobs since last check."""
+        import tempfile as _tempfile
+        results = []
+        for job_id, job in list(self._bg_jobs.items()):
+            proc = job["proc"]
+            alive = proc.returncode is None
+            # Read new bytes from log since last position
+            new_output = ""
+            try:
+                with open(job["log_path"], "rb") as f:
+                    f.seek(job["pos"])
+                    chunk = f.read(20000)
+                    job["pos"] += len(chunk)
+                    new_output = chunk.decode(errors="replace")
+            except OSError:
+                pass
+            entry = {
+                "job_id": job_id,
+                "running": alive,
+                "exit_code": proc.returncode,
+                "new_output": new_output[:10000],
+                "command": job["command"],
+            }
+            if not alive:
+                entry["status"] = "completed"
+                # Close and clean up finished jobs
+                try:
+                    job["fh"].close()
+                except Exception:
+                    pass
+                results.append(entry)
+                del self._bg_jobs[job_id]
+            else:
+                entry["status"] = "running"
+                results.append(entry)
+        if not results:
+            return {"jobs": [], "message": "No background jobs. Start one with run_in_background=true."}
+        return {"jobs": results}
 
 
 class RealGitOperations(Tool):

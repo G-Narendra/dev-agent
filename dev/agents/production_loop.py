@@ -1029,6 +1029,11 @@ class ProductionAgentLoop:
                 consecutive_empty = 0
 
                 final_content = full_content
+                # Progressive observation shrinking (OpenDev adaptive compaction):
+                # old tool outputs in history shrink each step so long sessions
+                # don't drown the model in stale logs.
+                self._shrink_old_observations(keep_recent=3)
+                self._maybe_inject_reminder(step)
                 self._state.done_messages.extend(self._state.cur_messages)
                 self._state.cur_messages = []
 
@@ -1379,10 +1384,17 @@ class ProductionAgentLoop:
         STRING_ONLY_KEYS = {"path", "content", "command", "pattern", "text", "query", "name", "description", "instructions", "old_string", "new_string", "message", "url", "cwd"}
         coerced = {}
         for k, v in args.items():
-            if k in STRING_ONLY_KEYS or isinstance(v, (dict, list)):
+            if k in STRING_ONLY_KEYS:
                 coerced[k] = v
             elif isinstance(v, str):
                 s = v.strip()
+                # Models often serialize array/object params as JSON strings
+                if s.startswith("[") or s.startswith("{"):
+                    try:
+                        coerced[k] = json.loads(s)
+                        continue
+                    except json.JSONDecodeError:
+                        pass
                 if s.lower() in ("true", "false"):
                     coerced[k] = s.lower() == "true"
                 else:
@@ -2187,6 +2199,56 @@ class ProductionAgentLoop:
         except Exception as e:
             self._log(f"Summary generation skipped: {e}")
             return ""
+
+    # =========================================================================
+    # Progressive Context Shrinking (OpenDev adaptive compaction pattern)
+    # =========================================================================
+
+    def _shrink_old_observations(self, keep_recent: int = 3, shrink_to: int = 300):
+        """Shrink old tool outputs in done_messages to short markers.
+
+        The last `keep_recent` tool messages stay full; older ones are
+        truncated to their first `shrink_to` chars. This is free (no LLM
+        call) and prevents long sessions from drowning in stale logs while
+        preserving the most recent observations the model needs.
+        """
+        tool_indices = [
+            i for i, m in enumerate(self._state.done_messages)
+            if m.role == "tool" and m.content and len(m.content) > shrink_to
+        ]
+        if not tool_indices:
+            return
+        for idx in tool_indices[:-keep_recent]:
+            msg = self._state.done_messages[idx]
+            name = msg.name or "tool"
+            self._state.done_messages[idx] = Message(
+                role="tool",
+                tool_call_id=msg.tool_call_id,
+                name=name,
+                content=msg.content[:shrink_to]
+                + f"\n[...older {name} output trimmed — see recent results for current state...]",
+            )
+
+    _REMINDER_INTERVAL = 8  # inject a system reminder every N steps
+
+    def _maybe_inject_reminder(self, step: int):
+        """Event-driven system reminder (OpenDev §2.3.4): counteract instruction
+        fade-out in long sessions by re-stating todo progress and critical rules
+        at the decision point instead of relying on the initial system prompt."""
+        if step == 0 or step % self._REMINDER_INTERVAL != 0:
+            return
+        parts = [f"[System reminder — step {step}]"]
+        # Todo progress
+        todos = None
+        if isinstance(self._state.output, dict):
+            todos = self._state.output.get("todos")
+        if todos:
+            done = sum(1 for t in todos if isinstance(t, dict) and t.get("completed"))
+            total = len(todos)
+            remaining = [t.get("task", "") for t in todos if isinstance(t, dict) and not t.get("completed")]
+            parts.append(f"Todos: {done}/{total} complete. Remaining: " + "; ".join(remaining[:5]))
+        parts.append("Stay focused on the user's task. Use write_file with complete file content — no placeholders.")
+        self._state.cur_messages.append(Message(role="user", content="\n".join(parts)))
 
     async def _auto_compact_if_needed(self, messages: list[Message], system_prompt: str):
         """Smart auto-compact using OpenClaw-style compaction engine."""

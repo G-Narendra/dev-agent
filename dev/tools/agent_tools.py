@@ -60,14 +60,24 @@ class WriteTodosTool(Tool):
         
         # Format for display
         lines = []
+        completed_count = 0
         for i, todo in enumerate(todos, 1):
-            status = "✅" if todo["completed"] else "⬜"
-            lines.append(f"{status} {i}. {todo['task']}")
+            # LLM may send items as plain strings or malformed dicts — normalize
+            if isinstance(todo, str):
+                todo = {"task": todo, "completed": False}
+            elif not isinstance(todo, dict):
+                continue
+            task = str(todo.get("task", ""))
+            completed = bool(todo.get("completed", False))
+            if completed:
+                completed_count += 1
+            status = "✅" if completed else "⬜"
+            lines.append(f"{status} {i}. {task}")
         
         return {
             "todos": todos,
             "display": "\n".join(lines),
-            "completed_count": sum(1 for t in todos if t["completed"]),
+            "completed_count": completed_count,
             "total_count": len(todos),
         }
 
