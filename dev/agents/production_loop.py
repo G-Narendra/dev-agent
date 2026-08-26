@@ -2426,6 +2426,24 @@ class ProductionAgentLoop:
 8. If the model outputs truncate mid-file, use str_replace to extend it rather than rewriting the whole file
 """)
 
+        # Capability map: teach the model WHICH tool solves WHICH problem.
+        parts.append("""
+
+## TOOL SELECTION GUIDE — pick the right tool for each need
+- Facts, docs, research → web_search then read_url on the best result
+- Live webpage content/screenshots → browser_navigate + browser_screenshot
+- Find code in repo → code_search (regex) or glob (filename patterns); read_files to open
+- Run anything → run_terminal_command. Long-running (servers, watchers) → run_in_background=true + check_background=true to poll output
+- Install packages ONLY into virtual environments (.venv), NEVER globally
+- Images/assets → reference remote URLs (Wikimedia, etc.) directly; never create local binary files
+- Multi-step tracking → write_todos; keep it updated as you complete tasks
+- Parallel subtasks → spawn_agents with agent_type + prompt per subtask
+- External integrations (DBs, GitHub, Slack, browsers...) → list_mcp_servers / mcp_connect / mcp_call
+- Free public APIs for data (weather, stocks, news...) → list_apis / free_api
+- Architecture diagrams → generate_diagram
+""")
+""")
+
         result = "\n".join(parts)
         # Cache for reuse
         if not hasattr(self, '_system_prompt_cache'):
