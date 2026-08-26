@@ -178,6 +178,11 @@ def register_new_tools(registry, project_path: str):
     from ..tools.deploy_tool import DeployTool
     registry.register("deploy", DeployTool())
     
+    # Visual review (screenshot + vision analysis for self-correction)
+    from ..tools.visual_review import VisualReviewTool, AutoVisualReviewTool
+    registry.register("visual_review", VisualReviewTool())
+    registry.register("auto_visual_review", AutoVisualReviewTool())
+    
     return registry
 
 

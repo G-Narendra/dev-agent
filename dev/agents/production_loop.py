@@ -2490,6 +2490,8 @@ class ProductionAgentLoop:
 - External integrations (DBs, GitHub, Slack, browsers...) → list_mcp_servers / mcp_connect / mcp_call
 - Free public APIs for data (weather, stocks, news...) → list_apis / free_api
 - Architecture diagrams → generate_diagram
+- Website looks ugly or need design feedback → visual_review (screenshots page, sends to vision model, returns scores + CSS fixes)
+- Auto-fix ugly website → auto_visual_review (screenshot + analyze + apply CSS fixes in a loop)
 """)
 
         result = "\n".join(parts)
