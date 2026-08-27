@@ -443,6 +443,33 @@ class ProductionAgentLoop:
                     )
                     continue
                 
+                # Nemotron multi-turn recovery: model returned text but no tools
+                # and we haven't completed much yet — inject corrective nudge
+                if len(all_tool_calls) == 0 and step < 3:
+                    self._log(f"Nemotron recovery: no tools used after {step+1} steps, injecting nudge")
+                    self._state.cur_messages.append(
+                        Message(role="user", content=(
+                            "You MUST use the write_file tool to create files. "
+                            "Do not describe what you will do — actually do it using the tools. "
+                            'Call write_file with the actual file content now.'
+                        ))
+                    )
+                    continue
+                
+                # Nemotron multi-turn recovery: model returned text but no tools
+                # after many tool calls — likely forgot context, remind it
+                if len(all_tool_calls) > 0 and not tool_calls:
+                    recent_tool_names = [tc["name"] for tc in all_tool_calls[-3:]]
+                    self._log(f"Nemotron recovery: model stopped using tools after {len(all_tool_calls)} calls, injecting reminder")
+                    self._state.cur_messages.append(
+                        Message(role="user", content=(
+                            f"Continue the task. You have been using tools successfully. "
+                            f"Recently used: {', '.join(recent_tool_names)}. "
+                            f"Keep using write_file, run_terminal_command, and other tools to complete the work."
+                        ))
+                    )
+                    continue
+                
                 self._state.done_messages.extend(self._state.cur_messages)
                 self._state.cur_messages = []
                 return {

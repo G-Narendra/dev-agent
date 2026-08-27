@@ -52,21 +52,23 @@ class NimProvider:
     
     BASE_URL = "https://integrate.api.nvidia.com/v1"
     
-    # Available models on NVIDIA NIMs free tier (verified working)
+    # Available models on NVIDIA NIMs free tier (verified working 2026-08-27)
+    # Llama 3.1 models are DEAD (HTTP 410 Gone) — use Nemotron 3.x instead
     MODELS = {
-        "coding": "meta/llama-3.1-70b-instruct",
-        "reasoning": "nvidia/llama-3.1-nemotron-ultra-253b-v1",
-        "fast": "meta/llama-3.1-8b-instruct",
+        "coding": "nvidia/nemotron-3-super-120b-a12b",
+        "reasoning": "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
+        "fast": "nvidia/nemotron-3-nano-30b-a3b",
         "vision": "meta/llama-3.2-11b-vision-instruct",
-        "default": "meta/llama-3.1-70b-instruct",
-        "tool": "meta/llama-3.1-70b-instruct",
+        "default": "nvidia/nemotron-3-super-120b-a12b",
+        "tool": "nvidia/nemotron-3-super-120b-a12b",
     }
     
     # Models that support reliable tool calling
     TOOL_CAPABLE_MODELS = {
-        "meta/llama-3.1-70b-instruct",
-        "meta/llama-3.1-8b-instruct",
-        "nvidia/llama-3.1-nemotron-ultra-253b-v1",
+        "nvidia/nemotron-3-super-120b-a12b",
+        "nvidia/nemotron-3-nano-30b-a3b",
+        "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
+        "meta/llama-3.2-11b-vision-instruct",
     }
     
     def __init__(
@@ -100,6 +102,45 @@ class NimProvider:
             except Exception:
                 pass
     
+    @staticmethod
+    def _recover_truncated_json(text: str) -> dict | None:
+        """Attempt to recover a truncated JSON object by closing open brackets.
+        
+        Nemotron sometimes truncates long tool call arguments mid-string.
+        This tries to produce a usable partial result.
+        """
+        if not text or not text.strip().startswith('{'):
+            return None
+        
+        text = text.strip()
+        
+        # First: try parsing as-is (might already be valid)
+        try:
+            result = json.loads(text)
+            if isinstance(result, dict):
+                return result
+        except (json.JSONDecodeError, ValueError):
+            pass
+        
+        # Try progressively: close any open string, close any open object/array
+        attempts = [
+            text + '"}',           # Close string + object
+            text + '"}}',          # Close nested object + object
+            text + '"}]',         # Close nested object + array
+            text + '"}]}}',       # Deep nesting
+            text + '"}}}',         # Deep nesting variant
+        ]
+        
+        for attempt in attempts:
+            try:
+                result = json.loads(attempt)
+                if isinstance(result, dict):
+                    return result
+            except (json.JSONDecodeError, ValueError):
+                continue
+        
+        return None
+    
     async def initialize(self):
         """Initialize the HTTP client with generous pool limits."""
         self._client = httpx.AsyncClient(
@@ -130,15 +171,17 @@ class NimProvider:
         now = time.time()
         
         for key in self.keys:
+            # Reset per-minute counter if 60s have passed since first request
+            if key.last_request_time > 0 and (now - key.last_request_time) > 60:
+                key.requests_this_minute = 0
+            
             # Reset exhausted state if cooldown has passed
             if key.is_exhausted and now > key.exhausted_until:
                 key.is_exhausted = False
                 key.requests_this_minute = 0
             
-            if not key.is_exhausted:
-                # Check if we can make a request this minute
-                if key.requests_this_minute < self.config.rpm:
-                    return key
+            if not key.is_exhausted and key.requests_this_minute < self.config.rpm:
+                return key
         
         return None
     
@@ -242,6 +285,28 @@ class NimProvider:
             usage = result.get("usage", {})
             tokens = usage.get("total_tokens", 0)
             self._record_request(key, tokens)
+            
+            # Detect and handle truncated tool calls in non-streaming response
+            choice = result.get("choices", [{}])[0]
+            message = choice.get("message", {})
+            tool_calls = message.get("tool_calls", [])
+            if tool_calls:
+                valid_tcs = []
+                for tc in tool_calls:
+                    args_str = tc.get("function", {}).get("arguments", "")
+                    try:
+                        parsed = json.loads(args_str) if args_str else {}
+                        if isinstance(parsed, dict):
+                            valid_tcs.append(tc)
+                    except (json.JSONDecodeError, TypeError):
+                        # Truncated args — try to recover partial JSON
+                        self._log(f"Truncated tool call args ({len(args_str)} chars), attempting recovery")
+                        recovered = self._recover_truncated_json(args_str)
+                        if recovered:
+                            tc["function"]["arguments"] = json.dumps(recovered)
+                            valid_tcs.append(tc)
+                        # else: skip this broken tool call
+                message["tool_calls"] = valid_tcs
             
             return result
             
@@ -367,9 +432,8 @@ class NimProvider:
         return sanitized
 
     def _resolve_model(self, model: str, has_tools: bool = False) -> str:
-        """Resolve model name, forcing 70B for tool calls."""
+        """Resolve model name, forcing tool-capable model when tools are needed."""
         resolved = self.MODELS.get(model, model)
-        # Force 70B for tool calling to avoid truncation
         if has_tools and resolved not in self.TOOL_CAPABLE_MODELS:
             resolved = self.MODELS["tool"]
         return resolved
@@ -400,12 +464,17 @@ class NimProvider:
         return True
     
     def _get_fallback_model(self, model: str) -> str:
-        """Get a fallback model when the primary is unhealthy."""
-        # Fallback chain: 70B -> 8B -> 70B (alternate)
-        if "70b" in model:
-            return self.MODELS["fast"]  # Try 8B
-        elif "8b" in model:
-            return self.MODELS["default"]  # Try 70B
+        """Get a fallback model when the primary is unhealthy.
+        
+        Fallback chain:
+          120B super -> 30B nano -> 120B super (alternate)
+        """
+        if "120b" in model:
+            return self.MODELS["fast"]  # Try 30B nano
+        elif "30b" in model:
+            return self.MODELS["default"]  # Try 120B super
+        elif "vision" in model:
+            return self.MODELS["default"]  # Vision -> coding
         return self.MODELS["default"]
     
     def get_model_health(self) -> dict:
