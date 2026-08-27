@@ -255,6 +255,11 @@ class NimProvider:
         resolved_model = self.MODELS.get(model, model)
         key = await self._wait_for_available_key()
         
+        # Sanitize tool definitions to minimize NIM token usage
+        tools = kwargs.pop("tools", None)
+        if tools:
+            tools = self._sanitize_tools_for_nim(tools)
+        
         payload = {
             "model": resolved_model,
             "messages": messages,
@@ -263,6 +268,8 @@ class NimProvider:
             "stream": stream,
             **kwargs,
         }
+        if tools:
+            payload["tools"] = tools
         
         headers = {
             "Authorization": f"Bearer {key.key}",
@@ -398,10 +405,11 @@ class NimProvider:
     def _sanitize_tools_for_nim(self, tools: list[dict]) -> list[dict]:
         """Sanitize tool definitions to minimize token usage for NIM.
         
-        NIM free-tier models truncate tool args. This method:
-        - Removes verbose descriptions (>100 chars)
-        - Strips empty property defaults
-        - Merges required arrays
+        Nemotron models truncate tool args aggressively. This method:
+        - Truncates descriptions to 80 chars
+        - Removes verbose property descriptions
+        - Strips defaults, examples, and unnecessary fields
+        - Removes 'additionalProperties' and 'enum' arrays where possible
         """
         if not tools:
             return tools
@@ -410,22 +418,32 @@ class NimProvider:
             t = dict(tool)
             if "function" in t:
                 func = dict(t["function"])
-                # Truncate long descriptions
-                if "description" in func and len(func["description"]) > 100:
-                    func["description"] = func["description"][:97] + "..."
+                # Truncate function description
+                if "description" in func and len(func["description"]) > 80:
+                    func["description"] = func["description"][:77] + "..."
                 # Clean parameters
                 if "parameters" in func:
                     params = dict(func["parameters"])
                     props = params.get("properties", {})
+                    clean_props = {}
                     for pname, pval in props.items():
                         if isinstance(pval, dict):
-                            # Remove default if it's None or empty
-                            if pval.get("default") in (None, "", []):
-                                pval = {k: v for k, v in pval.items() if k != "default"}
-                            # Truncate property descriptions
-                            if "description" in pval and len(pval["description"]) > 80:
-                                pval["description"] = pval["description"][:77] + "..."
-                            props[pname] = pval
+                            # Keep only type and description (shortened)
+                            clean = {"type": pval.get("type", "string")}
+                            if "description" in pval:
+                                desc = pval["description"]
+                                if len(desc) > 60:
+                                    desc = desc[:57] + "..."
+                                clean["description"] = desc
+                            # Keep 'required' in nested objects
+                            if "items" in pval:
+                                clean["items"] = {"type": pval["items"].get("type", "string")}
+                            clean_props[pname] = clean
+                        else:
+                            clean_props[pname] = pval
+                    params["properties"] = clean_props
+                    # Remove additionalProperties (saves tokens)
+                    params.pop("additionalProperties", None)
                     func["parameters"] = params
                 t["function"] = func
             sanitized.append(t)
@@ -784,6 +802,7 @@ class NimProvider:
         tool_call_deltas: dict[int, dict] = {}
         has_content = False
         has_tool_calls = False
+        accumulated_text = ""  # Buffer for Nemotron recovery
         
         async with self._client.stream(
             "POST",
@@ -828,6 +847,7 @@ class NimProvider:
                 content = delta.get("content", "")
                 if content:
                     has_content = True
+                    accumulated_text += content
                     yield {"type": "text", "content": content}
                 
                 # Tool call deltas
@@ -861,6 +881,16 @@ class NimProvider:
                     yield {"type": "finish", "reason": finish_reason}
             
             self._record_request(key)
+            
+            # Nemotron recovery: if no tool calls but accumulated text has JSON tool calls
+            if not has_tool_calls and accumulated_text and tools:
+                from dev.agents.production_loop import ProductionAgentLoop
+                remaining, extracted = ProductionAgentLoop._extract_json_tool_calls_from_content(accumulated_text)
+                if extracted:
+                    self._log(f"Streaming Nemotron recovery: extracted {len(extracted)} tool call(s) from text")
+                    for tc in extracted:
+                        yield {"type": "tool_call", "tool_call": tc}
+                    has_tool_calls = True
             
             # If we got neither text nor tool calls, something went wrong
             if not has_content and not has_tool_calls:

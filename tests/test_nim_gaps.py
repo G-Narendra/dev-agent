@@ -123,3 +123,116 @@ class TestMultiTurnRecovery:
         )
         assert "write_file" in nudge
         assert "Do not describe" in nudge
+
+
+class TestToolSanitization:
+    """Verify tool definitions are compressed for Nemotron."""
+
+    def test_descriptions_truncated(self):
+        from dev.providers.nim_provider import NimProvider
+        tools = [{
+            "type": "function",
+            "function": {
+                "name": "write_file",
+                "description": "A" * 200,
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "path": {"type": "string", "description": "B" * 150},
+                        "content": {"type": "string", "description": "C" * 150},
+                    }
+                }
+            }
+        }]
+        provider = NimProvider(keys=["test-key"])
+        sanitized = provider._sanitize_tools_for_nim(tools)
+        assert len(sanitized) == 1
+        func = sanitized[0]["function"]
+        assert len(func["description"]) <= 80
+        props = func["parameters"]["properties"]
+        assert len(props["path"]["description"]) <= 60
+        assert len(props["content"]["description"]) <= 60
+
+    def test_strips_additional_properties(self):
+        from dev.providers.nim_provider import NimProvider
+        tools = [{
+            "type": "function",
+            "function": {
+                "name": "write_file",
+                "description": "Write a file",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "path": {"type": "string", "description": "File path"}
+                    },
+                    "additionalProperties": False
+                }
+            }
+        }]
+        provider = NimProvider(keys=["test-key"])
+        sanitized = provider._sanitize_tools_for_nim(tools)
+        params = sanitized[0]["function"]["parameters"]
+        assert "additionalProperties" not in params
+
+    def test_strips_verbose_fields(self):
+        from dev.providers.nim_provider import NimProvider
+        tools = [{
+            "type": "function",
+            "function": {
+                "name": "test",
+                "description": "Test",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "x": {
+                            "type": "string",
+                            "description": "x",
+                            "default": None,
+                            "enum": ["a", "b"],
+                            "examples": ["a"]
+                        }
+                    }
+                }
+            }
+        }]
+        provider = NimProvider(keys=["test-key"])
+        sanitized = provider._sanitize_tools_for_nim(tools)
+        props = sanitized[0]["function"]["parameters"]["properties"]["x"]
+        # Should only have type and description
+        assert set(props.keys()) == {"type", "description"}
+
+
+class TestDeadModelError:
+    """Verify 410/404 errors trigger auto-fallback."""
+
+    def test_410_in_error_triggers_fallback(self):
+        from dev.providers.nim_provider import NimProvider
+        provider = NimProvider(keys=["test-key"])
+        # The fallback model should be different from the dead one
+        fallback = provider._get_fallback_model("nvidia/nemotron-3-super-120b-a12b")
+        assert fallback != "nvidia/nemotron-3-super-120b-a12b"
+        assert "30b" in fallback
+
+
+class TestCompressedSystemPrompt:
+    """Verify system prompt sections are compressed."""
+
+    def test_tool_guide_is_compressed(self):
+        from dev.agents.production_loop import ProductionAgentLoop, LoopConfig
+        loop = ProductionAgentLoop.__new__(ProductionAgentLoop)
+        loop._state = type('State', (), {
+            'fnames': set(), 'fname': '', 'output': {},
+            'done_messages': [], 'cur_messages': [],
+            'backup_dir': '.dev/checkpoints'
+        })()
+        loop.config = LoopConfig()
+        loop.project_path = '.'
+        loop._system_prompt_cache = {}
+        prompt = loop._build_system_prompt("You are Dev.")
+        # The prompt should be reasonable — compressed rules + tool guide
+        # Note: includes DEV.md rules and auto-memory, so won't be tiny
+        assert len(prompt) < 12000, f"System prompt too long: {len(prompt)} chars"
+        # But should still contain key instructions
+        assert "write_file" in prompt
+        assert "ONE FILE" in prompt or "one file" in prompt.lower()
+        assert "TOOL" in prompt.upper()

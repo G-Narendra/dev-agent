@@ -2608,52 +2608,14 @@ class ProductionAgentLoop:
         except Exception:
             pass  # Skills folder not available
 
-        # NIM model instruction: use write_file tool one file at a time
+        # NIM model instruction: use write_file tool one file at a time (compressed for Nemotron context)
         parts.append("""
 
-## CRITICAL: USE write_file TOOL -- ONE FILE AT A TIME
+## RULES: use write_file tool, ONE FILE per call. Path must end in extension (.js/.css/.html/.json). No placeholders. No local images -- use remote URLs. Keep each file <120 lines. Split long files: write_file then str_replace. Create ALL files from todo list. Install deps last. Never stop until todo 100% complete.""")
 
-### File Paths
-- Each write_file call creates ONE file with a proper filename and extension
-- Example paths: 'myapp/package.json', 'myapp/server.js', 'myapp/views/index.ejs'
-- The path MUST end with a file extension (.js, .css, .html, .json, .ejs, etc.)
-- NEVER write all content to a single file -- split into separate files
-
-### Content
-- Complete file content. No placeholders. No descriptions. No stubs.
-- Each file must be self-contained and production-quality
-
-### Flow
-1. Create a todo list with write_todos listing ALL files needed
-2. Create EACH file one by one using write_file with proper path
-3. Keep each write_file under 120 lines -- split long files into parts (write_file then str_replace to extend)
-4. NEVER create local image/binary files (.jpg, .png, .gif) -- reference remote URLs like https://upload.wikimedia.org/... directly in HTML/CSS
-5. After ALL files created, run_terminal_command to install deps and test
-6. Do NOT stop until todo list is 100% complete
-7. Research real information from the web before writing content -- use web_search for facts, use real URLs for images
-8. If the model outputs truncate mid-file, use str_replace to extend it rather than rewriting the whole file
-""")
-
-        # Capability map: teach the model WHICH tool solves WHICH problem.
+        # Capability map (compressed for Nemotron context)
         parts.append("""
-
-## TOOL SELECTION GUIDE -- pick the right tool for each need
-- Facts, docs, research → web_search then read_url on the best result
-- Live webpage content/screenshots → browser_navigate + browser_screenshot
-- Find code in repo → code_search (regex) or glob (filename patterns); read_files to open
-- Run anything → run_terminal_command. Long-running (servers, watchers) → run_in_background=true + check_background=true to poll output
-- Install packages ONLY into virtual environments (.venv), NEVER globally
-- Images/assets → reference remote URLs (Wikimedia, etc.) directly; never create local binary files
-- Multi-step tracking → write_todos; keep it updated as you complete tasks
-- Parallel subtasks → spawn_agents with agent_type + prompt per subtask
-- External integrations (DBs, GitHub, Slack, browsers...) → list_mcp_servers / mcp_connect / mcp_call
-- Free public APIs for data (weather, stocks, news...) → list_apis / free_api
-- Architecture diagrams → generate_diagram
-- Website looks ugly or need design feedback → visual_review (screenshots page, sends to vision model, returns scores + CSS fixes)
-- Auto-fix ugly website → auto_visual_review (screenshot + analyze + apply CSS fixes in a loop)
-- Need design patterns for a brand → design_fetch (fetches real Stripe/Linear/Apple/Nike DESIGN.md from GitHub)
-- List available brand designs → design_list (shows 40+ brands available)
-""")
+## TOOLS: research→web_search+read_url | code→code_search+read_files | run→run_terminal_command | install→venv ONLY | images→remote URLs | track→write_todos | parallel→spawn_agents | integrations→mcp_connect | APIs→free_api | design→visual_review+design_fetch | ugly site→auto_visual_review""")
 
         result = "\n".join(parts)
         # Cache for reuse
@@ -3176,6 +3138,19 @@ class ProductionAgentLoop:
                     # Rebuild messages with smaller context and retry
                     messages = self._format_messages("")
                     continue
+
+                # On 410/404 (dead model), auto-fallback to a different model
+                if any(code in last_error for code in ["410", "404"]):
+                    self._log(f"Model dead ({last_error}) -- trying fallback")
+                    if hasattr(self.provider, '_get_fallback_model'):
+                        current = self.config.model or "default"
+                        fallback = self.provider._get_fallback_model(current)
+                        self.config.model = fallback
+                        self._log(f"Switched to fallback model: {fallback}")
+                        continue
+                    # If no fallback provider method, just break
+                    self._log(f"No fallback available for dead model")
+                    break
 
                 is_retryable = any(
                     kw in last_error.lower()
