@@ -320,18 +320,11 @@ class PromptInjectionDetector:
     
     def _detect_encoding(self, text: str) -> str | None:
         """Detect encoded injection attempts."""
-        # Check for base64
+        # Check for base64 — only flag known dangerous payloads, not random substrings
         b64_matches = self.BASE64_PATTERN.findall(text)
         for match in b64_matches:
             if match in self.DANGEROUS_B64:
                 return f"dangerous_base64:{match[:20]}"
-            try:
-                decoded = base64.b64decode(match).decode('utf-8', errors='ignore')
-                result = self.detect(decoded)
-                if result.threat_level.value >= ThreatLevel.MEDIUM.value:
-                    return f"base64_encoded_injection:{decoded[:30]}"
-            except Exception:
-                pass
         
         # Check for hex-encoded
         hex_matches = self.HEX_PATTERN.findall(text)
