@@ -584,9 +584,14 @@ class UnifiedProvider:
                 )
                 choice = result.get("choices", [{}])[0]
                 message = choice.get("message", {})
-                content = message.get("content", "")
-                tool_calls = message.get("tool_calls", [])
-                
+                content = message.get("content", "") or ""
+                tool_calls = message.get("tool_calls", []) or []
+
+                # Nemotron recovery: extract tool calls from content string
+                if not tool_calls and content:
+                    from dev.agents.production_loop import ProductionAgentLoop
+                    content, tool_calls = ProductionAgentLoop._extract_json_tool_calls_from_content(content)
+
                 if content:
                     yield {"type": "text", "content": content}
                 for tc in tool_calls:

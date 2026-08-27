@@ -583,6 +583,11 @@ class NimProvider:
                     except Exception:
                         pass
                 
+                # Nemotron recovery: extract tool calls from content string
+                if not tool_calls and content:
+                    from dev.agents.production_loop import ProductionAgentLoop
+                    content, tool_calls = ProductionAgentLoop._extract_json_tool_calls_from_content(content)
+
                 # If no tool calls, yield text content
                 if content and not tool_calls:
                     yield {"type": "text", "content": content}

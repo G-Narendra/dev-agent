@@ -2896,6 +2896,184 @@ class ProductionAgentLoop:
         return result
 
     # =========================================================================
+    # Nemotron Content-to-ToolCall Extraction
+    # =========================================================================
+
+    @staticmethod
+    def _extract_json_tool_calls_from_content(content: str) -> tuple[str, list[dict]]:
+        """Extract tool calls embedded as JSON in the content string.
+
+        Nemotron 120B (and some other open models) put tool calls inside
+        the content field instead of the proper tool_calls field.  This
+        method detects and extracts them, returning (remaining_text, calls).
+
+        Handles these Nemotron formats:
+          1. JSON array of tool call objects
+             [{"function": {"name": "write_file", "arguments": "{...}"}}]
+          2. JSON array with "parameters" key (Nemotron-specific)
+             [{"name": "write_file", "parameters": {"path": ...}}]
+          3. Single JSON object (not wrapped in array)
+             {"name": "write_file", "parameters": {"path": ...}}
+          4. JSON array followed by/preceded by natural language
+        """
+        if not content or not content.strip():
+            return content, []
+
+        text = content.strip()
+        extracted: list[dict] = []
+        cleaned = text
+
+        # Strategy 1: The entire content is a JSON array of tool calls
+        #   e.g.  [{"function": {"name": "write_file", ...}}, ...]
+        try:
+            parsed = json.loads(text)
+            if isinstance(parsed, list):
+                items = parsed
+            elif isinstance(parsed, dict):
+                # Single tool call object
+                items = [parsed]
+            else:
+                items = []
+
+            for item in items:
+                if not isinstance(item, dict):
+                    continue
+                tc = ProductionAgentLoop._normalize_tool_call_object(item)
+                if tc:
+                    extracted.append(tc)
+
+            if extracted:
+                return "", extracted
+        except (json.JSONDecodeError, ValueError):
+            pass
+
+        # Strategy 2: Find JSON arrays/objects embedded in text using bracket matching
+        # Look for patterns like:  [{"name":...}] or [{"function":...}]
+        # or single objects: {"name":"write_file",...}
+        bracket_patterns = [
+            # JSON array of tool calls
+            (r'\[\s*\{\s*"(?:function|name|type)"', r'\}\s*\]'),
+            # Single tool call object (not inside a larger array)
+            (r'(?<![\[\{])\s*\{\s*"name"\s*:\s*"(?:write_file|read_files|str_replace|run_terminal_command|write_file|write_todos|code_search|web_search|read_url|list_directory|glob|ask_user|suggest_followups|gravity_index|render_ui|skill)"', None),
+        ]
+
+        for open_pat, close_pat in bracket_patterns:
+            for m in re.finditer(open_pat, cleaned):
+                start = m.start()
+                # Find the matching closing bracket
+                if close_pat:
+                    close_match = re.search(close_pat, cleaned[start:])
+                    if not close_match:
+                        continue
+                    end = start + close_match.end()
+                else:
+                    # Brace matching for single objects
+                    depth = 0
+                    end = start
+                    for i in range(start, len(cleaned)):
+                        if cleaned[i] == '{':
+                            depth += 1
+                        elif cleaned[i] == '}':
+                            depth -= 1
+                            if depth == 0:
+                                end = i + 1
+                                break
+                    else:
+                        continue
+
+                candidate = cleaned[start:end].strip()
+                try:
+                    parsed = json.loads(candidate)
+                    items = parsed if isinstance(parsed, list) else [parsed]
+                    for item in items:
+                        if isinstance(item, dict):
+                            tc = ProductionAgentLoop._normalize_tool_call_object(item)
+                            if tc:
+                                extracted.append(tc)
+                except (json.JSONDecodeError, ValueError):
+                    continue
+
+                if extracted:
+                    # Remove the JSON from the content
+                    remaining = cleaned[:start].strip() + "\n" + cleaned[end:].strip()
+                    remaining = remaining.strip()
+                    return remaining, extracted
+
+        # Strategy 3: Handle double-escaped JSON (model outputs stringified JSON)
+        # e.g. content = '[{\"name\":\"write_file\", ...}]'
+        unescaped = text
+        for unesc in [text.replace('\"', '"').replace('\\n', '\n'),
+                       text.replace('\"', '"')]:
+            if unesc != text:
+                try:
+                    parsed = json.loads(unesc)
+                    items = parsed if isinstance(parsed, list) else [parsed]
+                    for item in items:
+                        if isinstance(item, dict):
+                            tc = ProductionAgentLoop._normalize_tool_call_object(item)
+                            if tc:
+                                extracted.append(tc)
+                    if extracted:
+                        return "", extracted
+                except (json.JSONDecodeError, ValueError):
+                    pass
+
+        return content, []
+
+    @staticmethod
+    def _normalize_tool_call_object(obj: dict) -> dict | None:
+        """Normalize various tool call JSON formats into the standard format:
+        {"id": ..., "type": "function", "function": {"name": ..., "arguments": ...}}
+
+        Handles:
+          - OpenAI format: {"function": {"name": ..., "arguments": ...}}
+          - Nemotron format: {"name": ..., "parameters": ...}
+          - Anthropic-ish format: {"tool": ..., "input": ...}
+        """
+        # OpenAI format: {"function": {"name": ..., "arguments": ...}}
+        if "function" in obj and isinstance(obj["function"], dict):
+            func = obj["function"]
+            name = func.get("name", "")
+            raw_args = func.get("arguments", "{}")
+            if isinstance(raw_args, str):
+                try:
+                    args = json.loads(raw_args)
+                except (json.JSONDecodeError, TypeError):
+                    args = {}
+            elif isinstance(raw_args, dict):
+                args = raw_args
+            else:
+                args = {}
+            if name and isinstance(args, dict):
+                return {
+                    "id": obj.get("id", f"content-extract-{id(obj)}"),
+                    "type": "function",
+                    "function": {"name": name, "arguments": json.dumps(args)},
+                }
+
+        # Nemotron format: {"name": ..., "parameters": ...}
+        if "name" in obj and "function" not in obj:
+            name = obj.get("name", "")
+            raw_params = obj.get("parameters", obj.get("input", {}))
+            if isinstance(raw_params, str):
+                try:
+                    args = json.loads(raw_params)
+                except (json.JSONDecodeError, TypeError):
+                    args = {}
+            elif isinstance(raw_params, dict):
+                args = raw_params
+            else:
+                args = {}
+            if name and isinstance(args, dict):
+                return {
+                    "id": obj.get("id", f"content-extract-{id(obj)}"),
+                    "type": "function",
+                    "function": {"name": name, "arguments": json.dumps(args)},
+                }
+
+        return None
+
+    # =========================================================================
     # LLM Call with Retries
     # =========================================================================
 
@@ -2932,9 +3110,28 @@ class ProductionAgentLoop:
                 choice = response.get("choices", [{}])[0]
                 message = choice.get("message", {})
 
+                raw_content = message.get("content", "") or ""
+                raw_tool_calls = message.get("tool_calls", []) or []
+
+                # ── Nemotron recovery ─────────────────────────────────────
+                # Some models (Nemotron 120B, etc.) put tool-call JSON inside
+                # the content string instead of the tool_calls field.  Detect
+                # and extract them so the production loop can execute them.
+                if not raw_tool_calls and raw_content:
+                    extracted_content, extracted_calls = (
+                        self._extract_json_tool_calls_from_content(raw_content)
+                    )
+                    if extracted_calls:
+                        self._log(
+                            f"Nemotron recovery: extracted {len(extracted_calls)} "
+                            f"tool call(s) from content string"
+                        )
+                        raw_content = extracted_content
+                        raw_tool_calls = extracted_calls
+
                 return {
-                    "content": message.get("content", ""),
-                    "tool_calls": message.get("tool_calls", []),
+                    "content": raw_content,
+                    "tool_calls": raw_tool_calls,
                     "finish_reason": choice.get("finish_reason", ""),
                 }
 
