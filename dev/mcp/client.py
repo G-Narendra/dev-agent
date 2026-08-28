@@ -93,8 +93,8 @@ class MCPClient:
                 results[name] = False
                 continue
             try:
-                await self.connect_server(name)
-                results[name] = True
+                success = await self.connect_server(name)
+                results[name] = bool(success)
             except Exception as e:
                 print(f"Failed to connect to {name}: {e}")
                 results[name] = False
