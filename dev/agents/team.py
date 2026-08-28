@@ -49,22 +49,6 @@ class TeamMessage:
     content: str
     message_type: str = "info"  # info, request, result, error
     timestamp: float = field(default_factory=time.time)
-    
-    @property
-    def message_type(self) -> str:
-        return self._message_type
-    
-    @message_type.setter
-    def message_type(self, value: str):
-        self._message_type = value
-    
-    @property
-    def timestamp(self) -> float:
-        return self._timestamp
-    
-    @timestamp.setter
-    def timestamp(self, value: float):
-        self._timestamp = value
 
 
 class Mailbox:

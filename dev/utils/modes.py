@@ -6,6 +6,7 @@ Like Cline:
 - Act mode: Execute the plan with file edits and commands
 """
 from __future__ import annotations
+from typing import Callable
 import os
 import json
 from dataclasses import dataclass, field
@@ -47,7 +48,7 @@ class ModeManager:
     current_mode: AgentMode = AgentMode.ACT
     current_plan: Optional[ExecutionPlan] = None
     plans: list = field(default_factory=list)
-    _on_mode_change: Optional[callable] = None
+    _on_mode_change: Optional[Callable] = None
 
     def set_mode(self, mode: str) -> AgentMode:
         """Switch between plan and act mode."""
@@ -64,7 +65,7 @@ class ModeManager:
         
         return self.current_mode
 
-    def on_mode_change(self, callback: callable):
+    def on_mode_change(self, callback: Callable):
         """Register callback for mode changes."""
         self._on_mode_change = callback
 

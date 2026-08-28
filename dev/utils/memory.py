@@ -227,7 +227,7 @@ class AutoMemory:
                     if not e1 or not e2:
                         continue
                     # Simple similarity: check if keys share a prefix
-                    if k1[:min(5, len(k1))] == k2[:min(5, len(k2)]:
+                    if k1[:min(5, len(k1))] == k2[:min(5, len(k2))]:
                         # Merge: keep the one with higher use_count
                         if e1.use_count >= e2.use_count:
                             e1.value += f" | Also: {e2.value[:100]}"

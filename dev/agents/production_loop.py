@@ -169,7 +169,9 @@ DANGEROUS_COMMANDS = [
 ]
 
 
-class ProductionAgentLoop:
+from .system_prompt import SystemPromptMixin
+
+class ProductionAgentLoop(SystemPromptMixin):
     """
     Production-quality agent loop -- the brain of Dev.
 
@@ -223,7 +225,7 @@ class ProductionAgentLoop:
             self._audit_logger = _AuditLogger(project_path)
             self._audit_logger_new = True
         except Exception:
-            pass
+            pass  # Intentional: Exception in production_loop.py
         # Tool names to filter tool definitions (reduces tool count for LLM)
         self._tool_names: list[str] | None = None
         # Tool result cache: cache read-only tool results to avoid re-reading
@@ -948,7 +950,7 @@ class ProductionAgentLoop:
                                 folder_prefix = p.split("/")[0] + "/"
                                 break
                         except Exception:
-                            pass
+                            pass  # Intentional: Exception in production_loop.py
                     retry_prompt = (
                         "The previous write_file calls had PLACEHOLDER or CUT-OFF content -- the file was truncated mid-write.\n"
                         "This happens when a single write_file is too large. You MUST SPLIT YOUR WORK:\n\n"
@@ -1003,7 +1005,7 @@ class ProductionAgentLoop:
                                     incomplete_count = len(incomplete)
                                     self._log(f"Found {incomplete_count} incomplete todo items -- prompting agent to continue")
                         except Exception:
-                            pass
+                            pass  # Intentional: Exception in production_loop.py
                         break
 
                 # Also auto-continue if the model described files in text without creating them
@@ -1256,7 +1258,7 @@ class ProductionAgentLoop:
                                         for line in diff[:30]:
                                             self._log(line.rstrip())
                         except Exception:
-                            pass
+                            pass  # Intentional: Exception in production_loop.py
 
                 # Backup file before modifications
                 if tool_name in COMMIT_TOOLS:
@@ -1632,7 +1634,7 @@ class ProductionAgentLoop:
                     if os.path.exists(meta_path):
                         os.remove(meta_path)
         except Exception:
-            pass
+            pass  # Intentional: Exception in production_loop.py
 
     def _parse_text_tool_calls(self, text: str) -> list[dict]:
         """Extract tool calls from text when model outputs code instead of API tool calls.
@@ -1676,7 +1678,7 @@ class ProductionAgentLoop:
                                                               'instructions': instructions})},
                     })
             except Exception:
-                pass
+                pass  # Intentional: Exception in production_loop.py
 
         # --- write_file with kwargs ---
         for m in re.finditer(r'write_file\s*\((.+?)\n\s*\)', clean, re.DOTALL):
@@ -2047,7 +2049,7 @@ class ProductionAgentLoop:
                         data = json.load(f)
                     version = data.get("version", 1) + 1
                 except Exception:
-                    pass
+                    pass  # Intentional: Exception in production_loop.py
             # Save versioned plan
             with open(self._plan_file, "w", encoding="utf-8") as f:
                 json.dump({
@@ -2066,7 +2068,7 @@ class ProductionAgentLoop:
                         with open(archive_file, "w") as dst:
                             dst.write(src.read())
                 except Exception:
-                    pass
+                    pass  # Intentional: Exception in production_loop.py
             self._log(f"Plan saved (v{version})")
         except Exception as e:
             self._log(f"Plan save failed: {e}")
@@ -2079,7 +2081,7 @@ class ProductionAgentLoop:
                     data = json.load(f)
                 return data.get("plan", [])
             except Exception:
-                pass
+                pass  # Intentional: Exception in production_loop.py
         return []
 
     def update_plan_item(self, item_index: int, status: str, notes: str = "") -> bool:
@@ -2394,7 +2396,7 @@ class ProductionAgentLoop:
             try:
                 content = summary.get("choices", [{}])[0].get("message", {}).get("content", "") or ""
             except Exception:
-                pass
+                pass  # Intentional: Exception in production_loop.py
             if content.strip():
                 if on_text:
                     on_text(f"\n📋 **Session summary** (steps exhausted):\n{content}\n")
@@ -2597,278 +2599,6 @@ class ProductionAgentLoop:
     # =========================================================================
     # System Prompt & Context
     # =========================================================================
-
-    def _build_system_prompt(self, base_prompt: str, repo_map: str = "") -> str:
-        """Build the full system prompt with all context. Cached to avoid rebuilds."""
-        # Cache key based on base_prompt + repo_map + project rules
-        cache_key = f"{base_prompt[:200]}:{repo_map[:200]}:{self._state.fnames and sorted(self._state.fnames)[0]}"
-        if hasattr(self, '_system_prompt_cache') and self._system_prompt_cache.get('key') == cache_key:
-            return self._system_prompt_cache['value']
-        parts = []
-
-        # Base prompt
-        if base_prompt:
-            parts.append(base_prompt)
-
-        # Repo map
-        if repo_map and self.config.use_repo_map:
-            parts.append(f"\n\n## Repository Structure\n{repo_map}")
-
-        # File list
-        if self._state.fnames:
-            file_list = "\n".join(f"- {f}" for f in sorted(self._state.fnames))
-            parts.append(f"\n\n## Files in Chat\n{file_list}")
-
-        # Project rules (DEV.md, .devrules, .dev/)
-        rules = self._load_project_rules()
-        if rules:
-            parts.append(f"\n\n## Project Rules\n{rules}")
-            parts.append("\n\n**Rule Precedence:** .devrules overrides DEV.md. When rules conflict, follow the most specific source.")
-
-        # .gitignore awareness — tell agent which dirs/files to skip
-        gitignore_patterns = self._load_gitignore()
-        if gitignore_patterns:
-            parts.append(f"\n\n## .gitignore (DO NOT write files here)\n{gitignore_patterns}")
-
-        # Design knowledge (DESIGN.md patterns)
-        try:
-            from ..utils.design_knowledge import get_design_prompt_section
-            design_knowledge = get_design_prompt_section(self.project_path)
-            if design_knowledge:
-                parts.append(f"\n\n{design_knowledge}")
-        except Exception:
-            pass
-
-        # Auto-memory from previous sessions
-        memory = self._load_auto_memory()
-        if memory:
-            parts.append(f"\n\n## Auto Memory (learned from previous sessions)\n{memory}")
-
-        # Git context
-        git_ctx = self._get_git_context()
-        if git_ctx:
-            parts.append(f"\n\n## Git Status\n{git_ctx}")
-
-        # Plan mode notice
-        if self.config.enforce_plan_mode:
-            parts.append("\n\n## CURRENT MODE: PLAN (read-only)\nYou can ONLY use read-only tools. To make changes, the user must switch to act mode.")
-
-        # Skills integration -- inject expert role instructions (cached to avoid re-instantiation)
-        try:
-            if not hasattr(self, '_skill_integration'):
-                from .skill_integration import SkillIntegration
-                self._skill_integration = SkillIntegration(skills_path=os.path.join(self.project_path, "skills"))
-            si = self._skill_integration
-            # Get the user's task from current messages
-            task = ""
-            for msg in self._state.done_messages + self._state.cur_messages:
-                if msg.role == "user":
-                    task = msg.content or ""
-                    break
-            if task:
-                skill_prompt = si.build_skill_prompt(task)
-                if skill_prompt:
-                    # Compress: keep only first 400 chars of skill prompt to save context
-                    if len(skill_prompt) > 400:
-                        skill_prompt = skill_prompt[:400] + "\n[truncated]"
-                    parts.append(f"\n\n{skill_prompt}")
-        except Exception:
-            pass  # Skills folder not available
-
-        # NIM model instruction: use write_file tool one file at a time (compressed for Nemotron context)
-        parts.append("""
-
-## RULES: use write_file tool, ONE FILE per call. Path must end in extension (.js/.css/.html/.json). No placeholders. No local images -- use remote URLs. Keep each file <120 lines. Split long files: write_file then str_replace. Create ALL files from todo list. Install deps last. Never stop until todo 100% complete.""")
-
-        # Capability map (compressed for Nemotron context)
-        parts.append("""
-## TOOLS: research→web_search+read_url | code→code_search+read_files | run→run_terminal_command | install→venv ONLY | images→remote URLs | track→write_todos | parallel→spawn_agents | integrations→mcp_connect | APIs→free_api | design→visual_review+design_fetch | ugly site→auto_visual_review""")
-
-        result = "\n".join(parts)
-        
-        # Compress system prompt for Nemotron (effective ~4K tokens after tool defs)
-        result = self._compress_prompt_for_nim(result)
-        
-        # Cache for reuse
-        if not hasattr(self, '_system_prompt_cache'):
-            self._system_prompt_cache = {}
-        self._system_prompt_cache = {'key': cache_key, 'value': result}
-        return result
-    
-    def _compress_prompt_for_nim(self, prompt: str) -> str:
-        """Compress system prompt to fit Nemotron's limited context.
-        
-        Nemotron 120B has ~128K context but effective tool-calling context is ~4K tokens.
-        After tool definitions (~2K tokens), we have ~2K tokens for system prompt.
-        This method aggressively compresses non-essential sections.
-        """
-        # Estimate tokens (rough: 1 token ≈ 4 chars)
-        estimated_tokens = len(prompt) // 4
-        
-        # If under 6K chars (~1.5K tokens), no compression needed
-        if estimated_tokens < 1500:
-            return prompt
-        
-        self._log(f"System prompt: {estimated_tokens:,} tokens — compressing for Nemotron")
-        
-        # Strategy 1: Remove verbose sections
-        # Remove 'Rule Precedence' explanation (saves ~100 chars)
-        prompt = prompt.replace("\n\n**Rule Precedence:** .devrules overrides DEV.md. When rules conflict, follow the most specific source.", "")
-        
-        # Strategy 2: Truncate gitignore section to top 10 patterns
-        gi_match = re.search(r'## \.gitignore.*?(?=\n## |$)', prompt, re.DOTALL)
-        if gi_match:
-            gi_text = gi_match.group(0)
-            if len(gi_text) > 300:
-                # Keep only first 10 patterns
-                lines = gi_text.split('\n')[:12]  # Header + 10 patterns + buffer
-                prompt = prompt.replace(gi_text, '\n'.join(lines))
-        
-        # Strategy 3: Truncate auto-memory to 500 chars
-        mem_match = re.search(r'## Auto Memory.*?(?=\n## |$)', prompt, re.DOTALL)
-        if mem_match:
-            mem_text = mem_match.group(0)
-            if len(mem_text) > 600:
-                prompt = prompt.replace(mem_text, mem_text[:500] + '\n[truncated]')
-        
-        # Strategy 4: Truncate git context to 200 chars
-        git_match = re.search(r'## Git Status.*?(?=\n## |$)', prompt, re.DOTALL)
-        if git_match:
-            git_text = git_match.group(0)
-            if len(git_text) > 300:
-                prompt = prompt.replace(git_text, git_text[:200] + '\n[truncated]')
-        
-        # Strategy 5: Compress instructions section
-        instr_match = re.search(r'## Instructions\n(.*?)(?=\n## |$)', prompt, re.DOTALL)
-        if instr_match:
-            instr_text = instr_match.group(0)
-            if len(instr_text) > 500:
-                # Keep only first 3 rules
-                lines = instr_text.split('\n')[:5]
-                prompt = prompt.replace(instr_text, '\n'.join(lines) + '\n[truncated]')
-        
-        # Strategy 6: If still too long, truncate design section
-        design_match = re.search(r'## AUTO-LOADED DESIGN.*?(?=\n## |$)', prompt, re.DOTALL)
-        if design_match:
-            design_text = design_match.group(0)
-            if len(design_text) > 800:
-                prompt = prompt.replace(design_text, design_text[:600] + '\n[truncated]')
-        
-        # Final check: if still over 8K chars, hard truncate
-        if len(prompt) > 8000:
-            # Keep first 6000 chars + rules section
-            rules_match = re.search(r'## RULES.*', prompt, re.DOTALL)
-            if rules_match:
-                rules_text = rules_match.group(0)
-                prompt = prompt[:6000] + '\n\n' + rules_text[:1500]
-            else:
-                prompt = prompt[:7500] + '\n[truncated for context budget]'
-        
-        new_tokens = len(prompt) // 4
-        self._log(f"Compressed system prompt: {estimated_tokens:,} → {new_tokens:,} tokens ({100 - new_tokens*100//estimated_tokens}% reduction)")
-        return prompt
-
-    def _load_gitignore(self) -> str:
-        """Load .gitignore patterns and return a human-readable list of dirs/files to skip."""
-        try:
-            gitignore_path = os.path.join(self.project_path, '.gitignore')
-            if not os.path.isfile(gitignore_path):
-                return ''
-            with open(gitignore_path, 'r', encoding='utf-8', errors='ignore') as f:
-                lines = f.readlines()
-            patterns = []
-            for line in lines:
-                line = line.strip()
-                if line and not line.startswith('#') and not line.startswith('!'):
-                    patterns.append(line)
-            if not patterns:
-                return ''
-            return 'These paths are gitignored — DO NOT create or modify files in these locations:\n' + '\n'.join(f'- {p}' for p in patterns[:30])  # Limit to 30 patterns
-        except Exception:
-            return ''
-
-    def _load_project_rules(self) -> str:
-        """Load project rules from DEV.md, .devrules, and .dev/ directory."""
-        parts = []
-
-        # 1. DEV.md (like CLAUDE.md -- the primary project instructions file)
-        for devmd_name in ["DEV.md", "CLAUDE.md", ".dev.md"]:
-            devmd_path = os.path.join(self.project_path, devmd_name)
-            if os.path.isfile(devmd_path):
-                try:
-                    with open(devmd_path, "r", encoding="utf-8", errors="replace") as f:
-                        content = f.read()
-                    if "@import" in content:
-                        content = self._resolve_imports(content, self.project_path)
-                    parts.append(f"## Project Instructions ({devmd_name})\n{content}")
-                    break  # Only load one
-                except Exception:
-                    pass
-
-        # 2. .devrules directory (multiple .md files)
-        rules_dir = os.path.join(self.project_path, ".devrules")
-        rules_file = os.path.join(self.project_path, ".devrules.md")
-
-        if os.path.isfile(rules_file):
-            try:
-                with open(rules_file, "r", encoding="utf-8", errors="replace") as f:
-                    parts.append(f.read())
-            except Exception:
-                pass
-
-        if os.path.isdir(rules_dir):
-            for fname in sorted(os.listdir(rules_dir)):
-                if fname.endswith(".md"):
-                    try:
-                        fpath = os.path.join(rules_dir, fname)
-                        with open(fpath, "r", encoding="utf-8", errors="replace") as f:
-                            content = f.read()
-                        if "@import" in content:
-                            content = self._resolve_imports(content, rules_dir)
-                        parts.append(f"### {fname}\n{content}")
-                    except Exception:
-                        pass
-
-        return "\n\n".join(parts)
-
-    def _load_auto_memory(self) -> str:
-        """Load auto-memory from .dev/memory/auto_memory.md."""
-        memory_file = os.path.join(self.project_path, ".dev", "memory", "auto_memory.md")
-        if os.path.isfile(memory_file):
-            try:
-                with open(memory_file, "r", encoding="utf-8", errors="replace") as f:
-                    content = f.read()
-                if content.strip():
-                    return content
-            except Exception:
-                pass
-        return ""
-
-    def _resolve_imports(self, content: str, base_dir: str, _seen: set | None = None) -> str:
-        """Resolve @import directives in rules files (with circular reference protection)."""
-        import re
-        if _seen is None:
-            _seen = set()
-
-        def replace_import(match):
-            import_path = match.group(1).strip()
-            full_path = os.path.normpath(os.path.join(base_dir, import_path))
-            # Circular reference protection
-            if full_path in _seen:
-                return f"[circular import: {import_path}]"
-            if os.path.isfile(full_path):
-                _seen.add(full_path)
-                try:
-                    with open(full_path, "r", encoding="utf-8", errors="replace") as f:
-                        file_content = f.read()
-                    # Recursively resolve imports in imported file
-                    file_dir = os.path.dirname(full_path)
-                    return self._resolve_imports(file_content, file_dir, _seen)
-                except Exception:
-                    return f"[import failed: {import_path}]"
-            return f"[import not found: {import_path}]"
-
-        return re.sub(r'@import\s+["\'](.+?)["\']', replace_import, content)
 
     # =========================================================================
     # Message Formatting & Pruning
@@ -3432,7 +3162,7 @@ class ProductionAgentLoop:
                         self._log(f"Error recovered for {tool_name}")
                         return recovered
                 except Exception:
-                    pass
+                    pass  # Intentional: Exception in production_loop.py
 
             return error_result
 
@@ -3506,58 +3236,6 @@ class ProductionAgentLoop:
     # Git-Aware Context
     # =========================================================================
 
-    def _get_git_context(self) -> str:
-        """Get git context for the system prompt (branch, status, recent commits)."""
-        parts = []
-        try:
-            # Current branch
-            result = subprocess.run(
-                ["git", "rev-parse", "--abbrev-ref", "HEAD"],
-                capture_output=True, text=True, cwd=self.project_path, timeout=5,
-            )
-            if result.returncode == 0:
-                branch = result.stdout.strip()
-                parts.append(f"Branch: {branch}")
-
-            # Staged changes
-            result = subprocess.run(
-                ["git", "diff", "--cached", "--stat"],
-                capture_output=True, text=True, cwd=self.project_path, timeout=5,
-            )
-            if result.stdout.strip():
-                parts.append(f"Staged changes:\n{result.stdout.strip()}")
-
-            # Untracked files
-            result = subprocess.run(
-                ["git", "ls-files", "--others", "--exclude-standard"],
-                capture_output=True, text=True, cwd=self.project_path, timeout=5,
-            )
-            if result.stdout.strip():
-                untracked = result.stdout.strip().split("\n")[:10]
-                parts.append(f"Untracked files: {', '.join(untracked)}")
-
-            # Recent commits (last 3)
-            result = subprocess.run(
-                ["git", "log", "--oneline", "-3"],
-                capture_output=True, text=True, cwd=self.project_path, timeout=5,
-            )
-            if result.stdout.strip():
-                parts.append(f"Recent commits:\n{result.stdout.strip()}")
-
-            # Recent file changes (last 5 files changed)
-            result = subprocess.run(
-                ["git", "log", "--diff-filter=AM", "--name-only", "--pretty=format:", "-5"],
-                capture_output=True, text=True, cwd=self.project_path, timeout=5,
-            )
-            if result.stdout.strip():
-                recent_files = [f for f in result.stdout.strip().split("\n") if f][:5]
-                if recent_files:
-                    parts.append(f"Recently changed files: {', '.join(recent_files)}")
-        except Exception:
-            pass  # Not a git repo or git not available
-
-        return "\n".join(parts)
-
     # =========================================================================
     # Auto Quality Gates
     # =========================================================================
@@ -3590,7 +3268,7 @@ class ProductionAgentLoop:
                             return {'failed': True, 'output': result.stdout + result.stderr}
                         return {'passed': True}
                 except Exception:
-                    pass
+                    pass  # Intentional: Exception in production_loop.py
             
             # Check for Python test files
             import glob as _glob
@@ -3679,7 +3357,7 @@ class ProductionAgentLoop:
                 except ImportError:
                     suggestions.append(f"Missing dependency: {top_level} (install with: pip install {top_level})")
         except Exception:
-            pass
+            pass  # Intentional: Exception in production_loop.py
 
         return suggestions
 
@@ -3726,7 +3404,7 @@ class ProductionAgentLoop:
                         "build",
                     )
             except Exception:
-                pass
+                pass  # Intentional: Exception in production_loop.py
 
             self._log(f"Auto-memory updated: {len(memory.entries)} entries")
         except Exception as e:

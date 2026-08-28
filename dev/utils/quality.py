@@ -381,7 +381,7 @@ class QualityChecker:
                 if ext in LINTERS:
                     fpath = os.path.join(root, f)
                     rel_path = os.path.relpath(fpath, self.project_path)
-                    result = asyncio.get_event_loop().run_until_complete(
+                    result = asyncio.run(
                         self.lint_file(rel_path)
                     )
                     results["files"] += 1

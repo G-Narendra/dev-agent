@@ -405,12 +405,12 @@ def add_new_commands(app):
         mailbox = AgentMailbox()
         
         if action == "status":
-            status = asyncio.get_event_loop().run_until_complete(
+            status = asyncio.run(
                 mailbox.get_mailbox_status(agent_id)
             )
             console.print_json(status)
         elif action == "read":
-            messages = asyncio.get_event_loop().run_until_complete(
+            messages = asyncio.run(
                 mailbox.receive(agent_id)
             )
             for msg in messages:
@@ -420,7 +420,7 @@ def add_new_commands(app):
             if not message:
                 console.print("[red]Must provide --message[/red]")
                 raise typer.Exit(1)
-            asyncio.get_event_loop().run_until_complete(
+            asyncio.run(
                 mailbox.send("user", agent_id, "Message", message)
             )
             console.print(f"[green]✓ Message sent to {agent_id}[/green]")

@@ -34,6 +34,7 @@ PROVIDERS = {
         "url_note": "build.nvidia.com",
         "description": "80+ top AI models, fastest inference, 40 RPM free",
         "strength": "Speed",
+        "rpm": 40,
         "signup_steps": [
             "Go to build.nvidia.com",
             "Sign up with email (free)",

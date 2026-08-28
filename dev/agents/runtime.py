@@ -208,7 +208,7 @@ class AgentRuntime:
         state.system_prompt = system_prompt
         context = AgentStepContext(agent_state=state, prompt=prompt)
 
-        result = {"status": "completed", "steps": 0, "tool_calls": []}
+        result: dict = {"status": "completed", "steps": 0, "tool_calls": []}
 
         try:
             for action in agent_def.handle_steps(context):
