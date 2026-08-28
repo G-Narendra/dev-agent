@@ -81,9 +81,9 @@ class BrowserScreenshotTool(Tool):
                     "title": title,
                 }
         except ImportError:
-            pass
+            pass  # Intentional: ImportError
         except Exception as e:
-            pass
+            pass  # Intentional: Exception as e
         
         # Fallback: fetch page content instead of screenshot
         try:
@@ -99,9 +99,9 @@ class BrowserScreenshotTool(Tool):
                     "note": "Playwright not available — returned text content instead of screenshot",
                 }
         except ImportError:
-            pass
+            pass  # Intentional: ImportError
         except Exception:
-            pass
+            pass  # Intentional: Exception
         
         # Last fallback: urllib
         try:
@@ -165,9 +165,9 @@ class BrowserNavigateTool(Tool):
                         "count": len(content),
                     }
             except ImportError:
-                pass
+                pass  # Intentional: ImportError
             except Exception:
-                pass
+                pass  # Intentional: Exception
         
         # Try Playwright for general navigation
         try:
@@ -201,9 +201,9 @@ class BrowserNavigateTool(Tool):
                     await browser.close()
                     return {"url": url, "title": title, "text": content[:50000]}
         except ImportError:
-            pass
+            pass  # Intentional: ImportError
         except Exception:
-            pass
+            pass  # Intentional: Exception
         
         # Fallback: httpx
         try:
@@ -225,9 +225,9 @@ class BrowserNavigateTool(Tool):
                     text = _html_to_text(html)
                     return {"url": url, "title": title, "text": text[:50000]}
         except ImportError:
-            pass
+            pass  # Intentional: ImportError
         except Exception:
-            pass
+            pass  # Intentional: Exception
         
         # Last fallback: urllib
         try:
@@ -403,3 +403,4 @@ class DockerBuildTool(Tool):
             return {"error": "Docker build timed out after 120s"}
         except Exception as e:
             return {"error": str(e)}
+__all__ = ["BrowserScreenshotTool", "BrowserNavigateTool", "BrowserClickTool", "DockerRunTool", "DockerBuildTool"]

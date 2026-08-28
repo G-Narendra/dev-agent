@@ -181,3 +181,4 @@ class MCPAddServerTool(Tool):
                 return {"success": True, "message": f"Added server: {name}"}
         except Exception as e:
             return {"error": str(e)}
+__all__ = ["MCPListServersTool", "MCPConnectTool", "MCPListToolsTool", "MCPCallTool", "MCPAddServerTool"]

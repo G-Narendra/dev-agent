@@ -155,3 +155,4 @@ class ToolSearchTool(Tool):
                 for t in results
             ],
         }
+__all__ = ["ToolSearchTool"]

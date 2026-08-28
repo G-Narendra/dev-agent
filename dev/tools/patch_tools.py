@@ -14,6 +14,9 @@ from typing import Any
 from .base import Tool
 
 
+
+__all__ = ["ApplyPatchTool", "EditBlockTool"]
+
 class ApplyPatchTool(Tool):
     """
     Apply a patch to a file using unified diff format.

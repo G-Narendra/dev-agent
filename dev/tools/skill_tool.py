@@ -120,3 +120,4 @@ class SkillTool(Tool):
             "instructions": skill_content[:10000],  # Cap at 10K chars
             "source": skills_dir,
         }
+__all__ = ["SkillTool"]

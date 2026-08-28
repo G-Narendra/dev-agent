@@ -19,6 +19,8 @@ from typing import Any
 
 from .base import Tool
 
+__all__ = ["RealReadFilesTool", "RealWriteFileTool", "RealStrReplaceTool", "RealCodeSearchTool", "RealGlobTool", "RealListDirectoryTool", "RealRunTerminalCommand", "RealGitOperations", "RealWebSearchTool", "RealReadUrlTool", "RealPipelineTool"]
+
 
 class RealReadFilesTool(Tool):
     """Read files from disk with line ranges."""
@@ -96,7 +98,7 @@ class RealReadFilesTool(Tool):
                             results.append({"path": file_path, "error": "Cannot read binary file"})
                             continue
                 except Exception:
-                    pass
+                    pass  # Intentional: Exception
 
                 # Try UTF-8 first, then fallback to system encoding
                 try:
@@ -378,7 +380,7 @@ class RealStrReplaceTool(Tool):
                 try:
                     pass  # Verification is best-effort
                 except OSError:
-                    pass
+                    pass  # Intentional: OSError
 
             return {
                 "success": applied > 0,
@@ -399,7 +401,7 @@ class RealStrReplaceTool(Tool):
                 if os.path.exists(lock_path):
                     os.remove(lock_path)
             except Exception:
-                pass
+                pass  # Intentional: Exception
 
     def _make_diff(self, old: str, new: str, path: str) -> str:
         """Create a unified diff."""
@@ -542,7 +544,7 @@ class RealCodeSearchTool(Tool):
                     mtime = os.path.getmtime(abs_path)
                     priority -= (time.time() - mtime) / 3600  # Deduct by hours since modification
                 except Exception:
-                    pass
+                    pass  # Intentional: Exception
                 return priority
             import time as _time
             sorted_results = dict(sorted(results.items(), key=lambda kv: _file_priority(kv[0])))
@@ -585,7 +587,7 @@ class RealGlobTool(Tool):
                         if line and not line.startswith("#"):
                             gitignore_patterns.append(line)
             except Exception:
-                pass
+                pass  # Intentional: Exception
 
         def _is_gitignored(path: str) -> bool:
             rel = os.path.relpath(path, project_path)
@@ -894,7 +896,7 @@ class RealRunTerminalCommand(Tool):
                     job["pos"] += len(chunk)
                     new_output = chunk.decode(errors="replace")
             except OSError:
-                pass
+                pass  # Intentional: OSError
             entry = {
                 "job_id": job_id,
                 "running": alive,
@@ -908,7 +910,7 @@ class RealRunTerminalCommand(Tool):
                 try:
                     job["fh"].close()
                 except Exception:
-                    pass
+                    pass  # Intentional: Exception
                 results.append(entry)
                 del self._bg_jobs[job_id]
             else:
@@ -1037,7 +1039,7 @@ class RealWebSearchTool(Tool):
                                     "url": topic.get("FirstURL", ""),
                                 })
                 except Exception:
-                    pass
+                    pass  # Intentional: Exception
 
                 # 2. DuckDuckGo HTML lite (fallback)
                 if not results:
@@ -1064,7 +1066,7 @@ class RealWebSearchTool(Tool):
                                     "url": url,
                                 })
                     except Exception:
-                        pass
+                        pass  # Intentional: Exception
 
                 # 3. Google Custom Search (free tier) as last resort
                 if not results:
@@ -1082,7 +1084,7 @@ class RealWebSearchTool(Tool):
                                 if clean:
                                     results.append({"title": clean, "snippet": "", "url": ""})
                     except Exception:
-                        pass
+                        pass  # Intentional: Exception
 
             return {"query": query, "results": results[:10], "count": len(results)}
 
@@ -1133,7 +1135,7 @@ class RealReadUrlTool(Tool):
                         text = json.dumps(data, indent=2)[:max_chars]
                         return {"url": url, "content": text, "type": "json", "status": 200}
                     except Exception:
-                        pass
+                        pass  # Intentional: Exception
 
                 # Extract readable text from HTML
                 text = self._html_to_text(raw_html)

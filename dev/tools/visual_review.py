@@ -412,3 +412,4 @@ class AutoVisualReviewTool(Tool):
         """Apply HTML changes from vision feedback."""
         # HTML fixes are more complex — log them for the agent to apply
         pass
+__all__ = ["VisualReviewTool", "AutoVisualReviewTool"]

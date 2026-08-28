@@ -16,6 +16,9 @@ from typing import Any
 from .base import Tool
 
 
+
+__all__ = ["MultiEditTool"]
+
 class MultiEditTool(Tool):
     """Edit multiple files atomically — all succeed or all roll back."""
 

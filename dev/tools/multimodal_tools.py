@@ -15,6 +15,9 @@ from typing import Any
 from .base import Tool
 
 
+
+__all__ = ["ReadImageTool", "ReadPdfTool"]
+
 class ReadImageTool(Tool):
     """Read an image file and return its base64 content for analysis."""
 
