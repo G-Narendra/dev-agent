@@ -101,20 +101,31 @@ class MCPClient:
         self._initialized = True
         return results
     
-    async def connect_server(self, name: str) -> bool:
-        """Connect to a specific MCP server."""
+    async def connect_server(self, name: str, max_retries: int = 2) -> bool:
+        """Connect to a specific MCP server with retry logic."""
         server = self.servers.get(name)
         if not server:
             raise ValueError(f"Server '{name}' not configured")
         
-        if server.url:
-            # HTTP transport
-            return await self._connect_http(name, server)
-        elif server.command:
-            # stdio transport
-            return await self._connect_stdio(name, server)
-        else:
-            raise ValueError(f"Server '{name}' has no command or URL")
+        last_error = None
+        for attempt in range(max_retries + 1):
+            try:
+                if server.url:
+                    return await self._connect_http(name, server)
+                elif server.command:
+                    return await self._connect_stdio(name, server)
+                else:
+                    raise ValueError(f"Server '{name}' has no command or URL")
+            except Exception as e:
+                last_error = e
+                if attempt < max_retries:
+                    import sys
+                    print(f"[mcp] Retry {attempt + 1}/{max_retries} for {name}: {e}", file=sys.stderr)
+                    await asyncio.sleep(1.0 * (attempt + 1))  # Exponential backoff
+        
+        import sys
+        print(f"[mcp] Failed to connect to {name} after {max_retries + 1} attempts: {last_error}", file=sys.stderr)
+        return False
     
     async def _connect_stdio(self, name: str, server: MCPServer) -> bool:
         """Connect to an MCP server via stdio."""

@@ -2653,10 +2653,12 @@ class ProductionAgentLoop:
         if self.config.enforce_plan_mode:
             parts.append("\n\n## CURRENT MODE: PLAN (read-only)\nYou can ONLY use read-only tools. To make changes, the user must switch to act mode.")
 
-        # Skills integration -- inject expert role instructions
+        # Skills integration -- inject expert role instructions (cached to avoid re-instantiation)
         try:
-            from .skill_integration import SkillIntegration
-            si = SkillIntegration(skills_path=os.path.join(self.project_path, "skills"))
+            if not hasattr(self, '_skill_integration'):
+                from .skill_integration import SkillIntegration
+                self._skill_integration = SkillIntegration(skills_path=os.path.join(self.project_path, "skills"))
+            si = self._skill_integration
             # Get the user's task from current messages
             task = ""
             for msg in self._state.done_messages + self._state.cur_messages:
@@ -2683,11 +2685,88 @@ class ProductionAgentLoop:
 ## TOOLS: research→web_search+read_url | code→code_search+read_files | run→run_terminal_command | install→venv ONLY | images→remote URLs | track→write_todos | parallel→spawn_agents | integrations→mcp_connect | APIs→free_api | design→visual_review+design_fetch | ugly site→auto_visual_review""")
 
         result = "\n".join(parts)
+        
+        # Compress system prompt for Nemotron (effective ~4K tokens after tool defs)
+        result = self._compress_prompt_for_nim(result)
+        
         # Cache for reuse
         if not hasattr(self, '_system_prompt_cache'):
             self._system_prompt_cache = {}
         self._system_prompt_cache = {'key': cache_key, 'value': result}
         return result
+    
+    def _compress_prompt_for_nim(self, prompt: str) -> str:
+        """Compress system prompt to fit Nemotron's limited context.
+        
+        Nemotron 120B has ~128K context but effective tool-calling context is ~4K tokens.
+        After tool definitions (~2K tokens), we have ~2K tokens for system prompt.
+        This method aggressively compresses non-essential sections.
+        """
+        # Estimate tokens (rough: 1 token ≈ 4 chars)
+        estimated_tokens = len(prompt) // 4
+        
+        # If under 6K chars (~1.5K tokens), no compression needed
+        if estimated_tokens < 1500:
+            return prompt
+        
+        self._log(f"System prompt: {estimated_tokens:,} tokens — compressing for Nemotron")
+        
+        # Strategy 1: Remove verbose sections
+        # Remove 'Rule Precedence' explanation (saves ~100 chars)
+        prompt = prompt.replace("\n\n**Rule Precedence:** .devrules overrides DEV.md. When rules conflict, follow the most specific source.", "")
+        
+        # Strategy 2: Truncate gitignore section to top 10 patterns
+        gi_match = re.search(r'## \.gitignore.*?(?=\n## |$)', prompt, re.DOTALL)
+        if gi_match:
+            gi_text = gi_match.group(0)
+            if len(gi_text) > 300:
+                # Keep only first 10 patterns
+                lines = gi_text.split('\n')[:12]  # Header + 10 patterns + buffer
+                prompt = prompt.replace(gi_text, '\n'.join(lines))
+        
+        # Strategy 3: Truncate auto-memory to 500 chars
+        mem_match = re.search(r'## Auto Memory.*?(?=\n## |$)', prompt, re.DOTALL)
+        if mem_match:
+            mem_text = mem_match.group(0)
+            if len(mem_text) > 600:
+                prompt = prompt.replace(mem_text, mem_text[:500] + '\n[truncated]')
+        
+        # Strategy 4: Truncate git context to 200 chars
+        git_match = re.search(r'## Git Status.*?(?=\n## |$)', prompt, re.DOTALL)
+        if git_match:
+            git_text = git_match.group(0)
+            if len(git_text) > 300:
+                prompt = prompt.replace(git_text, git_text[:200] + '\n[truncated]')
+        
+        # Strategy 5: Compress instructions section
+        instr_match = re.search(r'## Instructions\n(.*?)(?=\n## |$)', prompt, re.DOTALL)
+        if instr_match:
+            instr_text = instr_match.group(0)
+            if len(instr_text) > 500:
+                # Keep only first 3 rules
+                lines = instr_text.split('\n')[:5]
+                prompt = prompt.replace(instr_text, '\n'.join(lines) + '\n[truncated]')
+        
+        # Strategy 6: If still too long, truncate design section
+        design_match = re.search(r'## AUTO-LOADED DESIGN.*?(?=\n## |$)', prompt, re.DOTALL)
+        if design_match:
+            design_text = design_match.group(0)
+            if len(design_text) > 800:
+                prompt = prompt.replace(design_text, design_text[:600] + '\n[truncated]')
+        
+        # Final check: if still over 8K chars, hard truncate
+        if len(prompt) > 8000:
+            # Keep first 6000 chars + rules section
+            rules_match = re.search(r'## RULES.*', prompt, re.DOTALL)
+            if rules_match:
+                rules_text = rules_match.group(0)
+                prompt = prompt[:6000] + '\n\n' + rules_text[:1500]
+            else:
+                prompt = prompt[:7500] + '\n[truncated for context budget]'
+        
+        new_tokens = len(prompt) // 4
+        self._log(f"Compressed system prompt: {estimated_tokens:,} → {new_tokens:,} tokens ({100 - new_tokens*100//estimated_tokens}% reduction)")
+        return prompt
 
     def _load_gitignore(self) -> str:
         """Load .gitignore patterns and return a human-readable list of dirs/files to skip."""
