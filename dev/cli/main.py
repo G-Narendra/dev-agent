@@ -2007,6 +2007,14 @@ def chat(
                 if verbose:
                     import traceback
                     console.print(f"[dim]{traceback.format_exc()}[/dim]")
+                # Auto-save session on error so work is not lost
+                if not no_persist:
+                    try:
+                        conv.add_message("system", f"[Error: {e}]")
+                        await asyncio.to_thread(history.save_conversation, conv)
+                        console.print("[dim]Session auto-saved.[/dim]")
+                    except Exception:
+                        pass  # Intentional: best-effort save on error
             profiler.stop_timer("agent_run")
 
             # Track cost

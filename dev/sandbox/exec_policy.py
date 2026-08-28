@@ -317,6 +317,18 @@ def create_default_policy(project_path: str = ".") -> ExecPolicy:
         "docs.python.org",
         "*.stackoverflow.com",
         "integrate.api.nvidia.com",  # NVIDIA NIMs
+        "openrouter.ai",         # OpenRouter
+        "api.openrouter.ai",
+        "*.openrouter.ai",
+        "*.bytez.com",            # Bytez
+        "*.googleapis.com",       # Google APIs
+        "*.openai.com",           # OpenAI-compatible APIs
+        "raw.githubusercontent.com",
+        "api.github.com",
+        "*.cloudflare.com",
+        "fonts.googleapis.com",
+        "*.tailwindcss.com",
+        "registry.npmjs.org",
     ]
     
     for host in allowed_hosts:

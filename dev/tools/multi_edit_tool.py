@@ -43,8 +43,8 @@ class MultiEditTool(Tool):
         "required": ["edits"],
     }
 
-    async def execute(self, args: dict, state: Any, project_path: str) -> dict:
-        edits = args.get("edits", [])
+    async def execute(self, input_data: dict, state: Any, project_path: str) -> dict:
+        edits = input_data.get("edits", [])
         if not edits:
             return {"error": "No edits provided"}
 

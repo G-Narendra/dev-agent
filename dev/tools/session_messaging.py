@@ -128,10 +128,10 @@ class SendMessageTool(Tool):
         self._session_id = session_id or str(uuid.uuid4())[:8]
         self._project_path = project_path
     
-    async def execute(self, args: dict) -> dict:
-        to_session = args.get("to_session", "")
-        message = args.get("message", "")
-        msg_type = args.get("type", "message")
+    async def execute(self, input_data: dict, state: Any = None, project_path: str = "") -> dict:
+        to_session = input_data.get("to_session", "")
+        message = input_data.get("message", "")
+        msg_type = input_data.get("type", "message")
         
         if not to_session or not message:
             return {"success": False, "error": "to_session and message are required"}
@@ -160,7 +160,7 @@ class ReceiveMessagesTool(Tool):
         self._session_id = session_id or str(uuid.uuid4())[:8]
         self._project_path = project_path
     
-    async def execute(self, args: dict) -> dict:
+    async def execute(self, input_data: dict, state: Any = None, project_path: str = "") -> dict:
         messenger = SessionMessenger(self._session_id, self._project_path)
         messages = messenger.receive()
         
@@ -185,7 +185,7 @@ class ListSessionsTool(Tool):
         self._session_id = session_id or str(uuid.uuid4())[:8]
         self._project_path = project_path
     
-    async def execute(self, args: dict) -> dict:
+    async def execute(self, input_data: dict, state: Any = None, project_path: str = "") -> dict:
         messenger = SessionMessenger(self._session_id, self._project_path)
         sessions = messenger.list_sessions()
         
@@ -214,9 +214,9 @@ class BroadcastTool(Tool):
         self._session_id = session_id or str(uuid.uuid4())[:8]
         self._project_path = project_path
     
-    async def execute(self, args: dict) -> dict:
-        message = args.get("message", "")
-        msg_type = args.get("type", "broadcast")
+    async def execute(self, input_data: dict, state: Any = None, project_path: str = "") -> dict:
+        message = input_data.get("message", "")
+        msg_type = input_data.get("type", "broadcast")
         
         if not message:
             return {"success": False, "error": "message is required"}

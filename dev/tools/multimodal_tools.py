@@ -41,8 +41,8 @@ class ReadImageTool(Tool):
         ".bmp": "image/bmp",
     }
 
-    async def execute(self, args: dict, state: Any, project_path: str) -> dict:
-        file_path = args.get("path", "")
+    async def execute(self, input_data: dict, state: Any, project_path: str) -> dict:
+        file_path = input_data.get("path", "")
         if not file_path:
             return {"error": "No path provided"}
 
@@ -99,9 +99,9 @@ class ReadPdfTool(Tool):
         "required": ["path"],
     }
 
-    async def execute(self, args: dict, state: Any, project_path: str) -> dict:
-        file_path = args.get("path", "")
-        max_pages = args.get("max_pages", 50)
+    async def execute(self, input_data: dict, state: Any, project_path: str) -> dict:
+        file_path = input_data.get("path", "")
+        max_pages = input_data.get("max_pages", 50)
 
         if not file_path:
             return {"error": "No path provided"}

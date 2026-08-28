@@ -46,9 +46,9 @@ class DeployTool(Tool):
         },
     }
 
-    async def execute(self, args: dict, state: Any, project_path: str) -> dict:
-        platform = args.get("platform", "docker")
-        port = args.get("port", 0)
+    async def execute(self, input_data: dict, state: Any, project_path: str) -> dict:
+        platform = input_data.get("platform", "docker")
+        port = input_data.get("port", 0)
 
         # Detect project type
         detection = self._detect_project(project_path, port)
