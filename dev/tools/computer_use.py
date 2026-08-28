@@ -39,9 +39,9 @@ class ComputerScreenshotTool(Tool):
         },
     }
     
-    async def execute(self, args: dict) -> dict:
-        region = args.get("region", "full")
-        save_path = args.get("save_path")
+    async def execute(self, input_data: dict, state=None, project_path=".") -> dict:
+        region = input_data.get("region", "full")
+        save_path = input_data.get("save_path")
         
         try:
             # Try Pillow first
@@ -136,9 +136,9 @@ class ComputerMouseMoveTool(Tool):
         "required": ["x", "y"],
     }
     
-    async def execute(self, args: dict) -> dict:
-        x = args.get("x", 0)
-        y = args.get("y", 0)
+    async def execute(self, input_data: dict, state=None, project_path=".") -> dict:
+        x = input_data.get("x", 0)
+        y = input_data.get("y", 0)
         
         try:
             import pyautogui
@@ -170,11 +170,11 @@ class ComputerClickTool(Tool):
         "required": ["x", "y"],
     }
     
-    async def execute(self, args: dict) -> dict:
-        x = args.get("x", 0)
-        y = args.get("y", 0)
-        button = args.get("button", "left")
-        clicks = args.get("clicks", 1)
+    async def execute(self, input_data: dict, state=None, project_path=".") -> dict:
+        x = input_data.get("x", 0)
+        y = input_data.get("y", 0)
+        button = input_data.get("button", "left")
+        clicks = input_data.get("clicks", 1)
         
         try:
             import pyautogui
@@ -200,9 +200,9 @@ class ComputerTypeTool(Tool):
         "required": ["text"],
     }
     
-    async def execute(self, args: dict) -> dict:
-        text = args.get("text", "")
-        interval = args.get("interval", 0.05)
+    async def execute(self, input_data: dict, state=None, project_path=".") -> dict:
+        text = input_data.get("text", "")
+        interval = input_data.get("interval", 0.05)
         
         try:
             import pyautogui
@@ -230,8 +230,8 @@ class ComputerKeyTool(Tool):
         "required": ["keys"],
     }
     
-    async def execute(self, args: dict) -> dict:
-        keys = args.get("keys", "")
+    async def execute(self, input_data: dict, state=None, project_path=".") -> dict:
+        keys = input_data.get("keys", "")
         
         try:
             import pyautogui
@@ -261,8 +261,8 @@ class ComputerOpenAppTool(Tool):
         "required": ["app_name"],
     }
     
-    async def execute(self, args: dict) -> dict:
-        app_name = args.get("app_name", "")
+    async def execute(self, input_data: dict, state=None, project_path=".") -> dict:
+        app_name = input_data.get("app_name", "")
         
         system = platform.system()
         

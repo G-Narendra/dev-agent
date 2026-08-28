@@ -202,30 +202,48 @@ class StreamingDisplay:
     """
     Live streaming display for agent responses.
     
-    Uses Rich Live for real-time token-by-token display.
+    Streams token-by-token using console.out for immediate feedback.
+    Handles Unicode encoding issues on Windows terminals.
     """
     
     def __init__(self, tui: DevTUI):
         self.tui = tui
         self._buffer = ""
-        self._live: Optional[Live] = None
+        self._started = False
     
     def start(self):
-        """Start streaming display."""
+        """Start streaming display with agent label."""
         self._buffer = ""
-        self.tui.console.print("Dev: ", end="", highlight=False)
+        self._started = True
+        try:
+            self.tui.console.out("\nDev: ", end="", highlight=False)
+        except Exception:
+            pass
     
     def update(self, chunk: str):
-        """Update with a new chunk — stream token by token."""
+        """Update with a new chunk — stream token by token with flush."""
+        if not self._started:
+            self.start()
         self._buffer += chunk
-        # Print each chunk immediately for real streaming feel
         try:
-            self.tui.console.out(chunk, end="", highlight=False)
+            self.tui.console.out(chunk, end="", highlight=False, flush=True)
         except UnicodeEncodeError:
             safe = chunk.encode("ascii", errors="replace").decode("ascii")
-            self.tui.console.out(safe, end="", highlight=False)
+            self.tui.console.out(safe, end="", highlight=False, flush=True)
+        except Exception:
+            pass
     
     def end(self):
-        """End streaming display."""
+        """End streaming display with newline."""
+        if self._started:
+            try:
+                self.tui.console.out("", end="\n", flush=True)
+            except Exception:
+                pass
         self._buffer = ""
+        self._started = False
+    
+    def get_buffer(self) -> str:
+        """Get the full accumulated buffer."""
+        return self._buffer
         self.tui.console.print()  # Final newline

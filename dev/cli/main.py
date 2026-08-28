@@ -224,24 +224,14 @@ def get_runtime(provider: NimProvider, project: str = ".") -> AgentRuntime:
     from ..tools.multi_edit_tool import MultiEditTool
     registry.register("multi_edit", MultiEditTool())
 
-    # Connect to MCP servers from .dev/mcp.json
+    # MCP servers are loaded lazily via McpRegistry to avoid blocking the event loop.
+    # See dev/mcp/registry.py for the list of available MCP servers.
     try:
-        from ..mcp.client import McpClient
-        mcp_config_path = os.path.join(abs_project, ".dev", "mcp.json")
-        if os.path.isfile(mcp_config_path):
-            with open(mcp_config_path) as f:
-                mcp_config = json.load(f)
-            for server_name, server_cfg in mcp_config.get("servers", {}).items():
-                try:
-                    client = McpClient(name=server_name, config=server_cfg)
-                    tools = asyncio.get_event_loop().run_until_complete(client.connect())
-                    for tool in tools:
-                        registry.register(tool.name, tool)
-                    console.print(f"[green]  MCP: {server_name} ({len(tools)} tools)[/green]")
-                except Exception as e:
-                    console.print(f"[yellow]  MCP: {server_name} failed: {e}[/yellow]")
+        from ..mcp.registry import ALL_MCPS
+        # Store MCP config for lazy connection (don't block here)
+        registry._mcp_servers = ALL_MCPS
     except Exception:
-        pass  # MCP not configured, skip
+        pass
 
     runtime = AgentRuntime(provider=provider, tool_registry=registry)
     spawn_tool.runtime = runtime
@@ -462,8 +452,6 @@ def run(
                     status = str(result)[:200] if result else "ok"
                     console.print(f"[dim]  <- {name}: {status}[/dim]")
 
-            import sys as _sys
-            print(f"[CLI-DEBUG] About to call run_streaming, bare={bare}, model={model}, max_steps={max_steps}", file=_sys.stderr, flush=True)
             result = await agent_loop.run_streaming(
                 prompt=prompt,
                 system_prompt=system_prompt,
@@ -560,8 +548,8 @@ def chat(
 ):
     """Interactive chat with streaming, tools, approval modes, context pruning."""
     async def _chat():
-        # Initialize local approval_mode from the chat() parameter
-        approval_mode = approval
+        # Use the chat() parameter directly (don't shadow with local assignment)
+        _approval_mode = approval
 
         # Quiet mode: suppress all output except responses
         if quiet:
@@ -724,7 +712,7 @@ def chat(
                 return
             try:
                 from dev.agents.production_loop import ProductionAgentLoop as PAL, LoopConfig as LC
-                lc = LC(model=model, auto_lint=True, auto_commit=True, verbose=verbose, approval_mode=approval)
+                lc = LC(model=model, auto_lint=True, auto_commit=True, verbose=verbose, approval_mode=approval or "auto-edit")
                 loop = PAL(provider=provider, tool_registry=runtime.tools, config=lc, project_path=abs_project)
                 result = await loop.run_streaming(prompt=print_prompt, system_prompt=system_prompt)
                 content = result.get("content", "")

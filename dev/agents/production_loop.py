@@ -215,7 +215,9 @@ class ProductionAgentLoop:
             self._tool_validator = ToolCallValidator(project_path)
         if OutputMonitor:
             self._output_monitor = OutputMonitor(strict_mode=False)
-        # Reuse the imported AuditLogger class if available
+        # Initialize audit logger (None if security module unavailable)
+        self._audit_logger = None
+        self._audit_logger_new = False
         try:
             from ..security.audit_logger import AuditLogger as _AuditLogger
             self._audit_logger = _AuditLogger(project_path)
@@ -227,7 +229,6 @@ class ProductionAgentLoop:
         # Tool result cache: cache read-only tool results to avoid re-reading
         self._tool_cache: dict[str, dict] = {}  # cache_key -> result
         self._tool_cache_max = 50  # Max cached results
-        # Audit logger already set above from security module -- don't overwrite
         # Approval history: track all approval decisions for review
         self._approval_history: list[dict] = []
         # Plan persistence
@@ -683,8 +684,6 @@ class ProductionAgentLoop:
         # AUTO-DESIGN: Detect if building a web project and fetch brand design
         full_system = await self._auto_fetch_design(prompt, full_system)
         
-        import sys as _sys
-        print(f"[DEBUG] System prompt: {len(full_system)} chars, Messages: {len(self._state.cur_messages)}", file=_sys.stderr, flush=True)
         all_tool_calls = []
         all_tool_results = []
         final_content = ""
@@ -716,11 +715,13 @@ class ProductionAgentLoop:
             # Convert to dicts for API
             msg_dicts = self._messages_to_dicts(messages)
 
-            # Get tool definitions -- filter by tool_names if set (reduces for LLM)
+            # Get tool definitions -- filter by tool_names or auto-select relevant tools
             if self._tool_names and hasattr(self.tools, 'get_definitions_for_tools'):
                 tool_defs = self.tools.get_definitions_for_tools(self._tool_names)
             else:
-                tool_defs = self.tools.get_definitions()
+                all_tool_defs = self.tools.get_definitions()
+                # Auto-filter for Nemotron (reduces token footprint)
+                tool_defs = self._get_relevant_tools(prompt if step == 0 else "", all_tool_defs)
             self._log(f"Sending {len(msg_dicts)} messages, {len(tool_defs)} tool schemas to LLM")
 
             # Stream the response WITH retry logic
@@ -2352,6 +2353,10 @@ class ProductionAgentLoop:
                 
                 design_section += f"\n\n**INSTRUCTION:** Apply these {detected_brand.upper()} design patterns to your code. Use the exact colors, fonts, spacing, and component styles defined above. Do NOT use generic patterns — use the {detected_brand} design system.\n"
                 
+                # Cap design section at 3000 chars to preserve Nemotron's limited context
+                if len(design_section) > 3000:
+                    design_section = design_section[:2950] + "\n...[truncated for context budget]\n"
+                
                 system_prompt += design_section
                 self._log(f"Auto-design: Injected {detected_brand} design ({len(design_section)} chars)")
             
@@ -2448,6 +2453,61 @@ class ProductionAgentLoop:
             parts.append(f"Todos: {done}/{total} complete. Remaining: " + "; ".join(remaining[:5]))
         parts.append("Stay focused on the user's task. Use write_file with complete file content -- no placeholders.")
         self._state.cur_messages.append(Message(role="user", content="\n".join(parts)))
+
+    # Core tools that every task needs (always included)
+    _CORE_TOOLS = frozenset({
+        'write_file', 'str_replace', 'read_files', 'run_terminal_command',
+        'list_directory', 'code_search', 'glob', 'write_todos', 'task_completed',
+    })
+    # Tools mapped to task types
+    _TASK_TOOL_MAP = {
+        'web': ['browser_screenshot', 'browser_navigate', 'browser_click', 'generate_diagram', 'design_fetch'],
+        'api': ['free_api', 'list_apis', 'list_mcp_servers'],
+        'git': ['git_operations'],
+        'research': ['web_search', 'read_url'],
+        'docker': ['docker_run', 'docker_build'],
+        'image': ['read_image', 'read_pdf'],
+        'team': ['spawn_agents', 'team_execute'],
+        'sandbox': ['sandboxed_run', 'sandbox_status'],
+    }
+
+    def _get_relevant_tools(self, prompt: str, all_tool_defs: list[dict]) -> list[dict]:
+        """Select only relevant tools for the prompt to reduce token footprint.
+        
+        Critical for Nemotron which can only handle ~15-20 tools effectively.
+        Always includes core tools, then adds task-specific tools.
+        """
+        prompt_lower = prompt.lower()
+        selected_names = set(self._CORE_TOOLS)
+        
+        # Add task-specific tools based on prompt keywords
+        for task_type, tools in self._TASK_TOOL_MAP.items():
+            task_keywords = {
+                'web': ['website', 'web', 'html', 'css', 'frontend', 'ui', 'portfolio', 'landing', 'site', 'page', 'design'],
+                'api': ['api', 'endpoint', 'rest', 'graphql', 'http'],
+                'git': ['git', 'commit', 'branch', 'diff', 'merge'],
+                'research': ['research', 'search', 'find', 'lookup', 'web', 'internet', 'url'],
+                'docker': ['docker', 'container', 'compose'],
+                'image': ['image', 'pdf', 'picture', 'photo', 'screenshot', 'vision'],
+                'team': ['team', 'parallel', 'agents', 'spawn'],
+                'sandbox': ['sandbox', 'safe', 'isolated'],
+            }
+            if any(kw in prompt_lower for kw in task_keywords.get(task_type, [])):
+                selected_names.update(tools)
+        
+        # Filter tool defs to only selected tools
+        filtered = [d for d in all_tool_defs if d.get('function', {}).get('name', '') in selected_names]
+        
+        # If we filtered too aggressively, fall back to all tools
+        if len(filtered) < 5:
+            return all_tool_defs[:20]  # Cap at 20 for Nemotron
+        
+        # Cap at 20 tools total for Nemotron
+        if len(filtered) > 20:
+            filtered = filtered[:20]
+        
+        self._log(f"Tool selection: {len(filtered)}/{len(all_tool_defs)} tools for prompt: {prompt[:50]}...")
+        return filtered
 
     async def _auto_compact_if_needed(self, messages: list[Message], system_prompt: str):
         """Smart auto-compact using OpenClaw-style compaction engine."""
@@ -2565,6 +2625,11 @@ class ProductionAgentLoop:
             parts.append(f"\n\n## Project Rules\n{rules}")
             parts.append("\n\n**Rule Precedence:** .devrules overrides DEV.md. When rules conflict, follow the most specific source.")
 
+        # .gitignore awareness — tell agent which dirs/files to skip
+        gitignore_patterns = self._load_gitignore()
+        if gitignore_patterns:
+            parts.append(f"\n\n## .gitignore (DO NOT write files here)\n{gitignore_patterns}")
+
         # Design knowledge (DESIGN.md patterns)
         try:
             from ..utils.design_knowledge import get_design_prompt_section
@@ -2623,6 +2688,25 @@ class ProductionAgentLoop:
             self._system_prompt_cache = {}
         self._system_prompt_cache = {'key': cache_key, 'value': result}
         return result
+
+    def _load_gitignore(self) -> str:
+        """Load .gitignore patterns and return a human-readable list of dirs/files to skip."""
+        try:
+            gitignore_path = os.path.join(self.project_path, '.gitignore')
+            if not os.path.isfile(gitignore_path):
+                return ''
+            with open(gitignore_path, 'r', encoding='utf-8', errors='ignore') as f:
+                lines = f.readlines()
+            patterns = []
+            for line in lines:
+                line = line.strip()
+                if line and not line.startswith('#') and not line.startswith('!'):
+                    patterns.append(line)
+            if not patterns:
+                return ''
+            return 'These paths are gitignored — DO NOT create or modify files in these locations:\n' + '\n'.join(f'- {p}' for p in patterns[:30])  # Limit to 30 patterns
+        except Exception:
+            return ''
 
     def _load_project_rules(self) -> str:
         """Load project rules from DEV.md, .devrules, and .dev/ directory."""

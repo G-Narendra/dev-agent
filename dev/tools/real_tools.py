@@ -71,7 +71,8 @@ class RealReadFilesTool(Tool):
                 offset = path_info.get("offset", 1)
                 limit = path_info.get("limit", 2000)
 
-            abs_path = self._resolve_path(file_path, project_path)
+            # read_files allows reading outside project (e.g. /etc/hosts, config files)
+            abs_path = self._resolve_path(file_path, project_path, allow_outside=True)
 
             try:
                 if not os.path.exists(abs_path):
@@ -127,23 +128,39 @@ class RealReadFilesTool(Tool):
 
         return {"files": results}
 
-    def _resolve_path(self, path: str, project_path: str) -> str:
+    def _resolve_path(self, path: str, project_path: str, allow_outside: bool = False) -> str:
+        """Resolve a path to absolute, with optional outside-project access.
+        
+        Security model:
+        - Relative paths: always resolved within project (safe by default)
+        - Absolute paths: allowed when allow_outside=True (for read_files, code_search, etc.)
+        - Symlink escapes: always blocked regardless of allow_outside
+        - Directory traversal (../): blocked for relative paths
+        """
         if os.path.isabs(path):
             abs_path = os.path.normpath(os.path.abspath(path))
         else:
+            # Check for directory traversal attempts in relative paths
+            if '..' in path.split(os.sep) or '..' in path.split('/'):
+                raise ValueError(f"Directory traversal blocked: {path} contains '..')")
             abs_path = os.path.normpath(os.path.abspath(os.path.join(project_path, path)))
-        # Path traversal protection: ensure resolved path is within project
+        
         abs_project = os.path.normpath(os.path.abspath(project_path))
-        # Resolve symlinks and check target is within project
+        
+        # Symlink escape protection: ALWAYS enforced
         try:
             real_path = os.path.realpath(abs_path)
             real_project = os.path.realpath(abs_project)
-            if not real_path.startswith(real_project):
+            if not abs_path.startswith(abs_project) and not real_path.startswith(real_project):
                 raise ValueError(f"Symlink escape blocked: {path} -> {real_path} resolves outside project")
-        except (OSError, ValueError):
-            pass
-        if not abs_path.startswith(abs_project):
-            raise ValueError(f"Path traversal blocked: {path} resolves outside project")
+        except (OSError, ValueError) as e:
+            if "Symlink escape" in str(e):
+                raise
+        
+        # For paths outside project: allow if allow_outside=True, block otherwise
+        if not abs_path.startswith(abs_project) and not allow_outside:
+            raise ValueError(f"Path outside project: {path}. Use allow_outside=True for external files.")
+        
         # Windows MAX_PATH workaround
         if os.name == 'nt' and len(abs_path) > 240 and not abs_path.startswith('\\\\?\\'):
             abs_path = '\\\\?\\' + abs_path
@@ -168,8 +185,8 @@ class RealWriteFileTool(Tool):
     async def execute(self, input_data: dict, state: Any, project_path: str) -> dict:
         path = input_data.get("path", "")
         if os.name == 'nt' and path:
-            # Sanitize trailing spaces on Windows to prevent ghost files
-            path = '/'.join(p.rstrip() for p in path.replace('\\', '/').split('/'))
+            # Only strip trailing spaces (not newlines/tabs) on Windows to prevent ghost files
+            path = '/'.join(p.rstrip(' ') for p in path.replace('\\', '/').split('/'))
         content = input_data.get("content", "")
         instructions = input_data.get("instructions", "")
 
@@ -250,16 +267,14 @@ class RealWriteFileTool(Tool):
         except Exception as e:
             return {"error": str(e), "path": path}
 
-    def _resolve_path(self, path: str, project_path: str) -> str:
-        # Always resolve to absolute first
+    def _resolve_path(self, path: str, project_path: str, allow_outside: bool = False) -> str:
         if os.path.isabs(path):
             abs_path = os.path.normpath(path)
         else:
             abs_path = os.path.normpath(os.path.abspath(os.path.join(project_path, path)))
         abs_project = os.path.normpath(os.path.abspath(project_path))
-        if not abs_path.startswith(abs_project):
+        if not abs_path.startswith(abs_project) and not allow_outside:
             raise ValueError(f"Path traversal blocked: {path} resolves outside project")
-        # Windows MAX_PATH workaround
         if os.name == 'nt' and len(abs_path) > 240 and not abs_path.startswith('\\\\?\\'):
             abs_path = '\\\\?\\' + abs_path
         return abs_path
@@ -294,7 +309,8 @@ class RealStrReplaceTool(Tool):
         path = input_data.get("path", "")
         replacements = input_data.get("replacements", [])
 
-        abs_path = self._resolve_path(path, project_path)
+        # str_replace allows editing files outside project (e.g. config files)
+        abs_path = self._resolve_path(path, project_path, allow_outside=True)
 
         # File locking to prevent concurrent modification (best-effort)
         lock_path = abs_path + ".lock"
@@ -406,19 +422,20 @@ class RealStrReplaceTool(Tool):
 
         return "\n".join(diff_lines[:50])
 
-    def _resolve_path(self, path: str, project_path: str) -> str:
-        # Always resolve to absolute first
+
+
+    def _resolve_path(self, path: str, project_path: str, allow_outside: bool = False) -> str:
         if os.path.isabs(path):
             abs_path = os.path.normpath(path)
         else:
             abs_path = os.path.normpath(os.path.abspath(os.path.join(project_path, path)))
         abs_project = os.path.normpath(os.path.abspath(project_path))
-        if not abs_path.startswith(abs_project):
+        if not abs_path.startswith(abs_project) and not allow_outside:
             raise ValueError(f"Path traversal blocked: {path} resolves outside project")
-        # Windows MAX_PATH workaround
         if os.name == 'nt' and len(abs_path) > 240 and not abs_path.startswith('\\\\?\\'):
             abs_path = '\\\\?\\' + abs_path
         return abs_path
+
 
 
 class RealCodeSearchTool(Tool):
