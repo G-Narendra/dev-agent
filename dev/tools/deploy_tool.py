@@ -23,7 +23,7 @@ from .base import Tool
 __all__ = ["DeployTool"]
 
 class DeployTool(Tool):
-    """Generate deployment configuration for the project."""
+    """Detect project type and generate deployment configurations: Dockerfile, docker-compose.yml, GitHub Actions CI/CD, Vercel config, Heroku Procfile."""
 
     name = "deploy"
     description = (

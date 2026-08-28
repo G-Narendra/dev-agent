@@ -65,7 +65,7 @@ Format your response as JSON:
 
 
 class VisualReviewTool(Tool):
-    """Screenshot a webpage and get AI design feedback for self-correction."""
+    """Review code changes by taking a screenshot and analyzing visual output for quality."""
     
     name = "visual_review"
     description = (
@@ -280,7 +280,7 @@ class VisualReviewTool(Tool):
 
 
 class AutoVisualReviewTool(Tool):
-    """Automatically review and fix a website — the self-correction loop."""
+    """Automatically review all recent file changes with visual screenshot comparison."""
     
     name = "auto_visual_review"
     description = (

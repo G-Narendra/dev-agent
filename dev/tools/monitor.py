@@ -19,7 +19,7 @@ from .base import Tool
 __all__ = ["MonitorProcessTool", "MonitorFileTool", "MonitorDirectoryTool", "MonitorLogTool"]
 
 class MonitorProcessTool(Tool):
-    """Monitor a running process and stream its output."""
+    """Monitor a running process for a specified duration, capturing stdout/stderr output."""
     
     name = "monitor_process"
     description = "Monitor a running process and stream its output in real-time."
@@ -81,7 +81,7 @@ class MonitorProcessTool(Tool):
 
 
 class MonitorFileTool(Tool):
-    """Monitor a file for changes (like tail -f)."""
+    """Monitor a file for changes (line count, modification time) over a duration."""
     
     name = "monitor_file"
     description = "Monitor a file for new lines being added (like tail -f)."
@@ -138,7 +138,7 @@ class MonitorFileTool(Tool):
 
 
 class MonitorDirectoryTool(Tool):
-    """Monitor a directory for file changes."""
+    """Monitor a directory for file creation, modification, or deletion events."""
     
     name = "monitor_directory"
     description = "Monitor a directory for file creation, modification, or deletion."
@@ -207,7 +207,7 @@ class MonitorDirectoryTool(Tool):
 
 
 class MonitorLogTool(Tool):
-    """Monitor log output from a command."""
+    """Monitor a log file for new entries matching a pattern."""
     
     name = "monitor_log"
     description = "Run a command and monitor its log output for patterns."

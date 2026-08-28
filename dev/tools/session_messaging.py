@@ -20,7 +20,7 @@ from .base import Tool
 
 
 class SessionMessenger:
-    """Local IPC messenger for Dev Agent sessions."""
+    """Local IPC messenger for cross-session communication via filesystem-based mailbox."""
     
     def __init__(self, session_id: str, project_path: str = "."):
         self.session_id = session_id
@@ -110,7 +110,7 @@ class SessionMessenger:
 
 
 class SendMessageTool(Tool):
-    """Send a message to another Dev Agent session."""
+    """Send a message to another Dev Agent session running in the same project."""
     
     name = "send_session_message"
     description = "Send a message to another Dev Agent session running in the same project."
@@ -147,7 +147,7 @@ class SendMessageTool(Tool):
 
 
 class ReceiveMessagesTool(Tool):
-    """Receive messages from other Dev Agent sessions."""
+    """Receive unread messages from other Dev Agent sessions."""
     
     name = "receive_session_messages"
     description = "Receive unread messages from other Dev Agent sessions."
@@ -172,7 +172,7 @@ class ReceiveMessagesTool(Tool):
 
 
 class ListSessionsTool(Tool):
-    """List all active Dev Agent sessions."""
+    """List all active Dev Agent sessions with mailboxes in the project."""
     
     name = "list_sessions"
     description = "List all active Dev Agent sessions in this project."
@@ -197,7 +197,7 @@ class ListSessionsTool(Tool):
 
 
 class BroadcastTool(Tool):
-    """Broadcast a message to all active sessions."""
+    """Broadcast a message to all active Dev Agent sessions."""
     
     name = "broadcast_session_message"
     description = "Broadcast a message to all active Dev Agent sessions."

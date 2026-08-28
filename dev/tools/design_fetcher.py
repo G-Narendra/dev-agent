@@ -87,7 +87,7 @@ GITHUB_RAW_URL = "https://raw.githubusercontent.com/VoltAgent/awesome-design-md/
 
 
 class DesignFetcherTool(Tool):
-    """Fetch real DESIGN.md files from brands and inject design patterns."""
+    """Fetch design patterns and UI component examples from curated design systems for implementation guidance."""
     
     name = "design_fetch"
     description = (
@@ -193,7 +193,7 @@ class DesignFetcherTool(Tool):
 
 
 class DesignListTool(Tool):
-    """List available brand DESIGN.md files."""
+    """List available design patterns and component categories from the design system."""
     
     name = "design_list"
     description = "List all available brand DESIGN.md files you can fetch."

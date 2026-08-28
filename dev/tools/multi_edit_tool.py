@@ -20,7 +20,7 @@ from .base import Tool
 __all__ = ["MultiEditTool"]
 
 class MultiEditTool(Tool):
-    """Edit multiple files atomically — all succeed or all roll back."""
+    """Edit multiple files atomically -- all edits succeed or all roll back. Supports full replacement and string replacement per file."""
 
     name = "multi_edit"
     description = "Edit multiple files in a single atomic operation. If any edit fails, all changes are rolled back. Use this when you need to modify several files together."

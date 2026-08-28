@@ -23,7 +23,7 @@ __all__ = ["RealReadFilesTool", "RealWriteFileTool", "RealStrReplaceTool", "Real
 
 
 class RealReadFilesTool(Tool):
-    """Read files from disk with line ranges."""
+    """Read files from disk with optional line ranges and multi-file support. Handles UTF-8/latin-1 encoding, binary detection, symlinks, and 10MB size limits."""
     name = "read_files"
     description = "Read files from disk. Supports line ranges and multiple files."
     parameters = {
@@ -171,7 +171,7 @@ class RealReadFilesTool(Tool):
 
 
 class RealWriteFileTool(Tool):
-    """Write content to a file."""
+    """Create or overwrite files with atomic writes (temp-then-replace), binary content blocking, concurrent modification detection, and 5MB size limits."""
     name = "write_file"
     description = "Create or replace a file with the given content."
     parameters = {
@@ -283,7 +283,7 @@ class RealWriteFileTool(Tool):
 
 
 class RealStrReplaceTool(Tool):
-    """Replace strings in a file."""
+    """Perform exact string replacements in files with file locking, CRLF normalization, multiple-occurrence handling, and unified diff output."""
     name = "str_replace"
     description = "Replace strings in a file with new strings."
     parameters = {
@@ -441,7 +441,7 @@ class RealStrReplaceTool(Tool):
 
 
 class RealCodeSearchTool(Tool):
-    """Search code using ripgrep-style patterns."""
+    """Search code files using ripgrep (if available) or Python regex fallback. Supports case-insensitive search, file type filtering, and relevance-based result sorting."""
     name = "code_search"
     description = "Search through code files for patterns."
     parameters = {
@@ -554,7 +554,7 @@ class RealCodeSearchTool(Tool):
 
 
 class RealGlobTool(Tool):
-    """Find files by glob pattern."""
+    """Find files by glob pattern with .gitignore awareness, hidden directory filtering, and result count capping."""
     name = "glob"
     description = "Search for files matching a glob pattern."
     parameters = {
@@ -620,7 +620,7 @@ class RealGlobTool(Tool):
 
 
 class RealListDirectoryTool(Tool):
-    """List directory contents."""
+    """List files and directories in a given path, separating files from subdirectories."""
     name = "list_directory"
     description = "List files and directories in a path."
     parameters = {
@@ -922,7 +922,7 @@ class RealRunTerminalCommand(Tool):
 
 
 class RealGitOperations(Tool):
-    """Git operations."""
+    """Execute git commands for diff, log, commit, branch, status, stash, and more. Blocks dangerous operations like force push and hard reset."""
     name = "git_operations"
     description = "Execute git commands."
     parameters = {
@@ -990,7 +990,7 @@ class RealGitOperations(Tool):
 
 
 class RealWebSearchTool(Tool):
-    """Web search using multiple free fallbacks."""
+    """Search the web using DuckDuckGo API, DuckDuckGo Lite HTML, and Google as fallbacks. Returns structured results with titles, snippets, and URLs."""
     name = "web_search"
     description = "Search the web for information."
     parameters = {
@@ -1093,7 +1093,7 @@ class RealWebSearchTool(Tool):
 
 
 class RealReadUrlTool(Tool):
-    """Read URL content with proper HTML-to-text extraction."""
+    """Fetch URLs and extract readable text from HTML with proper entity decoding, tag stripping, and title/meta extraction."""
     name = "read_url"
     description = "Fetch and read readable text from a URL."
     parameters = {
@@ -1210,7 +1210,7 @@ class RealReadUrlTool(Tool):
 
 
 class RealPipelineTool(Tool):
-    """Execute multiple tools in sequence (pipeline)."""
+    """Execute multiple tool calls in sequence with data piping between steps, enabling complex multi-step workflows."""
     name = "pipeline"
     description = "Execute multiple tools in sequence. Each step can use the output of the previous step."
     parameters = {

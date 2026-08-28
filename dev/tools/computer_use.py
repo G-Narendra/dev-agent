@@ -23,7 +23,7 @@ from .base import Tool
 __all__ = ["ComputerScreenshotTool", "ComputerMouseMoveTool", "ComputerClickTool", "ComputerTypeTool", "ComputerKeyTool", "ComputerOpenAppTool"]
 
 class ComputerScreenshotTool(Tool):
-    """Take screenshots of the desktop or specific windows."""
+    """Take desktop screenshots using Pillow (ImageGrab) or platform-specific tools (screencapture on macOS, scrot on Linux, PowerShell on Windows)."""
     
     name = "computer_screenshot"
     description = "Take a screenshot of the desktop or a specific application window."
@@ -126,7 +126,7 @@ class ComputerScreenshotTool(Tool):
 
 
 class ComputerMouseMoveTool(Tool):
-    """Move the mouse cursor to a specific position."""
+    """Move the mouse cursor to absolute screen coordinates using pyautogui."""
     
     name = "computer_mouse_move"
     description = "Move the mouse cursor to a specific position on screen."
@@ -154,7 +154,7 @@ class ComputerMouseMoveTool(Tool):
 
 
 class ComputerClickTool(Tool):
-    """Click at a specific position on screen."""
+    """Click at screen coordinates with optional click count and button selection using pyautogui."""
     
     name = "computer_click"
     description = "Click at a specific position on screen."
@@ -190,7 +190,7 @@ class ComputerClickTool(Tool):
 
 
 class ComputerTypeTool(Tool):
-    """Type text at the current cursor position."""
+    """Type text at the current cursor position using pyautogui keyboard simulation."""
     
     name = "computer_type"
     description = "Type text at the current cursor position."
@@ -218,7 +218,7 @@ class ComputerTypeTool(Tool):
 
 
 class ComputerKeyTool(Tool):
-    """Press a keyboard shortcut or special key."""
+    """Press keyboard shortcuts or special keys using pyautogui."""
     
     name = "computer_key"
     description = "Press a keyboard shortcut or special key (e.g., 'enter', 'ctrl+c', 'alt+tab')."
@@ -252,7 +252,7 @@ class ComputerKeyTool(Tool):
 
 
 class ComputerOpenAppTool(Tool):
-    """Open an application by name."""
+    """Open desktop applications by name using platform-specific launchers (start, open, xdg-open)."""
     
     name = "computer_open_app"
     description = "Open an application by name (e.g., 'notepad', 'chrome', 'vscode')."

@@ -16,7 +16,7 @@ from .base import Tool
 __all__ = ["TeamCreateTool", "TeamStatusTool", "TeamMergeTool", "TeamCleanupTool", "TeamExecuteTool"]
 
 class TeamCreateTool(Tool):
-    """Create a new team for parallel work."""
+    """Create a multi-agent team with specialized roles (architect, developer, tester, etc.)."""
     
     name = "team_create"
     description = "Create a team of agents to work on a complex task in parallel."
@@ -59,7 +59,7 @@ class TeamCreateTool(Tool):
 
 
 class TeamStatusTool(Tool):
-    """Get status of a team."""
+    """Show status of all active agent teams including task assignments."""
     
     name = "team_status"
     description = "Get the current status of a team and its tasks."
@@ -87,7 +87,7 @@ class TeamStatusTool(Tool):
 
 
 class TeamMergeTool(Tool):
-    """Merge a team's work into main branch."""
+    """Merge completed work from team member branches into the main branch."""
     
     name = "team_merge"
     description = "Merge a completed team's work into the main branch."
@@ -119,7 +119,7 @@ class TeamMergeTool(Tool):
 
 
 class TeamCleanupTool(Tool):
-    """Clean up a completed team."""
+    """Clean up completed team sessions and temporary branches."""
     
     name = "team_cleanup"
     description = "Clean up a team's worktree and branch after merging."
@@ -151,7 +151,7 @@ class TeamCleanupTool(Tool):
 
 
 class TeamExecuteTool(Tool):
-    """Execute a task on a team's worktree."""
+    """Dispatch a task to a team member agent for parallel execution."""
     
     name = "team_execute"
     description = "Execute a specific task on a team's worktree."

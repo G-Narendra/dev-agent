@@ -14,7 +14,7 @@ from .base import Tool
 
 
 class MCPListServersTool(Tool):
-    """List configured MCP servers."""
+    """List all configured MCP servers and their connection status."""
     
     name = "mcp_list_servers"
     description = "List all configured MCP servers and their status."
@@ -41,7 +41,7 @@ class MCPListServersTool(Tool):
 
 
 class MCPConnectTool(Tool):
-    """Connect to an MCP server."""
+    """Connect to an MCP server by name to activate its tools."""
     
     name = "mcp_connect"
     description = "Connect to an MCP server to access its tools."
@@ -76,7 +76,7 @@ class MCPConnectTool(Tool):
 
 
 class MCPListToolsTool(Tool):
-    """List available MCP tools."""
+    """List all tools available from a connected MCP server."""
     
     name = "mcp_list_tools"
     description = "List all available tools from connected MCP servers."
@@ -107,7 +107,7 @@ class MCPListToolsTool(Tool):
 
 
 class MCPCallTool(Tool):
-    """Execute an MCP tool."""
+    """Call a tool on an MCP server with specified arguments."""
     
     name = "mcp_call"
     description = "Execute a tool on an MCP server."
@@ -141,7 +141,7 @@ class MCPCallTool(Tool):
 
 
 class MCPAddServerTool(Tool):
-    """Add a new MCP server configuration."""
+    """Add a new MCP server configuration to the registry."""
     
     name = "mcp_add_server"
     description = "Add a new MCP server to the configuration."

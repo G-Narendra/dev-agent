@@ -42,7 +42,7 @@ def _extract_links(html: str) -> list[dict]:
 
 
 class BrowserScreenshotTool(Tool):
-    """Take screenshots of web pages."""
+    """Take screenshots of web pages using Playwright (preferred) or httpx/urllib fallback for text extraction."""
     name = "browser_screenshot"
     description = "Take a screenshot of a web page."
     parameters = {
@@ -121,7 +121,7 @@ class BrowserScreenshotTool(Tool):
 
 
 class BrowserNavigateTool(Tool):
-    """Navigate and interact with web pages."""
+    """Navigate to URLs and extract text, links, or raw HTML. Supports CSS selectors via Playwright with httpx fallback."""
     name = "browser_navigate"
     description = "Navigate to a URL and extract content (text, links, or HTML)."
     parameters = {
@@ -252,7 +252,7 @@ class BrowserNavigateTool(Tool):
 
 
 class BrowserClickTool(Tool):
-    """Click elements on web pages."""
+    """Click elements on web pages using CSS selectors. Requires Playwright for interactive browser control."""
     name = "browser_click"
     description = "Click an element on a web page (requires Playwright)."
     parameters = {
@@ -307,7 +307,7 @@ class BrowserClickTool(Tool):
 
 
 class DockerRunTool(Tool):
-    """Run commands in Docker containers."""
+    """Run commands inside Docker containers with automatic project directory mounting and configurable timeouts."""
     name = "docker_run"
     description = "Run a command inside a Docker container."
     parameters = {
@@ -362,7 +362,7 @@ class DockerRunTool(Tool):
 
 
 class DockerBuildTool(Tool):
-    """Build Docker images."""
+    """Build Docker images from Dockerfiles with customizable tags and build contexts."""
     name = "docker_build"
     description = "Build a Docker image from a Dockerfile."
     parameters = {

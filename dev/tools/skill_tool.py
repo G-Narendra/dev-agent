@@ -6,7 +6,7 @@ from .base import Tool
 
 
 class SkillTool(Tool):
-    """Load a skill by name to get domain-specific instructions."""
+    """Load and execute a built-in skill to get specialized instructions for a task domain."""
     
     name = "skill"
     description = (

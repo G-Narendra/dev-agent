@@ -109,7 +109,7 @@ class FreeApiTool(Tool):
 
 
 class ListApisTool(Tool):
-    """List available free APIs."""
+    """List all available free public APIs grouped by category for discovery."""
     
     name = "list_apis"
     description = "List available free public APIs by category"
@@ -155,7 +155,7 @@ class ListApisTool(Tool):
 
 
 class ListMcpTools(Tool):
-    """List available MCP servers."""
+    """List available MCP server integrations from the built-in registry of 57+ servers."""
     
     name = "list_mcp_servers"
     description = "List available free MCP servers"

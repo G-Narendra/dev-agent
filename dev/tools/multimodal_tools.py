@@ -19,7 +19,7 @@ from .base import Tool
 __all__ = ["ReadImageTool", "ReadPdfTool"]
 
 class ReadImageTool(Tool):
-    """Read an image file and return its base64 content for analysis."""
+    """Read image files (PNG, JPG, GIF, WebP) and return base64-encoded content for AI vision analysis."""
 
     name = "read_image"
     description = "Read an image file (png, jpg, gif, webp) and return its base64 content. Use this when you need to see a screenshot, diagram, or any visual content."
@@ -81,7 +81,7 @@ class ReadImageTool(Tool):
 
 
 class ReadPdfTool(Tool):
-    """Read a PDF document and extract text content."""
+    """Extract text from PDF documents using PyMuPDF, pdfplumber, or basic regex extraction as fallback."""
 
     name = "read_pdf"
     description = "Read a PDF file and extract its text content. Use this for reading documentation, papers, or any PDF document."
