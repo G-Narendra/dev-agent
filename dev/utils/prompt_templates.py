@@ -96,7 +96,7 @@ class TemplateManager:
                         "variables": data.get("variables", []),
                     })
                 except Exception:
-                    pass
+                    pass  # Intentional: non-critical: best-effort operation
         return templates
     
     def delete(self, name: str) -> bool:

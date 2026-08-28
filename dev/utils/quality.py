@@ -340,7 +340,7 @@ class QualityChecker:
         try:
             results["lint"] = self._lint_project()
         except Exception:
-            pass
+            pass  # Intentional: non-critical: best-effort operation
         
         # Detect circular dependencies
         try:
@@ -348,7 +348,7 @@ class QualityChecker:
             detector = ProjectDetector(self.project_path)
             results["circular_deps"] = detector.detect_circular_dependencies()
         except Exception:
-            pass
+            pass  # Intentional: non-critical: best-effort operation
         
         # Detect unused imports
         try:
@@ -356,13 +356,13 @@ class QualityChecker:
             detector = ProjectDetector(self.project_path)
             results["unused_imports"] = detector.detect_unused_imports()
         except Exception:
-            pass
+            pass  # Intentional: non-critical: best-effort operation
         
         # Calculate cyclomatic complexity
         try:
             results["complexity"] = self._calculate_complexity()
         except Exception:
-            pass
+            pass  # Intentional: non-critical: best-effort operation
         
         return results
     
@@ -421,7 +421,7 @@ class QualityChecker:
                         "complexity": branches + 1,  # McCabe complexity
                     }
                 except Exception:
-                    pass
+                    pass  # Intentional: non-critical: best-effort operation
         
         return complexity
     

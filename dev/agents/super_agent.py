@@ -396,7 +396,7 @@ You have access to advanced tools:
                                      if isinstance(t, dict) and not t.get('completed', False)]
                         return len(incomplete) > 0
                 except Exception:
-                    pass
+                    pass  # Intentional: non-critical: best-effort operation
         return False
     
     async def _auto_commit(self, tool_name: str, tool_args: dict):

@@ -455,7 +455,7 @@ class TeamCoordinator:
                 timeout=5,
             )
         except Exception:
-            pass
+            pass  # Intentional: non-critical: best-effort operation
         
         del self.teams[team_name]
 

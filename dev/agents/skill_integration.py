@@ -2140,7 +2140,7 @@ class SkillIntegration:
                 with open(path, 'r', encoding='utf-8') as f:
                     return f.read()
             except Exception:
-                pass
+                pass  # Intentional: non-critical: best-effort operation
         return None
     
     def get_project_type(self, task: str) -> str:

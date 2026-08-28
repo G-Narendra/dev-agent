@@ -426,10 +426,10 @@ class SettingsWatcher:
                             try:
                                 cb(self.config_manager._config)
                             except Exception:
-                                pass
+                                pass  # Intentional: non-critical: best-effort operation
                     self._last_mtime = mtime
             except Exception:
-                pass
+                pass  # Intentional: non-critical: best-effort operation
 
 
 # ============================================================================

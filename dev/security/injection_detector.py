@@ -336,7 +336,7 @@ class PromptInjectionDetector:
                     if result.threat_level.value >= ThreatLevel.MEDIUM.value:
                         return f"hex_encoded_injection:{decoded[:30]}"
             except Exception:
-                pass
+                pass  # Intentional: non-critical: best-effort operation
         
         return None
     

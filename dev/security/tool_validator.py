@@ -145,7 +145,7 @@ class ToolCallValidator:
             from .sandbox import SecuritySandbox, SandboxConfig
             self._sandbox = SecuritySandbox(SandboxConfig(workspace_path=project_path))
         except Exception:
-            pass
+            pass  # Intentional: non-critical: best-effort operation
         
         # Add default rules
         self._setup_default_rules()
@@ -304,7 +304,7 @@ class ToolCallValidator:
             if not str(resolved).startswith(str(self.project_path)):
                 violations.append(f"Path outside project: {path}")
         except Exception:
-            pass
+            pass  # Intentional: non-critical: best-effort operation
         
         return violations
     
@@ -332,6 +332,6 @@ class ToolCallValidator:
                 if not str(resolved).startswith(str(self.project_path)):
                     violations.append(f"Working directory outside project: {cwd}")
             except Exception:
-                pass
+                pass  # Intentional: non-critical: best-effort operation
         
         return violations

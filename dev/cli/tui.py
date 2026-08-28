@@ -54,7 +54,7 @@ class DevTUI:
                 sys.stdout.reconfigure(encoding="utf-8")
                 sys.stderr.reconfigure(encoding="utf-8")
             except Exception:
-                pass
+                pass  # Intentional: Exception
         self.console = Console(theme=THEME, force_terminal=True)
         self._start_time = time.time()
         self._session_cost = 0.0
@@ -218,7 +218,7 @@ class StreamingDisplay:
         try:
             self.tui.console.out("\nDev: ", end="", highlight=False)
         except Exception:
-            pass
+            pass  # Intentional: Exception
     
     def update(self, chunk: str):
         """Update with a new chunk — stream token by token with flush."""
@@ -231,7 +231,7 @@ class StreamingDisplay:
             safe = chunk.encode("ascii", errors="replace").decode("ascii")
             self.tui.console.out(safe, end="", highlight=False, flush=True)
         except Exception:
-            pass
+            pass  # Intentional: Exception
     
     def end(self):
         """End streaming display with newline."""
@@ -239,7 +239,7 @@ class StreamingDisplay:
             try:
                 self.tui.console.out("", end="\n", flush=True)
             except Exception:
-                pass
+                pass  # Intentional: Exception
         self._buffer = ""
         self._started = False
     

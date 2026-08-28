@@ -493,6 +493,6 @@ class DockerSandbox:
             )
             await proc.wait()
         except Exception:
-            pass
+            pass  # Intentional: non-critical: best-effort operation
         
         self._running = False

@@ -208,7 +208,7 @@ class SecurityAudit:
                             "detail": finding["match"],
                         })
                 except Exception:
-                    pass
+                    pass  # Intentional: non-critical: best-effort operation
         
         # Check for .gitignore
         gitignore_path = os.path.join(project_path, '.gitignore')
@@ -270,7 +270,7 @@ class AuditLogger:
             with open(self.audit_file, "a", encoding="utf-8") as f:
                 f.write(json.dumps(event) + "\n")
         except Exception:
-            pass
+            pass  # Intentional: non-critical: best-effort operation
     
     def log_tool_use(self, tool_name: str, args: dict, result: dict):
         """Log a tool execution."""
@@ -312,7 +312,7 @@ class AuditLogger:
                     except json.JSONDecodeError:
                         pass
         except Exception:
-            pass
+            pass  # Intentional: non-critical: best-effort operation
         return logs
 
 

@@ -120,4 +120,4 @@ class DockerSandbox:
                 timeout=30,
             )
         except Exception:
-            pass
+            pass  # Intentional: non-critical: best-effort operation

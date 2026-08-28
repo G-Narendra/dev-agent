@@ -187,7 +187,7 @@ class ReadPdfTool(Tool):
                         if len(text) > 3:
                             text_parts.append(text)
                     except Exception:
-                        pass
+                        pass  # Intentional: non-critical: best-effort operation
 
                 if text_parts:
                     return {
@@ -197,7 +197,7 @@ class ReadPdfTool(Tool):
                         "note": "Basic text extraction (install pymupdf or pdfplumber for better results)",
                     }
             except Exception:
-                pass
+                pass  # Intentional: non-critical: best-effort operation
 
             return {
                 "error": "No PDF library available. Install with: pip install pymupdf",

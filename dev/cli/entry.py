@@ -13,7 +13,7 @@ def main():
             sys.stdout.reconfigure(encoding="utf-8")
             sys.stderr.reconfigure(encoding="utf-8")
         except Exception:
-            pass
+            pass  # Intentional: non-critical: best-effort operation
 
     if len(sys.argv) <= 1:
         # Check first-run
@@ -27,7 +27,7 @@ def main():
                 asyncio.run(run_wizard())
                 print("\nStarting chat...\n")
         except Exception:
-            pass
+            pass  # Intentional: non-critical: best-effort operation
         sys.argv = ["dev", "chat"]
 
     from dev.cli.main import app

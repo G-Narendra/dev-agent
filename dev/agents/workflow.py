@@ -331,7 +331,7 @@ class WorkflowOrchestrator:
                 import shutil
                 shutil.rmtree(worktree_path, ignore_errors=True)
             except Exception:
-                pass
+                pass  # Intentional: non-critical: best-effort operation
     
     def cancel_workflow(self, workflow_id: str):
         """Cancel a running workflow."""

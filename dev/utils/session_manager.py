@@ -181,7 +181,7 @@ class SessionManager:
             try:
                 os.remove(session.log_file)
             except Exception:
-                pass
+                pass  # Intentional: non-critical: best-effort operation
         
         return True
     
@@ -210,7 +210,7 @@ class SessionManager:
                 with open(session.log_file, "a", encoding="utf-8") as f:
                     f.write(f"[{time.strftime('%H:%M:%S')}] {message}\n")
             except Exception:
-                pass
+                pass  # Intentional: non-critical: best-effort operation
     
     def format_session(self, session: BackgroundSession) -> str:
         """Format a session for display."""
@@ -249,7 +249,7 @@ class AuthManager:
                 with open(self.config_file) as f:
                     return json.load(f)
             except Exception:
-                pass
+                pass  # Intentional: non-critical: best-effort operation
         return {}
     
     def _save_config(self, config: dict):

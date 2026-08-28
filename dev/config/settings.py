@@ -96,7 +96,7 @@ class DevConfig:
                     
                     config._apply_dict(data)
                 except Exception:
-                    pass
+                    pass  # Intentional: non-critical: best-effort operation
         
         # Override with environment variables
         if os.environ.get("DEV_MODEL"):

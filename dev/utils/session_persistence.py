@@ -75,9 +75,9 @@ class SessionManager:
                 try:
                     os.remove(os.path.join(self.sessions_dir, f))
                 except Exception:
-                    pass
+                    pass  # Intentional: non-critical: best-effort operation
         except Exception:
-            pass
+            pass  # Intentional: non-critical: best-effort operation
     
     def _mask_sensitive(self, messages: list) -> list:
         """Mask sensitive data (API keys, passwords) in session messages."""
@@ -165,7 +165,7 @@ class SessionManager:
                         "messages": len(data.get("messages", [])),
                     })
                 except Exception:
-                    pass
+                    pass  # Intentional: non-critical: best-effort operation
         
         return sorted(sessions, key=lambda x: x.get("updated_at", ""), reverse=True)
     

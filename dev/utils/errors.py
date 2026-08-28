@@ -258,7 +258,7 @@ class ErrorHandler:
             with open(self.log_file, "a") as f:
                 f.write(json.dumps(error_info) + "\n")
         except Exception:
-            pass
+            pass  # Intentional: non-critical: best-effort operation
     
     def get_stats(self) -> dict:
         """Get error statistics."""

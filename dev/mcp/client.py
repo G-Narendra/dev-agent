@@ -349,7 +349,7 @@ class MCPClient:
                     conn["process"].terminate()
                     await asyncio.wait_for(conn["process"].wait(), timeout=5)
                 except Exception:
-                    pass
+                    pass  # Intentional: non-critical: best-effort operation
         self.connections.clear()
         self.tools.clear()
         self._initialized = False
@@ -430,7 +430,7 @@ class MCPManager:
                 with open(self.config_path, 'r') as f:
                     return json.load(f)
             except Exception:
-                pass
+                pass  # Intentional: non-critical: best-effort operation
         return {"servers": {}}
     
     def _save_config(self):

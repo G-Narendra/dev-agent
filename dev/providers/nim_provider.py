@@ -100,7 +100,7 @@ class NimProvider:
                 import sys
                 print(f"[nim] {msg}", file=sys.stderr)
             except Exception:
-                pass
+                pass  # Intentional: non-critical: best-effort operation
     
     @staticmethod
     def _recover_truncated_json(text: str) -> dict | None:
@@ -647,7 +647,7 @@ class NimProvider:
                             if isinstance(args, dict) and len(json.dumps(args)) > 20:
                                 yield {"type": "tool_call", "tool_call": tc}
                         except Exception:
-                            pass
+                            pass  # Intentional: non-critical: best-effort operation
                     yield {"type": "finish", "reason": "truncation_recovery"}
                     return
                 elif truncated and not content:
@@ -668,7 +668,7 @@ class NimProvider:
                         yield {"type": "finish", "reason": "truncation_recovery"}
                         return
                     except Exception:
-                        pass
+                        pass  # Intentional: non-critical: best-effort operation
                 
                 # Nemotron recovery: extract tool calls from content string
                 if not tool_calls and content:

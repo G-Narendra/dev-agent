@@ -1970,7 +1970,7 @@ def execute_free_api(
         try:
             body = e.read().decode("utf-8", errors="replace")[:500]
         except Exception:
-            pass
+            pass  # Intentional: non-critical: best-effort operation
         return {
             "success": False,
             "status": e.code,

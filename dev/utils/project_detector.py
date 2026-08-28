@@ -139,7 +139,7 @@ class ProjectDetector:
                     if "django" in reqs:
                         return "django"
             except Exception:
-                pass
+                pass  # Intentional: non-critical: best-effort operation
         
         # Check for Node.js frameworks
         if os.path.exists(os.path.join(self.project_path, "package.json")):
@@ -166,7 +166,7 @@ class ProjectDetector:
                     if "fastify" in deps:
                         return "fastify"
             except Exception:
-                pass
+                pass  # Intentional: non-critical: best-effort operation
         
         # Check for Go
         if os.path.exists(os.path.join(self.project_path, "go.mod")):
@@ -208,7 +208,7 @@ class ProjectDetector:
                     if "[tool.pdm]" in content:
                         return "pdm"
             except Exception:
-                pass
+                pass  # Intentional: non-critical: best-effort operation
         
         return "unknown"
     
@@ -234,7 +234,7 @@ class ProjectDetector:
                     if "mocha" in deps:
                         return "mocha"
             except Exception:
-                pass
+                pass  # Intentional: non-critical: best-effort operation
         
         return "unknown"
     
@@ -248,7 +248,7 @@ class ProjectDetector:
                     if "[flake8]" in f.read():
                         return "flake8"
             except Exception:
-                pass
+                pass  # Intentional: non-critical: best-effort operation
         if os.path.exists(os.path.join(self.project_path, "pyproject.toml")):
             try:
                 with open(os.path.join(self.project_path, "pyproject.toml")) as f:
@@ -258,7 +258,7 @@ class ProjectDetector:
                     if "[tool.black]" in content:
                         return "black"
             except Exception:
-                pass
+                pass  # Intentional: non-critical: best-effort operation
         if os.path.exists(os.path.join(self.project_path, ".eslintrc")):
             return "eslint"
         if os.path.exists(os.path.join(self.project_path, ".eslintrc.js")):
@@ -282,7 +282,7 @@ class ProjectDetector:
                     if "[tool.ruff]" in content:
                         return "ruff"
             except Exception:
-                pass
+                pass  # Intentional: non-critical: best-effort operation
         return "unknown"
     
     def _find_config_files(self) -> list[str]:
@@ -343,7 +343,7 @@ class ProjectDetector:
                     if main:
                         entry_points.append(main)
             except Exception:
-                pass
+                pass  # Intentional: non-critical: best-effort operation
         
         return entry_points
     
@@ -365,7 +365,7 @@ class ProjectDetector:
                             else:
                                 deps.setdefault("dependencies", {})[line] = "*"
             except Exception:
-                pass
+                pass  # Intentional: non-critical: best-effort operation
         
         # Node.js package.json
         pkg_file = os.path.join(self.project_path, "package.json")
@@ -377,7 +377,7 @@ class ProjectDetector:
                     deps["dependencies"] = pkg.get("dependencies", {})
                     deps["dev_dependencies"] = pkg.get("devDependencies", {})
             except Exception:
-                pass
+                pass  # Intentional: non-critical: best-effort operation
         
         return deps
     
@@ -403,7 +403,7 @@ class ProjectDetector:
                         result["workspaces"] = workspaces
                         result["package_manager"] = "npm"
             except Exception:
-                pass
+                pass  # Intentional: non-critical: best-effort operation
         
         # Check for lerna.json
         if os.path.exists(os.path.join(self.project_path, "lerna.json")):
@@ -430,7 +430,7 @@ class ProjectDetector:
                         if members:
                             result["workspaces"] = [m.strip().strip('"').strip("'") for m in members[0].split(",")]
             except Exception:
-                pass
+                pass  # Intentional: non-critical: best-effort operation
         
         # Check for pyproject.toml workspaces
         pyproject = os.path.join(self.project_path, "pyproject.toml")
@@ -442,7 +442,7 @@ class ProjectDetector:
                         result["is_monorepo"] = True
                         result["package_manager"] = "poetry"
             except Exception:
-                pass
+                pass  # Intentional: non-critical: best-effort operation
         
         # Check for go.work (Go workspaces)
         if os.path.exists(os.path.join(self.project_path, "go.work")):
@@ -489,7 +489,7 @@ class ProjectDetector:
                     if local_imports:
                         graph[rel_path] = local_imports
                 except Exception:
-                    pass
+                    pass  # Intentional: non-critical: best-effort operation
         
         return graph
     
@@ -569,6 +569,6 @@ class ProjectDetector:
                                 "statement": stmt,
                             })
                 except Exception:
-                    pass
+                    pass  # Intentional: non-critical: best-effort operation
         
         return results

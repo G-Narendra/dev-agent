@@ -48,7 +48,7 @@ class ToolRulesManager:
                         scope=r.get("scope", "global"),
                     ))
             except Exception:
-                pass
+                pass  # Intentional: non-critical: best-effort operation
 
     def _save_rules(self):
         """Save rules to disk."""

@@ -98,7 +98,7 @@ class FileWatcher:
                         if line and not line.startswith("#"):
                             patterns.append(line)
             except Exception:
-                pass
+                pass  # Intentional: non-critical: best-effort operation
         return patterns
     
     def _is_gitignored(self, path: str, patterns: list[str]) -> bool:
@@ -129,7 +129,7 @@ class FileWatcher:
                     try:
                         cb(change)
                     except Exception:
-                        pass
+                        pass  # Intentional: non-critical: best-effort operation
             
             # Detect deletions
             for fpath in self._file_mtimes:
@@ -139,7 +139,7 @@ class FileWatcher:
                         try:
                             cb(change)
                         except Exception:
-                            pass
+                            pass  # Intentional: non-critical: best-effort operation
             
             self._file_mtimes = new_mtimes
 

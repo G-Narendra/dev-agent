@@ -121,7 +121,7 @@ class MultiEditTool(Tool):
                     try:
                         shutil.copy2(backup, abs_path)
                     except Exception:
-                        pass
+                        pass  # Intentional: non-critical: best-effort operation
 
             return {"error": f"Multi-edit failed, all changes rolled back: {e}"}
 
@@ -131,4 +131,4 @@ class MultiEditTool(Tool):
                 try:
                     os.remove(backup)
                 except Exception:
-                    pass
+                    pass  # Intentional: non-critical: best-effort operation

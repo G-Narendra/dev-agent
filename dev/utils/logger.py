@@ -58,7 +58,7 @@ class DevLogger:
                     file_handler.setFormatter(file_formatter)
                     self._logger.addHandler(file_handler)
                 except Exception:
-                    pass
+                    pass  # Intentional: non-critical: best-effort operation
 
     def debug(self, msg: str, *args, **kwargs):
         if self.level <= DEBUG:

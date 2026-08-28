@@ -162,7 +162,7 @@ class DesignFetcherTool(Tool):
                 if response.status_code == 200:
                     return response.text
         except Exception:
-            pass
+            pass  # Intentional: non-critical: best-effort operation
         return None
     
     def _extract_tokens(self, content: str) -> dict:

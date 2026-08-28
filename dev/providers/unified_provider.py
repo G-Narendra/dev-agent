@@ -177,7 +177,7 @@ class UnifiedProvider:
                 import sys
                 print(f"[unified] {msg}", file=sys.stderr)
             except Exception:
-                pass
+                pass  # Intentional: non-critical: best-effort operation
     
     async def initialize(self):
         """Initialize HTTP client."""
@@ -599,7 +599,7 @@ class UnifiedProvider:
                 yield {"type": "finish", "reason": choice.get("finish_reason", "stop")}
                 return
             except Exception:
-                pass
+                pass  # Intentional: non-critical: best-effort operation
         
         raise last_error or RuntimeError("All providers failed")
     

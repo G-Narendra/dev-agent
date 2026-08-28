@@ -305,7 +305,7 @@ class SkillLoader:
                     self._loaded[name] = skill
                     count += 1
                 except Exception:
-                    pass
+                    pass  # Intentional: non-critical: best-effort operation
         
         return count
     

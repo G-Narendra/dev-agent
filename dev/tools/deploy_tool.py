@@ -112,7 +112,7 @@ class DeployTool(Tool):
                     detection["type"] = "vite"
                     detection["cmd"] = "npm run build"
             except Exception:
-                pass
+                pass  # Intentional: non-critical: best-effort operation
 
         # Python
         elif os.path.isfile(os.path.join(project_path, "requirements.txt")):
@@ -134,7 +134,7 @@ class DeployTool(Tool):
                     detection["type"] = "django"
                     detection["cmd"] = "python manage.py runserver 0.0.0.0:8000"
             except Exception:
-                pass
+                pass  # Intentional: non-critical: best-effort operation
 
         # Go
         elif os.path.isfile(os.path.join(project_path, "go.mod")):

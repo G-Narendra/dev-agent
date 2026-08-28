@@ -95,7 +95,7 @@ class ErrorRecovery:
                     os.makedirs(parent, exist_ok=True)
                     return {"recovered": True, "action": "created_parent_dirs", "path": parent}
                 except Exception:
-                    pass
+                    pass  # Intentional: non-critical: best-effort operation
         
         # Strategy 2: Permission denied — try with different approach
         if "permission" in error_str or "eacces" in error_str:
@@ -177,7 +177,7 @@ class ErrorRecovery:
                         result = await result
                     return result
                 except Exception:
-                    pass
+                    pass  # Intentional: non-critical: best-effort operation
         
         return None
 

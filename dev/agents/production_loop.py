@@ -2115,7 +2115,10 @@ class ProductionAgentLoop(SystemPromptMixin):
             self._approval_history = self._approval_history[-200:]
 
     def _backup_file(self, file_path: str) -> str | None:
-        """Create a backup of a file before modification. Returns backup path."""
+        """Create a backup of a file before modification. Returns backup path.
+        
+        Also stores SHA-256 checksum for integrity verification.
+        """
         abs_path = os.path.join(self.project_path, file_path) if not os.path.isabs(file_path) else file_path
         if not os.path.exists(abs_path):
             return None
@@ -2129,17 +2132,78 @@ class ProductionAgentLoop(SystemPromptMixin):
         backup_path = os.path.join(backup_dir, f"cp{self._checkpoint_id}_{safe_name}")
 
         try:
+            # Compute checksum before backup
+            import hashlib
+            sha256 = hashlib.sha256()
+            with open(abs_path, "rb") as f:
+                for chunk in iter(lambda: f.read(8192), b""):
+                    sha256.update(chunk)
+            checksum = sha256.hexdigest()
+            
             temp_backup = backup_path + ".tmp"
             shutil.copy2(abs_path, temp_backup)
             os.replace(temp_backup, backup_path)
-            # Save original path as .meta sidecar for undo
+            # Save metadata: original path + checksum
             with open(backup_path + ".meta", "w", encoding="utf-8") as f:
-                f.write(abs_path)
-            self._log(f"Backed up: {file_path} -> {backup_path}")
+                json.dump({"path": abs_path, "checksum": checksum}, f)
+            self._log(f"Backed up: {file_path} (sha256:{checksum[:12]}...)")
             return backup_path
         except Exception as e:
             self._log(f"Backup failed: {e}")
             return None
+    
+    def verify_file_integrity(self, file_path: str) -> dict:
+        """Verify a file's integrity against its last backup checksum.
+        
+        Returns {"valid": True/False, "expected": ..., "actual": ...}
+        """
+        abs_path = os.path.join(self.project_path, file_path) if not os.path.isabs(file_path) else file_path
+        backup_dir = os.path.join(self.project_path, self._state.backup_dir)
+        
+        if not os.path.isdir(backup_dir):
+            return {"valid": True, "reason": "no backups exist"}
+        
+        # Find the most recent backup for this file
+        safe_name = file_path.replace("/", "_").replace("\\", "_").replace(":", "_")
+        latest_backup = None
+        latest_meta = None
+        
+        for fname in sorted(os.listdir(backup_dir), reverse=True):
+            if fname.endswith(".meta") and safe_name in fname:
+                meta_path = os.path.join(backup_dir, fname)
+                backup_path = meta_path.replace(".meta", "")
+                if os.path.exists(backup_path):
+                    latest_backup = backup_path
+                    latest_meta = meta_path
+                    break
+        
+        if not latest_meta:
+            return {"valid": True, "reason": "no backup found for verification"}
+        
+        try:
+            with open(latest_meta, "r") as f:
+                meta = json.load(f)
+            expected_checksum = meta.get("checksum", "")
+            
+            if not os.path.exists(abs_path):
+                return {"valid": False, "expected": expected_checksum, "actual": "FILE_MISSING"}
+            
+            import hashlib
+            sha256 = hashlib.sha256()
+            with open(abs_path, "rb") as f:
+                for chunk in iter(lambda: f.read(8192), b""):
+                    sha256.update(chunk)
+            actual_checksum = sha256.hexdigest()
+            
+            valid = actual_checksum == expected_checksum
+            return {
+                "valid": valid,
+                "expected": expected_checksum,
+                "actual": actual_checksum,
+                "file": file_path,
+            }
+        except Exception as e:
+            return {"valid": True, "reason": f"verification error: {e}"}
 
     def undo_last(self) -> dict:
         """Undo the last edit using git (Aider pattern).

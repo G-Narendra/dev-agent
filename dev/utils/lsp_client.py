@@ -102,7 +102,7 @@ class LSPClient:
                 await self._send_request("shutdown", {})
                 await self._send_notification("exit", {})
             except Exception:
-                pass
+                pass  # Intentional: non-critical: best-effort operation
             self._process.terminate()
         self._connected = False
     
@@ -249,7 +249,7 @@ class LSPClient:
                 response = json.loads(body.decode())
                 return response.get("result", {})
         except Exception:
-            pass
+            pass  # Intentional: non-critical: best-effort operation
         
         return {}
     

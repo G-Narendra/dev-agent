@@ -100,7 +100,7 @@ class Scheduler:
                 for name, task_data in data.get("tasks", {}).items():
                     self.tasks[name] = ScheduledTask(**task_data)
             except Exception:
-                pass
+                pass  # Intentional: non-critical: best-effort operation
 
     def _save_config(self):
         """Save scheduled tasks to file."""
@@ -190,7 +190,7 @@ class Scheduler:
                     if now >= next_time:
                         due.append(task)
                 except Exception:
-                    pass
+                    pass  # Intentional: non-critical: best-effort operation
 
             if task.interval > 0 and not task.last_run:
                 due.append(task)

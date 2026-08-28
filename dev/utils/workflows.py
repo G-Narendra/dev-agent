@@ -318,7 +318,7 @@ class WorkflowManager:
                         "steps": len(data.get("steps", {})),
                     })
                 except Exception:
-                    pass
+                    pass  # Intentional: non-critical: best-effort operation
         return workflows
 
     def delete_workflow(self, name: str) -> bool:
