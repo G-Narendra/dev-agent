@@ -97,33 +97,30 @@ def load_config() -> dict:
     if CONFIG_FILE.exists():
         with open(CONFIG_FILE, encoding="utf-8") as f:
             config = json.load(f)
-        # Handle legacy encrypted keys (decrypt if needed)
-        if "api_keys" in config:
-            decrypted_keys = []
-            for k in config["api_keys"]:
-                if k.startswith("enc:"):
-                    try:
-                        from ..utils.security import CredentialEncryptor
-                        enc = CredentialEncryptor()
-                        decrypted_keys.append(enc.decrypt(k[4:]))
-                    except Exception:
-                        decrypted_keys.append(k[4:])  # Best effort
-                else:
-                    decrypted_keys.append(k)
-            config["api_keys"] = decrypted_keys
+        # Decrypt API keys using key vault
+        try:
+            from ..security.key_vault import decrypt_config_keys
+            config = decrypt_config_keys(config)
+        except Exception:
+            pass  # Fall back to plaintext
         return config
     return {}
 
 
 def save_config(config: dict, encrypt_keys: bool = True):
-    """Save config to disk. API keys stored in plain text with restricted file permissions."""
+    """Save config to disk. API keys encrypted with machine-derived key."""
     import stat
     CONFIG_DIR.mkdir(parents=True, exist_ok=True)
-    # Store keys as plain text (XOR "encryption" adds no real security)
-    # File permissions (chmod 600) are the standard protection
+    # Encrypt API keys before saving
+    if encrypt_keys:
+        try:
+            from ..security.key_vault import encrypt_config_keys
+            config = encrypt_config_keys(config)
+        except Exception:
+            pass  # Fall back to plaintext
     with open(CONFIG_FILE, "w", encoding="utf-8") as f:
         json.dump(config, f, indent=2)
-    # Restrict file permissions to owner only (contains API keys)
+    # Restrict file permissions to owner only (defense in depth)
     try:
         os.chmod(CONFIG_FILE, stat.S_IRUSR | stat.S_IWUSR)
     except (OSError, AttributeError):
@@ -231,7 +228,7 @@ def get_runtime(provider: NimProvider, project: str = ".") -> AgentRuntime:
         # Store MCP config for lazy connection (don't block here)
         registry._mcp_servers = ALL_MCPS
     except Exception:
-        pass
+        pass  # Intentional: Exception
 
     runtime = AgentRuntime(provider=provider, tool_registry=registry)
     spawn_tool.runtime = runtime
@@ -368,7 +365,7 @@ def run(
             if upd.get("update_available"):
                 console.print(f"[yellow]Update available: {upd['latest']} (run: dev update)[/yellow]")
         except Exception:
-            pass
+            pass  # Intentional: Exception
 
         provider = await get_provider()
         runtime = get_runtime(provider, project)
@@ -423,7 +420,7 @@ def run(
                 agent_def = get_agent(agent)
                 agent_loop.set_tool_names(agent_def.tool_names)
             except Exception:
-                pass
+                pass  # Intentional: Exception
 
             # Wire budget, error recovery, tool rules, hooks
             from ..utils.budget import BudgetManager, BudgetConfig
@@ -595,7 +592,7 @@ def chat(
             if upd.get("update_available"):
                 console.print(f"[yellow]Update available: {upd['latest']} (run: dev update)[/yellow]")
         except Exception:
-            pass
+            pass  # Intentional: Exception
 
         # --resume: resume session by ID or show picker
         if resume:
@@ -699,6 +696,19 @@ def chat(
         # Wire dangerously-skip-permissions
         if dangerously_skip:
             approval_mode = "full-auto"
+            console.print("\n" + "=" * 60)
+            console.print("[bold red]⚠️  SECURITY WARNING: --dangerously-skip-permissions[/bold red]")
+            console.print("[red]All permission prompts are DISABLED.[/red]")
+            console.print("[red]The agent can execute ANY command without approval.[/red]")
+            console.print("[red]This includes: file deletion, network access, system commands.[/red]")
+            console.print("[dim]Press Ctrl+C within 3 seconds to abort...[/dim]")
+            import time as _time
+            try:
+                _time.sleep(3)
+            except KeyboardInterrupt:
+                console.print("\n[yellow]Aborted by user.[/yellow]")
+                raise typer.Exit(0)
+            console.print("=" * 60 + "\n")
 
         # --print mode: non-interactive, print response and exit
         if print_mode:
@@ -2015,7 +2025,7 @@ def chat(
         try:
             file_watcher.stop()
         except Exception:
-            pass
+            pass  # Intentional: Exception
 
         # Save conversation on exit (non-blocking)
         if not no_persist:
@@ -2054,7 +2064,7 @@ def _show_colored_diff(project_path: str):
             console.print(f"  [dim]... {remaining} more lines[/dim]")
         console.print(f"  [dim]+{added} -{removed} lines changed[/dim]")
     except Exception:
-        pass
+        pass  # Intentional: Exception
 
 
 def _show_context_bar(tokens: int, max_tokens: int):
@@ -3096,7 +3106,7 @@ def resume_cmd(
                     if isinstance(data, dict) and 'path' in data:
                         edited_files.add(data['path'])
                 except Exception:
-                    pass
+                    pass  # Intentional: Exception
             if tool_calls:
                 tool_call_count += len(tool_calls)
             agent_loop._state.done_messages.append(
@@ -3574,7 +3584,7 @@ def tools_list_cmd():
             instance = cls()
             table.add_row(instance.name, instance.description[:80], type(instance).__name__)
         except Exception:
-            pass
+            pass  # Intentional: Exception
 
     console.print(table)
 

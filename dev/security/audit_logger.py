@@ -78,7 +78,13 @@ class AuditLogger:
     Structured audit logger for the Dev agent.
     
     Writes JSON-line logs to .dev/audit/ directory.
+    Includes automatic log rotation to prevent unbounded growth.
     """
+    
+    # Max log file size before rotation (10MB)
+    MAX_LOG_SIZE = 10 * 1024 * 1024
+    # Max number of rotated log files to keep
+    MAX_ROTATED_FILES = 5
     
     def __init__(self, project_path: str = ".", session_id: str = ""):
         self.project_path = Path(project_path)
@@ -88,6 +94,31 @@ class AuditLogger:
         self._log_file = self._log_dir / f"{self.session_id}.jsonl"
         self._event_count = 0
         self._start_time = time.time()
+        # Rotate logs on init if needed
+        self._rotate_if_needed()
+    
+    def _rotate_if_needed(self):
+        """Rotate log file if it exceeds max size."""
+        try:
+            if not self._log_file.exists():
+                return
+            if self._log_file.stat().st_size < self.MAX_LOG_SIZE:
+                return
+            
+            # Rotate: rename current to .1, .1 to .2, etc.
+            for i in range(self.MAX_ROTATED_FILES - 1, 0, -1):
+                src = self._log_file.with_suffix(f".jsonl.{i}")
+                dst = self._log_file.with_suffix(f".jsonl.{i + 1}")
+                if src.exists():
+                    if i + 1 >= self.MAX_ROTATED_FILES:
+                        src.unlink()  # Delete oldest
+                    else:
+                        src.rename(dst)
+            
+            # Move current to .1
+            self._log_file.rename(self._log_file.with_suffix(".jsonl.1"))
+        except Exception:
+            pass  # Don't crash on rotation failure
     
     def log(self, event: AuditEvent):
         """Write an audit event to the log file."""
