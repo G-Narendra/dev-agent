@@ -8,8 +8,13 @@
   },
   "scripts": {
     "postinstall": "node install.js",
+    "preuninstall": "node uninstall.js",
     "dev": "node bin/narendra.js",
-    "test": "echo \"Tests: .venv/Scripts/python -m pytest tests/ -q\""
+    "chat": "node bin/narendra.js chat",
+    "test": "echo \"Tests: .venv/Scripts/python -m pytest tests/ -q\"",
+    "completion:bash": "node bin/narendra.js --completion bash",
+    "completion:zsh": "node bin/narendra.js --completion zsh",
+    "completion:fish": "node bin/narendra.js --completion fish"
   },
   "keywords": [
     "ai",
@@ -19,7 +24,8 @@
     "nims",
     "free",
     "code-generation",
-    "development-tools"
+    "development-tools",
+    "ai-assistant"
   ],
   "author": "G-Narendra",
   "license": "MIT",
@@ -27,21 +33,31 @@
     "type": "git",
     "url": "https://github.com/G-Narendra/dev-agent.git"
   },
+  "homepage": "https://github.com/G-Narendra/dev-agent#readme",
+  "bugs": {
+    "url": "https://github.com/G-Narendra/dev-agent/issues"
+  },
   "engines": {
     "node": ">=18.0.0"
   },
   "files": [
     "bin/",
     "dev/",
+    "skills/",
     "install.js",
+    "uninstall.js",
+    "requirements.txt",
     "pyproject.toml",
     "LICENSE",
-    "README.md",
-    "skills/"
+    "README.md"
   ],
   "os": [
     "win32",
     "darwin",
     "linux"
+  ],
+  "cpu": [
+    "x64",
+    "arm64"
   ]
 }
