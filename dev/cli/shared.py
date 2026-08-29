@@ -198,7 +198,7 @@ def get_runtime(provider: NimProvider, project: str = ".") -> AgentRuntime:
     # MCP servers are loaded lazily via McpRegistry
     try:
         from ..mcp.registry import ALL_MCPS
-        registry._mcp_servers = ALL_MCPS
+        setattr(registry, '_mcp_servers', ALL_MCPS)
     except Exception:
         pass  # Intentional: MCP registry may not be available
 

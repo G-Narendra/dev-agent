@@ -35,8 +35,8 @@ class ToolExecutorMixin:
     _on_approval_prompt: Callable | None = None
     _tool_cache: dict = {}
     _tool_cache_max: int = 100
-    _state: LoopState = None
-    config: LoopConfig = None
+    _state: LoopState = None  # type: ignore[assignment]
+    config: LoopConfig = None  # type: ignore[assignment]
     tools: Any = None
     project_path: str = ""
 
@@ -223,7 +223,7 @@ class ToolExecutorMixin:
 
     def _parse_text_tool_calls(self, text: str) -> list[dict]:
         """Extract tool calls from text when model outputs code instead of API tool calls."""
-        calls = []
+        calls: list[dict] = []
         # Pattern 1: tool_name(args) format
         pattern = r'(\w+)\(([^)]*)\)'
         for match in re.finditer(pattern, text):
@@ -247,7 +247,7 @@ class ToolExecutorMixin:
 
     def _parse_code_blocks(self, text: str) -> list[dict]:
         """Parse fenced code blocks into write_file tool calls."""
-        calls = []
+        calls: list[dict] = []
         seen_paths = set()
 
         # Pattern 1: ```filename: path\n<code>\n``` or ```path\n<code>\n```
@@ -427,9 +427,11 @@ class ToolExecutorMixin:
                 if meta.get("original_path") == file_path:
                     import hashlib
                     with open(latest, "rb") as f:
-                        backup_hash = hashlib.md5(f.read()).hexdigest()
+                        backup_data = f.read()
+                        backup_hash = hashlib.md5(backup_data).hexdigest()
                     with open(file_path, "rb") as f:
-                        current_hash = hashlib.md5(f.read()).hexdigest()
+                        current_data = f.read()
+                        current_hash = hashlib.md5(current_data).hexdigest()
                     return {"verified": backup_hash == current_hash, "reason": "hash match" if backup_hash == current_hash else "hash mismatch"}
             return {"verified": True, "reason": "no matching backup"}
         except Exception:
