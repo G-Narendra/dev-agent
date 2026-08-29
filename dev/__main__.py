@@ -13,8 +13,8 @@ if __name__ == "__main__" or "__main__" in sys.modules:
             sys.stdout.reconfigure(encoding="utf-8")
             sys.stderr.reconfigure(encoding="utf-8")
         except Exception:
-            pass
 
+            pass  # best-effort: non-critical operation
     # If no arguments given (just `python -m dev`), start interactive chat
     if len(sys.argv) <= 1:
         try:
@@ -27,8 +27,8 @@ if __name__ == "__main__" or "__main__" in sys.modules:
                 asyncio.run(run_wizard())
                 print("\nStarting chat...\n")
         except Exception:
-            pass
 
+            pass  # best-effort: non-critical operation
         # Default to chat
         sys.argv = ["dev", "chat"]
 
