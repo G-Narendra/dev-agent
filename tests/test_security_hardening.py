@@ -114,9 +114,9 @@ class TestDangerouslySkipWarning:
     """Verify dangerously-skip-permissions shows warning."""
 
     def test_warning_message_exists(self):
-        """The warning text should be present in main.py."""
-        main_path = os.path.join(os.path.dirname(__file__), "..", "dev", "cli", "main.py")
-        with open(main_path, "r", encoding="utf-8") as f:
+        """The warning text should be present in chat.py."""
+        chat_path = os.path.join(os.path.dirname(__file__), "..", "dev", "cli", "chat.py")
+        with open(chat_path, "r", encoding="utf-8") as f:
             content = f.read()
         assert "SECURITY WARNING" in content
         assert "dangerously-skip-permissions" in content
