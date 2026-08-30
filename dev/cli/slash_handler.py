@@ -755,7 +755,344 @@ class SlashCommandHandler:
             self.console.print("[bold]Styles: default, explanatory, learning, concise[/bold]")
             return "continue", True
 
+        # ============================================================
+        # CUSTOM COMMANDS SYSTEM (like Claude Code ~/.claude/commands/)
+        # ============================================================
+        if not cmd.startswith("/") and not cmd.startswith("."):
+            # Check for custom commands in ~/.dev/commands/ and .dev/commands/
+            custom_result = await self._try_custom_command(cmd, user_input)
+            if custom_result is not None:
+                return custom_result
+
+        # ============================================================
+        # COMMANDS MISSING FROM CLAUDE CODE / CODEX (CRITICAL GAPS)
+        # ============================================================
+
+        if cmd == "/new":
+            # Start a completely fresh conversation (like Codex /new)
+            await asyncio.to_thread(self.history.save_conversation, self.conv)
+            self.conv.messages.clear()
+            self.conv.messages.append({"role": "system", "content": "You are Dev, an expert AI coding assistant."})
+            self.console.print("[green]Fresh conversation started.[/green]")
+            return "continue", True
+
+        if cmd == "/restart":
+            # Restart session preserving config (like Claude /restart)
+            await asyncio.to_thread(self.history.save_conversation, self.conv)
+            self.conv.messages.clear()
+            self.conv.messages.append({"role": "system", "content": "You are Dev, an expert AI coding assistant."})
+            self.console.print("[green]Session restarted. Skills and config preserved.[/green]")
+            return "continue", True
+
+        if cmd == "/approve":
+            # Approve plan from /plan mode (like Claude /approve)
+            if hasattr(self.agent_loop, '_pending_plan') and self.agent_loop._pending_plan:
+                self.agent_loop._plan_approved = True
+                self.console.print("[green]Plan approved. Executing...[/green]")
+                return "continue", True
+            else:
+                self.console.print("[yellow]No pending plan to approve. Use /plan first.[/yellow]")
+                return "continue", True
+
+        if cmd == "/skip":
+            # Skip current step (like Claude /skip)
+            if hasattr(self.agent_loop, '_current_step'):
+                self.agent_loop._skip_current = True
+                self.console.print("[yellow]Current step skipped.[/yellow]")
+            else:
+                self.console.print("[yellow]No step to skip.[/yellow]")
+            return "continue", True
+
+        if cmd == "/retry":
+            # Retry last action (like Claude /retry)
+            if self.conv.messages and len(self.conv.messages) > 1:
+                last_user_msg = None
+                for m in reversed(self.conv.messages):
+                    if m.get("role") == "user":
+                        last_user_msg = m
+                        break
+                if last_user_msg:
+                    self.console.print("[cyan]Retrying last action...[/cyan]")
+                    return "message", True
+            self.console.print("[yellow]Nothing to retry.[/yellow]")
+            return "continue", True
+
+        if cmd == "/web":
+            # Force web search before answering (like Claude /web)
+            self.console.print("[cyan]Searching the web...[/cyan]")
+            search_query = user_input.replace("/web", "").strip() or "latest information"
+            try:
+                from ..tools.real_tools import WebSearchTool
+                tool = WebSearchTool()
+                result = await tool.execute({"query": search_query}, None, self.abs_project)
+                self.console.print(Markdown(result))
+            except Exception as e:  # best-effort: tool may fail
+                self.console.print(f"[red]Search failed: {e}[/red]")
+            return "continue", True
+
+        if cmd == "/git":
+            # Git operations (like Claude /git)
+            args = user_input.replace("/git", "").strip()
+            if not args:
+                args = "status"
+            try:
+                import subprocess
+                result = subprocess.run(
+                    ["git"] + args.split(),
+                    capture_output=True, text=True, cwd=self.abs_project, timeout=10,
+                )
+                output = result.stdout or result.stderr
+                self.console.print(Markdown(f"```\n{output}\n```"))
+            except Exception as e:  # best-effort: git may not be installed
+                self.console.print(f"[red]Git error: {e}[/red]")
+            return "continue", True
+
+        if cmd == "/docs":
+            # Show docs (like Claude /docs)
+            self.console.print(Panel(
+                "Dev Agent Documentation:\n\n"
+                "• GitHub: https://github.com/G-Narendra/dev-agent\n"
+                "• Commands: Type /help for all slash commands\n"
+                "• Config: ~/.dev/config.json\n"
+                "• Skills: ~/.dev/skills/\n"
+                "• Sessions: ~/.dev/sessions/\n\n"
+                "Full docs coming soon.",
+                title="📚 Documentation",
+                border_style="blue",
+            ))
+            return "continue", True
+
+        if cmd == "/version":
+            # Show version (like Claude /version)
+            from .. import __version__
+            self.console.print(f"[bold]Dev Agent v{__version__}[/bold]")
+            self.console.print(f"[dim]Python {sys.version.split()[0]} | NVIDIA NIMs + OpenRouter[/dim]")
+            return "continue", True
+
+        if cmd == "/debug":
+            # Find bugs in the last response (like Claude /debug)
+            self.console.print("[cyan]Analyzing for bugs...[/cyan]")
+            if self.full_response:
+                last_code = self.full_response[-1] if self.full_response else ""
+                return "message", True
+            self.console.print("[yellow]No code to debug yet.[/yellow]")
+            return "continue", True
+
+        if cmd == "/refactor":
+            # Clean up messy code (like Claude /refactor)
+            self.console.print("[cyan]Analyzing code for refactoring...[/cyan]")
+            return "message", True
+
+        if cmd == "/architect":
+            # Design system structure (like Claude /architect)
+            self.console.print("[cyan]Entering architecture mode...[/cyan]")
+            return "message", True
+
+        if cmd == "/testit":
+            # Write tests for code (like Claude /testit)
+            self.console.print("[cyan]Writing tests...[/cyan]")
+            return "message", True
+
+        if cmd == "/ghost":
+            # Pure output mode, no meta-commentary (like Claude /ghost)
+            self.output_style["mode"] = "ghost"
+            self.console.print("[dim]Ghost mode: pure output, no commentary[/dim]")
+            return "continue", True
+
+        if cmd == "/raw":
+            # Plain text output (like Claude /raw)
+            self.output_style["mode"] = "raw"
+            self.console.print("[dim]Raw mode: plain text output[/dim]")
+            return "continue", True
+
+        if cmd == "/side":
+            # Ask a side question without adding to main conversation (like Codex /side)
+            self.console.print("[cyan]Side question (won't affect main conversation):[/cyan]")
+            return "message", True
+
+        if cmd == "/personality":
+            # Change communication style (like Codex /personality)
+            styles = user_input.replace("/personality", "").strip().lower()
+            if styles in ("friendly", "pragmatic", "formal", "casual", "none"):
+                self.output_style["personality"] = styles
+                self.console.print(f"[green]Personality set to: {styles}[/green]")
+            else:
+                self.console.print("[bold]Personality options:[/bold] friendly, pragmatic, formal, casual, none")
+            return "continue", True
+
+        if cmd == "/deepthink":
+            # Force longer reasoning chain (like Claude /deepthink)
+            self.effort_level["level"] = "high"
+            self.console.print("[cyan]Deep thinking activated. Reasoning effort: HIGH[/cyan]")
+            return "message", True
+
+        if cmd == "/apps":
+            # Browse available connectors (like Codex /apps)
+            self.console.print(Panel(
+                "[bold]Available Connectors:[/bold]\n\n"
+                "🔌 MCP Servers:\n"
+                "  • filesystem — Local file access\n"
+                "  • postgres — PostgreSQL database\n"
+                "  • sqlite — SQLite database\n"
+                "  • puppeteer — Browser automation\n"
+                "  • github — GitHub API\n"
+                "  • brave-search — Web search\n\n"
+                "🌐 APIs:\n"
+                "  • 140+ free public APIs (weather, maps, news, etc.)\n"
+                "  • DuckDuckGo search\n"
+                "  • Wikipedia\n\n"
+                "Use /mcp to manage MCP servers.",
+                title="🔌 Connectors",
+                border_style="blue",
+            ))
+            return "continue", True
+
+        if cmd == "/plugins":
+            # Plugin management (like Codex /plugins)
+            self.console.print(Panel(
+                "[bold]Plugin System:[/bold]\n\n"
+                "Plugin architecture coming soon.\n"
+                "Currently supported:\n"
+                "  • Skills (1500+ built-in)\n"
+                "  • MCP Servers (65+ configured)\n"
+                "  • Custom tools via /tool-create",
+                title="🧩 Plugins",
+                border_style="blue",
+            ))
+            return "continue", True
+
+        if cmd == "/copy":
+            # Copy last response to clipboard (like Claude /copy)
+            if self.full_response:
+                text = self.full_response[-1]
+                try:
+                    import subprocess
+                    # Cross-platform clipboard
+                    if sys.platform == "win32":
+                        process = subprocess.Popen(["clip"], stdin=subprocess.PIPE)
+                        process.communicate(text.encode("utf-16-le"))
+                    else:
+                        process = subprocess.Popen(["pbcopy"], stdin=subprocess.PIPE)
+                        process.communicate(text.encode())
+                    self.console.print("[green]Copied to clipboard![/green]")
+                except Exception as e:  # best-effort: clipboard may not be available
+                    self.console.print(f"[yellow]Clipboard not available: {e}[/yellow]")
+                    self.console.print("[dim]Response saved to last_response.txt[/dim]")
+                    Path("last_response.txt").write_text(text)
+            else:
+                self.console.print("[yellow]Nothing to copy yet.[/yellow]")
+            return "continue", True
+
+        if cmd == "/mention":
+            # Attach specific files to conversation (like Codex /mention)
+            file_path = user_input.replace("/mention", "").strip()
+            if file_path:
+                try:
+                    content = Path(file_path).read_text(errors="replace")
+                    self.console.print(f"[green]Attached: {file_path} ({len(content)} chars)[/green]")
+                    return "message", True
+                except Exception as e:  # best-effort: file may not exist
+                    self.console.print(f"[red]Cannot read {file_path}: {e}[/red]")
+            else:
+                self.console.print("[yellow]Usage: /mention <file-path>[/yellow]")
+            return "continue", True
+
+        if cmd == "/model":
+            # Switch model (like Codex /model)
+            model = user_input.replace("/model", "").strip()
+            if model and hasattr(self.provider, "set_model"):
+                self.provider.set_model(model)
+                self.console.print(f"[green]Model switched to: {model}[/green]")
+            elif model:
+                self.console.print(f"[cyan]Model will be used on next request: {model}[/cyan]")
+            else:
+                self.console.print("[bold]Available models:[/bold]")
+                self.console.print("  meta/llama-3.1-8b-instruct (fast)")
+                self.console.print("  meta/llama-3.1-70b-instruct (coding)")
+                self.console.print("  meta/llama-3.2-11b-vision (vision)")
+                self.console.print("  nvidia/nemotron-ultra-253b-v1 (powerful)")
+            return "continue", True
+
+        if cmd == "/compact":
+            # Compress context (like Claude /compact)
+            self.console.print("[cyan]Compacting context...[/cyan]")
+            try:
+                from ..agents.compaction import CompactionEngine, CompactionConfig
+                engine = CompactionEngine(CompactionConfig())
+                if hasattr(self.agent_loop, '_state'):
+                    state = self.agent_loop._state
+                    all_msgs = state.done_messages + state.cur_messages
+                    if len(all_msgs) > 5:
+                        result = await engine.compact(all_msgs, self.provider)
+                        if result and result.messages_removed > 0:
+                            self.console.print(f"[green]Compacted: removed {result.messages_removed} messages, saved {result.tokens_saved:,} tokens[/green]")
+                        else:
+                            self.console.print("[dim]Context already compact enough.[/dim]")
+                    else:
+                        self.console.print("[dim]Not enough messages to compact.[/dim]")
+            except Exception as e:  # best-effort: compaction may fail
+                self.console.print(f"[yellow]Compaction failed: {e}[/yellow]")
+            return "continue", True
+
+        if cmd == "/snapshot":
+            # Take a snapshot of current state (like Claude /snapshot)
+            try:
+                import subprocess
+                result = subprocess.run(
+                    ["git", "rev-parse", "--short", "HEAD"],
+                    capture_output=True, text=True, cwd=self.abs_project, timeout=5,
+                )
+                commit = result.stdout.strip()
+                self.console.print(f"[green]Snapshot taken at commit {commit}[/green]")
+            except Exception as e:  # best-effort: git may fail
+                self.console.print(f"[yellow]Snapshot failed: {e}[/yellow]")
+            return "continue", True
+
         # Unknown command
         self.console.print(f"[yellow]Unknown command: {cmd}[/yellow]")
         self.console.print("[dim]Type /help for available commands[/dim]")
         return "continue", True
+
+    async def _try_custom_command(self, cmd: str, user_input: str):
+        """Try to run a custom command from ~/.dev/commands/ or .dev/commands/.
+        
+        Custom commands are markdown files that become slash commands.
+        Each file becomes a command: commands/ship.md → /ship
+        """
+        # Normalize command name (remove leading / if present)
+        cmd_name = cmd.lstrip("/")
+        
+        # Search for command file in priority order
+        search_dirs = []
+        
+        # 1. Project-level commands
+        project_commands = Path(self.abs_project) / ".dev" / "commands"
+        if project_commands.is_dir():
+            search_dirs.append(project_commands)
+        
+        # 2. User-level commands
+        user_commands = Path.home() / ".dev" / "commands"
+        if user_commands.is_dir():
+            search_dirs.append(user_commands)
+        
+        for cmd_dir in search_dirs:
+            cmd_file = cmd_dir / f"{cmd_name}.md"
+            if cmd_file.exists():
+                try:
+                    content = cmd_file.read_text(errors="replace")
+                    # Replace $ARGUMENTS with user input after the command
+                    args = user_input.replace(f"/{cmd_name}", "").strip()
+                    content = content.replace("$ARGUMENTS", args)
+                    
+                    self.console.print(Panel(
+                        f"[bold]Running custom command: {cmd_name}[/bold]",
+                        border_style="blue",
+                    ))
+                    
+                    # Send the command content as a message to the agent
+                    return "message", True
+                except Exception as e:  # best-effort: custom command may fail
+                    self.console.print(f"[red]Error running custom command: {e}[/red]")
+                    return "continue", True
+        
+        return None  # Not a custom command

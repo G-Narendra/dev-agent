@@ -113,6 +113,9 @@ def _show_help():
 ## Core Commands
 - `/help` - Show this help
 - `/quit` or `/exit` - Exit chat
+- `/new` - Start fresh conversation
+- `/restart` - Restart session preserving config
+- `/version` - Show version info
 
 ## Session
 - `/save` - Save conversation
@@ -123,44 +126,67 @@ def _show_help():
 - `/name <name>` - Name this session
 - `/snapshot` - Save project state to git stash
 - `/restore` - List stashes for restore
+- `/copy` - Copy last response to clipboard
 
 ## Agent Control
 - `/approve <mode>` - Set approval mode (suggest/auto-edit/full-auto)
+- `/approve` - Approve plan from /plan mode
 - `/plan` - Toggle plan mode (read-only)
+- `/skip` - Skip current step
+- `/retry` - Retry last action
 - `/model` - Show/switch NIM model
 - `/effort <level>` - Set reasoning effort (low/medium/high)
 - `/verbose` - Toggle verbose mode
 - `/compact` - Manually compact conversation context
+- `/deepthink` - Activate deep reasoning mode
+- `/personality` - Change communication style
+
+## Output Modes
+- `/ghost` - Pure output, no meta-commentary
+- `/raw` - Plain text output
 
 ## File Operations
 - `/undo` - Undo last file change
 - `/redo` - Redo last undone change
 - `/diff` - Show colored git diff
 - `/commit` - Commit all changes with a message
+- `/mention <file>` - Attach file to conversation
 
 ## Git
+- `/git <args>` - Run git commands (status, log, etc.)
 - `/branch [name]` - List or create/switch branches
 - `/worktree list|add|remove` - Manage git worktrees for experiments
 
 ## Code Quality
 - `/test` - Run project tests
+- `/testit` - Write tests for code in context
 - `/lint` - Run linter
 - `/review` - AI code review of recent changes
 - `/explain` - Explain project structure and architecture
+- `/debug` - Find bugs in code
 - `/refactor` - Find and apply refactoring opportunities
+- `/architect` - Design system structure
 - `/document` - Generate documentation
 - `/optimize` - Performance analysis and suggestions
 - `/security` - Security audit
 
+## Web & Research
+- `/web <query>` - Force web search before answering
+
 ## Project
 - `/detect` - Detect project type
 - `/rules` - Show project rules
-- `/doctor` or `/debug` - Run diagnostics
+- `/doctor` - Run diagnostics
 - `/config` - Show current configuration
 - `/deps` - Check dependency status
 - `/env` - Show environment variables (masked)
 - `/schema` - Analyze database schema
 - `/migrate` - Check migration needs
+- `/docs` - Show documentation
+
+## Connectors & Plugins
+- `/apps` - Browse available connectors
+- `/plugins` - Manage plugins
 
 ## Information
 - `/stats` - Show token/request stats
